@@ -181,7 +181,7 @@ The upcoming sections offer comprehensive insights into our project, including d
 | TR05 | Web application | The system should be developed as a web application featuring dynamic pages, utilizing technologies such as HTML5, JavaScript, CSS3, and PHP. |
 | **TR06** | **Portability** | **The server-side system should be platform-agnostic, ensuring compatibility across various platforms such as Linux, Mac OS, and others. <br><br> Ensuring platform-agnostic compatibility, including Linux, Mac OS, and others, is essential as it expands the system's user base, enhances accessibility, and reduces adoption barriers by allowing users to choose their preferred operating system.** |
 | TR07 | Database | The PostgreSQL database management system must be used, with a version of 11 or higher. |
-| TR08 | **Security** | **The system shall safeguard information against unauthorized access by implementing an authentication and verification system. <br><br> Security is crucial to protect user information. Implementing authentication and verification ensures that only authorized users can access the system, safeguarding sensitive data and maintaining user trust.** |
+| **TR08** | **Security** | **The system shall safeguard information against unauthorized access by implementing an authentication and verification system. <br><br> Security is crucial to protect user information. Implementing authentication and verification ensures that only authorized users can access the system, safeguarding sensitive data and maintaining user trust.** |
 | TR09 | Robustness | The system must be designed to effectively handle and maintain operation even in the presence of runtime errors. |
 | TR10 | Scalability | The system must be ready to accommodate an increasing number of users and their interactions as it scales. |
 | TR11 | Ethics | The system must adhere to ethical principles in software development, which means it should refrain from collecting or sharing personal user details or usage data without obtaining full acknowledgment and authorization from the data owner. |
@@ -255,7 +255,7 @@ Changes made to the first submission:
 
 GROUP23117, 22/09/2023
 
-* Inês Oliveira, up202103343@edu.fe.up.pt
+* Inês Oliveira, up202103343@edu.fe.up.pt (editor)
 * João Oliveira, up202108737@edu.fe.up.pt 
 * Pedro Magalhães, up202108756@edu.fe.up.pt
 * Samuel Oliveira, up202108751@edu.fe.up.pt
