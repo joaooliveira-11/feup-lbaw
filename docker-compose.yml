@@ -1,0 +1,29 @@
+version: '3'
+services:
+
+  postgres:
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pg!password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    
+  pgadmin:
+    image: dpage/pgadmin4:6
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@lbaw.com
+      PGADMIN_DEFAULT_PASSWORD: pg!password
+    ports:
+      - "4321:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  postgres-data:
+  pgadmin-data:

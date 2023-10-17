@@ -5,7 +5,7 @@ TeamSync is the solution to simplify and enhance project management, fostering e
 ## Project Components
 
 - [ER: Requirements Specification](WIKI/ER.md)
-- [EBD: Database Specification]()
+- [EBD: Database Specification](WIKI/EBD.md)
 - [EAP: Architecture Specification and Prototype]()
 - [PA: Product and Presentation]()
 
