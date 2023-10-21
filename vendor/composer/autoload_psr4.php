@@ -60,7 +60,7 @@ return array(
     'Illuminate\\Foundation\\Auth\\' => array($vendorDir . '/laravel/ui/auth-backend'),
     'Illuminate\\' => array($vendorDir . '/laravel/framework/src/Illuminate'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
-    'Fruitcake\\Cors\\' => array($vendorDir . '/fruitcake/php-cors/src', $vendorDir . '/fruitcake/laravel-cors/src'),
+    'Fruitcake\\Cors\\' => array($vendorDir . '/fruitcake/laravel-cors/src', $vendorDir . '/fruitcake/php-cors/src'),
     'Fideloper\\Proxy\\' => array($vendorDir . '/fideloper/proxy/src'),
     'Faker\\' => array($vendorDir . '/fakerphp/faker/src/Faker'),
     'Egulias\\EmailValidator\\' => array($vendorDir . '/egulias/email-validator/src'),
