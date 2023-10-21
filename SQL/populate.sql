@@ -1,3 +1,5 @@
+SET search_path TO lbaw23117;
+
 INSERT INTO users (name, username, email, password, description, photo, isAdmin, isBanned, emailVerification) VALUES
 ('Alice Johnson', 'alicej', 'alice@example.com', 'securepwd123', 'User account for Alice', 'alice.jpg', FALSE, FALSE, TRUE),
 ('Bob Smith', 'bobsmith', 'bob@example.com', 'bobspassword456', 'User account for Bob', 'bob.jpg', FALSE, FALSE, TRUE),
@@ -36,6 +38,7 @@ INSERT INTO interest (interest) VALUES
 -- User_interests table, associating users with their interests
 
 -- For user Alice Johnson
+
 INSERT INTO user_interests (userId, interestId) VALUES (1, 1);  -- Alice is interested _in HikingInterests (userId, interestId) VALUES (1, 1);  -- Alice is interested in Hiking
 INSERT INTO user_interests (userId, interestId) VALUES (1, 4);  -- Alice is interested in Reading
 INSERT INTO user_interests (userId, interestId) VALUES (1, 7);  -- Alice is interested in Swimming
@@ -150,60 +153,61 @@ INSERT INTO user_skills (userId, skillId) VALUES (20, 8);
 INSERT INTO user_skills (userId, skillId) VALUES (20, 3);
 
 
-INSERT INTO project (title, description, createdBy, projectCoordinator) VALUES
-('Website Redesign', 'Redesign our company website to improve user experience and visual appeal.', 1, 1),  -- Project 1 created by Alice Johnson and Alice is the coordinator
-('Marketing Campaign for New Product', 'Plan and execute a marketing campaign for our upcoming product launch.', 3, 3),  -- Project 2 created by Charlie Brown, and Charlie is the coordinator
-('Customer Support Enhancement', 'Improve our customer support system to provide better assistance to our clients.', 5, 5),  -- Project 3 created by Eve Anderson, and Eve is the coordinator
-('Sales Optimization Strategy', 'Develop a strategy to optimize our sales processes and increase revenue.', 7, 7),  -- Project 4 created by Grace Martinez, and Grace is the coordinator
-('E-commerce Website Development', 'Create an e-commerce platform for our online store with secure payment processing.', 9, 9), -- Project 5 created by Ivy Taylor, and Ivy is the coordinator
-('Content Marketing Plan', 'Plan and execute a content marketing strategy to enhance brand visibility.', 11, 11), -- Project 6 created by Karen White, and Karen is the coordinator
-('Data Analysis for Market Insights', 'Analyze market data to provide insights and improve decision-making.', 13, 13), -- Project 7 created by Mia Turner, and Mia is the coordinator
-('Social Media Engagement Campaign', 'Increase social media engagement and grow our online presence.', 15, 15), -- Project 8 created by Olivia Hall, and Olivia is the coordinator
-('Project Management Tool Implementation', 'Implement a project management tool for efficient task tracking and coordination.', 17, 17), -- Project 9 created by Quinn King, and Quinn is the coordinator
-('Content Creation and Publishing', 'Create and publish engaging content to boost brand awareness and user engagement.', 19, 19),  -- Project 10 created by Sophia Allen, and Sophia is the coordinator
-('Mobile App Development', 'Develop a mobile app to provide our users with a better mobile experience.', 2, 2),  -- Project 11 created by Bob Smith, and Bob is the coordinator
-('Product Inventory Management', 'Implement a system to efficiently manage product inventory and restocking.', 4, 4),  -- Project 12 created by David Wilson, and David is the coordinator
-('Content Writing for Blog', 'Create high-quality content for our company blog to engage readers.', 6, 6),  -- Project 13 created by Frank Miller, and Frank is the coordinator
-('Customer Feedback Surveys', 'Design and conduct customer feedback surveys to gather insights for improvements.', 8, 8),  -- Project 14 created by Henry Davis, and Henry is the coordinator
-('Social Media Advertising', 'Launch social media advertising campaigns to increase our online reach.', 10, 10), -- Project 15 created by Jack Adams, and Jack is the coordinator
-('Database Optimization', 'Optimize our database systems for faster data retrieval and storage.', 12, 12), -- Project 16 created by Liam Scott, and Liam is the coordinator
-('Web Security Audit', 'Perform a comprehensive security audit of our website and systems.', 14, 14), -- Project 17 created by Noah Lewis, and Noah is the coordinator
-('Art Gallery Exhibition', 'Organize an art gallery exhibition to showcase local artists and their work.', 16, 16), -- Project 18 created by Peter Baker, and Peter is the coordinator
-('Music Festival Planning', 'Plan and execute a music festival with multiple artists and stages.', 18, 18), -- Project 19 created by Quinn King, and Quinn is the coordinator
-('Data Analytics Workshop', 'Host a workshop on data analytics to educate employees on data-driven decision-making.', 20, 20);  -- Project 20 created by Sophia Allen, and Sophia is the coordinator
+INSERT INTO project (title, description, isPublic, archived, createDate, finishDate, createdBy, projectCoordinator) VALUES
+('Website Redesign', 'Redesign our company website to improve user experience and visual appeal.', FALSE, FALSE, '2022-10-21', '2022-11-30', 1, 1),  -- Project 1 created by Alice Johnson and Alice is the coordinator
+('Marketing Campaign for New Product', 'Plan and execute a marketing campaign for our upcoming product launch.', TRUE, FALSE, '2022-10-20', '2022-12-15', 3, 3),  -- Project 2 created by Charlie Brown, and Charlie is the coordinator
+('Customer Support Enhancement', 'Improve our customer support system to provide better assistance to our clients.', TRUE, FALSE, '2022-10-20', NULL, 5, 5),  -- Project 3 created by Eve Anderson, and Eve is the coordinator
+('Sales Optimization Strategy', 'Develop a strategy to optimize our sales processes and increase revenue.', FALSE, FALSE, '2022-10-12','2022-11-30', 7, 7),  -- Project 4 created by Grace Martinez, and Grace is the coordinator
+('E-commerce Website Development', 'Create an e-commerce platform for our online store with secure payment processing.', TRUE, FALSE, '2022-9-25', '2022-12-20', 9, 9), -- Project 5 created by Ivy Taylor, and Ivy is the coordinator
+('Content Marketing Plan', 'Plan and execute a content marketing strategy to enhance brand visibility.', TRUE, FALSE, '2022-10-13', '2022-11-30', 11, 11), -- Project 6 created by Karen White, and Karen is the coordinator
+('Data Analysis for Market Insights', 'Analyze market data to provide insights and improve decision-making.', FALSE, FALSE, '2022-10-14', '2022-12-15', 13, 13), -- Project 7 created by Mia Turner, and Mia is the coordinator
+('Social Media Engagement Campaign', 'Increase social media engagement and grow our online presence.', FALSE, TRUE, '2022-10-20', NULL, 15, 15), -- Project 8 created by Olivia Hall, and Olivia is the coordinator
+('Project Management Tool Implementation', 'Implement a project management tool for efficient task tracking and coordination.', TRUE, FALSE, '2022-09-29', '2022-11-30',17, 17), -- Project 9 created by Quinn King, and Quinn is the coordinator
+('Content Creation and Publishing', 'Create and publish engaging content to boost brand awareness and user engagement.',TRUE, FALSE, '2022-09-30', '2022-12-31', 19, 19),  -- Project 10 created by Sophia Allen, and Sophia is the coordinator
+('Mobile App Development', 'Develop a mobile app to provide our users with a better mobile experience.', TRUE, FALSE, '2022-09-01', NULL, 2, 2),  -- Project 11 created by Bob Smith, and Bob is the coordinator
+('Product Inventory Management', 'Implement a system to efficiently manage product inventory and restocking.',TRUE, FALSE, '2022-08-02', '2022-11-30', 4, 4),  -- Project 12 created by David Wilson, and David is the coordinator
+('Content Writing for Blog', 'Create high-quality content for our company blog to engage readers.', FALSE, FALSE, '2022-01-03', NULL, 6, 6),  -- Project 13 created by Frank Miller, and Frank is the coordinator
+('Customer Feedback Surveys', 'Design and conduct customer feedback surveys to gather insights for improvements.', TRUE, FALSE, '2022-02-04', '2022-12-15', 8, 8),  -- Project 14 created by Henry Davis, and Henry is the coordinator
+('Social Media Advertising', 'Launch social media advertising campaigns to increase our online reach.', TRUE, FALSE, '2022-03-05', NULL, 10, 10), -- Project 15 created by Jack Adams, and Jack is the coordinator
+('Database Optimization', 'Optimize our database systems for faster data retrieval and storage.', FALSE, FALSE, '2022-04-06', '2022-11-30', 12, 12), -- Project 16 created by Liam Scott, and Liam is the coordinator
+('Web Security Audit', 'Perform a comprehensive security audit of our website and systems.', FALSE, FALSE, '2022-05-07', NULL, 14, 14), -- Project 17 created by Noah Lewis, and Noah is the coordinator
+('Art Gallery Exhibition', 'Organize an art gallery exhibition to showcase local artists and their work.', TRUE, FALSE, '2022-06-08', '2022-12-31', 16, 16), -- Project 18 created by Peter Baker, and Peter is the coordinator
+('Music Festival Planning', 'Plan and execute a music festival with multiple artists and stages.', TRUE, FALSE, '2022-07-09', NULL, 18, 18), -- Project 19 created by Quinn King, and Quinn is the coordinator
+('Data Analytics Workshop', 'Host a workshop on data analytics to educate employees on data-driven decision-making.', TRUE, FALSE, '2022-09-10', '2022-11-30', 20, 20);  -- Project 20 created by Sophia Allen, and Sophia is the coordinator
 
 INSERT INTO task (title, description, priority, createDate, finishDate, state, createBy, assignedTo, projectTask) VALUES
-('Redesign Homepage Banner', 'Create a new homepage banner design for the website with a focus on our upcoming product launch.', 'High', '2023-10-17 08:00:00', '2023-10-18 16:00:00', 'closed', 1, 2, 1),  -- Task 1 created by Alice Johnson, assigned to Bob Smith, part of Project 1
-('Keyword Research for Marketing', 'Conduct keyword research to identify target keywords for our marketing campaign.', 'Medium', '2023-10-17 09:00:00', NULL, 'open', 3, NULL, 2),  -- Task 2 created by Charlie Brown, not assigned, part of Project 2
-('Customer Support Ticket System Upgrade', 'Upgrade our customer support ticket system to improve response times and user experience.', 'Low', '2023-10-17 10:00:00', '2023-10-19 14:00:00', 'closed', 5, 6, 3),  -- Task 3 created by Eve Anderson, assigned to Frank Miller, part of Project 3
-('Sales Report Analysis', 'Analyze recent sales reports to identify trends and opportunities for growth.', 'High', '2023-10-17 11:00:00', NULL, 'open', 7, NULL, 4),  -- Task 4 created by Grace Martinez, not assigned, part of Project 4
-('Mobile App UI Design', 'Design the user interface for the mobile app, focusing on a user-friendly experience.', 'Medium', '2023-10-17 12:00:00', '2023-10-20 12:00:00', 'closed', 9, 10, 5), -- Task 5 created by Ivy Taylor, assigned to Jack Adams, part of Project 5
-('Content Marketing Calendar Planning', 'Plan the content marketing calendar for the next quarter to align with our brand strategy.', 'Low', '2023-10-17 13:00:00', NULL, 'open', 11, NULL, 6), -- Task 6 created by Karen White, not assigned, part of Project 6
-('Market Data Presentation', 'Prepare a presentation with insights from market data analysis for the executive team.', 'High', '2023-10-17 14:00:00', '2023-10-21 10:00:00', 'closed', 13, 14, 7), -- Task 7 created by Mia Turner, assigned to Noah Lewis, part of Project 7
-('Social Media Content Creation', 'Create engaging social media content to boost user engagement and brand visibility.', 'Medium', '2023-10-17 15:00:00', NULL, 'open', 15, NULL, 8), -- Task 8 created by Olivia Hall, not assigned, part of Project 8
-('Project Management Tool Implementation', 'Implement a project management tool for efficient task tracking and coordination.', 'Low', '2023-10-17 16:00:00', '2023-10-22 18:00:00', 'closed', 17, 18, 9), -- Task 9 created by Quinn King, assigned to Riley Garcia, part of Project 9
-('Blog Article Writing', 'Write a blog article on data analytics and its impact on business decision-making for the company blog.', 'High', '2023-10-17 17:00:00', NULL, 'open', 19, NULL, 10); -- Task 10 created by Sophia Allen, not assigned, part of Project 10
+('Redesign Homepage Banner', 'Create a new homepage banner design for the website with a focus on our upcoming product launch.', 'High', '2022-10-17 08:00:00', '2022-10-18 16:00:00', 'assigned', 1, 2, 1),  -- Task 1 created by Alice Johnson, assigned to Bob Smith, part of Project 1 
+('Keyword Research for Marketing', 'Conduct keyword research to identify target keywords for our marketing campaign.', 'Medium', '2022-10-17 09:00:00', NULL, 'open', 3, NULL, 2),  -- Task 2 created by Charlie Brown, not assigned, part of Project 2
+('Customer Support Ticket System Upgrade', 'Upgrade our customer support ticket system to improve response times and user experience.', 'Low', '2022-10-17 10:00:00', '2022-10-19 14:00:00', 'assigned', 5, 6, 3),  -- Task 3 created by Eve Anderson, assigned to Frank Miller, part of Project 3
+('Sales Report Analysis', 'Analyze recent sales reports to identify trends and opportunities for growth.', 'High', '2022-10-17 11:00:00', NULL, 'open', 7, NULL, 4),  -- Task 4 created by Grace Martinez, not assigned, part of Project 4
+('Mobile App UI Design', 'Design the user interface for the mobile app, focusing on a user-friendly experience.', 'Medium', '2022-10-17 12:00:00', '2022-10-20 12:00:00', 'assigned', 9, 10, 5), -- Task 5 created by Ivy Taylor, assigned to Jack Adams, part of Project 5
+('Content Marketing Calendar Planning', 'Plan the content marketing calendar for the next quarter to align with our brand strategy.', 'Low', '2022-10-17 13:00:00', NULL, 'open', 11, NULL, 6), -- Task 6 created by Karen White, not assigned, part of Project 6
+('Market Data Presentation', 'Prepare a presentation with insights from market data analysis for the executive team.', 'High', '2022-10-17 14:00:00', '2022-10-21 10:00:00', 'archived', 13, 14, 7), -- Task 7 created by Mia Turner, assigned to Noah Lewis, archived by the coordinator as feedback, part of Project 7
+('Social Media Content Creation', 'Create engaging social media content to boost user engagement and brand visibility.', 'Medium', '2022-10-17 15:00:00', NULL, 'open', 15, NULL, 8), -- Task 8 created by Olivia Hall, not assigned, part of Project 8
+('Project Management Tool Implementation', 'Implement a project management tool for efficient task tracking and coordination.', 'Low', '2022-10-17 16:00:00', '2022-10-22 18:00:00', 'open', 17, 18, 9), -- Task 9 created by Quinn King, assigned to Riley Garcia, and completed waiting for aproval, part of Project 9
+('Blog Article Writing', 'Write a blog article on data analytics and its impact on business decision-making for the company blog.', 'High', '2022-10-17 17:00:00', NULL, 'open', 19, NULL, 10); -- Task 10 created by Sophia Allen, not assigned, part of Project 10
 
 INSERT INTO comment (content, createDate, edited, commentBy, taskComment) VALUES
-('Great progress on this task!', '2023-10-17 08:30:00', FALSE, 2, 1),  -- Comment 1 by Bob Smith on Task 1
-('I will take care of this. Thanks!', '2023-10-17 10:45:00', FALSE, 1, 2),  -- Comment 2 by Alice Johnson on Task 2
-('The new design looks fantastic!', '2023-10-17 14:15:00', FALSE, 4, 3),  -- Comment 3 by David Wilson on Task 3
-('I need some more information to proceed.', '2023-10-17 16:30:00', FALSE, 6, 4),  -- Comment 4 by Frank Miller on Task 4
-('Task completed ahead of schedule!', '2023-10-18 10:00:00', FALSE, 2, 5), -- Comment 5 by Bob Smith on Task 5
-('I am making good progress on this task.', '2023-10-18 12:45:00', FALSE, 5, 6), -- Comment 6 by Eve Anderson on Task 6
-('Great insights in the report!', '2023-10-18 16:20:00', FALSE, 7, 7), -- Comment 7 by Grace Martinez on Task 7
-('Looking forward to seeing the content!', '2023-10-19 09:30:00', FALSE, 1, 8), -- Comment 8 by Alice Johnson on Task 8
-('Tool implementation is on track.', '2023-10-19 13:55:00', FALSE, 18, 9), -- Comment 9 by Riley Garcia on Task 9
-('Article is ready for review.', '2023-10-20 10:10:00', FALSE, 19, 10); -- Comment 10 by Sophia Allen on Task 10
+('Great progress on this task!', '2022-10-17 08:30:00', FALSE, 2, 1),  -- Comment 1 by Bob Smith on Task 1 
+('I will take care of this. Thanks!', '2022-10-17 10:45:00', FALSE, 1, 2),  -- Comment 2 by Alice Johnson on Task 2
+('The new design looks fantastic!', '2022-10-17 14:15:00', FALSE, 4, 3),  -- Comment 3 by David Wilson on Task 3
+('I need some more information to proceed.', '2022-10-17 16:30:00', FALSE, 6, 4),  -- Comment 4 by Frank Miller on Task 4
+('Task completed ahead of schedule!', '2022-10-18 10:00:00', FALSE, 2, 5), -- Comment 5 by Bob Smith on Task 5
+('I am making good progress on this task.', '2022-10-18 12:45:00', FALSE, 5, 6), -- Comment 6 by Eve Anderson on Task 6
+('Great insights in the report!', '2022-10-18 16:20:00', FALSE, 7, 7), -- Comment 7 by Grace Martinez on Task 7
+('Looking forward to seeing the content!', '2022-10-19 09:30:00', FALSE, 1, 8), -- Comment 8 by Alice Johnson on Task 8
+('Tool implementation is on track.', '2022-10-19 13:55:00', FALSE, 18, 9), -- Comment 9 by Riley Garcia on Task 9
+('Article is ready for review.', '2022-10-20 10:10:00', FALSE, 19, 10); -- Comment 10 by Sophia Allen on Task 10
 
-INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, notificationType, referenceID) VALUES
-('2023-10-17 08:30:00', FALSE, 2, 1, 'assignedtask', 2),  -- Notification 1 from Bob Smith to Alice Johnson
-('2023-10-17 10:45:00', FALSE, 1, 2, 'coordinator', 3),  -- Notification 2 from Alice Johnson to Bob Smith
-('2023-10-17 14:15:00', FALSE, 4, 3. 'invite', 1),  -- Notification 3 from David Wilson to Charlie Brown
-('2023-10-17 16:30:00', FALSE, 6, 4, 'archivedtask', 2),  -- Notification 4 from Frank Miller to David Wilson
-('2023-10-18 10:00:00', FALSE, 2, 5, 'acceptedinvite', 1), -- Notification 5 from Bob Smith to Eve Anderson
-('2023-10-18 12:45:00', FALSE, 5, 6, 'forum', 3), -- Notification 6 from Eve Anderson to Frank Miller
-('2023-10-18 16:20:00', FALSE, 7, 7, 'comment', 1), -- Notification 7 from Grace Martinez to Grace Martinez (self)
-('2023-10-19 09:30:00', FALSE, 1, 8, 'invite', 2), -- Notification 8 from Alice Johnson to Henry Davis
-('2023-10-19 13:55:00', FALSE, 18, 9, 'coordinator', 4), -- Notification 9 from Riley Garcia to Ivy Taylor
-('2023-10-20 10:10:00', FALSE, 19, 10, 'acceptedinvite', 1); -- Notification 10 from Sophia Allen to Jack Adams
+
+INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES
+('2022-10-17 08:30:00', FALSE, 2, 1, 'assignedtask', 2), -- Notification 1 from Bob Smith to Alice Johnson
+('2022-10-17 10:45:00', FALSE, 1, 2, 'coordinator', 3), -- Notification 2 from Alice Johnson to Bob Smith
+('2022-10-17 14:15:00', FALSE, 4, 3, 'invite', 1), -- Notification 3 from David Wilson to Charlie Brown
+('2022-10-17 16:30:00', FALSE, 6, 4, 'archivedtask', 2), -- Notification 4 from Frank Miller to David Wilson
+('2022-10-18 10:00:00', FALSE, 2, 5, 'acceptedinvite', 1), -- Notification 5 from Bob Smith to Eve Anderson
+('2022-10-18 12:45:00', FALSE, 5, 6, 'forum', 3), -- Notification 6 from Eve Anderson to Frank Miller
+('2022-10-18 16:20:00', FALSE, 7, 7, 'comment', 1), -- Notification 7 from Grace Martinez to Grace Martinez (self)
+('2022-10-19 09:30:00', FALSE, 1, 8, 'invite', 2), -- Notification 8 from Alice Johnson to Henry Davis
+('2022-10-19 13:55:00', FALSE, 18, 9, 'coordinator', 4), -- Notification 9 from Riley Garcia to Ivy Taylor
+('2022-10-20 10:10:00', FALSE, 19, 10, 'acceptedinvite', 1); -- Notification 10 from Sophia Allen to Jack Adams

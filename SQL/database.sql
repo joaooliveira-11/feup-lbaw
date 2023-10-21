@@ -13,11 +13,11 @@ DROP TABLE IF EXISTS invite CASCADE;
 DROP TABLE IF EXISTS task CASCADE;
 DROP TABLE IF EXISTS comment CASCADE;
 DROP TABLE IF EXISTS message CASCADE;
-DROP TABLE IF EXISTS comment CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
 
-DROP TYPE IF EXISTS statusTypes;
+DROP TYPE IF EXISTS taskStatus;
 DROP TYPE IF EXISTS notificationTypes;
+
 
 DROP FUNCTION IF EXISTS inviteNotification;
 DROP FUNCTION IF EXISTS coordinatorNotification;
@@ -28,7 +28,8 @@ DROP FUNCTION IF EXISTS commentNotification;
 DROP FUNCTION IF EXISTS forumNotification;
 
 
-CREATE TYPE statusTypes AS ENUM ('open', 'closed', 'archived');
+
+CREATE TYPE taskStatus AS ENUM ('open', 'assigned', 'closed', 'archived');
 CREATE TYPE notificationTypes as ENUM('assignedtask', 'coordinator', 'archivedtask', 'invite', 'forum', 'comment', 'acceptedinvite');
 
 CREATE TABLE users (
@@ -50,8 +51,8 @@ CREATE TABLE interest (
 );
 
 CREATE TABLE user_interests(
-    userId INTEGER REFERENCES Users,
-    interestId INTEGER REFERENCES Interest,
+    userId INTEGER REFERENCES users (userId) ON UPDATE CASCADE,
+    interestId INTEGER REFERENCES interest (interestId) ON UPDATE CASCADE,
     PRIMARY KEY (userId, interestId)
 );
 
@@ -61,8 +62,8 @@ CREATE TABLE skill (
 );
 
 CREATE TABLE user_skills(
-    userId INTEGER REFERENCES Users,
-    skillId INTEGER REFERENCES Skill,
+    userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
+    skillId INTEGER REFERENCES skill(skillId) ON UPDATE CASCADE,
     PRIMARY KEY (userId, skillId)
 ); 
 
@@ -73,19 +74,20 @@ CREATE TABLE project (
     isPublic BOOLEAN NOT NULL DEFAULT TRUE,
     archived BOOLEAN NOT NULL DEFAULT FALSE,
     createDate TIMESTAMP NOT NULL CHECK(createDate <= now()),
-    createdBy INTEGER NOT NULL REFERENCES Users,
-    projectCoordinator INTEGER NOT NULL REFERENCES Users
+    finishDate TIMESTAMP CHECK(finishDate <= now()),
+    createdBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
+    projectCoordinator INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE
 );
 
 CREATE TABLE project_users (
-    projectId INTEGER REFERENCES Project,
-    userId INTEGER REFERENCES Users,
+    projectId INTEGER REFERENCES project(projectId) ON UPDATE CASCADE,
+    userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
     PRIMARY KEY (projectId, userId)
 );
 
 CREATE TABLE favorite_projects (
-    projectId INTEGER REFERENCES Project,
-    userId INTEGER REFERENCES Users,
+    projectId INTEGER REFERENCES project(projectId) ON UPDATE CASCADE,
+    userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
     PRIMARY KEY (projectId, userId)
 );
 
@@ -94,9 +96,9 @@ CREATE TABLE invite (
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     createDate TIMESTAMP NOT NULL CHECK (createDate <= now()),
-    invitedBy INTEGER NOT NULL REFERENCES Users,
-    invitedTo INTEGER NOT NULL REFERENCES Users,
-    projectInvite INTEGER NOT NULL REFERENCES Project
+    invitedBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
+    invitedTo INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
+    projectInvite INTEGER NOT NULL REFERENCES project(projectId) ON UPDATE CASCADE
 );
 
 CREATE TABLE task (
@@ -105,11 +107,11 @@ CREATE TABLE task (
     description TEXT NOT NULL,
     priority TEXT NOT NULL,
     createDate TIMESTAMP NOT NULL CHECK(createDate <= now()),
-    finishDate TIMESTAMP,
-    state statusTypes NOT NULL DEFAULT 'open',
-    createBy INTEGER NOT NULL REFERENCES Users,
-    assignedTo INTEGER REFERENCES Users,
-    projectTask INTEGER REFERENCES Project 
+    finishDate TIMESTAMP CHECK(finishDate <= now()),
+    state taskStatus NOT NULL DEFAULT 'open',
+    createBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
+    assignedTo INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
+    projectTask INTEGER REFERENCES project(projectId) ON UPDATE CASCADE 
 );
     
 CREATE TABLE comment (
@@ -117,8 +119,8 @@ CREATE TABLE comment (
     content TEXT NOT NULL,
     createDate TIMESTAMP NOT NULL CHECK (createDate <= now()),
     edited BOOLEAN NOT NULL DEFAULT FALSE,
-    commentBy INTEGER NOT NULL REFERENCES Users,
-    taskComment INTEGER NOT NULL REFERENCES Task   
+    commentBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
+    taskComment INTEGER NOT NULL REFERENCES task(taskId) ON UPDATE CASCADE
 );
 
 CREATE TABLE message (
@@ -126,25 +128,23 @@ CREATE TABLE message (
     content TEXT NOT NULL,
     createDate TIMESTAMP NOT NULL CHECK (createDate <= now()),
     edited BOOLEAN NOT NULL DEFAULT FALSE,
-    messageBy INTEGER REFERENCES Users,
-    projectMessage INTEGER REFERENCES Project
+    messageBy INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
+    projectMessage INTEGER REFERENCES project(projectId) ON UPDATE CASCADE
 );
 
 CREATE TABLE notification (
     notificationId SERIAL PRIMARY KEY,
     createDate TIMESTAMP NOT NULL CHECK (createDate <= now()),
     viewed BOOLEAN NOT NULL DEFAULT FALSE,
-    emitedBy INTEGER NOT NULL REFERENCES Users, 
-    emitedTo INTEGER NOT NULL REFERENCES Users,
+    emitedBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE, 
+    emitedTo INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
     type notificationTypes NOT NULL,
     referenceID INTEGER NOT NULL
 );
 
-
-
 ------------------------------TRIGGERS------------------------------
 
-
+/*
 --TRIGGER01 (Invite Notification)
 CREATE FUNCTION inviteNotification() RETURNS TRIGGER AS
 $BODY$
@@ -270,3 +270,5 @@ CREATE TRIGGER forumNotification
         AFTER INSERT ON invite
         FOR EACH ROW
         EXECUTE PROCEDURE forumNotification();
+
+*/
