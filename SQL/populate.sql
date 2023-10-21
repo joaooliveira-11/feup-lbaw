@@ -1,7 +1,7 @@
 SET search_path TO lbaw23117;
 
 INSERT INTO users (name, username, email, password, description, photo, isAdmin, isBanned, emailVerification) VALUES
-('Alice Johnson', 'alicej', 'alice@example.com', 'securepwd123', 'User account for Alice', 'alice.jpg', FALSE, FALSE, TRUE),
+('Alice Johnson', 'alicej', 'alice@example.com', 'securepwd123', 'User account for Alice', 'alice.jpg', TRUE, FALSE, TRUE),
 ('Bob Smith', 'bobsmith', 'bob@example.com', 'bobspassword456', 'User account for Bob', 'bob.jpg', FALSE, FALSE, TRUE),
 ('Charlie Brown', 'charlieb', 'charlie@example.com', 'strongpwd789', 'User account for Charlie', 'charlie.jpg', FALSE, FALSE, TRUE),
 ('David Wilson', 'davidw', 'david@example.com', 'davidpass4321', 'User account for David', 'david.jpg', FALSE, FALSE, TRUE),
@@ -56,6 +56,7 @@ INSERT INTO user_interests (userId, interestId) VALUES (3, 6);  -- Charlie is in
 -- For user Sophia Allen
 INSERT INTO user_interests (userId, interestId) VALUES (18, 2);  -- Sophia is interested in Photography
 INSERT INTO user_interests (userId, interestId) VALUES (18, 9);  -- Sophia is interested in Music
+
 
 
 INSERT INTO skill (skill) VALUES ('Programming');
@@ -154,7 +155,7 @@ INSERT INTO user_skills (userId, skillId) VALUES (20, 3);
 
 
 INSERT INTO project (title, description, isPublic, archived, createDate, finishDate, createdBy, projectCoordinator) VALUES
-('Website Redesign', 'Redesign our company website to improve user experience and visual appeal.', FALSE, FALSE, '2022-10-21', '2022-11-30', 1, 1),  -- Project 1 created by Alice Johnson and Alice is the coordinator
+('Website Redesign', 'Redesign our company website to improve user experience and visual appeal.', FALSE, FALSE, '2022-10-21', '2022-11-30', 2, 2),  -- Project 1 created by Alice Johnson and Alice is the coordinator
 ('Marketing Campaign for New Product', 'Plan and execute a marketing campaign for our upcoming product launch.', TRUE, FALSE, '2022-10-20', '2022-12-15', 3, 3),  -- Project 2 created by Charlie Brown, and Charlie is the coordinator
 ('Customer Support Enhancement', 'Improve our customer support system to provide better assistance to our clients.', TRUE, FALSE, '2022-10-20', NULL, 5, 5),  -- Project 3 created by Eve Anderson, and Eve is the coordinator
 ('Sales Optimization Strategy', 'Develop a strategy to optimize our sales processes and increase revenue.', FALSE, FALSE, '2022-10-12','2022-11-30', 7, 7),  -- Project 4 created by Grace Martinez, and Grace is the coordinator
@@ -175,6 +176,18 @@ INSERT INTO project (title, description, isPublic, archived, createDate, finishD
 ('Music Festival Planning', 'Plan and execute a music festival with multiple artists and stages.', TRUE, FALSE, '2022-07-09', NULL, 18, 18), -- Project 19 created by Quinn King, and Quinn is the coordinator
 ('Data Analytics Workshop', 'Host a workshop on data analytics to educate employees on data-driven decision-making.', TRUE, FALSE, '2022-09-10', '2022-11-30', 20, 20);  -- Project 20 created by Sophia Allen, and Sophia is the coordinator
 
+INSERT INTO project_users (projectId, userId) VALUES
+(1, 3),
+(1, 8),
+(2, 7),
+(2, 17),
+(2, 12),
+(2, 11),
+(3, 8),
+(5, 3),
+(4, 5),
+(6, 4);
+
 INSERT INTO task (title, description, priority, createDate, finishDate, state, createBy, assignedTo, projectTask) VALUES
 ('Redesign Homepage Banner', 'Create a new homepage banner design for the website with a focus on our upcoming product launch.', 'High', '2022-10-17 08:00:00', '2022-10-18 16:00:00', 'assigned', 1, 2, 1),  -- Task 1 created by Alice Johnson, assigned to Bob Smith, part of Project 1 
 ('Keyword Research for Marketing', 'Conduct keyword research to identify target keywords for our marketing campaign.', 'Medium', '2022-10-17 09:00:00', NULL, 'open', 3, NULL, 2),  -- Task 2 created by Charlie Brown, not assigned, part of Project 2
@@ -187,9 +200,10 @@ INSERT INTO task (title, description, priority, createDate, finishDate, state, c
 ('Project Management Tool Implementation', 'Implement a project management tool for efficient task tracking and coordination.', 'Low', '2022-10-17 16:00:00', '2022-10-22 18:00:00', 'open', 17, 18, 9), -- Task 9 created by Quinn King, assigned to Riley Garcia, and completed waiting for aproval, part of Project 9
 ('Blog Article Writing', 'Write a blog article on data analytics and its impact on business decision-making for the company blog.', 'High', '2022-10-17 17:00:00', NULL, 'open', 19, NULL, 10); -- Task 10 created by Sophia Allen, not assigned, part of Project 10
 
+
 INSERT INTO comment (content, createDate, edited, commentBy, taskComment) VALUES
-('Great progress on this task!', '2022-10-17 08:30:00', FALSE, 2, 1),  -- Comment 1 by Bob Smith on Task 1 
-('I will take care of this. Thanks!', '2022-10-17 10:45:00', FALSE, 1, 2),  -- Comment 2 by Alice Johnson on Task 2
+('Great progress on this task!', '2022-10-17 08:30:00', FALSE, 3, 1),  -- Comment 1 by Bob Smith on Task 1 
+('I will take care of this. Thanks!', '2022-10-17 10:45:00', FALSE, 1, 5),  -- Comment 2 by Alice Johnson on Task 5
 ('The new design looks fantastic!', '2022-10-17 14:15:00', FALSE, 4, 3),  -- Comment 3 by David Wilson on Task 3
 ('I need some more information to proceed.', '2022-10-17 16:30:00', FALSE, 6, 4),  -- Comment 4 by Frank Miller on Task 4
 ('Task completed ahead of schedule!', '2022-10-18 10:00:00', FALSE, 2, 5), -- Comment 5 by Bob Smith on Task 5
@@ -200,14 +214,18 @@ INSERT INTO comment (content, createDate, edited, commentBy, taskComment) VALUES
 ('Article is ready for review.', '2022-10-20 10:10:00', FALSE, 19, 10); -- Comment 10 by Sophia Allen on Task 10
 
 
-INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES
-('2022-10-17 08:30:00', FALSE, 2, 1, 'assignedtask', 2), -- Notification 1 from Bob Smith to Alice Johnson
-('2022-10-17 10:45:00', FALSE, 1, 2, 'coordinator', 3), -- Notification 2 from Alice Johnson to Bob Smith
-('2022-10-17 14:15:00', FALSE, 4, 3, 'invite', 1), -- Notification 3 from David Wilson to Charlie Brown
-('2022-10-17 16:30:00', FALSE, 6, 4, 'archivedtask', 2), -- Notification 4 from Frank Miller to David Wilson
-('2022-10-18 10:00:00', FALSE, 2, 5, 'acceptedinvite', 1), -- Notification 5 from Bob Smith to Eve Anderson
-('2022-10-18 12:45:00', FALSE, 5, 6, 'forum', 3), -- Notification 6 from Eve Anderson to Frank Miller
-('2022-10-18 16:20:00', FALSE, 7, 7, 'comment', 1), -- Notification 7 from Grace Martinez to Grace Martinez (self)
-('2022-10-19 09:30:00', FALSE, 1, 8, 'invite', 2), -- Notification 8 from Alice Johnson to Henry Davis
-('2022-10-19 13:55:00', FALSE, 18, 9, 'coordinator', 4), -- Notification 9 from Riley Garcia to Ivy Taylor
-('2022-10-20 10:10:00', FALSE, 19, 10, 'acceptedinvite', 1); -- Notification 10 from Sophia Allen to Jack Adams
+INSERT INTO invite (title, description, createDate, invitedBy, invitedTo, projectInvite) VALUES
+('Invite 1', 'This is an example invite 1', '2022-10-21', 1, 2, 1),
+('Invite 2', 'This is an example invite 2', '2022-10-22', 3, 4, 2),
+('Invite 3', 'This is an example invite 3', '2022-10-23', 5, 6, 3),
+('Invite 4', 'This is an example invite 4', '2022-10-24', 7, 8, 4),
+('Invite 5', 'This is an example invite 5', '2022-10-25', 9, 10, 5),
+('Invite 6', 'This is an example invite 6', '2022-10-26', 11, 12, 6),
+('Invite 7', 'This is an example invite 7', '2022-10-27', 13, 14, 7),
+('Invite 8', 'This is an example invite 8', '2022-10-28', 15, 16, 8),
+('Invite 9', 'This is an example invite 9', '2022-10-29', 17, 18, 9),
+('Invite 10', 'This is an example invite 10', '2022-10-30', 19, 20, 10);
+
+INSERT INTO message (content, createDate, edited, messageBy, projectMessage) VALUES 
+('Hello', '2022-10-21', FALSE, 7, 2),
+('Bye', '2022-10-23', FALSE, 12, 2);

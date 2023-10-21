@@ -24,7 +24,7 @@ DROP FUNCTION IF EXISTS coordinatorNotification;
 DROP FUNCTION IF EXISTS archivedtaskNotification;
 DROP FUNCTION IF EXISTS assignedtaskNotification;
 DROP FUNCTION IF EXISTS acceptedInviteNotification;
-DROP FUNCTION IF EXISTS commentNotification;
+DROP FUNCTION IF EXISTS commeDntNotification;
 DROP FUNCTION IF EXISTS forumNotification;
 
 
@@ -142,15 +142,16 @@ CREATE TABLE notification (
     referenceID INTEGER NOT NULL
 );
 
+
+
 ------------------------------TRIGGERS------------------------------
 
-/*
 --TRIGGER01 (Invite Notification)
 CREATE FUNCTION inviteNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, notificationType, referenceID) VALUES ('2022-11-03 06:00:00', 
-        FALSE, 2, 4 , 'invite', (SELECT inviteId FROM invite WHERE invite.inviteId = NEW.inviteId));
+    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES ((SELECT createDate FROM invite WHERE invite.createDate = NEW.createDate), 
+        FALSE, (SELECT invitedBy FROM invite WHERE invite.invitedBy = NEW.invitedBy), (SELECT invitedTo FROM invite WHERE invite.invitedTo = NEW.invitedTo) , 'invite', (SELECT inviteId FROM invite WHERE invite.inviteId = NEW.inviteId));
     RETURN NEW;
 END
 $BODY$
@@ -162,12 +163,22 @@ CREATE TRIGGER inviteNotification
     EXECUTE PROCEDURE inviteNotification();
 
 
+
 --TRIGGER02 (Coordinator Notification)
 CREATE FUNCTION coordinatorNotification() RETURNS TRIGGER AS
 $BODY$
+DECLARE
+    user_id INTEGER;
 BEGIN 
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, notificationType, referenceID) VALUES ('2022-11-03 06:00:00', 
-        FALSE, 2, 4 , 'coordinator', (SELECT projectCoordinator FROM project WHERE projectCoordinator = NEW.projectCoordinator));
+    -- Check if the projectCoordinator field is updated
+    IF NEW.projectCoordinator <> OLD.projectCoordinator THEN
+        -- Iterate over all project members and insert notifications
+        FOR user_id IN (SELECT userId FROM project_users WHERE projectId = NEW.projectId) LOOP
+            INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID)
+            VALUES ('2022-11-25', FALSE, NEW.projectCoordinator, user_id, 'coordinator', NEW.projectId);
+        END LOOP;
+    END IF;
+    
     RETURN NEW;
 END
 $BODY$
@@ -176,16 +187,17 @@ LANGUAGE plpgsql;
 CREATE TRIGGER coordinatorNotification
     AFTER UPDATE ON project
     FOR EACH ROW
-    EXECUTE PROCEDURE coordinatorNotification();
+    EXECUTE FUNCTION coordinatorNotification();
+
 
 
 -- TRIGGER03 (Archieve Task Notification)
-CREATE OR REPLACE FUNCTION archivedtaskNotification() RETURNS TRIGGER AS
+CREATE FUNCTION archivedtaskNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.state = 'archived' AND NEW.state <> OLD.state THEN
-        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, notificationType, referenceID)
-        VALUES ('2022-11-03 06:00:00', FALSE, 2, 4, 'archivedtask', NEW.taskId);
+        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID)
+        VALUES ('2022-11-03', FALSE, (SELECT projectCoordinator from project WHERE NEW.projectTask = projectId), NEW.assignedTo, 'archivedtask', NEW.taskId);
     END IF;
     RETURN NEW;
 END
@@ -202,16 +214,19 @@ CREATE TRIGGER archivedtaskNotification
 --TRIGGER4 (Assigned Task Notification)
 CREATE FUNCTION assignedtaskNotification() RETURNS TRIGGER AS
 $BODY$
-BEGIN 
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, notificationType, referenceID) VALUES ('2022-11-03 06:00:00', 
-        FALSE, 2, 4 , 'assignedtask', (SELECT assignedTo FROM task WHERE assignedTo = NEW.assignedTo));
+BEGIN
+    IF (OLD.assignedTo IS NULL AND NEW.assignedTo IS NOT NULL) OR
+    (OLD.assignedTo IS NOT NULL AND NEW.assignedTo IS NOT NULL AND NEW.assignedTo <> OLD.assignedTo) THEN 
+        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES ('2022-11-03', 
+            FALSE, (SELECT projectCoordinator from project WHERE NEW.projectTask = projectId), NEW.assignedTo, 'assignedtask', NEW.taskId);
+    END IF;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER assignedtaskNotification
-        AFTER INSERT OR UPDATE ON task
+        AFTER UPDATE ON task
         FOR EACH ROW
         EXECUTE PROCEDURE assignedtaskNotification();
 
@@ -220,19 +235,22 @@ CREATE TRIGGER assignedtaskNotification
 --TRIGGER5 (Accepted Invite Notification)
 CREATE FUNCTION acceptedInviteNotification() RETURNS TRIGGER AS
 $BODY$
+DECLARE
+    user_id INTEGER;
 BEGIN
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, notificationType, referenceID) VALUES ('2022-11-03 06:00:00', 
-        FALSE, 2, 4 , 'acceptedinvite', (SELECT inviteId FROM invite WHERE invite.inviteId = NEW.inviteId));
+    FOR user_id IN (SELECT userId FROM project_users WHERE projectId = New.projectId AND userId <> NEW.userId) LOOP
+        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES ('2022-11-03', 
+            FALSE, (SELECT projectCoordinator from project WHERE NEW.projectId = projectId), user_id, 'acceptedinvite', NEW.projectId);
+    END LOOP;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER acceptedInviteNotification
-        AFTER INSERT ON invite
+        AFTER INSERT ON project_users
         FOR EACH ROW
         EXECUTE PROCEDURE acceptedInviteNotification();
-
 
 
 
@@ -240,35 +258,43 @@ CREATE TRIGGER acceptedInviteNotification
 CREATE FUNCTION commentNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, notificationType, referenceID) VALUES ('2022-11-03 06:00:00', 
-        FALSE, 2, 4 , 'comment', (SELECT inviteId FROM invite WHERE invite.inviteId = NEW.inviteId));
+    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES (NEW.createDate, 
+        FALSE, NEW.commentBy , (SELECT assignedTo FROM task WHERE NEW.taskComment = taskId), 'comment', NEW.commentId);
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER commentNotification
-        AFTER INSERT ON invite
+        AFTER INSERT ON comment
         FOR EACH ROW
         EXECUTE PROCEDURE commentNotification();
-
 
 
 
 --TRIGGER7 (Forum Notification)
 CREATE FUNCTION forumNotification() RETURNS TRIGGER AS
 $BODY$
+DECLARE
+    user_id INTEGER;
 BEGIN
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, notificationType, referenceID) VALUES ('2022-11-03 06:00:00', 
-        FALSE, 2, 4 , 'forum', (SELECT inviteId FROM invite WHERE invite.inviteId = NEW.inviteId));
+    FOR user_id IN (
+        SELECT userId FROM project_users WHERE projectId = New.projectMessage AND userId <> NEW.messageBy
+        UNION
+        SELECT projectCoordinator FROM project WHERE projectId = NEW.projectMessage
+        ) LOOP
+        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES (NEW.createDate, 
+            FALSE, NEW.messageBy, user_id, 'forum', NEW.messageId);
+    END LOOP;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER forumNotification
-        AFTER INSERT ON invite
+        AFTER INSERT ON message
         FOR EACH ROW
         EXECUTE PROCEDURE forumNotification();
 
-*/
+
+
