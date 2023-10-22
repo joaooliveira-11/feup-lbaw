@@ -26,6 +26,9 @@ DROP FUNCTION IF EXISTS assignedtaskNotification;
 DROP FUNCTION IF EXISTS acceptedInviteNotification;
 DROP FUNCTION IF EXISTS commeDntNotification;
 DROP FUNCTION IF EXISTS forumNotification;
+DROP FUNCTION IF EXISTS inviteUserInProject;
+DROP FUNCTION IF EXISTS adminCreateProj;
+DROP FUNCTION IF EXISTS coordinatorNotInProjectUsers;
 
 
 
@@ -143,6 +146,24 @@ CREATE TABLE notification (
 );
 
 
+------------------------------INDEXES------------------------------
+
+CREATE INDEX users_username ON users USING btree(username);
+CLUSTER users USING users_username;
+
+CREATE INDEX emitedBy_notification ON notification USING btree(emitedBy);
+CLUSTER notification USING emitedBy_notification;
+
+CREATE INDEX emitedTo_notification ON notification USING btree(emitedTo);
+CLUSTER notification USING emitedTo_notification;
+
+CREATE INDEX projectMessage_message ON message USING btree(projectMessage);
+CLUSTER message USING projectMessage_message;
+
+CREATE INDEX projectTask_task ON task USING hash(projectTask);
+
+CREATE INDEX task_Comment ON comment USING hash(taskComment);
+
 
 ------------------------------TRIGGERS------------------------------
 
@@ -150,8 +171,8 @@ CREATE TABLE notification (
 CREATE FUNCTION inviteNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES ((SELECT createDate FROM invite WHERE invite.createDate = NEW.createDate), 
-        FALSE, (SELECT invitedBy FROM invite WHERE invite.invitedBy = NEW.invitedBy), (SELECT invitedTo FROM invite WHERE invite.invitedTo = NEW.invitedTo) , 'invite', (SELECT inviteId FROM invite WHERE invite.inviteId = NEW.inviteId));
+    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES (NEW.createDate, 
+        FALSE, NEW.invitedBy, NEW.invitedTo , 'invite', NEW.inviteId);
     RETURN NEW;
 END
 $BODY$
@@ -163,16 +184,13 @@ CREATE TRIGGER inviteNotification
     EXECUTE PROCEDURE inviteNotification();
 
 
-
---TRIGGER02 (Coordinator Notification)
+------------TRIGGER02 (Coordinator Notification)------------
 CREATE FUNCTION coordinatorNotification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
     user_id INTEGER;
 BEGIN 
-    -- Check if the projectCoordinator field is updated
     IF NEW.projectCoordinator <> OLD.projectCoordinator THEN
-        -- Iterate over all project members and insert notifications
         FOR user_id IN (SELECT userId FROM project_users WHERE projectId = NEW.projectId) LOOP
             INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID)
             VALUES ('2022-11-25', FALSE, NEW.projectCoordinator, user_id, 'coordinator', NEW.projectId);
@@ -191,7 +209,7 @@ CREATE TRIGGER coordinatorNotification
 
 
 
--- TRIGGER03 (Archieve Task Notification)
+------------TRIGGER03 (Archieve Task Notification)------------
 CREATE FUNCTION archivedtaskNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -211,7 +229,7 @@ CREATE TRIGGER archivedtaskNotification
 
 
 
---TRIGGER4 (Assigned Task Notification)
+------------TRIGGER4 (Assigned Task Notification)------------
 CREATE FUNCTION assignedtaskNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -232,7 +250,7 @@ CREATE TRIGGER assignedtaskNotification
 
 
 
---TRIGGER5 (Accepted Invite Notification)
+------------TRIGGER5 (Accepted Invite Notification)------------
 CREATE FUNCTION acceptedInviteNotification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -254,7 +272,7 @@ CREATE TRIGGER acceptedInviteNotification
 
 
 
---TRIGGER6 (Comment Notification)
+------------TRIGGER6 (Comment Notification)------------
 CREATE FUNCTION commentNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
@@ -272,7 +290,7 @@ CREATE TRIGGER commentNotification
 
 
 
---TRIGGER7 (Forum Notification)
+------------TRIGGER7 (Forum Notification)------------
 CREATE FUNCTION forumNotification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -297,10 +315,56 @@ CREATE TRIGGER forumNotification
         EXECUTE PROCEDURE forumNotification();
 
 
-CREATE INDEX users_username ON users USING btree(username); CLUSTER users USING users_username;
-CREATE INDEX emitedBy_notification ON notification USING btree(emitedBy); CLUSTER notification USING emitedBy_notification;
-CREATE INDEX emitedTo_notification ON notification USING btree(emitedTo); CLUSTER notification USING emitedTo_notification;
-CREATE INDEX projectMessage_message ON message USING btree(projectMessage); CLUSTER message USING projectMessage_message;
-CREATE INDEX projectTask_task ON task USING hash(projectTask);
-CREATE INDEX task_Comment ON comment USING hash(taskComment);
 
+------------TRIGGER08 (An admin cannot create a project)------------
+CREATE FUNCTION adminCreateProj() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF EXISTS (SELECT * FROM users WHERE isAdmin = TRUE AND NEW.createdBy = userId) THEN
+        RAISE EXCEPTION 'An administrator cannot create a project.';
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER adminCreateProj
+    BEFORE INSERT ON project
+    FOR EACH ROW
+    EXECUTE PROCEDURE adminCreateProj();
+
+
+------------TRIGGER09 (The coordinator cannot invite a user who is already a part of the team)------------
+CREATE FUNCTION inviteUserInProject() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF EXISTS (SELECT * FROM project_users WHERE NEW.projectInvite = projectId AND NEW.invitedTo = userId) THEN
+        RAISE EXCEPTION 'The user you want to invte is already on the project team.';
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER inviteUserInProject
+    BEFORE INSERT ON invite
+    FOR EACH ROW
+    EXECUTE PROCEDURE inviteUserInProject();
+
+
+------------TRIGGER10 (The coordinator cannot be part of project as a worker)------------
+CREATE FUNCTION coordinatorNotInProjectUsers() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF EXISTS (SELECT * FROM project_users WHERE NEW.userId = (select projectCoordinator from project where NEW.projectId = projectId)) THEN
+        RAISE EXCEPTION 'The coordinator cannot be part of project as a worker';
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER inviteUserInProject
+    BEFORE INSERT ON project_users
+    FOR EACH ROW
+    EXECUTE PROCEDURE coordinatorNotInProjectUsers();
