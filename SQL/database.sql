@@ -179,7 +179,7 @@ CREATE INDEX task_Comment ON comment USING hash(taskComment);
 
 
 -----------------------------------------
--- TRIGGERS and UDFs
+-- TRIGGERS
 -----------------------------------------
 
 --TRIGGER01 (Invite Notification)
@@ -421,6 +421,101 @@ CREATE TRIGGER updateTasksOnUserLeave
     FOR EACH ROW
     EXECUTE PROCEDURE updateTasksOnUserLeave();
 
+-----------------------------------------
+-- FULL-TEXT SEARCH INDEXES
+----------------------------------------
+--Full-text search index 1 -> for the users based on matching names and usernames
+
+ALTER TABLE users ADD COLUMN tsvectors TSVECTOR;
+
+CREATE FUNCTION user_search_update() RETURNS trigger AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors :=
+            setweight(to_tsvector('english', coalesce(NEW.name, '')), 'A') ||
+            setweight(to_tsvector('english', coalesce(NEW.username, '')), 'B');
+        RETURN NEW;
+    END IF;
+
+    IF TG_OP = 'UPDATE' THEN
+        IF NEW.name <> OLD.name OR NEW.username <> OLD.username THEN
+            NEW.tsvectors :=
+                setweight(to_tsvector('english', coalesce(NEW.name, '')), 'A') ||
+                setweight(to_tsvector('english', coalesce(NEW.username, '')), 'B');
+            RETURN NEW;
+        END IF;
+    END IF;
+
+    RETURN NULL;
+END $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER user_search_update BEFORE INSERT OR UPDATE ON users
+    FOR EACH ROW EXECUTE PROCEDURE user_search_update();
+
+CREATE INDEX user_search_idx ON users USING GIN(tsvectors);
+
+
+--Full-text search index 2 -> for the projects based on matching titles and descriptions
+
+ALTER TABLE project ADD COLUMN tsvectors TSVECTOR;
+
+CREATE FUNCTION project_search_update() RETURNS trigger AS $$
+
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors :=
+            setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
+            setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
+        RETURN NEW;
+    END IF;
+
+    IF TG_OP = 'UPDATE' THEN
+        IF NEW.title <> OLD.title OR NEW.description <> OLD.description THEN
+            NEW.tsvectors :=
+                setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
+                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
+            RETURN NEW;
+        END IF;
+    END IF;
+
+    RETURN NULL;
+END $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER project_search_update BEFORE INSERT OR UPDATE ON project
+    FOR EACH ROW EXECUTE PROCEDURE project_search_update();
+
+CREATE INDEX project_search_idx ON project USING GIN(tsvectors);
+
+-- Full-text search index 3 -> for the tasks based on matching titles and descriptions
+
+ALTER TABLE task ADD COLUMN tsvectors TSVECTOR;
+
+CREATE FUNCTION task_search_update() RETURNS trigger AS $$
+
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors :=
+            setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
+            setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
+        RETURN NEW;
+    END IF;
+
+    IF TG_OP = 'UPDATE' THEN
+        IF NEW.title <> OLD.title OR NEW.description <> OLD.description THEN
+            NEW.tsvectors :=
+                setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
+                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
+            RETURN NEW;
+        END IF;
+    END IF;
+
+    RETURN NULL;
+END $$ LANGUAGE plpgsql;
+
+create TRIGGER task_search_update BEFORE INSERT OR UPDATE ON task
+    FOR EACH ROW EXECUTE PROCEDURE task_search_update();
+
+CREATE INDEX task_search_idx ON task USING GIN(tsvectors);
 
 -----------------------------------------
 -- end
