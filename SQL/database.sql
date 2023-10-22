@@ -297,4 +297,10 @@ CREATE TRIGGER forumNotification
         EXECUTE PROCEDURE forumNotification();
 
 
+CREATE INDEX users_username ON users USING btree(username); CLUSTER users USING users_username;
+CREATE INDEX emitedBy_notification ON notification USING btree(emitedBy); CLUSTER notification USING emitedBy_notification;
+CREATE INDEX emitedTo_notification ON notification USING btree(emitedTo); CLUSTER notification USING emitedTo_notification;
+CREATE INDEX projectMessage_message ON message USING btree(projectMessage); CLUSTER message USING projectMessage_message;
+CREATE INDEX projectTask_task ON task USING hash(projectTask);
+CREATE INDEX task_Comment ON comment USING hash(taskComment);
 
