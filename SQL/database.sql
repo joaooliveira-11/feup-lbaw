@@ -29,6 +29,8 @@ DROP FUNCTION IF EXISTS forumNotification;
 DROP FUNCTION IF EXISTS inviteUserInProject;
 DROP FUNCTION IF EXISTS adminCreateProj;
 DROP FUNCTION IF EXISTS coordinatorNotInProjectUsers;
+DROP FUNCTION IF EXISTS updateTasksOnUserLeave;
+DROP FUNCTION IF EXISTS commentUnassignedOrArchivedTask;
 
 
 
@@ -229,7 +231,7 @@ CREATE TRIGGER archivedtaskNotification
 
 
 
-------------TRIGGER4 (Assigned Task Notification)------------
+------------TRIGGER04 (Assigned Task Notification)------------
 CREATE FUNCTION assignedtaskNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -250,7 +252,7 @@ CREATE TRIGGER assignedtaskNotification
 
 
 
-------------TRIGGER5 (Accepted Invite Notification)------------
+------------TRIGGER05 (Accepted Invite Notification)------------
 CREATE FUNCTION acceptedInviteNotification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -272,7 +274,7 @@ CREATE TRIGGER acceptedInviteNotification
 
 
 
-------------TRIGGER6 (Comment Notification)------------
+------------TRIGGER06 (Comment Notification)------------
 CREATE FUNCTION commentNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
@@ -290,7 +292,7 @@ CREATE TRIGGER commentNotification
 
 
 
-------------TRIGGER7 (Forum Notification)------------
+------------TRIGGER07 (Forum Notification)------------
 CREATE FUNCTION forumNotification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -368,3 +370,40 @@ CREATE TRIGGER inviteUserInProject
     BEFORE INSERT ON project_users
     FOR EACH ROW
     EXECUTE PROCEDURE coordinatorNotInProjectUsers();
+
+
+------------TRIGGER11 (User cannot comment on a task that is not assigned to someone or is archived) ------------
+CREATE FUNCTION commentUnassignedOrArchivedTask() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF EXISTS (SELECT * FROM task WHERE taskId = NEW.taskComment AND (assignedTo IS NULL OR state = 'archived')) THEN
+        RAISE EXCEPTION 'User cannot comment on a task that is not assigned to someone or is archived';
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER commentUnassignedOrArchivedTask
+    BEFORE INSERT ON comment
+    FOR EACH ROW
+    EXECUTE PROCEDURE commentUnassignedOrArchivedTask();
+
+
+------------TRIGGER12 (Update tasks when a user leaves a project)------------
+CREATE FUNCTION updateTasksOnUserLeave() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    UPDATE task
+    SET state = 'open', assignedTo = NULL
+    WHERE projectTask = OLD.projectId
+    AND ((state = 'assigned' OR state = 'closed') AND assignedTo = OLD.userId);
+    RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER updateTasksOnUserLeave
+    AFTER DELETE ON project_users
+    FOR EACH ROW
+    EXECUTE PROCEDURE updateTasksOnUserLeave();

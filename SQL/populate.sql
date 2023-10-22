@@ -208,6 +208,7 @@ INSERT INTO project_users (projectId, userId) VALUES
 (20, 10),
 (20, 12);
 
+
 INSERT INTO task (title, description, priority, createDate, finishDate, state, createBy, assignedTo, projectTask) VALUES
 ('Redesign Homepage Banner', 'Create a new homepage banner design for the website with a focus on our upcoming product launch.', 'High', '2022-10-17 08:00:00', '2022-10-18 16:00:00', 'assigned', 2, 3, 1),
 ('Keyword Research for Marketing', 'Conduct keyword research to identify target keywords for our marketing campaign.', 'Medium', '2022-10-17 09:00:00', NULL, 'open', 3, NULL, 2),
@@ -217,9 +218,9 @@ INSERT INTO task (title, description, priority, createDate, finishDate, state, c
 ('Mobile App UI Design', 'Design the user interface for the mobile app, focusing on a user-friendly experience.', 'Medium', '2022-10-17 12:00:00', '2022-10-20 12:00:00', 'assigned', 9, 6, 5), 
 ('Content Marketing Calendar Planning', 'Plan the content marketing calendar for the next quarter to align with our brand strategy.', 'Low', '2022-10-17 13:00:00', NULL, 'open', 11, NULL, 6),
 ('Software Testing and Quality Assurance', 'Conduct testing and quality assurance for a software product before release.', 'High', '2022-10-19 12:00:00', '2022-10-21 16:00:00', 'assigned', 11, 16, 6),
-('Market Data Presentation', 'Prepare a presentation with insights from market data analysis for the executive team.', 'High', '2022-10-17 14:00:00', '2022-10-21 10:00:00', 'archived', 13, 4, 7),
+('Market Data Presentation', 'Prepare a presentation with insights from market data analysis for the executive team.', 'High', '2022-10-17 14:00:00', '2022-10-21 10:00:00', 'assigned', 13, 4, 7),
 ('Social Media Content Creation', 'Create engaging social media content to boost user engagement and brand visibility.', 'Medium', '2022-10-17 15:00:00', NULL, 'open', 15, NULL, 8),
-('Project Management Tool Implementation', 'Implement a project management tool for efficient task tracking and coordination.', 'Low', '2022-10-17 16:00:00', '2022-10-22 18:00:00', 'open', 17, 2, 9),
+('Project Management Tool Implementation', 'Implement a project management tool for efficient task tracking and coordination.', 'Low', '2022-10-17 16:00:00', '2022-10-22 18:00:00', 'assigned', 17, 2, 9),
 ('Blog Article Writing', 'Write a blog article on data analytics and its impact on business decision-making for the company blog.', 'High', '2022-10-17 17:00:00', NULL, 'open', 19, NULL, 10),
 ('Database Performance Monitoring', 'Monitor and optimize database performance to ensure efficient data retrieval.', 'Low', '2022-10-19 14:00:00', '2022-10-21 16:00:00', 'assigned', 19, 14, 10),
 ('E-commerce Platform Payment Integration', 'Integrate secure payment processing into the e-commerce platform.', 'High', '2022-10-18 08:00:00', '2022-10-20 16:00:00', 'assigned', 2, 7, 11),
@@ -230,10 +231,9 @@ INSERT INTO task (title, description, priority, createDate, finishDate, state, c
 ('Database Query Optimization', 'Optimize database queries for faster data retrieval and reporting.', 'High', '2022-10-18 14:00:00', '2022-10-21 16:00:00', 'assigned', 6, 13, 16),
 ('Web Security Vulnerability Patching', 'Patch security vulnerabilities found during the web security audit.', 'Medium', '2022-10-18 15:00:00', '2022-10-20 14:00:00', 'assigned', 14, 9, 17),
 ('Art Gallery Exhibition Setup', 'Coordinate the setup and arrangement of artworks for the art gallery exhibition.', 'Low', '2022-10-18 16:00:00', NULL, 'open', 16, NULL, 18),
-('Music Festival Ticket Sales', 'Manage and oversee ticket sales for the upcoming music festival.', 'Medium', '2022-10-18 17:00:00', '2022-10-23 14:00:00', 'assigned', 11, 6, 19),
+('Music Festival Ticket Sales', 'Manage and oversee ticket sales for the upcoming music festival.', 'Medium', '2022-10-18 17:00:00', '2022-10-23 14:00:00', 'archived', 11, 6, 19),
 ('Content Marketing Analysis', 'Analyze the performance of content marketing campaigns and provide insights for improvement.', 'Medium', '2022-10-18 09:00:00', '2022-10-24 16:00:00', 'assigned', 15, 10, 20),
 ('Website Security Audit Report', 'Prepare a detailed security audit report for the website with findings and recommendations.', 'High', '2022-10-19 15:00:00', NULL, 'open', 15, NULL, 20);
-
 
 
 INSERT INTO comment (content, createDate, edited, commentBy, taskComment) VALUES
