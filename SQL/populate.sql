@@ -1,3 +1,7 @@
+-----------------------------------------
+-- Populate the database
+-----------------------------------------
+
 SET search_path TO lbaw23117;
 
 INSERT INTO users (name, username, email, password, description, photo, isAdmin, isBanned, emailVerification) VALUES
@@ -266,3 +270,7 @@ INSERT INTO message (content, createDate, edited, messageBy, projectMessage) VAL
 ('Important update: We will have a team meeting tomorrow at 2 PM.', '2022-10-27', FALSE, 15, 5),
 ('Great job on completing your tasks ahead of schedule!', '2022-10-28', FALSE, 6, 14),
 ('Reminder: The project deadline is approaching. Keep up the good work!', '2022-10-29', FALSE, 9, 17);
+
+-----------------------------------------
+-- end
+-----------------------------------------

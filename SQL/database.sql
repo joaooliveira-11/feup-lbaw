@@ -1,6 +1,10 @@
 create schema if not exists lbaw23117;
 SET search_path TO lbaw23117;
 
+-----------------------------------------
+-- Drop old schema
+-----------------------------------------
+
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS interest CASCADE;
 DROP TABLE IF EXISTS user_interests CASCADE;
@@ -18,7 +22,6 @@ DROP TABLE IF EXISTS notification CASCADE;
 DROP TYPE IF EXISTS taskStatus;
 DROP TYPE IF EXISTS notificationTypes;
 
-
 DROP FUNCTION IF EXISTS inviteNotification;
 DROP FUNCTION IF EXISTS coordinatorNotification;
 DROP FUNCTION IF EXISTS archivedtaskNotification;
@@ -28,14 +31,20 @@ DROP FUNCTION IF EXISTS commeDntNotification;
 DROP FUNCTION IF EXISTS forumNotification;
 DROP FUNCTION IF EXISTS inviteUserInProject;
 DROP FUNCTION IF EXISTS adminCreateProj;
-DROP FUNCTION IF EXISTS coordinatorNotInProjectUsers;
+DROP FUNCTION IF EXISTS coordinatorNotInProjectAsUser;
 DROP FUNCTION IF EXISTS updateTasksOnUserLeave;
 DROP FUNCTION IF EXISTS commentUnassignedOrArchivedTask;
 
-
+-----------------------------------------
+-- Types
+-----------------------------------------
 
 CREATE TYPE taskStatus AS ENUM ('open', 'assigned', 'closed', 'archived');
 CREATE TYPE notificationTypes as ENUM('assignedtask', 'coordinator', 'archivedtask', 'invite', 'forum', 'comment', 'acceptedinvite');
+
+-----------------------------------------
+-- Tables
+-----------------------------------------
 
 CREATE TABLE users (
     userId SERIAL PRIMARY KEY,
@@ -148,7 +157,9 @@ CREATE TABLE notification (
 );
 
 
-------------------------------INDEXES------------------------------
+-----------------------------------------
+-- INDEXES
+-----------------------------------------
 
 CREATE INDEX users_username ON users USING btree(username);
 CLUSTER users USING users_username;
@@ -167,7 +178,9 @@ CREATE INDEX projectTask_task ON task USING hash(projectTask);
 CREATE INDEX task_Comment ON comment USING hash(taskComment);
 
 
-------------------------------TRIGGERS------------------------------
+-----------------------------------------
+-- TRIGGERS and UDFs
+-----------------------------------------
 
 --TRIGGER01 (Invite Notification)
 CREATE FUNCTION inviteNotification() RETURNS TRIGGER AS
@@ -186,7 +199,7 @@ CREATE TRIGGER inviteNotification
     EXECUTE PROCEDURE inviteNotification();
 
 
-------------TRIGGER02 (Coordinator Notification)------------
+--TRIGGER02 (Coordinator Notification)
 CREATE FUNCTION coordinatorNotification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -211,7 +224,7 @@ CREATE TRIGGER coordinatorNotification
 
 
 
-------------TRIGGER03 (Archieve Task Notification)------------
+--TRIGGER03 (Archieve Task Notification)
 CREATE FUNCTION archivedtaskNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -231,7 +244,7 @@ CREATE TRIGGER archivedtaskNotification
 
 
 
-------------TRIGGER04 (Assigned Task Notification)------------
+--TRIGGER04 (Assigned Task Notification)
 CREATE FUNCTION assignedtaskNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -252,7 +265,7 @@ CREATE TRIGGER assignedtaskNotification
 
 
 
-------------TRIGGER05 (Accepted Invite Notification)------------
+--TRIGGER05 (Accepted Invite Notification)
 CREATE FUNCTION acceptedInviteNotification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -274,7 +287,7 @@ CREATE TRIGGER acceptedInviteNotification
 
 
 
-------------TRIGGER06 (Comment Notification)------------
+--TRIGGER06 (Comment Notification)
 CREATE FUNCTION commentNotification() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
@@ -292,7 +305,7 @@ CREATE TRIGGER commentNotification
 
 
 
-------------TRIGGER07 (Forum Notification)------------
+--TRIGGER07 (Forum Notification)
 CREATE FUNCTION forumNotification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -318,7 +331,7 @@ CREATE TRIGGER forumNotification
 
 
 
-------------TRIGGER08 (An admin cannot create a project)------------
+--TRIGGER08 (An admin cannot create a project)
 CREATE FUNCTION adminCreateProj() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -336,7 +349,7 @@ CREATE TRIGGER adminCreateProj
     EXECUTE PROCEDURE adminCreateProj();
 
 
-------------TRIGGER09 (The coordinator cannot invite a user who is already a part of the team)------------
+--TRIGGER09 (The coordinator cannot invite a user who is already a part of the team)
 CREATE FUNCTION inviteUserInProject() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -354,8 +367,8 @@ CREATE TRIGGER inviteUserInProject
     EXECUTE PROCEDURE inviteUserInProject();
 
 
-------------TRIGGER10 (The coordinator cannot be part of project as a worker)------------
-CREATE FUNCTION coordinatorNotInProjectUsers() RETURNS TRIGGER AS
+--TRIGGER10 (The coordinator cannot be part of project as a worker)
+CREATE FUNCTION coordinatorNotInProjectAsUser() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF EXISTS (SELECT * FROM project_users WHERE NEW.userId = (select projectCoordinator from project where NEW.projectId = projectId)) THEN
@@ -366,13 +379,13 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER inviteUserInProject
+CREATE TRIGGER coordinatorNotInProjectAsUser
     BEFORE INSERT ON project_users
     FOR EACH ROW
-    EXECUTE PROCEDURE coordinatorNotInProjectUsers();
+    EXECUTE PROCEDURE coordinatorNotInProjectAsUser();
 
 
-------------TRIGGER11 (User cannot comment on a task that is not assigned to someone or is archived) ------------
+--TRIGGER11 (User cannot comment on a task that is not assigned to someone or is archived)
 CREATE FUNCTION commentUnassignedOrArchivedTask() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -390,7 +403,7 @@ CREATE TRIGGER commentUnassignedOrArchivedTask
     EXECUTE PROCEDURE commentUnassignedOrArchivedTask();
 
 
-------------TRIGGER12 (Update tasks when a user leaves a project)------------
+--TRIGGER12 (Update tasks when a user leaves a project)
 CREATE FUNCTION updateTasksOnUserLeave() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -407,3 +420,8 @@ CREATE TRIGGER updateTasksOnUserLeave
     AFTER DELETE ON project_users
     FOR EACH ROW
     EXECUTE PROCEDURE updateTasksOnUserLeave();
+
+
+-----------------------------------------
+-- end
+-----------------------------------------
