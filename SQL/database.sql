@@ -19,141 +19,141 @@ DROP TABLE IF EXISTS comment CASCADE;
 DROP TABLE IF EXISTS message CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
 
-DROP TYPE IF EXISTS taskStatus;
-DROP TYPE IF EXISTS notificationTypes;
+DROP TYPE IF EXISTS task_status;
+DROP TYPE IF EXISTS notification_types;
 
-DROP FUNCTION IF EXISTS inviteNotification;
-DROP FUNCTION IF EXISTS coordinatorNotification;
-DROP FUNCTION IF EXISTS archivedtaskNotification;
-DROP FUNCTION IF EXISTS assignedtaskNotification;
-DROP FUNCTION IF EXISTS acceptedInviteNotification;
-DROP FUNCTION IF EXISTS commeDntNotification;
-DROP FUNCTION IF EXISTS forumNotification;
-DROP FUNCTION IF EXISTS inviteUserInProject;
-DROP FUNCTION IF EXISTS adminCreateProj;
-DROP FUNCTION IF EXISTS coordinatorNotInProjectAsUser;
-DROP FUNCTION IF EXISTS updateTasksOnUserLeave;
-DROP FUNCTION IF EXISTS commentUnassignedOrArchivedTask;
+DROP FUNCTION IF EXISTS invite_notification;
+DROP FUNCTION IF EXISTS coordinator_notification;
+DROP FUNCTION IF EXISTS archivedtask_notification;
+DROP FUNCTION IF EXISTS assignedtask_notification;
+DROP FUNCTION IF EXISTS acceptedinvite_notification;
+DROP FUNCTION IF EXISTS comment_notification;
+DROP FUNCTION IF EXISTS forum_notification;
+DROP FUNCTION IF EXISTS invite_user_in_project;
+DROP FUNCTION IF EXISTS admin_create_proj;
+DROP FUNCTION IF EXISTS coordinator_not_in_project;
+DROP FUNCTION IF EXISTS update_tasks_on_user_leave;
+DROP FUNCTION IF EXISTS comment_unassigned_or_archived_task;
 
 -----------------------------------------
 -- Types
 -----------------------------------------
 
-CREATE TYPE taskStatus AS ENUM ('open', 'assigned', 'closed', 'archived');
-CREATE TYPE notificationTypes as ENUM('assignedtask', 'coordinator', 'archivedtask', 'invite', 'forum', 'comment', 'acceptedinvite');
+CREATE TYPE task_status AS ENUM ('open', 'assigned', 'closed', 'archived');
+CREATE TYPE notification_types as ENUM('assignedtask', 'coordinator', 'archivedtask', 'invite', 'forum', 'comment', 'acceptedinvite');
 
 -----------------------------------------
 -- Tables
 -----------------------------------------
 
 CREATE TABLE users (
-    userId SERIAL PRIMARY KEY,
+    user_id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     description TEXT,
     photo TEXT, 
-    isAdmin BOOLEAN NOT NULL DEFAULT FALSE, 
-    isBanned BOOLEAN NOT NULL DEFAULT FALSE,
-    emailVerification BOOLEAN NOT NULL DEFAULT FALSE 
+    is_admin BOOLEAN NOT NULL DEFAULT FALSE, 
+    is_banned BOOLEAN NOT NULL DEFAULT FALSE,
+    email_verification BOOLEAN NOT NULL DEFAULT FALSE 
 );
 
 CREATE TABLE interest (
-    interestId SERIAL PRIMARY KEY,
+    interest_id SERIAL PRIMARY KEY,
     interest TEXT NOT NULL 
 );
 
 CREATE TABLE user_interests(
-    userId INTEGER REFERENCES users (userId) ON UPDATE CASCADE,
-    interestId INTEGER REFERENCES interest (interestId) ON UPDATE CASCADE,
-    PRIMARY KEY (userId, interestId)
+    user_id INTEGER REFERENCES users (user_id) ON UPDATE CASCADE,
+    interest_id INTEGER REFERENCES interest (interest_id) ON UPDATE CASCADE,
+    PRIMARY KEY (user_id, interest_id)
 );
 
 CREATE TABLE skill (
-    skillId SERIAL PRIMARY KEY,
+    skill_id SERIAL PRIMARY KEY,
     skill TEXT NOT NULL 
 );
 
 CREATE TABLE user_skills(
-    userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
-    skillId INTEGER REFERENCES skill(skillId) ON UPDATE CASCADE,
-    PRIMARY KEY (userId, skillId)
+    user_id INTEGER REFERENCES users(user_id) ON UPDATE CASCADE,
+    skill_id INTEGER REFERENCES skill(skill_id) ON UPDATE CASCADE,
+    PRIMARY KEY (user_id, skill_id)
 ); 
 
 CREATE TABLE project (
-    projectId SERIAL PRIMARY KEY,
+    project_id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
-    isPublic BOOLEAN NOT NULL DEFAULT TRUE,
+    is_public BOOLEAN NOT NULL DEFAULT TRUE,
     archived BOOLEAN NOT NULL DEFAULT FALSE,
-    createDate TIMESTAMP NOT NULL CHECK(createDate <= now()),
-    finishDate TIMESTAMP CHECK(finishDate <= now()),
-    createdBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
-    projectCoordinator INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE
+    create_date TIMESTAMP NOT NULL CHECK(create_date <= now()),
+    finish_date TIMESTAMP,
+    created_by INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE,
+    project_coordinator INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE
 );
 
 CREATE TABLE project_users (
-    projectId INTEGER REFERENCES project(projectId) ON UPDATE CASCADE,
-    userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
-    PRIMARY KEY (projectId, userId)
+    project_id INTEGER REFERENCES project(project_id) ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES users(user_id) ON UPDATE CASCADE,
+    PRIMARY KEY (project_id, user_id)
 );
 
 CREATE TABLE favorite_projects (
-    projectId INTEGER REFERENCES project(projectId) ON UPDATE CASCADE,
-    userId INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
-    PRIMARY KEY (projectId, userId)
+    project_id INTEGER REFERENCES project(project_id) ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES users(user_id) ON UPDATE CASCADE,
+    PRIMARY KEY (project_id, user_id)
 );
 
 CREATE TABLE invite (
-    inviteId SERIAL PRIMARY KEY,
+    invite_id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
-    createDate TIMESTAMP NOT NULL CHECK (createDate <= now()),
-    invitedBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
-    invitedTo INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
-    projectInvite INTEGER NOT NULL REFERENCES project(projectId) ON UPDATE CASCADE
+    create_date TIMESTAMP NOT NULL CHECK (create_date <= now()),
+    invited_by INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE,
+    invited_to INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE,
+    project_invite INTEGER NOT NULL REFERENCES project(project_id) ON UPDATE CASCADE
 );
 
 CREATE TABLE task (
-    taskId SERIAL PRIMARY KEY,
+    task_id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     priority TEXT NOT NULL,
-    createDate TIMESTAMP NOT NULL CHECK(createDate <= now()),
-    finishDate TIMESTAMP CHECK(finishDate <= now()),
-    state taskStatus NOT NULL DEFAULT 'open',
-    createBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
-    assignedTo INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
-    projectTask INTEGER REFERENCES project(projectId) ON UPDATE CASCADE 
+    create_date TIMESTAMP NOT NULL CHECK(create_date <= now()),
+    finish_date TIMESTAMP,
+    state task_status NOT NULL DEFAULT 'open',
+    create_by INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE,
+    assigned_to INTEGER REFERENCES users(user_id) ON UPDATE CASCADE,
+    project_task INTEGER REFERENCES project(project_id) ON UPDATE CASCADE 
 );
     
 CREATE TABLE comment (
-    commentId SERIAL PRIMARY KEY,
+    comment_id SERIAL PRIMARY KEY,
     content TEXT NOT NULL,
-    createDate TIMESTAMP NOT NULL CHECK (createDate <= now()),
+    create_date TIMESTAMP NOT NULL CHECK (create_date <= now()),
     edited BOOLEAN NOT NULL DEFAULT FALSE,
-    commentBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
-    taskComment INTEGER NOT NULL REFERENCES task(taskId) ON UPDATE CASCADE
+    comment_by INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE,
+    task_comment INTEGER NOT NULL REFERENCES task(task_id) ON UPDATE CASCADE
 );
 
 CREATE TABLE message (
-    messageId SERIAL PRIMARY KEY,
+    message_id SERIAL PRIMARY KEY,
     content TEXT NOT NULL,
-    createDate TIMESTAMP NOT NULL CHECK (createDate <= now()),
+    create_date TIMESTAMP NOT NULL CHECK (create_date <= now()),
     edited BOOLEAN NOT NULL DEFAULT FALSE,
-    messageBy INTEGER REFERENCES users(userId) ON UPDATE CASCADE,
-    projectMessage INTEGER REFERENCES project(projectId) ON UPDATE CASCADE
+    message_by INTEGER REFERENCES users(user_id) ON UPDATE CASCADE,
+    project_message INTEGER REFERENCES project(project_id) ON UPDATE CASCADE
 );
 
 CREATE TABLE notification (
-    notificationId SERIAL PRIMARY KEY,
-    createDate TIMESTAMP NOT NULL CHECK (createDate <= now()),
+    notification_id SERIAL PRIMARY KEY,
+    create_Date TIMESTAMP NOT NULL CHECK (create_date <= now()),
     viewed BOOLEAN NOT NULL DEFAULT FALSE,
-    emitedBy INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE, 
-    emitedTo INTEGER NOT NULL REFERENCES users(userId) ON UPDATE CASCADE,
-    type notificationTypes NOT NULL,
-    referenceID INTEGER NOT NULL
+    emited_by INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE, 
+    emited_to INTEGER NOT NULL REFERENCES users(user_id) ON UPDATE CASCADE,
+    type notification_types NOT NULL,
+    reference_id INTEGER NOT NULL
 );
 
 
@@ -175,7 +175,7 @@ CLUSTER message USING projectMessage_message;
 
 CREATE INDEX projectTask_task ON task USING hash(projectTask);
 
-CREATE INDEX task_Comment ON comment USING hash(taskComment);
+CREATE INDEX task_comment ON comment USING hash(taskComment);
 
 
 -----------------------------------------
@@ -183,32 +183,32 @@ CREATE INDEX task_Comment ON comment USING hash(taskComment);
 -----------------------------------------
 
 --TRIGGER01 (Invite Notification)
-CREATE FUNCTION inviteNotification() RETURNS TRIGGER AS
+CREATE FUNCTION invite_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES (NEW.createDate, 
-        FALSE, NEW.invitedBy, NEW.invitedTo , 'invite', NEW.inviteId);
+    INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NEW.create_date, 
+        FALSE, NEW.invited_by, NEW.invited_to , 'invite', NEW.invite_id);
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER inviteNotification
+CREATE TRIGGER invite_notification
     AFTER INSERT ON invite
     FOR EACH ROW
-    EXECUTE PROCEDURE inviteNotification();
+    EXECUTE PROCEDURE invite_notification();
 
 
 --TRIGGER02 (Coordinator Notification)
-CREATE FUNCTION coordinatorNotification() RETURNS TRIGGER AS
+CREATE FUNCTION coordinator_notification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
-    user_id INTEGER;
+    userslist INTEGER;
 BEGIN 
-    IF NEW.projectCoordinator <> OLD.projectCoordinator THEN
-        FOR user_id IN (SELECT userId FROM project_users WHERE projectId = NEW.projectId) LOOP
-            INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID)
-            VALUES ('2022-11-25', FALSE, NEW.projectCoordinator, user_id, 'coordinator', NEW.projectId);
+    IF NEW.project_coordinator <> OLD.project_Coordinator THEN
+        FOR userslist IN (SELECT user_id FROM project_users WHERE project_id = NEW.project_id) LOOP
+            INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id)
+            VALUES ('2022-11-25', FALSE, NEW.project_coordinator, userslist, 'coordinator', NEW.project_id);
         END LOOP;
     END IF;
     
@@ -217,125 +217,125 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER coordinatorNotification
+CREATE TRIGGER coordinator_notification
     AFTER UPDATE ON project
     FOR EACH ROW
-    EXECUTE FUNCTION coordinatorNotification();
+    EXECUTE FUNCTION coordinator_notification();
 
 
 
 --TRIGGER03 (Archieve Task Notification)
-CREATE FUNCTION archivedtaskNotification() RETURNS TRIGGER AS
+CREATE FUNCTION archivedtask_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF NEW.state = 'archived' AND NEW.state <> OLD.state THEN
-        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID)
-        VALUES ('2022-11-03', FALSE, (SELECT projectCoordinator from project WHERE NEW.projectTask = projectId), NEW.assignedTo, 'archivedtask', NEW.taskId);
+        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id)
+        VALUES ('2022-11-03', FALSE, (SELECT project_coordinator from project WHERE NEW.project_task = project_id), NEW.assigned_to, 'archivedtask', NEW.task_id);
     END IF;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER archivedtaskNotification
+CREATE TRIGGER archivedtask_notification
     AFTER UPDATE ON task
     FOR EACH ROW
-    EXECUTE PROCEDURE archivedtaskNotification();
+    EXECUTE PROCEDURE archivedtask_notification();
 
 
 
 --TRIGGER04 (Assigned Task Notification)
-CREATE FUNCTION assignedtaskNotification() RETURNS TRIGGER AS
+CREATE FUNCTION assignedtask_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF (OLD.assignedTo IS NULL AND NEW.assignedTo IS NOT NULL) OR
-    (OLD.assignedTo IS NOT NULL AND NEW.assignedTo IS NOT NULL AND NEW.assignedTo <> OLD.assignedTo) THEN 
-        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES ('2022-11-03', 
-            FALSE, (SELECT projectCoordinator from project WHERE NEW.projectTask = projectId), NEW.assignedTo, 'assignedtask', NEW.taskId);
+    IF (OLD.assigned_to IS NULL AND NEW.assigned_to IS NOT NULL) OR
+    (OLD.assigned_to IS NOT NULL AND NEW.assigned_to IS NOT NULL AND NEW.assigned_to <> OLD.assigned_to) THEN 
+        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES ('2022-11-03', 
+            FALSE, (SELECT project_coordinator from project WHERE NEW.project_task = project_id), NEW.assigned_to, 'assignedtask', NEW.task_id);
     END IF;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER assignedtaskNotification
+CREATE TRIGGER assignedtask_notification
         AFTER UPDATE ON task
         FOR EACH ROW
-        EXECUTE PROCEDURE assignedtaskNotification();
+        EXECUTE PROCEDURE assignedtask_notification();
 
 
 
 --TRIGGER05 (Accepted Invite Notification)
-CREATE FUNCTION acceptedInviteNotification() RETURNS TRIGGER AS
+CREATE FUNCTION acceptedinvite_notification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
-    user_id INTEGER;
+    userslist INTEGER;
 BEGIN
-    FOR user_id IN (SELECT userId FROM project_users WHERE projectId = New.projectId AND userId <> NEW.userId) LOOP
-        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES ('2022-11-03', 
-            FALSE, (SELECT projectCoordinator from project WHERE NEW.projectId = projectId), user_id, 'acceptedinvite', NEW.projectId);
+    FOR userslist IN (SELECT user_id FROM project_users WHERE project_id = New.project_id AND user_id <> NEW.user_id) LOOP
+        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES ('2022-11-03', 
+            FALSE, (SELECT project_coordinator from project WHERE NEW.project_id = project_id), userslist, 'acceptedinvite', NEW.project_id);
     END LOOP;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER acceptedInviteNotification
+CREATE TRIGGER acceptedinvite_notification
         AFTER INSERT ON project_users
         FOR EACH ROW
-        EXECUTE PROCEDURE acceptedInviteNotification();
+        EXECUTE PROCEDURE acceptedinviteNotification();
 
 
 
 --TRIGGER06 (Comment Notification)
-CREATE FUNCTION commentNotification() RETURNS TRIGGER AS
+CREATE FUNCTION comment_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
-    INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES (NEW.createDate, 
-        FALSE, NEW.commentBy , (SELECT assignedTo FROM task WHERE NEW.taskComment = taskId), 'comment', NEW.commentId);
+    INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NEW.create_date, 
+        FALSE, NEW.comment_by , (SELECT assigned_to FROM task WHERE NEW.task_comment = task_id), 'comment', NEW.comment_id);
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER commentNotification
+CREATE TRIGGER comment_notification
         AFTER INSERT ON comment
         FOR EACH ROW
-        EXECUTE PROCEDURE commentNotification();
+        EXECUTE PROCEDURE comment_notification();
 
 
 
 --TRIGGER07 (Forum Notification)
-CREATE FUNCTION forumNotification() RETURNS TRIGGER AS
+CREATE FUNCTION forum_notification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
-    user_id INTEGER;
+    userslist INTEGER;
 BEGIN
-    FOR user_id IN (
-        SELECT userId FROM project_users WHERE projectId = New.projectMessage AND userId <> NEW.messageBy
+    FOR userslist IN (
+        SELECT user_id FROM project_users WHERE project_id = New.project_message AND user_id <> NEW.message_by
         UNION
-        SELECT projectCoordinator FROM project WHERE projectId = NEW.projectMessage
+        SELECT project_coordinator FROM project WHERE project_id = NEW.project_message
         ) LOOP
-        INSERT INTO notification (createDate, viewed, emitedBy, emitedTo, type, referenceID) VALUES (NEW.createDate, 
-            FALSE, NEW.messageBy, user_id, 'forum', NEW.messageId);
+        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NEW.create_date, 
+            FALSE, NEW.message_by, userslist, 'forum', NEW.message_id);
     END LOOP;
     RETURN NEW;
 END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER forumNotification
+CREATE TRIGGER forum_notification
         AFTER INSERT ON message
         FOR EACH ROW
-        EXECUTE PROCEDURE forumNotification();
+        EXECUTE PROCEDURE forum_notification();
 
 
 
 --TRIGGER08 (An admin cannot create a project)
-CREATE FUNCTION adminCreateProj() RETURNS TRIGGER AS
+CREATE FUNCTION admin_create_proj() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM users WHERE isAdmin = TRUE AND NEW.createdBy = userId) THEN
+    IF EXISTS (SELECT * FROM users WHERE is_admin = TRUE AND NEW.created_by = user_id) THEN
         RAISE EXCEPTION 'An administrator cannot create a project.';
     END IF;
     RETURN NEW;
@@ -343,17 +343,17 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER adminCreateProj
+CREATE TRIGGER admin_create_proj
     BEFORE INSERT ON project
     FOR EACH ROW
-    EXECUTE PROCEDURE adminCreateProj();
+    EXECUTE PROCEDURE admin_create_proj();
 
 
 --TRIGGER09 (The coordinator cannot invite a user who is already a part of the team)
-CREATE FUNCTION inviteUserInProject() RETURNS TRIGGER AS
+CREATE FUNCTION invite_user_in_project() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM project_users WHERE NEW.projectInvite = projectId AND NEW.invitedTo = userId) THEN
+    IF EXISTS (SELECT * FROM project_users WHERE NEW.project_invite = project_id AND NEW.invited_to = user_id) THEN
         RAISE EXCEPTION 'The user you want to invte is already on the project team.';
     END IF;
     RETURN NEW;
@@ -361,17 +361,17 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER inviteUserInProject
+CREATE TRIGGER invite_user_in_project
     BEFORE INSERT ON invite
     FOR EACH ROW
-    EXECUTE PROCEDURE inviteUserInProject();
+    EXECUTE PROCEDURE invite_user_in_project();
 
 
 --TRIGGER10 (The coordinator cannot be part of project as a worker)
-CREATE FUNCTION coordinatorNotInProjectAsUser() RETURNS TRIGGER AS
+CREATE FUNCTION coordinator_not_in_project() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM project_users WHERE NEW.userId = (select projectCoordinator from project where NEW.projectId = projectId)) THEN
+    IF EXISTS (SELECT * FROM project_users WHERE NEW.user_id = (select project_coordinator from project where NEW.project_id = project_id)) THEN
         RAISE EXCEPTION 'The coordinator cannot be part of project as a worker';
     END IF;
     RETURN NEW;
@@ -379,17 +379,16 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER coordinatorNotInProjectAsUser
+CREATE TRIGGER coordinator_not_in_project
     BEFORE INSERT ON project_users
     FOR EACH ROW
-    EXECUTE PROCEDURE coordinatorNotInProjectAsUser();
-
+    EXECUTE PROCEDURE coordinator_not_in_project();
 
 --TRIGGER11 (User cannot comment on a task that is not assigned to someone or is archived)
-CREATE FUNCTION commentUnassignedOrArchivedTask() RETURNS TRIGGER AS
+CREATE FUNCTION comment_unassigned_or_archived_task() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM task WHERE taskId = NEW.taskComment AND (assignedTo IS NULL OR state = 'archived')) THEN
+    IF EXISTS (SELECT * FROM task WHERE task_id = NEW.task_comment AND (assigned_to IS NULL OR state = 'archived')) THEN
         RAISE EXCEPTION 'User cannot comment on a task that is not assigned to someone or is archived';
     END IF;
     RETURN NEW;
@@ -397,29 +396,29 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER commentUnassignedOrArchivedTask
+CREATE TRIGGER comment_unassigned_or_archived_task
     BEFORE INSERT ON comment
     FOR EACH ROW
-    EXECUTE PROCEDURE commentUnassignedOrArchivedTask();
+    EXECUTE PROCEDURE comment_unassigned_or_archived_task();
 
 
 --TRIGGER12 (Update tasks when a user leaves a project)
-CREATE FUNCTION updateTasksOnUserLeave() RETURNS TRIGGER AS
+CREATE FUNCTION update_tasks_on_user_leave() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     UPDATE task
-    SET state = 'open', assignedTo = NULL
-    WHERE projectTask = OLD.projectId
-    AND ((state = 'assigned' OR state = 'closed') AND assignedTo = OLD.userId);
+    SET state = 'open', assigned_to = NULL
+    WHERE project_task = OLD.project_id
+    AND ((state = 'assigned' OR state = 'closed') AND assigned_to = OLD.user_id);
     RETURN OLD;
 END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER updateTasksOnUserLeave
+CREATE TRIGGER update_tasks_on_user_leave
     AFTER DELETE ON project_users
     FOR EACH ROW
-    EXECUTE PROCEDURE updateTasksOnUserLeave();
+    EXECUTE PROCEDURE update_tasks_on_user_leave();
 
 -----------------------------------------
 -- FULL-TEXT SEARCH INDEXES
@@ -452,7 +451,7 @@ END $$ LANGUAGE plpgsql;
 CREATE TRIGGER user_search_update BEFORE INSERT OR UPDATE ON users
     FOR EACH ROW EXECUTE PROCEDURE user_search_update();
 
-CREATE INDEX user_search_idx ON users USING GIN(tsvectors);
+CREATE INDEX user_search__idx ON users USING GIN(tsvectors);
 
 
 --Full-text search index 2 -> for the projects based on matching titles and descriptions
@@ -484,7 +483,7 @@ END $$ LANGUAGE plpgsql;
 CREATE TRIGGER project_search_update BEFORE INSERT OR UPDATE ON project
     FOR EACH ROW EXECUTE PROCEDURE project_search_update();
 
-CREATE INDEX project_search_idx ON project USING GIN(tsvectors);
+CREATE INDEX project_search__idx ON project USING GIN(tsvectors);
 
 -- Full-text search index 3 -> for the tasks based on matching titles and descriptions
 
@@ -515,7 +514,7 @@ END $$ LANGUAGE plpgsql;
 create TRIGGER task_search_update BEFORE INSERT OR UPDATE ON task
     FOR EACH ROW EXECUTE PROCEDURE task_search_update();
 
-CREATE INDEX task_search_idx ON task USING GIN(tsvectors);
+CREATE INDEX task_search__idx ON task USING GIN(tsvectors);
 
 -----------------------------------------
 -- end

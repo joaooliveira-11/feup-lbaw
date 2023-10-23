@@ -4,11 +4,11 @@
 
 SET search_path TO lbaw23117;
 
-INSERT INTO users (name, username, email, password, description, photo, isAdmin, isBanned, emailVerification) VALUES
+INSERT INTO users (name, username, email, password, description, photo, is_admin, is_banned, email_verification) VALUES
 ('Alice Johnson', 'alicej', 'alice@example.com', 'securepwd123', 'User account for Alice', 'alice.jpg', TRUE, FALSE, TRUE),
 ('Bob Smith', 'bobsmith', 'bob@example.com', 'bobspassword456', 'User account for Bob', 'bob.jpg', FALSE, FALSE, TRUE),
 ('Charlie Brown', 'charlieb', 'charlie@example.com', 'strongpwd789', 'User account for Charlie', 'charlie.jpg', FALSE, FALSE, TRUE),
-('David Wilson', 'davidw', 'david@example.com', 'davidpass4321', 'User account for David', 'david.jpg', FALSE, FALSE, TRUE),
+('Dav_id Wilson', 'dav_idw', 'dav_id@example.com', 'dav_idpass4321', 'User account for Dav_id', 'dav_id.jpg', FALSE, FALSE, TRUE),
 ('Eve Anderson', 'evea', 'eve@example.com', 'password1234', 'User account for Eve', 'eve.jpg', FALSE, FALSE, TRUE),
 ('Frank Miller', 'frankm', 'frank@example.com', 'millerpwd567', 'User account for Frank', 'frank.jpg', FALSE, FALSE, TRUE),
 ('Grace Martinez', 'gracem', 'grace@example.com', 'grace12345', 'User account for Grace', 'grace.jpg', FALSE, FALSE, TRUE),
@@ -34,7 +34,7 @@ INSERT INTO interest (interest) VALUES
 ('Open Source'),
 ('Data Science'),
 ('Problem Solving'),
-('Video Games'),
+('V_ideo Games'),
 ('AI and Robotics'),
 ('Blockchain'),
 ('Cybersecurity'),
@@ -47,7 +47,7 @@ INSERT INTO interest (interest) VALUES
 ('Linux');
 
 
-INSERT INTO user_interests (userId, interestId) VALUES 
+INSERT INTO user_interests (user_id, interest_id) VALUES 
 (1, 1),
 (1, 4),
 (1, 7),
@@ -105,7 +105,7 @@ INSERT INTO skill (skill) VALUES
 ('Data Science');
 
 
-INSERT INTO user_skills (userId, skillId) VALUES 
+INSERT INTO user_skills (user_id, skill_id) VALUES 
 (2, 4),
 (2, 7),
 (3, 3),
@@ -146,18 +146,18 @@ INSERT INTO user_skills (userId, skillId) VALUES
 (20, 3);
 
 
-INSERT INTO project (title, description, isPublic, archived, createDate, finishDate, createdBy, projectCoordinator) VALUES
-('Website Redesign', 'Redesign our company website to improve user experience and visual appeal.', FALSE, FALSE, '2022-10-21', '2022-11-30', 2, 2),
+INSERT INTO project (title, description, is_public, archived, create_date, finish_date, created_by, project_coordinator) VALUES
+('Website Redesign', 'Redesign our company website to improve user experience and visual appeal.', FALSE, FALSE, '2022-10-21', '2023-11-30', 2, 2),
 ('Marketing Campaign for New Product', 'Plan and execute a marketing campaign for our upcoming product launch.', TRUE, FALSE, '2022-10-20', '2022-12-15', 3, 3),
-('Customer Support Enhancement', 'Improve our customer support system to provide better assistance to our clients.', TRUE, FALSE, '2022-10-20', NULL, 5, 5),
+('Customer Support Enhancement', 'Improve our customer support system to prov_ide better assistance to our clients.', TRUE, FALSE, '2022-10-20', NULL, 5, 5),
 ('Sales Optimization Strategy', 'Develop a strategy to optimize our sales processes and increase revenue.', FALSE, FALSE, '2022-10-12','2022-11-30', 7, 7),
 ('E-commerce Website Development', 'Create an e-commerce platform for our online store with secure payment processing.', TRUE, FALSE, '2022-9-25', '2022-12-20', 9, 9),
 ('Content Marketing Plan', 'Plan and execute a content marketing strategy to enhance brand visibility.', TRUE, FALSE, '2022-10-13', '2022-11-30', 11, 11), 
-('Data Analysis for Market Insights', 'Analyze market data to provide insights and improve decision-making.', FALSE, FALSE, '2022-10-14', '2022-12-15', 13, 13),
+('Data Analysis for Market Insights', 'Analyze market data to prov_ide insights and improve decision-making.', FALSE, FALSE, '2022-10-14', '2022-12-15', 13, 13),
 ('Social Media Engagement Campaign', 'Increase social media engagement and grow our online presence.', FALSE, TRUE, '2022-10-20', NULL, 15, 15),
 ('Project Management Tool Implementation', 'Implement a project management tool for efficient task tracking and coordination.', TRUE, FALSE, '2022-09-29', '2022-11-30',17, 17),
 ('Content Creation and Publishing', 'Create and publish engaging content to boost brand awareness and user engagement.',TRUE, FALSE, '2022-09-30', '2022-12-31', 19, 19),
-('Mobile App Development', 'Develop a mobile app to provide our users with a better mobile experience.', TRUE, FALSE, '2022-09-01', NULL, 2, 2),
+('Mobile App Development', 'Develop a mobile app to prov_ide our users with a better mobile experience.', TRUE, FALSE, '2022-09-01', NULL, 2, 2),
 ('Product Inventory Management', 'Implement a system to efficiently manage product inventory and restocking.',TRUE, FALSE, '2022-08-02', '2022-11-30', 4, 4),
 ('Content Writing for Blog', 'Create high-quality content for our company blog to engage readers.', FALSE, FALSE, '2022-01-03', NULL, 5, 5),
 ('Customer Feedback Surveys', 'Design and conduct customer feedback surveys to gather insights for improvements.', TRUE, FALSE, '2022-02-04', '2022-12-15', 12, 12),
@@ -168,7 +168,7 @@ INSERT INTO project (title, description, isPublic, archived, createDate, finishD
 ('Music Festival Planning', 'Plan and execute a music festival with multiple artists and stages.', TRUE, FALSE, '2022-07-09', NULL, 11, 11),
 ('Data Analytics Workshop', 'Host a workshop on data analytics to educate employees on data-driven decision-making.', TRUE, FALSE, '2022-09-10', '2022-11-30', 15, 15);
 
-INSERT INTO project_users (projectId, userId) VALUES
+INSERT INTO project_users (project_id, user_id) VALUES
 (1, 3),
 (1, 8),
 (2, 7),
@@ -213,12 +213,12 @@ INSERT INTO project_users (projectId, userId) VALUES
 (20, 12);
 
 
-INSERT INTO task (title, description, priority, createDate, finishDate, state, createBy, assignedTo, projectTask) VALUES
+INSERT INTO task (title, description, priority, create_date, finish_date, state, create_by, assigned_to, project_task) VALUES
 ('Redesign Homepage Banner', 'Create a new homepage banner design for the website with a focus on our upcoming product launch.', 'High', '2022-10-17 08:00:00', '2022-10-18 16:00:00', 'assigned', 2, 3, 1),
-('Keyword Research for Marketing', 'Conduct keyword research to identify target keywords for our marketing campaign.', 'Medium', '2022-10-17 09:00:00', NULL, 'open', 3, NULL, 2),
+('Keyword Research for Marketing', 'Conduct keyword research to _identify target keywords for our marketing campaign.', 'Medium', '2022-10-17 09:00:00', NULL, 'open', 3, NULL, 2),
 ('Product Launch Event Planning', 'Plan and coordinate the upcoming product launch event for our new offering.', 'High', '2022-10-19 10:00:00', '2022-10-24 16:00:00', 'assigned', 3, 17, 2),
 ('Customer Support Ticket System Upgrade', 'Upgrade our customer support ticket system to improve response times and user experience.', 'Low', '2022-10-17 10:00:00', '2022-10-19 14:00:00', 'assigned', 5, 8, 3),
-('Sales Report Analysis', 'Analyze recent sales reports to identify trends and opportunities for growth.', 'High', '2022-10-17 11:00:00', NULL, 'open', 7, NULL, 4),
+('Sales Report Analysis', 'Analyze recent sales reports to _identify trends and opportunities for growth.', 'High', '2022-10-17 11:00:00', NULL, 'open', 7, NULL, 4),
 ('Mobile App UI Design', 'Design the user interface for the mobile app, focusing on a user-friendly experience.', 'Medium', '2022-10-17 12:00:00', '2022-10-20 12:00:00', 'assigned', 9, 6, 5), 
 ('Content Marketing Calendar Planning', 'Plan the content marketing calendar for the next quarter to align with our brand strategy.', 'Low', '2022-10-17 13:00:00', NULL, 'open', 11, NULL, 6),
 ('Software Testing and Quality Assurance', 'Conduct testing and quality assurance for a software product before release.', 'High', '2022-10-19 12:00:00', '2022-10-21 16:00:00', 'assigned', 11, 16, 6),
@@ -236,11 +236,11 @@ INSERT INTO task (title, description, priority, createDate, finishDate, state, c
 ('Web Security Vulnerability Patching', 'Patch security vulnerabilities found during the web security audit.', 'Medium', '2022-10-18 15:00:00', '2022-10-20 14:00:00', 'assigned', 14, 9, 17),
 ('Art Gallery Exhibition Setup', 'Coordinate the setup and arrangement of artworks for the art gallery exhibition.', 'Low', '2022-10-18 16:00:00', NULL, 'open', 16, NULL, 18),
 ('Music Festival Ticket Sales', 'Manage and oversee ticket sales for the upcoming music festival.', 'Medium', '2022-10-18 17:00:00', '2022-10-23 14:00:00', 'archived', 11, 6, 19),
-('Content Marketing Analysis', 'Analyze the performance of content marketing campaigns and provide insights for improvement.', 'Medium', '2022-10-18 09:00:00', '2022-10-24 16:00:00', 'assigned', 15, 10, 20),
+('Content Marketing Analysis', 'Analyze the performance of content marketing campaigns and prov_ide insights for improvement.', 'Medium', '2022-10-18 09:00:00', '2022-10-24 16:00:00', 'assigned', 15, 10, 20),
 ('Website Security Audit Report', 'Prepare a detailed security audit report for the website with findings and recommendations.', 'High', '2022-10-19 15:00:00', NULL, 'open', 15, NULL, 20);
 
 
-INSERT INTO comment (content, createDate, edited, commentBy, taskComment) VALUES
+INSERT INTO comment (content, create_date, edited, comment_by, task_comment) VALUES
 ('Great progress on this task!', '2022-10-17 08:30:00', FALSE, 8, 1),
 ('The new design looks fantastic!', '2022-10-17 14:15:00', FALSE, 7, 3),
 ('I need some more information to proceed.', '2022-10-17 16:30:00', FALSE, 13, 4),
@@ -255,7 +255,7 @@ INSERT INTO comment (content, createDate, edited, commentBy, taskComment) VALUES
 ('Please make sure the content aligns with our brand.', '2022-10-24 12:45:00', FALSE, 13, 19);
 
 
-INSERT INTO invite (title, description, createDate, invitedBy, invitedTo, projectInvite) VALUES
+INSERT INTO invite (title, description, create_date, invited_by, invited_to, project_invite) VALUES
 ('Web Development Collaboration', 'Join us in an exciting web development project to create innovative solutions.', '2022-10-21', 2, 5, 1),
 ('Marketing Campaign Team', 'Collaborate on a strategic marketing campaign to boost brand visibility and growth.', '2022-10-22', 9, 11, 5),
 ('Data Analysis Team Invitation', 'Join our team of data analysts to uncover valuable insights and drive informed decisions.', '2022-10-23', 13, 6, 7),
@@ -264,12 +264,13 @@ INSERT INTO invite (title, description, createDate, invitedBy, invitedTo, projec
 ('Content Marketing Collaboration', 'Collaborate on a content marketing strategy to enhance brand visibility and user engagement.', '2022-10-26', 16, 12, 18);
 
 
-INSERT INTO message (content, createDate, edited, messageBy, projectMessage) VALUES 
+INSERT INTO message (content, create_date, edited, message_by, project_message) VALUES 
 ('Welcome to our project! We are excited to have you on board.', '2022-10-25', FALSE, 3, 1),
 ('Lets collaborate and make this project a success!', '2022-10-26', TRUE, 10, 8),
 ('Important update: We will have a team meeting tomorrow at 2 PM.', '2022-10-27', FALSE, 15, 5),
 ('Great job on completing your tasks ahead of schedule!', '2022-10-28', FALSE, 6, 14),
 ('Reminder: The project deadline is approaching. Keep up the good work!', '2022-10-29', FALSE, 9, 17);
+
 
 -----------------------------------------
 -- end
