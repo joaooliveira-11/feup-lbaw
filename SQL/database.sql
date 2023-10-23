@@ -164,18 +164,18 @@ CREATE TABLE notification (
 CREATE INDEX users_name ON users USING btree(name);
 CLUSTER users USING users_name;
 
-CREATE INDEX emitedBy_notification ON notification USING btree(emitedBy);
+CREATE INDEX emitedBy_notification ON notification USING btree(emited_by);
 CLUSTER notification USING emitedBy_notification;
 
-CREATE INDEX emitedTo_notification ON notification USING btree(emitedTo);
+CREATE INDEX emitedTo_notification ON notification USING btree(emited_to);
 CLUSTER notification USING emitedTo_notification;
 
-CREATE INDEX projectMessage_message ON message USING btree(projectMessage);
+CREATE INDEX projectMessage_message ON message USING btree(project_message);
 CLUSTER message USING projectMessage_message;
 
-CREATE INDEX projectTask_task ON task USING hash(projectTask);
+CREATE INDEX projectTask_task ON task USING hash(project_task);
 
-CREATE INDEX task_comment ON comment USING hash(taskComment);
+CREATE INDEX task_comment ON comment USING hash(task_comment);
 
 
 -----------------------------------------
@@ -283,7 +283,7 @@ LANGUAGE plpgsql;
 CREATE TRIGGER acceptedinvite_notification
         AFTER INSERT ON project_users
         FOR EACH ROW
-        EXECUTE PROCEDURE acceptedinviteNotification();
+        EXECUTE PROCEDURE acceptedinvite_notification();
 
 
 

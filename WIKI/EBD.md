@@ -328,24 +328,24 @@ To facilitate the development of a well-designed database, it is imperative to h
 | **Index**           | IDX02 |
 | ---                 | --- |
 | **Relation**        | notification |
-| **Attribute**       | emitted_by  |
+| **Attribute**       | emited_by  |
 | **Type**            | B-tree |
 | **Cardinality**     | medium |
 | **Clustering**      | yes |
 | **Justification**   | Since we have a lot of notifications, searching them using an index will improve performance using a B-tree and a cluster. UPDATE frequency is loe and cardinality is medium. |
-| **SQL code** | `CREATE INDEX emitedBy_notification ON notification USING btree(emitedBy); CLUSTER notification USING emitedBy_notification; ` |
+| **SQL code** | `CREATE INDEX emitedBy_notification ON notification USING btree(emited_by); CLUSTER notification USING emitedBy_notification; ` |
 
 *Table 26: EmittedBy User Index*
 
 | **Index**           | IDX03 |
 | ---                 | --- |
 | **Relation**        | notification |
-| **Attribute**       | emitted_to  |
+| **Attribute**       | emited_to  |
 | **Type**            | B-tree |
 | **Cardinality**     | medium |
 | **Clustering**      | yes |
 | **Justification**   | Since we have a lot of notifications, searching them using an index will improve performance using a B-tree and a cluster. UPDATE frequency is loe and cardinality is medium. |
-| **SQL code**  | `CREATE INDEX emitedTo_notification ON notification USING btree(emitedTo); CLUSTER notification USING emitedTo_notification;` |
+| **SQL code**  | `CREATE INDEX emitedTo_notification ON notification USING btree(emited_to); CLUSTER notification USING emitedTo_notification;` |
 
 *Table 27: EmittedTo User Index*
 
@@ -357,7 +357,7 @@ To facilitate the development of a well-designed database, it is imperative to h
 | **Cardinality**     | medium |
 | **Clustering**      | yes |
 | **Justification**   | Since we have a lot of messages, searching them using an index will improve performance using a B-tree and a cluster. UPDATE frequency is loe and cardinality is medium. |
-| **SQL code** | `CREATE INDEX projectMessage_message ON message USING btree(projectMessage); CLUSTER message USING projectMessage_message;` |
+| **SQL code** | `CREATE INDEX projectMessage_message ON message USING btree(project_message); CLUSTER message USING projectMessage_message;` |
 
 *Table 28: Project Message Index*
 
@@ -369,7 +369,7 @@ To facilitate the development of a well-designed database, it is imperative to h
 | **Cardinality**     | medium |
 | **Clustering**      | no |
 | **Justification**   | Since we have a lot of tasks in every project, searching them using an index will improve performance using a hash. UPDATE frequency is loe and cardinality is medium. |
-| **SQL code** | `CREATE INDEX projectTask_task ON task USING hash(projectTask);` |
+| **SQL code** | `CREATE INDEX projectTask_task ON task USING hash(project_task);` |
 
 *Table 29: Project Task Index*
 
@@ -381,7 +381,7 @@ To facilitate the development of a well-designed database, it is imperative to h
 | **Cardinality**     | medium |
 | **Clustering**      | no                |
 | **Justification**   | Since we have a lot of tasks in every project and every task needs to have comments associated, searching the comments using an index will improve performance using a hash. UPDATE frequency is loe and cardinality is medium. |
-| **SQL code** | ` CREATE INDEX task_Comment ON comment USING hash(taskComment);` |
+| **SQL code** | ` CREATE INDEX task_Comment ON comment USING hash(task_comment);` |
 
 *Table 30: Task Comment Index*
 
@@ -1048,21 +1048,21 @@ CREATE TABLE notification (
 -- INDEXES
 -----------------------------------------
 
-CREATE INDEX users_username ON users USING btree(username);
-CLUSTER users USING users_username;
+CREATE INDEX users_name ON users USING btree(name);
+CLUSTER users USING users_name;
 
-CREATE INDEX emitedBy_notification ON notification USING btree(emitedBy);
+CREATE INDEX emitedBy_notification ON notification USING btree(emited_by);
 CLUSTER notification USING emitedBy_notification;
 
-CREATE INDEX emitedTo_notification ON notification USING btree(emitedTo);
+CREATE INDEX emitedTo_notification ON notification USING btree(emited_to);
 CLUSTER notification USING emitedTo_notification;
 
-CREATE INDEX projectMessage_message ON message USING btree(projectMessage);
+CREATE INDEX projectMessage_message ON message USING btree(project_message);
 CLUSTER message USING projectMessage_message;
 
-CREATE INDEX projectTask_task ON task USING hash(projectTask);
+CREATE INDEX projectTask_task ON task USING hash(project_task);
 
-CREATE INDEX task_comment ON comment USING hash(taskComment);
+CREATE INDEX task_comment ON comment USING hash(task_comment);
 
 
 -----------------------------------------
@@ -1170,7 +1170,7 @@ LANGUAGE plpgsql;
 CREATE TRIGGER acceptedinvite_notification
         AFTER INSERT ON project_users
         FOR EACH ROW
-        EXECUTE PROCEDURE acceptedinviteNotification();
+        EXECUTE PROCEDURE acceptedinvite_notification();
 
 
 
