@@ -161,8 +161,8 @@ CREATE TABLE notification (
 -- INDEXES
 -----------------------------------------
 
-CREATE INDEX users_username ON users USING btree(username);
-CLUSTER users USING users_username;
+CREATE INDEX users_name ON users USING btree(name);
+CLUSTER users USING users_name;
 
 CREATE INDEX emitedBy_notification ON notification USING btree(emitedBy);
 CLUSTER notification USING emitedBy_notification;
