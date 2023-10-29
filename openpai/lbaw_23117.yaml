@@ -1,0 +1,272 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: 'LBAW TeamSync Web API'
+  description: 'Web Resources Specification (A7) for TeamSync'
+
+servers:
+- url: http://lbaw23117.lbaw.fe.up.pt
+  description: Production server
+
+externalDocs:
+  description: Find more info here.
+  url: https://git.fe.up.pt/lbaw/lbaw2324/lbaw23117/-/wikis/home/EAP.md
+
+tags:
+  - name: 'M01: Authentication and Individual Profile'
+  - description: 'This component encompasses web resources related to user authentication and individual profile management. It includes essential system features such as user login and logout, registration, credential recovery, as well as the ability to view and edit personal profile information.'
+  - name: 'M02: Works'
+  - name: 'M03: Reviews and Wish list'
+  - name: 'M04: Loans'
+  - name: 'M05: User Administration and Static pages'
+
+paths:
+
+
+##################     LOG IN     ##################
+
+
+  /login:
+    get:
+      operationId: R101
+      summary: 'R101: Login Form'
+      description: 'Provide login form. Access: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show log-in UI'
+    post:
+      operationId: R102
+      summary: 'R102: Login Action'
+      description: 'Processes the login form submission. Access: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+ 
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:          # <!--- form field name
+                  type: text
+                password:    # <!--- form field name
+                  type: text
+              required:
+                - email
+                - password
+ 
+      responses:
+        '302':
+          description: 'Redirect after processing the login credentials.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to home page.'
+                  value: '/home'
+                302Error:
+                  description: 'Failed authentication. Redirect to login form.'
+                  value: '/login'
+ 
+
+##################     LOG OUT     ##################
+
+
+  /logout:
+
+    post:
+      operationId: R103
+      summary: 'R103: Logout Action'
+      description: 'Logout the current authenticated used. Access: USR, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '302':
+          description: 'Redirect after processing logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful logout. Redirect to landing page.'
+                  value: '/index'
+
+
+
+##################     REGISTER     ##################
+
+
+  /register:
+    get:
+      operationId: R104
+      summary: 'R104: Register Form'
+      description: 'Provide new user registration form. Access: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show sign-up UI'
+
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Processes the new user registration form submission. Access: PUB'
+      tags:
+        - 'M01: Authentication'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: text
+                email:
+                  type: text
+                password:
+                  type: text
+                confirm_password:
+                  type: text
+              required:
+                - name
+                - email
+                - password
+                - confirm_password
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to home page.'
+                  value: '/home'
+                302Failure:
+                  description: 'Failed authentication. Redirect to login form.'
+                  value: '/login'
+
+
+##################     PROFILE     ##################
+
+
+  /users/{id}:
+    get:
+      operationId: R106
+      summary: 'R106: View user profile'
+      description: 'Show the individual user profile. Access: USR, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Ok. Show view profile UI'
+        '302':
+          description: 'Redirect if user is not logged in or user does not exist.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed.'
+                  value: '/'
+ 
+
+##################     API     ##################
+
+
+  /api/works:
+    get:
+      operationId: R202
+      summary: 'R202: Search Works API'
+      description: 'Searches for works and returns the results as JSON. Access: PUB.'
+
+      tags: 
+        - 'M02: Works'
+
+      parameters:
+        - in: query
+          name: query
+          description: String to use for full-text search
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: item
+          description: Category of the works
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: loaned
+          description: Boolean with the loaned flag value
+          schema:
+            type: boolean
+          required: false
+        - in: query
+          name: owner
+          description: Boolean with the owner flag value
+          schema:
+            type: boolean
+          required: false
+        - in: query
+          name: classification
+          description: Integer corresponding to the work classification
+          schema:
+            type: integer
+          required: false
+
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    obs:
+                      type: string
+                    year:
+                      type: string
+                    owner:
+                      type: string
+                    type:
+                      type: string
+                example:
+                  - id: 1
+                    title: Rihanna - Unapologetic
+                    obs: Good pop music album.
+                    year: 2012
+                    owner: Joana Lima
+                    type: MP3
+                  - id: 15
+                    title: Mr. Bean
+                    obs: The best comedy movie.
+                    year: 1995
+                    owner: Manuel Teixeira
+                    type: DVD
