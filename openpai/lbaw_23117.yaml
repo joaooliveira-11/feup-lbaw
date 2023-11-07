@@ -15,18 +15,14 @@ externalDocs:
 
 tags:
   - name: 'M01: Authentication and Individual Profile'
-  - description: 'This component encompasses web resources related to user authentication and individual profile management. It includes essential system features such as user login and logout, registration, credential recovery, as well as the ability to view and edit personal profile information.'
   - name: 'M02: Works'
   - name: 'M03: Reviews and Wish list'
   - name: 'M04: Loans'
   - name: 'M05: User Administration and Static pages'
 
-paths:
-
-
 ##################     LOG IN     ##################
 
-
+paths:
   /login:
     get:
       operationId: R101
@@ -52,9 +48,11 @@ paths:
               type: object
               properties:
                 email:          # <!--- form field name
-                  type: text
+                  type: string
+                  format: email
                 password:    # <!--- form field name
-                  type: text
+                  type: string
+                  format: password
               required:
                 - email
                 - password
@@ -83,7 +81,7 @@ paths:
     post:
       operationId: R103
       summary: 'R103: Logout Action'
-      description: 'Logout the current authenticated used. Access: USR, ADM'
+      description: 'Logout the current authenticated user. Access: USR, ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
       responses:
@@ -112,14 +110,14 @@ paths:
         - 'M01: Authentication and Individual Profile'
       responses:
         '200':
-          description: 'Ok. Show sign-up UI'
+          description: 'Ok. Show Sign-Up UI'
 
     post:
       operationId: R105
       summary: 'R105: Register Action'
       description: 'Processes the new user registration form submission. Access: PUB'
       tags:
-        - 'M01: Authentication'
+        - 'M01: Authentication and Individual Profile'
 
       requestBody:
         required: true
@@ -129,15 +127,21 @@ paths:
               type: object
               properties:
                 name:
-                  type: text
+                  type: string
+                username:
+                  type: string
                 email:
-                  type: text
+                  type: string
+                  format: email
                 password:
-                  type: text
+                  type: string
+                  format: password
                 confirm_password:
-                  type: text
+                  type: string
+                  format: password
               required:
                 - name
+                - username
                 - email
                 - password
                 - confirm_password
@@ -151,10 +155,10 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful authentication. Redirect to home page.'
+                  description: 'Successful registration. Redirect to home page.'
                   value: '/home'
                 302Failure:
-                  description: 'Failed authentication. Redirect to login form.'
+                  description: 'Failed registration. Redirect to register form.'
                   value: '/login'
 
 
