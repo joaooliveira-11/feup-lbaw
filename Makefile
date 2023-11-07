@@ -12,17 +12,17 @@ help:
 	@echo "  cache     Clear all caches and remake"
 
 up:
-	@docker-compose up -d
+	@docker compose up -d
 	@php artisan serve
 
 serve:
 	@php artisan serve
 
 down:
-	@docker-compose down
+	@docker compose down
 
 logs:
-	@docker-compose logs -f
+	@docker compose logs -f
 
 db:
 	@php artisan db:seed
