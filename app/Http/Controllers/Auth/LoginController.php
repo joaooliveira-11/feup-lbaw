@@ -25,6 +25,7 @@ class LoginController extends Controller
         }
     }
 
+
     /**
      * Handle an authentication attempt.
      */
