@@ -15,6 +15,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'users';
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
 
@@ -51,10 +52,13 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the cards for a user.
+     * Get the projects for a user.
      */
-    public function cards(): HasMany
-    {
-        return $this->hasMany(Card::class);
+    public function projects(): HasMany {
+        return $this->hasMany(Project::class);
+    }
+
+    public function isAdmin() {
+        return $this->is_admin;
     }
 }
