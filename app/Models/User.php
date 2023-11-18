@@ -57,4 +57,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Card::class);
     }
+
+    /**
+     * Get the interests for a user.
+     */
+    public function interests()
+    {
+        return $this->belongsToMany(Interest::class, 'user_interests', 'user_id', 'interest_id');
+    }
 }

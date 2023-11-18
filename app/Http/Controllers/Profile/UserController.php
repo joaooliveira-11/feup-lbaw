@@ -10,21 +10,22 @@ use App\Models\User;
 class UserController extends Controller
 {
     /**
-     * Display a profile form.
+     * Display profile info.
      */
     public function show(int $id)
     {
         $user = User::find($id);
+        $interests = $user->interests()->get();
 
         if(!$user)
             return redirect()->route('cards')
                 ->withError('User not found!');
 
         return view('profile.show', [
-            'user' => $user
+            'user' => $user,
+            'interests' => $interests
         ]);
     }
-
     
     /**
      * Update a profile.
