@@ -529,7 +529,7 @@ CREATE INDEX task_search__idx ON task USING GIN(tsvectors);
 -----------------------------------------
 
 INSERT INTO users (name, username, email, password, description, photo, is_admin, is_banned, email_verification) VALUES
-('Admin', 'admin', 'admin@gmail.com', 'admin123', 'User account for Admin', 'admin.jpg', TRUE, FALSE, TRUE),
+('Admin', 'admin', 'admin@gmail.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Admin', 'admin.jpg', TRUE, FALSE, TRUE),
 ('Bob Smith', 'bobsmith', 'bob@example.com', 'bobspassword456', 'User account for Bob', 'bob.jpg', FALSE, FALSE, TRUE),
 ('Charlie Brown', 'charlieb', 'charlie@example.com', 'strongpwd789', 'User account for Charlie', 'charlie.jpg', FALSE, FALSE, TRUE),
 ('Dav_id Wilson', 'dav_idw', 'dav_id@example.com', 'dav_idpass4321', 'User account for Dav_id', 'dav_id.jpg', FALSE, FALSE, TRUE),

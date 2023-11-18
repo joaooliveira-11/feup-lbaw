@@ -11,7 +11,7 @@ class ProjectController extends Controller{
 
     public function create(Request $request){   
 
-        // $this->authorize('create', Project::class);
+        $this->authorize('create', Project::class);
 
         // Set project details.
         $project = new Project();
