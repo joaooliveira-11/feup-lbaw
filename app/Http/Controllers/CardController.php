@@ -43,8 +43,8 @@ class CardController extends Controller
 
             // Get cards for user ordered by id.
             //$cards = Auth::user()->cards()->orderBy('id')->get();
-            $user=Auth::user()->get();
-            echo($user);
+            //$user=Auth::user()->get();
+            //echo($user);
             // Check if the current user can list the cards.
             $this->authorize('list', Card::class);
 
