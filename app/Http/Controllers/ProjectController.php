@@ -15,10 +15,10 @@ class ProjectController extends Controller{
 
         // Set project details.
         $project = new Project();
-        $project->title = $request->title;
-        $project->description = $request->description;
+        $project->title = $request->input('title');
+        $project->description = $request->input('description');
         $project->create_date = now();
-        $project->finish_date = $request->finish_date;
+        $project->finish_date = $request->input('finish_date');
         $project->created_by = Auth::user()->id;
         $project->project_coordinator = Auth::user()->id;
         $project->save();
