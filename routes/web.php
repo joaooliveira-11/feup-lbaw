@@ -8,6 +8,7 @@ use App\Http\Controllers\ProjectController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Profile\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,10 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+Route::controller(UserController::class)->group(function () {
+    Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
+    Route::post('/profile', 'update');
+});
 Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/create','showCreateForm')->name('createproject');
     Route::post('/project/create', 'create');
