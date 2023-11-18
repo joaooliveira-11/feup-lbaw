@@ -530,9 +530,9 @@ CREATE INDEX task_search__idx ON task USING GIN(tsvectors);
 
 INSERT INTO users (name, username, email, password, description, photo, is_admin, is_banned, email_verification) VALUES
 ('Admin', 'admin', 'admin@gmail.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Admin', 'admin.jpg', TRUE, FALSE, TRUE),
-('Bob Smith', 'bobsmith', 'bob@example.com', 'bobspassword456', 'User account for Bob', 'bob.jpg', FALSE, FALSE, TRUE),
-('Charlie Brown', 'charlieb', 'charlie@example.com', 'strongpwd789', 'User account for Charlie', 'charlie.jpg', FALSE, FALSE, TRUE),
-('Dav_id Wilson', 'dav_idw', 'dav_id@example.com', 'dav_idpass4321', 'User account for Dav_id', 'dav_id.jpg', FALSE, FALSE, TRUE),
+('Bob Smith', 'bobsmith', 'bob@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Bob', 'bob.jpg', FALSE, FALSE, TRUE),
+('Charlie Brown', 'charlieb', 'charlie@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Charlie', 'charlie.jpg', FALSE, FALSE, TRUE),
+('Dav_id Wilson', 'dav_idw', 'dav_id@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Dav_id', 'dav_id.jpg', FALSE, FALSE, TRUE),
 ('Eve Anderson', 'evea', 'eve@example.com', 'password1234', 'User account for Eve', 'eve.jpg', FALSE, FALSE, TRUE),
 ('Frank Miller', 'frankm', 'frank@example.com', 'millerpwd567', 'User account for Frank', 'frank.jpg', FALSE, FALSE, TRUE),
 ('Grace Martinez', 'gracem', 'grace@example.com', 'grace12345', 'User account for Grace', 'grace.jpg', FALSE, FALSE, TRUE),
