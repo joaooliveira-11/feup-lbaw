@@ -1,0 +1,55 @@
+#profile_page_content {
+    width: 80%;
+    height: 100rem;
+    margin: 0 auto;
+    padding: 20px;  
+    background: linear-gradient(to right, #2E3399, #6f75e7);
+    border-radius: 5px;
+    color: #f4f4f4;
+    font-size: 16px;
+}
+
+#ProfilePicture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: block;
+    margin: 20px auto;
+}
+
+.label {
+    font-weight: bold;
+    color: #f4f4f4;
+    width: 8rem;
+}
+
+#Name, #Email, #Username, #Description, #Interests, #Skills {
+    margin-bottom: 20px;
+}
+
+#Interests li, #Skills li {
+    list-style-type: none;
+    background: transparent;
+    color: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    width: 15rem;
+    text-align: center;
+}
+
+#profile_container {
+
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1fr;
+}
+
+#Interests, #Skills, #ProfileInfo {
+    margin-right: 20px;
+}
+
+.label-info *{
+    display: inline-block;
+    margin-right:3rem;
+}
