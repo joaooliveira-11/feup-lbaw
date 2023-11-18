@@ -16,6 +16,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $interests = $user->interests()->get();
+        $skills = $user->skills()->get();
 
         if(!$user)
             return redirect()->route('cards')
@@ -23,9 +24,12 @@ class UserController extends Controller
 
         return view('profile.show', [
             'user' => $user,
-            'interests' => $interests
+            'interests' => $interests,
+            'skills' => $skills
         ]);
     }
+
+
     
     /**
      * Update a profile.

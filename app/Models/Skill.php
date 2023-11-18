@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
-
-class Interest extends Model
+class Skill extends Model
 {
     use HasFactory;
 
-    protected $table = 'interest';
-    protected $primaryKey = 'interest_id';
+    protected $table = 'skill';
+    protected $primaryKey = 'skill_id';
 
     public function users()
 {
-    return $this->belongsToMany(User::class, 'user_interests', 'interest_id', 'user_id');
+    return $this->belongsToMany(User::class, 'user_skills', 'skill_id', 'user_id');
 }
     
 }
