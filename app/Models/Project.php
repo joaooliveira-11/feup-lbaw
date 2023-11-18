@@ -13,6 +13,8 @@ class Project extends Model
 
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
+    protected $table = 'project';
+    protected $primaryKey = 'project_id';
 
     /**
      * Get the user that owns the card.
