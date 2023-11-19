@@ -2,27 +2,23 @@
 
 @section('content')
 <div id="profile_page_content">
-    <h1>Hello, {{ $user->name}}</h1>
-    <p>Here is your profile:</p>
     <div id="ProfilePicture">
     <img src="https://via.placeholder.com/150" alt="Profile Picture">
     </div>
-    <div id = "profile_container">
         <div id = "ProfileInfo"> 
-            <div id="Name" class = "label-info">
-                <p class = "label">Name </p>
+            <div id="Name">
                 <p> {{ $user->name }}</p>
             </div>
-            <div id="Email" class = "label-info" >
-                <p class = "label" >Email </p>
-                <p>{{ $user->email }}</p>
+            <div id="Username">
+                <p>( {{ $user->username }} )</p>
             </div>
-            <div id="Username" class = "label-info">
-                <p class = "label">Username </p>
-                <p> {{ $user->username }}</p>
+            <div id="Email" >
+
+                <p> Contact: {{ $user->email }}</p>
             </div>
-            <div id="Description" class = "label-info">
-                <p class = "label">Description </p>
+            
+            <div id="Description">
+                <p class = "label">About me </p>
                 <p>{{ $user->description }}</p>
             </div>
         </div>
@@ -43,6 +39,21 @@
             @else
                 @foreach ($skills as $skill)
                 <li>{{ $skill->skill }}</li>
+                @endforeach
+            @endif
+        </div>
+        <div id = "Projects">
+            <p class = "label">Projects</p>
+            @if ($projects->isEmpty())
+            <p>No projects yet!</p>
+
+            @else
+            <ul id = "ProjectsList">
+                @foreach ($projects as $project)
+                <li>
+                    <p id = "ProjectTitle">{{ $project -> title }} </p>
+                    <p>{{ $project -> description }} </p>
+                </li>
                 @endforeach
             @endif
         </div>
