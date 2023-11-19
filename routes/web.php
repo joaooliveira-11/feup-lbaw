@@ -55,3 +55,8 @@ Route::controller(ProjectController::class)->group(function() {
     Route::post('/project/create', 'create');
     Route::get('/project/{project_id}/members', 'showProjectMembers')->where(['project_id' => '[0-9]+'])->name('projectmembers');
 });
+
+Route::controller(TaskController::class)->group(function() {
+    Route::get('/project/{project_id}/task/create', 'createTaskForm')->where(['project_id' => '[0-9]+'])->name('createtaskform');
+    Route::post('/task/create', 'create')->name('createtask');
+});

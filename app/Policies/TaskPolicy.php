@@ -14,7 +14,7 @@ class TaskPolicy {
     }
     
     public function create(User $user, Task $task): bool {
-        // User can only create tasks in projects they own.
+        // User can only create tasks in projects they are members. Need to fix this 
         return $user->id === $task->project->user_id;
     }
 }

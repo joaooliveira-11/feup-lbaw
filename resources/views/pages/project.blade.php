@@ -19,8 +19,8 @@
             <div id="ProjectDeadline">
                 <p id="TitleInPage">Project Deadline:</p>
                 <p>{{ $project->deadline !== null ? $project->deadline : 'Not defined' }}</p>
-                <button id="CreateTaskButton">Create Task</button>
-                <button id="CreateTaskButton">Invite User</button>
+                <a id="CreateTaskButton" href="{{ route('createtaskform', ['project_id' => $project->project_id]) }}">Create Task</a>
+                <a id="CreateTaskButton" href="">Add Member</a>
             </div>
             <div id="ProjectDescription">
                 <p id="TitleInPage">Details:</p>
@@ -45,6 +45,40 @@
                 @else
                 <p>No tasks found for this project.</p>
                 @endif
+                <div id="taskContainer">
+                    <div id="createTask" style="display: none;">
+                        <form method="POST" action="{{ url('/task/create') }}" class="createTaskForm">
+                        <h4>New Task</h4>
+                        @csrf
+                        <input type="hidden" name="project_id" value="{{ $project->project_id }}">
+                        <label for="title">Title:</label>
+                        <input type="text" name="title" class="form-control" id="title" required>
+                        @if($errors->has('title'))
+                        <div class="error">{{ $errors->first('title') }}</div>
+                        @endif
+
+                        <label for="description">Description:</label>
+                        <input type="text" name="description" class="form-control" id="description" required>
+                        @if($errors->has('description'))
+                        <div class="error">{{ $errors->first('description') }}</div>
+                        @endif
+
+                        <label for="finish_date">Finish Date:</label>
+                        <input type="date" name="finish_date" class="form-control" id="finish_date">
+                        @if($errors->has('finishdate'))
+                        <div class="error">{{ $errors->first('finishdate') }}</div>
+                        @endif
+
+                        <label for="priority">Priority:</label>
+                        <select name="priority" id="priority" class="form-control">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-dark" id="createTaskButton">Create Task</button>
+                        </form>
+                    </div>         
+                </div>
             </div>
         </div>
     </div>
