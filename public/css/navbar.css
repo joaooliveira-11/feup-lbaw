@@ -1,12 +1,9 @@
-header {
-    border-bottom: 1px solid black;
-    margin-bottom: 5em;
-}
-
 .navbar {
     display: flex;
     justify-content: space-around;
     border-bottom: 1ps solid black;
+    background-color: rgb(227, 233, 246);
+    border-bottom: 1px solid black;
 }
 
 .navbar-list-ul {
@@ -34,5 +31,5 @@ header {
 .navbar-logout-button {
     font-size: 2rem;
     font-weight: bold;
-    color: red;
+    color: rgb(0, 0, 0);
 }

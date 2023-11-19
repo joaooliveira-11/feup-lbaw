@@ -42,20 +42,26 @@
                 @endforeach
             @endif
         </div>
-        <div id = "Projects">
-            <p class = "label">Projects</p>
-            @if ($projects->isEmpty())
-            <p>No projects yet!</p>
+        <div id="Projects">
+        <p class="label">Projects</p>
 
-            @else
-            <ul id = "ProjectsList">
+        @if ($projects->isEmpty())
+            <p>No projects yet!</p>
+        @else
+            <ul id="ProjectsList">
                 @foreach ($projects as $project)
-                <li>
-                    <p id = "ProjectTitle">{{ $project -> title }} </p>
-                    <p>{{ $project -> description }} </p>
-                </li>
+                    <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
+                        <li>
+                            <div>
+                                <p id="ProjectTitle">{{ $project->title }}</p>
+                                <p>{{ $project->description }}</p>
+                            </div>
+                    </li> 
+                </a>
                 @endforeach
-            @endif
-        </div>
+            </ul>
+        @endif
+    </div>
+
     </div>
 @endsection

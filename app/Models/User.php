@@ -15,6 +15,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'users';
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
 
@@ -50,13 +51,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    /**
-     * Get the cards for a user.
-     */
-    public function cards(): HasMany
-    {
-        return $this->hasMany(Card::class);
-    }
+    
     /**
      * Get the interests for a user.
      */

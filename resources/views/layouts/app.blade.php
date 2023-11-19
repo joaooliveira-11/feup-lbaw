@@ -15,6 +15,7 @@
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link href="{{ url('css/signin.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
+        <link href="{{ url('css/project.css') }}" rel="stylesheet">
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
@@ -26,10 +27,11 @@
     <body>
         <main>
             <header>
-                @include('partials.navbar')
+                @if(!Request::is('login') && !Request::is('register'))
+                    @include('partials.navbar')
+                @endif
                 @yield('navbar')
             </header>
-
 
             <section id="content">
                 @yield('content')

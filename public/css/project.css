@@ -1,0 +1,142 @@
+#ProjectPage {
+    background-image: url('/img/background.png');
+    background-size: cover; 
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 93vh; 
+    display: flex;
+}
+
+#ProjectInfo {
+    display: flex;
+    background-color: rgba(231, 231, 231, 0.6);
+    border-radius: 0.7vw;
+    padding: 1.67vw;
+    max-width: 80vw; 
+    height: 38vw;
+    width: 100%;
+    margin: auto; 
+    margin-top: 4.5vw;
+}
+
+#Sidebar {
+    width: 20vw;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 2vw;
+    border-radius: 0.7vw;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#Sidebar h1 {
+    font-size: 1.6vw;
+    margin-bottom: 1.2vw;
+    text-align: center;
+}
+
+#Sidebar a {
+    display: block;
+    font-size: 1vw;
+    margin-bottom: 2vw;
+    text-decoration: none;
+    color: #000000;
+}
+
+#MainContent {
+    flex-grow: 1;
+    padding-left: 2vw; 
+}
+
+#Sidebar .title-line {
+    border-bottom: 1.5px solid #000000;
+    margin-bottom: 3.5vw; 
+}
+
+#Sidebar #leaveProject {
+    color: #fff;
+    font-size: 0.9vw;
+    background-color: #e83749;
+    padding: 0.4vw 1vw;
+    margin-top: 6vw;
+    border-radius: 0.7vw;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    display: inline-block;
+    text-align: center;
+}
+
+#Sidebar #leaveProject:hover {
+    background-color: #d52536;
+}
+
+#Tasks{
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+#Tasks ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5vw;
+}
+
+#Tasks li {
+    list-style-type: none;
+    background: #303030;
+    color: #ffffff;
+    padding: 10px;
+    margin-bottom: 0.8vw;
+    border-radius: 0.7vw;
+    border: 1px solid #333;
+    font-size: 0.6vw;
+    letter-spacing: 0.02vw;
+}
+
+#TaskTitle {
+    font-size: 1.2vw;
+}
+
+.TaskLabel {
+    font-size: 1.5vw;
+    color: #303030;
+}
+
+#line-before-tasks {
+    border-top: 1px solid #000;
+    margin-top: 1.5vw;
+}
+
+#MainContent {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1vw; 
+}
+
+#ProjectDescription,
+#ProjectDeadline {
+    width: 100%;
+    font-size: 1vw;
+}
+
+#TitleInPage {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+#CreateTaskButton {
+    background-color: #303030;
+    color: white;
+    border: none;
+    border-radius: 0.7vw;
+    cursor: pointer;
+    display: inline-block;
+    width: 35%;
+    font-size: 0.7vw;
+    margin-top: -5vw;
+}
+
+#CreateTaskButton:hover,
+#InviteUserButton:hover {
+    background-color: #454545;
+}
