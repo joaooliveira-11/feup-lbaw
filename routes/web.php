@@ -21,9 +21,8 @@ Route::redirect('/', '/login');
 
 //Project
 Route::controller(ProjectController::class)->group(function () {
-    Route::get('project/{project_id}','show')->where(['project_id'=>'[0-9]+']);
+    Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
 });
-
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {

@@ -13,6 +13,7 @@ class ProjectController extends Controller {
         $project = Project::find($id);  
         $user = User::find(Auth::user()->id);
         $this->authorize('show', $project);
+        return view('pages.project', ['project'=>$project]);
     }
 
     public function create(Request $request) {   

@@ -31,6 +31,6 @@ class Project extends Model
      * Get the tasks for the project.
      */
     public function tasks(): HasMany {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'project_task');
     }
 }
