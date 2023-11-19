@@ -1,39 +1,54 @@
-/* Adicione estilos específicos para a página do projeto */
-.card {
-    margin-bottom: 20px;
+#ProjectPage {
+    background-image: url('/img/background.png');
+    background-size: cover; 
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 100vh; 
+    display: flex;
 }
 
-.card-header h2 {
-    margin-bottom: 0;
+#ProjectInfo {
+    display: flex;
+    background-color: rgba(231, 231, 231, 0.6);
+    border-radius: 1.67vw;
+    padding: 1.67vw;
+    max-width: 50vw; 
+    width: 100%;
+    margin: auto; 
+}
+#Sidebar {
+    width: 20vw;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 2vw;
+    border-radius: 1.67vw;
+    height: 100%;
+    box-sizing: border-box;
 }
 
-.card-body {
-    padding: 20px;
+#Sidebar h1 {
+    font-size: 1.6vw;
+    margin-bottom: 2vw;
 }
 
-.row.mt-4 {
-    margin-top: 20px;
+#Sidebar a {
+    display: block;
+    font-size: 0.8vw;
+    margin-bottom: 1vw;
+    text-decoration: none;
+    color: #000000;
+    transition: background-color 0.3s;
 }
 
-/* Adicione estilos específicos para a seção de tarefas */
-.card-body ul {
-    list-style-type: none;
-    padding: 0;
+#Sidebar a:hover {
+    background-color: #ccc; 
 }
 
-.card-body ul li {
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
+#Sidebar a.active {
+    background-color: #ddd;
 }
 
-.card-body ul li h4 {
-    margin-bottom: 5px;
-}
-
-/* Adicione estilos para quando não há tarefas no projeto */
-.card-body p {
-    font-style: italic;
-    color: #888;
+#MainContent {
+    flex-grow: 1;
+    padding-left: 2vw; 
 }
