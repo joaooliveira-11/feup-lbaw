@@ -62,6 +62,9 @@
             </ul>
         @endif
     </div>
+    <div id="EditProfile">
+                <button onclick="location.href='{{ url("/edit-profile/".$user->id) }}'">Edit Profile</button>
+    </div>
 
     </div>
 @endsection

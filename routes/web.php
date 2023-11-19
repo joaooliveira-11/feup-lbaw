@@ -39,8 +39,11 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
-    Route::post('/profile', 'update');
+    Route::get('/edit-profile/{id}', 'edit')->where('id', '[0-9]+')->name('edit');
+    Route::put('/profile/{id}', 'update')->name('user.update');
 });
+
+
 Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/create','showCreateForm')->name('createproject');
     Route::post('/project/create', 'create');
