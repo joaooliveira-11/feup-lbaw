@@ -47,7 +47,9 @@ Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
     Route::post('/profile', 'update');
 });
+
 Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/create','showCreateForm')->name('createproject');
     Route::post('/project/create', 'create');
+    Route::get('/project/{project_id}/members', 'showProjectMembers')->where(['project_id' => '[0-9]+'])->name('projectmembers');
 });

@@ -38,4 +38,12 @@ class ProjectController extends Controller {
         return view('pages.createProject');
     }
 
+    public function showProjectMembers(int $project_id) : View {
+        
+        $project = Project::find($project_id); 
+
+        return view('pages.projectMembers', ['project'=> $project]);
+        
+    }
+
 }

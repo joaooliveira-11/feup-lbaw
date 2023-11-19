@@ -11,7 +11,7 @@
             <a href="">Dashboard</a>
             <a href="">Chat</a>
             <a href=" ">Tasks</a>
-            <a href="">Members</a>
+            <a href="{{ route('projectmembers', ['project_id' => $project->project_id]) }}">Members</a>
             <a href="#" id="leaveProject" class="center-button">Leave Project</a>
         </div>
 
