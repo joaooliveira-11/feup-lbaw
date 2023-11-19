@@ -26,11 +26,14 @@ class Project extends Model
     public function is_member(User $user) {
         return ($this->hasMany('App\Models\Project_Users','project_id')->where('user_id', $user->id)->get()->isNotEmpty());
     }
-
+    public function users() {
+        return $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id');
+    }
     /**
      * Get the tasks for the project.
      */
     public function tasks(): HasMany {
         return $this->hasMany(Task::class, 'project_task');
     }
+    
 }

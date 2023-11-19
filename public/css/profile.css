@@ -1,0 +1,131 @@
+#profile_page_content {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;  
+    background: linear-gradient(to right, #1d1d20, #9d9ea8);
+    border-radius: 5px;
+    color: #f4f4f4;
+    font-size: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-gap: 20px;
+}
+
+#ProfilePicture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px auto;
+}
+
+.label {
+    font-weight: bold;
+    color: #f4f4f4;
+    width: 8rem;
+}
+
+
+
+#Interests li, #Skills li {
+    list-style-type: none;
+    background: transparent;
+    color: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #f4f4f4;
+    width: 15rem;
+    text-align: center;
+}
+
+#Interests, #Skills, #ProfileInfo {
+    margin-right: 20px;
+}
+
+#Interests li:hover, #Skills li:hover {
+    background: #f4f4f4;
+    color: #333;
+    border: 1px solid #333;
+    transition: ease-in-out 0.3s;
+}
+
+#ProfileInfo {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 25px;
+
+}
+
+#ProfileInfo p {
+    margin: 0;
+}
+
+#Description {
+    grid-row-start: 1;
+    grid-row-end: 4; 
+    grid-column: 2;
+}
+
+#Email, #Username, #Name {
+    grid-column: 1;
+}
+
+#Email, #Username{
+    position: relative;
+    bottom: 6rem;
+}
+
+
+
+#Name{
+    font-weight: bold;
+    font-size: 25px;
+    position: relative;
+    bottom: 1rem;
+}
+
+
+
+
+
+#Projects{
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+#Interests{
+    grid-row: 2;
+
+}
+
+#Skills{
+    grid-row: 3;
+}
+
+#Projects ul{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+#Projects li{
+    list-style-type: none;
+    background: #f4f4f4;
+    color: #333;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #333;
+}
+
+#ProjectTitle{
+    font-weight: bold;
+    color: #333;
+}
+
+#ProfilePicture img{
+    margin: 20px;
+}

@@ -51,14 +51,28 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    
     /**
-     * Get the projects for a user.
+     * Get the interests for a user.
      */
-    public function projects(): HasMany {
-        return $this->hasMany(Project::class);
+    public function interests()
+    {
+        return $this->belongsToMany(Interest::class, 'user_interests', 'user_id', 'interest_id');
     }
 
+    /**
+     * Get the skills for a user.
+     */ 
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'user_skills', 'user_id', 'skill_id');
+    }
     public function isAdmin() {
         return $this->is_admin;
+    }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_users', 'user_id', 'project_id');
     }
 }

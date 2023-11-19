@@ -32,4 +32,10 @@ class ProjectController extends Controller {
   
         return response()->json($project);
     }
+
+    public function showCreateForm(): View
+    {
+        return view('pages.createProject');
+    }
+
 }
