@@ -36,6 +36,7 @@
                 @else
                     <p>No tasks found for this project.</p>
                 @endif
+                <a href="{{ url('/task/create', ['project_id' => $project->project_id]) }}" class="btn btn-primary">Create Task</a>
             </div>
         </div>
     </div>

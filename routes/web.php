@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
@@ -41,7 +42,14 @@ Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
     Route::post('/profile', 'update');
 });
+
 Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/create','showCreateForm')->name('createproject');
     Route::post('/project/create', 'create');
+});
+
+Route::controller(TaskController::class)->group(function() {
+    Route::get('/task/create/{project_id}', 'showCreateForm');
+    // Route::get('/project/{project_id}/tasks/create', 'showCreateForm');
+    Route::post('/task/create', 'create');
 });
