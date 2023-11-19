@@ -20,7 +20,7 @@ class UserController extends Controller
         $projects = $user->projects()->get();
 
         if(!$user)
-            return redirect()->route('cards')
+            return redirect()->route('home')
                 ->withError('User not found!');
 
         return view('profile.show', [

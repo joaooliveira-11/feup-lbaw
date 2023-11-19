@@ -26,10 +26,11 @@
     <body>
         <main>
             <header>
-                @include('partials.navbar')
+                @if(!Request::is('login') && !Request::is('register'))
+                    @include('partials.navbar')
+                @endif
                 @yield('navbar')
             </header>
-
 
             <section id="content">
                 @yield('content')
