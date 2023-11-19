@@ -75,4 +75,9 @@ class User extends Authenticatable
     public function isAdmin() {
         return $this->is_admin;
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_users', 'user_id', 'project_id');
+    }
 }

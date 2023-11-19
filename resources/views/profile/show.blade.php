@@ -46,5 +46,19 @@
                 @endforeach
             @endif
         </div>
+        <div id = "Projects">
+            <p class = "label">Projects</p>
+            @if ($projects->isEmpty())
+            <p>No projects yet!</p>
+            @else
+                @foreach ($projects as $project)
+                <li>
+                    <p id = "ProjectTitle">{{ $project -> title }} </p>
+                    <p>{{ $project -> description }} </p>
+                </li>
+                @endforeach
+            @endif
+        </div>
+        </div>
     </div>
 @endsection

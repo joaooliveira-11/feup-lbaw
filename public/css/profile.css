@@ -1,6 +1,5 @@
 #profile_page_content {
     width: 80%;
-    height: 100rem;
     margin: 0 auto;
     padding: 20px;  
     background: linear-gradient(to right, #2E3399, #6f75e7);
@@ -52,4 +51,19 @@
 .label-info *{
     display: inline-block;
     margin-right:3rem;
+}
+
+#Projects li{
+    list-style-type: none;
+    background: #f4f4f4;
+    color: #333;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #333;
+}
+
+#ProjectTitle{
+    font-weight: bold;
+    color: #333;
 }
