@@ -5,7 +5,6 @@
     <form action="{{ route('user.update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
-
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="{{ $user->name }}">
 
@@ -18,22 +17,32 @@
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="4" cols="50">{{ $user->description }}</textarea>
 
-            <label for="interests">Interests:</label>
-            @foreach($allInterests as $interest)
-            <div>
-                <input type="checkbox" id="{{ $interest->interest_id }}" name="interests[]" value="{{ $interest->interest_id }}" {{ in_array($interest->interest_id, $userInterests) ? 'checked' : '' }}>
-                <label for="{{ $interest->interest_id }}">{{ $interest->interest }}</label>
+            <div id = "interests">
+                Interests:
+                <div id = "interests-list">
+                    @foreach($allInterests as $interest)
+                    <div class="interest {{ in_array($interest->interest_id, $userInterests) ? 'selected' : '' }}" >
+                        <label >
+                            <input type="checkbox" id="{{ $interest->interest_id }}" name="interests[]" value="{{ $interest->interest_id }}" {{ in_array($interest->interest_id, $userInterests) ? 'checked' : '' }}>
+                            {{ $interest->interest }}
+                        </label>
+                    </div>
+                    @endforeach
+                </div>
             </div>
-            @endforeach
-
-            <label for="skills">Skills:</label>
-            @foreach($allSkills as $skill)
-            <div>
-                <input type="checkbox" id="{{ $skill->skill_id }}" name="skills[]" value="{{ $skill->skill_id }}" {{ in_array($skill->skill_id, $userSkills) ? 'checked' : '' }}>
-                <label for="{{ $skill->skill_id }}">{{ $skill->skill }}</label>
+            <div id = "skills">
+                Skills:
+                <div id = "skills-list">
+                    @foreach($allSkills as $skill)
+                    <div class = "skill {{ in_array($skill->skill_id, $userSkills) ? 'selected' : '' }}" >
+                        <label>
+                            <input type="checkbox" id="skill{{ $skill->skill_id }}" name="skills[]" value="{{ $skill->skill_id }}" {{ in_array($skill->skill_id, $userSkills) ? 'checked' : '' }}>
+                            {{ $skill->skill }}
+                        </label>
+                    </div>
+                    @endforeach
+                </div>
             </div>
-            @endforeach
-
             <input type="submit" value="Update Profile">
         </form>
         

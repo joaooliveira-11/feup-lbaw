@@ -176,6 +176,12 @@ function addEventListeners() {
   
     return new_item;
   }
+
+  document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        this.parentNode.parentNode.classList.toggle('selected', this.checked);
+    });
+  });
   
   addEventListeners();
   
