@@ -18,5 +18,11 @@ class Interest extends Model
 {
     return $this->belongsToMany(User::class, 'user_interests', 'interest_id', 'user_id');
 }
+
+    public static function getAllInterests()
+    {
+        return self::all();
+    }
+
     
 }

@@ -21,6 +21,9 @@
                 <p class = "label">About me </p>
                 <p>{{ $user->description }}</p>
             </div>
+            <div id="EditProfile">
+                <button onclick="location.href='{{ url("/edit-profile/".$user->id) }}'">Edit Profile</button>
+            </div>
         </div>
         <div id = "Interests">
             <p class = "label">Interests</p>

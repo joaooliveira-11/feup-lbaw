@@ -18,4 +18,9 @@ class Skill extends Model
     return $this->belongsToMany(User::class, 'user_skills', 'skill_id', 'user_id');
 }
     
+    public static function getAllSkills()
+{
+        return self::all();   
+}
+    
 }
