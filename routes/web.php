@@ -48,5 +48,6 @@ Route::controller(ProjectController::class)->group(function() {
 });
 
 Route::controller(TaskController::class)->group(function() {
-    Route::post('/task/create', 'create');
+    Route::get('/project/{project_id}/task/create', 'createTaskForm')->where(['project_id' => '[0-9]+'])->name('createtaskform');
+    Route::post('/task/create', 'create')->name('createtask');
 });

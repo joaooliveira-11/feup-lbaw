@@ -19,7 +19,7 @@
             <div id="ProjectDeadline">
                 <p id="TitleInPage">Project Deadline:</p>
                 <p>{{ $project->deadline !== null ? $project->deadline : 'Not defined' }}</p>
-                <button id="CreateTaskButton">Create Task</button>
+                <a href="{{ route('createtaskform', ['project_id' => $project->project_id]) }}">Create Task</a>
                 <button id="CreateTaskButton">Invite User</button>
             </div>
             <div id="ProjectDescription">

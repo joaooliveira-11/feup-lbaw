@@ -33,4 +33,9 @@ class TaskController extends Controller {
         
         return response()->json($task);
     }
+
+    public function createTaskForm($project_id) : View {
+        return view('pages.createTask', ['project_id' => $project_id]);
+    }
+
 }
