@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
@@ -23,6 +24,11 @@ Route::redirect('/', '/login');
 //Project
 Route::controller(ProjectController::class)->group(function () {
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
+});
+
+//Task
+Route::controller(TaskController::class)->group(function () {
+    Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
 });
 
 // Authentication
