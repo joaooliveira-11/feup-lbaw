@@ -16,6 +16,7 @@
         <link href="{{ url('css/signin.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/project.css') }}" rel="stylesheet">
+        <link href="{{ url('css/createProject.css') }}" rel="stylesheet">
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug

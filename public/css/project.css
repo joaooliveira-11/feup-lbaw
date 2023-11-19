@@ -64,6 +64,7 @@
     transition: background-color 0.3s;
     display: inline-block;
     text-align: center;
+    
 }
 
 #Sidebar #leaveProject:hover {
@@ -131,9 +132,11 @@
     border-radius: 0.7vw;
     cursor: pointer;
     display: inline-block;
-    width: 35%;
-    font-size: 0.7vw;
+    width: 30%;
+    font-size: 0.8vw;
     margin-top: -5vw;
+    padding: 0.5vw;
+    text-align: center;
 }
 
 #CreateTaskButton:hover,

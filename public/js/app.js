@@ -23,10 +23,11 @@ function addEventListeners() {
     if (cardCreator != null)
       cardCreator.addEventListener('submit', sendCreateCardRequest);
 
+  /*
     let displayCreateTaskbtn = document.getElementById('CreateTaskButton');
     displayCreateTaskbtn.addEventListener('click', displayCreateTask);
-  
-  }
+  */
+}
   
   function encodeForAjax(data) {
     if (data == null) return null;
@@ -180,12 +181,11 @@ function addEventListeners() {
   
     return new_item;
   }
-
+/*
   function displayCreateTask(event) {
     event.preventDefault();
     let createTaskElement = document.getElementById('createTask');
     createTaskElement.style.display = (createTaskElement.style.display === 'none') ? 'block' : 'none';
   }
-
+*/
   addEventListeners();
-  
