@@ -25,6 +25,7 @@ class TaskController extends Controller {
         $task->title = $request->input('title');
         $task->description = $request->input('description');
         $task->priority = $request->input('priority');
+        $task->create_date = now();
         $task->finish_date = $request->input('finish_date');
         $task->create_by = Auth::user()->id;
         $task->project_task = $project_id;
