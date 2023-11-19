@@ -181,6 +181,7 @@ function addEventListeners() {
   
     return new_item;
   }
+
 /*
   function displayCreateTask(event) {
     event.preventDefault();
@@ -188,4 +189,11 @@ function addEventListeners() {
     createTaskElement.style.display = (createTaskElement.style.display === 'none') ? 'block' : 'none';
   }
 */
+
+  document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        this.parentNode.parentNode.classList.toggle('selected', this.checked);
+    });
+  });
+  
   addEventListeners();

@@ -8,6 +8,11 @@ use App\Models\Task;
 
 class TaskPolicy {
 
+    public function show(User $user, Task $task) {
+        $project = Project::find($task->project_task);
+        return $project->is_member($user) || $user->isAdmin();    
+    }
+    
     public function create(User $user, Task $task): bool {
         // User can only create tasks in projects they are members. Need to fix this 
         return $user->id === $task->project->user_id;

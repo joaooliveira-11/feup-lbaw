@@ -3,7 +3,7 @@
     background-size: cover; 
     background-position: center center;
     background-repeat: no-repeat;
-    min-height: 93vh; 
+    min-height: 92.9vh; 
     display: flex;
 }
 
@@ -58,7 +58,7 @@
     font-size: 0.9vw;
     background-color: #e83749;
     padding: 0.4vw 1vw;
-    margin-top: 6vw;
+    margin-top: 3.5vw;
     border-radius: 0.7vw;
     text-decoration: none;
     transition: background-color 0.3s;
@@ -101,6 +101,7 @@
 .TaskLabel {
     font-size: 1.5vw;
     color: #303030;
+    margin-bottom: 0.2vw;
 }
 
 #line-before-tasks {

@@ -5,14 +5,14 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
 
 class TaskController extends Controller {
     public function show(int $id){
         $task = Task::find($id);  
         $user = User::find(Auth::user()->id);
         $this->authorize('show', $task);
-        return view('partials.task', ['task'=>$task]);
+        return view('pages.task', ['task'=>$task]);
     }
 
     public function create(Request $request){
@@ -21,6 +21,7 @@ class TaskController extends Controller {
 
         // Set task details.
         $project_id = $request->input('project_id');
+        
         $task = new Task();
         $task->title = $request->input('title');
         $task->description = $request->input('description');
