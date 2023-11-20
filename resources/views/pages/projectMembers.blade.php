@@ -23,9 +23,11 @@
             <div class="add-user-list">
                 <ul class="add-user-ul">
                     @foreach($project->users as $user)
+                    <a href="{{ route('show', ['id' => $user->id]) }}">
                         <li class="add-user-element">
                             <p>{{ $user->name }} - <em>{{ '@' . $user->username }}</em></p>
                         </li>
+                    </a>
                     @endforeach
                 </ul>
             </div>
