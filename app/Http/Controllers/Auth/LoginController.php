@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\View\View;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -38,8 +39,10 @@ class LoginController extends Controller
  
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
- 
-            return redirect()->intended('/profile');
+            //return redirect()->intended('/profile/');
+            $user = User::find(Auth::user()->id);
+            return redirect()->route('show', ['id' => $user->id])
+            ->withSuccess('You have successfully logged in!');
         }
  
         return back()->withErrors([
