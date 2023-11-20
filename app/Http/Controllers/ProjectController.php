@@ -63,12 +63,15 @@ class ProjectController extends Controller {
     }
 
     public function addUser(Request $request) {   
-    
+
         $project_users = new Project_Users();
-        $project_users->project_id = $request->project_id;
-        $project_users->user_id = $request->user_id;
+        $project_users->project_id = $request->input('project_id');
+        $project_users->user_id = $request->input('user_id');
         $project_users->save();
 
-        return view('pages.addUser', ['project'=> $project]);
+        $project_id = $project_users->project_id;
+
+        $project = Project::find($project_id); 
+        return view('pages.projectMembers', ['project'=> $project]);
     }
 }

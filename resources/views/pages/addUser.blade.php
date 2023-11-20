@@ -25,7 +25,7 @@
                     @foreach($project->usersNotInProject()  as $user)
                         <li class="add-user-element">
                             <p>{{ $user->name }} - <em>{{ '@' . $user->username }}</em></p>
-                            <form method="POST" action="{{ route('addUser') }}">
+                            <form method="POST" action="{{ route('adduser') }}">
                                 @csrf
                                 <input type="hidden" name="project_id" value="{{ $project->project_id }}">
                                 <input type="hidden" name="user_id" value="{{ $user->id }}">
