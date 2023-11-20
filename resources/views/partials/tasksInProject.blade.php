@@ -1,12 +1,10 @@
 @section('tasksInProject')
 
 <div id="Tasks">
-    <div class="line-before-tasks"></div>
     <p class="TaskLabel">All Tasks:</p>
 
-    <!-- Barra de pesquisa -->
     <div class="search-bar">
-        <input type="text" id="taskSearch" placeholder="Search tasks...">
+        <input type="text" id="taskSearch" placeholder="Search tasks..." onkeyup="searchOnEnter(event)">
         <button onclick="searchTasks()">Search</button>
     </div>
 

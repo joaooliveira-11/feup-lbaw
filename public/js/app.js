@@ -217,4 +217,28 @@ function addEventListeners() {
   }
 
 
+  function searchTasks() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('taskSearch');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById('TasksList');
+    li = ul.getElementsByTagName('li');
+
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName('p')[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = '';
+        } else {
+            li[i].style.display = 'none';
+        }
+    }
+  }
+
+  function searchOnEnter(event) {
+    if (event.key === 'Enter') {
+        searchTasks();
+    }
+  }
+
   addEventListeners();
