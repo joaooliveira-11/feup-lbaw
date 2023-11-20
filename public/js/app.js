@@ -49,6 +49,14 @@ function addEventListeners() {
     request.addEventListener('load', handler);
     request.send(encodeForAjax(data));
   }
+
+  function getCSRF() {
+    let tokenField = document.createElement('input')
+    tokenField.type = "hidden"
+    tokenField.name = "_token"
+    tokenField.value = document.querySelector("head meta[name='csrf-token']").content;
+    return tokenField;
+  }
   
   function sendItemUpdateRequest() {
     let item = this.closest('li.item');
@@ -242,24 +250,55 @@ function addEventListeners() {
   }
 
   function searchProjects() {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById('projectSearch');
-    filter = input.value.toUpperCase();
-    ul = document.querySelector('.projects-list');
-    li = ul.getElementsByTagName('li');
-
-    for (i = 0; i < li.length; i++) {
-        a = li[i].querySelector('.project-title');
-        txtValue = a.textContent || a.innerText;
-        
-        // Alteração para pesquisa de texto completo
-        if (txtValue.toUpperCase().includes(filter)) {
-            li[i].style.display = '';
-        } else {
-            li[i].style.display = 'none';
-        }
-    }
+      var input = document.getElementById('projectSearch');
+      var filter = input.value;
+      
+  
+      sendAjaxRequest('POST', '/search-projects', { filter: filter }, handleSearchResponse);
 }
+
+function handleSearchResponse() {
+  if (this.status >= 200 && this.status < 400) {
+      var data = JSON.parse(this.response);
+      var container = document.querySelector('#projects-container');
+      var ul = document.querySelector('.projects-list');
+      if (!ul) {
+          ul = document.createElement('ul');
+          ul.classList.add('projects-list');
+          container.appendChild(ul);
+      }
+      ul.innerHTML = ''; 
+
+      data.forEach(project => {
+          var li = document.createElement('li');
+          li.classList.add('project-item');
+
+          var div = document.createElement('div');
+
+          var a = document.createElement('a');
+          a.href = '/project/' + project.project_id;
+          a.classList.add('project-link');
+
+          var title = document.createElement('h2');
+          title.classList.add('project-title');
+          title.textContent = project.title;
+          div.appendChild(title);
+
+          var description = document.createElement('p');
+          description.classList.add('project-description');
+          description.textContent = project.description;
+          div.appendChild(description);
+
+
+          li.appendChild(div);
+          a.appendChild(li);
+          ul.appendChild(a);
+      });
+  } else {
+      console.error('Error:', this.status, this.statusText);
+  }
+}
+
 
 function searchProjectsOnEnter(event) {
     if (event.key === 'Enter') {

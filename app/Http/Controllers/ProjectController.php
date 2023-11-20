@@ -61,4 +61,15 @@ class ProjectController extends Controller {
         return view('pages.allTasks', ['project'=> $project]);
     }
 
+    public function search(Request $request)
+    {
+        $filter = strtolower($request->get('filter'));
+
+        $projects = Project::whereRaw('LOWER(title) LIKE ?', ['%' . $filter . '%'])
+        ->where('is_public', 1)
+        ->get();
+
+    return response()->json($projects);
+    }
+
 }
