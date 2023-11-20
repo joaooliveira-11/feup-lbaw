@@ -33,13 +33,14 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+// User
 Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
     Route::get('/edit-profile/{id}', 'edit')->where('id', '[0-9]+')->name('edit');
     Route::put('/profile/{id}', 'update')->name('user.update');
 });
 
-
+//Project
 Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/create','showCreateForm')->name('createproject');
     Route::post('/project/create', 'create');
@@ -47,7 +48,7 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
 });
 
-
+//Task
 Route::controller(TaskController::class)->group(function() {
     Route::get('/project/{project_id}/task/create', 'createTaskForm')->where(['project_id' => '[0-9]+'])->name('createtaskform');
     Route::post('/task/create', 'create')->name('createtask');
