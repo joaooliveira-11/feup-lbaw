@@ -10,4 +10,6 @@ class Project_Users extends Model
     public $timestamps  = false;
 
     protected $table = 'project_users';
+
+    protected $primaryKey = ['project_id', 'user_id'];
 }
