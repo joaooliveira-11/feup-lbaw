@@ -20,7 +20,6 @@ body{
 .button,button,input[type='button'],input[type='reset'],input[type='submit']{
     border:none;
     border-radius:.1vw;
-    color:#fff;
     cursor:pointer;
     display:inline-block;
     font-size:1vw;
