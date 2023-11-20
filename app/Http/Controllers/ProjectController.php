@@ -57,6 +57,22 @@ class ProjectController extends Controller {
         return view('pages.projectMembers', ['project'=> $project]);
     }
 
+    public function showProjectTasks(int $project_id) : View {
+        $project = Project::find($project_id); 
+        return view('pages.allTasks', ['project'=> $project]);
+    }
+
+    public function search(Request $request)
+    {
+        $filter = strtolower($request->get('filter'));
+
+        $projects = Project::whereRaw('LOWER(title) LIKE ?', ['%' . $filter . '%'])
+        ->where('is_public', 1)
+        ->get();
+
+    return response()->json($projects);
+    }
+
     public function showNonProjectMembers(int $project_id) : View {
         $project = Project::find($project_id); 
         return view('pages.addUser', ['project'=> $project]);
