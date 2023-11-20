@@ -29,7 +29,7 @@ paths:
       summary: 'R101: Login Form'
       description: 'Provide login form. Access: PUB'
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - 'M02: Individual Profile'
       responses:
         '200':
           description: 'Ok. Show log-in UI'
@@ -83,7 +83,7 @@ paths:
       summary: 'R103: Logout Action'
       description: 'Logout the current authenticated user. Access: USR, ADM'
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - 'M02: Individual Profile'
       responses:
         '302':
           description: 'Redirect after processing logout.'
@@ -164,8 +164,7 @@ paths:
 
 ##################     PROFILE     ##################
 
-
-  /users/{id}:
+  /profile/{id}:
     get:
       operationId: R106
       summary: 'R106: View user profile'
@@ -193,7 +192,327 @@ paths:
                 302Failure:
                   description: 'Failed.'
                   value: '/'
- 
+                  
+##################     EDIT PROFILE     ##################
+
+  /edit-profile/{id}:
+    get:
+      operationId: R107
+      summary: 'R107: Edit user profile form'
+      description: 'Provide edit user profile form. Access: USR, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show edit profile UI'
+        '302':
+          description: 'Redirect if user is not logged in or user does not exist.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed.'
+                  value: '/'
+
+    put:
+      operationId: R108
+      summary: 'R108: Update user profile'
+      description: 'Processes the edit user profile form submission. Access: USR, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                confirm_password:
+                  type: string
+                  format: password
+              required:
+                - name
+                - username
+                - email
+      responses:
+        '302':
+          description: 'Redirect after processing the updated user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful update. Redirect to profile page.'
+                  value: '/profile/{id}'
+                302Failure:
+                  description: 'Failed update. Redirect to edit profile form.'
+                  value: '/edit-profile/{id}'
+
+##################     PROJECT     ##################
+
+  /project/create:
+    get:
+      operationId: R109
+      summary: 'R109: Create project form'
+      description: 'Provide create project form. Access: USR, ADM'
+      tags:
+        - 'M02: Works'
+      responses:
+        '200':
+          description: 'Ok. Show create project UI'
+        '302':
+          description: 'Redirect if user is not logged in.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed.'
+                  value: '/login'
+
+    post:
+      operationId: R110
+      summary: 'R110: Create project'
+      description: 'Processes the create project form submission. Access: USR, ADM'
+      tags:
+        - 'M02: Works'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                project_name:
+                  type: string
+                project_description:
+                  type: string
+              required:
+                - project_name
+      responses:
+        '302':
+          description: 'Redirect after processing the new project information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful creation. Redirect to project page.'
+                  value: '/project/{project_id}'
+                302Failure:
+                  description: 'Failed creation. Redirect to create project form.'
+                  value: '/project/create'
+
+  /project/{project_id}:
+    get:
+      operationId: R111
+      summary: 'R111: View project'
+      description: 'Show the individual project. Access: USR, ADM'
+      tags:
+        - 'M02: Works'
+      parameters:
+        - in: path
+          name: project_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show view project UI'
+        '302':
+          description: 'Redirect if user is not logged in or project does not exist.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed.'
+                  value: '/'
+                  
+##################     TASK     ##################
+
+  /project/{project_id}/task/create:
+    get:
+      operationId: R113
+      summary: 'R113: Create task form'
+      description: 'Provide create task form. Access: USR, ADM'
+      tags:
+        - 'M02: Works'
+      parameters:
+        - in: path
+          name: project_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show create task UI'
+        '302':
+          description: 'Redirect if user is not logged in or project does not exist.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed.'
+                  value: '/login'
+
+    post:
+      operationId: R114
+      summary: 'R114: Create task'
+      description: 'Processes the create task form submission. Access: USR, ADM'
+      tags:
+        - 'M02: Works'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                task_name:
+                  type: string
+                task_description:
+                  type: string
+              required:
+                - task_name
+      responses:
+        '302':
+          description: 'Redirect after processing the new task information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful creation. Redirect to task page.'
+                  value: '/task/{task_id}'
+                302Failure:
+                  description: 'Failed creation. Redirect to create task form.'
+                  value: '/project/{project_id}/task/create'
+
+  /task/{task_id}:
+    get:
+      operationId: R115
+      summary: 'R115: View task'
+      description: 'Show the individual task. Access: USR, ADM'
+      tags:
+        - 'M02: Works'
+      parameters:
+        - in: path
+          name: task_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show view task UI'
+        '302':
+          description: 'Redirect if user is not logged in or task does not exist.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed.'
+                  value: '/'
+
+  /task/{task_id}/edit:
+    get:
+      operationId: R116
+      summary: 'R116: Edit task form'
+      description: 'Provide edit task form. Access: USR, ADM'
+      tags:
+        - 'M02: Works'
+      parameters:
+        - in: path
+          name: task_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show edit task UI'
+        '302':
+          description: 'Redirect if user is not logged in or task does not exist.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed.'
+                  value: '/'
+
+    patch:
+      operationId: R117
+      summary: 'R117: Update task'
+      description: 'Processes the edit task form submission. Access: USR, ADM'
+      tags:
+        - 'M02: Works'
+      parameters:
+        - in: path
+          name: task_id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                task_name:
+                  type: string
+                task_description:
+                  type: string
+              required:
+                - task_name
+      responses:
+        '302':
+          description: 'Redirect after processing the updated task information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful update. Redirect to task page.'
+                  value: '/task/{task_id}'
+                302Failure:
+                  description: 'Failed update. Redirect to edit task form.'
+                  value: '/task/{task_id}/edit'
 
 ##################     API     ##################
 
