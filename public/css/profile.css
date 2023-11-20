@@ -9,6 +9,10 @@
     margin-top: 4.5vw;
 }
 
+#fileInput {
+    display: none;
+}
+
 .Profile-LeftSection {
     width: 30%;
     background-color: #fff;
@@ -26,7 +30,7 @@
 }
 
 .profile-interests-skills {
-    background-color: #2E3399;
+    background-color: #4248ab;
     border-radius: 1em;
     padding: 2.2em 1.2em;
 }
@@ -37,12 +41,12 @@
     margin-bottom: 0.5em;
 }
 
-
 #Interests {
     padding: 1em 0;
     margin-bottom: 2em;
     border-bottom: 1px solid #D0D0D0;
 }
+
 #Interests p, #Skills p {
     font-size: 1.2rem;
     color: #D0D0D0;
@@ -62,7 +66,7 @@
 #ProfileInfo {
     display: flex;
     justify-content: space-between;
-    background-color: #2E3399;
+    background-color: #4248ab;
     padding: 2em 3em;
     border-radius: 0.7vw;
 }
@@ -206,8 +210,6 @@ div.skill, div.interest {
 div.selected{
     border: #333 0.1vw solid;
 }
-
-
 
 #interests-list, #skills-list{
     height: 20vh;

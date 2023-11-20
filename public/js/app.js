@@ -23,6 +23,10 @@ function addEventListeners() {
     if (cardCreator != null)
       cardCreator.addEventListener('submit', sendCreateCardRequest);
 
+    let changePic = document.querySelector('#fileInput');
+    if (changePic != null)
+    changePic.addEventListener('change', handleFileSelect);
+
   /*
     let displayCreateTaskbtn = document.getElementById('CreateTaskButton');
     displayCreateTaskbtn.addEventListener('click', displayCreateTask);
@@ -195,5 +199,22 @@ function addEventListeners() {
         this.parentNode.parentNode.classList.toggle('selected', this.checked);
     });
   });
-  
+
+
+  function handleFileSelect(event) {
+    const fileInput = event.target;
+    console.log(event);
+    const file = fileInput.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const profilePicture = document.getElementById('profilePicture');
+            profilePicture.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+  }
+
+
   addEventListeners();

@@ -4,7 +4,10 @@
 <div id="ProjectPage">
     <div id="ProfilePage">
         <div class="Profile-LeftSection">
-            <img src="https://via.placeholder.com/150" alt="Profile Picture">
+            <label for="fileInput">
+                <img id="profilePicture" src="https://via.placeholder.com/150" alt="Profile Picture" style="cursor: pointer;">
+                <input id="fileInput" type="file">
+            </label>           
             <div class="profile-interests-skills">
                 <div id="Interests">
                     <h4>Interests</h4>
