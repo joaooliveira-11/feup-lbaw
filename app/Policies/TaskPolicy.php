@@ -19,7 +19,7 @@ class TaskPolicy {
     
     public function create(User $user, Task $task): bool {
         $project = Project::find($task->project_task);
-        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user);    
+        return $project->is_member($user) || $project->is_coordinator($user);    
     }
 
 /*

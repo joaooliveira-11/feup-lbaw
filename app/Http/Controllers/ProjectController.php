@@ -10,6 +10,11 @@ use App\Models\User;
 class ProjectController extends Controller {
 
     public function show(int $id){
+
+        if(!Auth::check()){
+            return redirect("/login");
+        }
+
         $project = Project::find($id);  
         $user = User::find(Auth::user()->id);
         $this->authorize('show', $project);
@@ -18,8 +23,11 @@ class ProjectController extends Controller {
 
     public function create(Request $request) {   
 
-        $this->authorize('create', Project::class);
+        if(!Auth::check()){
+            return redirect("/login");
+        }
 
+        $this->authorize('create', Project::class);
         // Set project details.
         $project = new Project();
         $project->title = $request->title;

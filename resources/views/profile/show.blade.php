@@ -45,20 +45,36 @@
         <div id="Projects">
         <p class="label">Projects</p>
 
-        @if ($projects->isEmpty())
+        @if ($workerprojects->isEmpty() && $coordinatorprojects->isEmpty() )
             <p>No projects yet!</p>
         @else
             <ul id="ProjectsList">
-                @foreach ($projects as $project)
-                    <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
-                        <li>
-                            <div>
-                                <p id="ProjectTitle">{{ $project->title }}</p>
-                                <p>{{ $project->description }}</p>
-                            </div>
-                    </li> 
-                </a>
-                @endforeach
+                @if (!$workerprojects->isEmpty())
+                    @foreach ($workerprojects as $project)
+                        <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
+                            <li>
+                                <div>
+                                    <p id="ProjectTitle">{{ $project->title }}</p>
+                                    <p>{{ $project->description }}</p>
+                                </div>
+                            </li> 
+                        </a>
+                    @endforeach
+                @endif
+
+                @if (!$coordinatorprojects->isEmpty())
+                    @foreach ($coordinatorprojects as $project)
+                        <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
+                            <li>
+                                <div>
+                                    <p id="ProjectTitle">{{ $project->title }}</p>
+                                    <p>{{ $project->description }}</p>
+                                </div>
+                            </li> 
+                        </a>
+                    @endforeach
+                @endif
+
             </ul>
         @endif
     </div>
