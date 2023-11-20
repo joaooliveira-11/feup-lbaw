@@ -15,15 +15,18 @@
             <a href="#" id="leaveProject" class="center-button">Leave Task</a>
         </div>
 
-        <div id="MainContent">
-            <div id="ProjectDeadline">
-                <p id="TitleInPage">Task Deadline:</p>
-                <p>{{ $task->finish_date !== null ? $task->finish_date : 'Not defined' }}</p>
-                <button id="CreateTaskButton">Invite User</button>
-            </div>
-            <div id="ProjectDescription">
-                <p id="TitleInPage">Details:</p>
-                <p>{{ $task->description }}</p>
+        <div id="TaskContent">
+            <div class="task-details">
+                <div id="TaskInfo">
+                    <h5><span class="profile-info-span">Task: </span>{{ $task->title }}</h5>
+                    <h5><span class="profile-info-span">Deadline: </span>{{ $task->finish_date !== null ? $task->finish_date : 'Not defined' }}</h5>
+                    <h5><span class="profile-info-span">Priority: </span>{{ $task->priority }}</h5>
+                    <button id="EditTaskDetailsButton">Edit Details</button>
+                </div>
+                <div id="Description">
+                    <h5 class = "label">Details</h5>
+                    <p>{{ $task->description }}</p>
+                </div>
             </div>
         </div>
     </div>
