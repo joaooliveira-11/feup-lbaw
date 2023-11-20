@@ -1,0 +1,27 @@
+.new-project-form {
+    width: 60em;
+    margin: 0 auto;
+    padding: 2em 0;
+}
+
+.new-project-form h2 {
+    text-align: center;
+    color: #303030;
+}
+
+.new-project-form label {
+    margin-top: 0;
+}
+
+.new-project-form #description {
+    height: 7em;
+    vertical-align: top;
+    border-radius: 0.6em;
+}
+
+#createProjectButton {
+    display: block;
+    margin: auto;
+    margin-top: 1em;
+    border-radius: 0.6em;
+}

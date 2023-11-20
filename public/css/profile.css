@@ -1,138 +1,143 @@
-#profile_page_content {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;  
-    background: linear-gradient(to right, #3a3a41, #9d9ea8);
-    border-radius: 5px;
-    color: #f4f4f4;
-    font-size: 16px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr auto;
-    grid-gap: 20px;
+#ProfilePage {
+    display: flex;
+    background-color: rgba(231, 231, 231, 0.6);
+    border-radius: 0.7vw;
+    max-width: 80vw; 
+    height: 38vw;
+    width: 100%;
+    margin: auto; 
+    margin-top: 4.5vw;
 }
 
-#ProfilePicture img {
+.Profile-LeftSection {
+    width: 30%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 0 2.4em;
+    border-radius: 0.7vw 0 0 0;
+}
+
+.Profile-LeftSection img {
     width: 150px;
-    height: 150px;
+    height: auto;
     border-radius: 50%;
-    margin: 20px auto;
+    margin: 3em auto;
 }
 
-.label {
-    font-weight: bold;
-    color: #f4f4f4;
-    width: 8rem;
+.profile-interests-skills {
+    background-color: #2E3399;
+    border-radius: 1em;
+    padding: 2.2em 1.2em;
+}
+
+.profile-interests-skills h4 {
+    color: #fff;
+    text-align: left;
+    margin-bottom: 0.5em;
 }
 
 
-
-#Interests li, #Skills li {
-    list-style-type: none;
-    background: transparent;
-    color: #f4f4f4;
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    border: 1px solid #f4f4f4;
-    width: 15rem;
-    text-align: center;
+#Interests {
+    padding: 1em 0;
+    margin-bottom: 2em;
+    border-bottom: 1px solid #D0D0D0;
+}
+#Interests p, #Skills p {
+    font-size: 1.2rem;
+    color: #D0D0D0;
+    margin-bottom: 0.8em;
 }
 
-#Interests, #Skills, #ProfileInfo {
-    margin-right: 20px;
-}
-
-#Interests li:hover, #Skills li:hover {
-    background: #f4f4f4;
-    color: #333;
-    border: 1px solid #333;
-    transition: ease-in-out 0.3s;
+.Profile-RightSection {
+    width: 70%;
+    background-color: rgba(231, 231, 231, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+    padding: 2.4em;
+    border-radius: 0 0.7vw 0 0;
 }
 
 #ProfileInfo {
-    grid-column: span 2;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 25px;
-
+    display: flex;
+    justify-content: space-between;
+    background-color: #2E3399;
+    padding: 2em 3em;
+    border-radius: 0.7vw;
 }
 
-#ProfileInfo p {
+.profile-right-section-left {
+    width: 50%;
+}
+
+.Profile-RightSection h4, h5, h6, p {
+    color: #fff;
     margin: 0;
+    margin-bottom: 0.2em;
+}
+
+.profile-info-span {
+    color: #DEDEDE;
+    font-size: 1.6rem;
+}
+
+#EditProfile button{
+    font-size: 1rem;
+    margin-top: 0.5em;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+#EditProfile button:hover{
+    background-color: #DEDEDE;;
+    border: 2px solid #000;
+    color: #000;
+    transition: ease-in-out 0.2s;
 }
 
 #Description {
-    grid-row-start: 1;
-    grid-row-end: 4; 
-    grid-column: 2;
-}
-
-#Email, #Username, #Name {
-    grid-column: 1;
-}
-
-#Email, #Username {
-    position: relative;
-    bottom: 6rem;
-}
-
-#Name {
-    font-weight: bold;
-    font-size: 25px;
-    position: relative;
-    bottom: 1rem;
+    width: 50%;
 }
 
 #Projects {
-    grid-column: span 2;
-    grid-row: span 2;
+    background-color: #fff;
+    padding: 2.4em;
+    border-radius: 0.7vw;
 }
 
-#Interests {
-    grid-row: 2;
-}
-
-#Skills {
-    grid-row: 3;
+#Projects h4 {
+    color: #000;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 1em;
 }
 
 #Projects ul {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 1.4em;
 }
 
 #Projects li {
     list-style-type: none;
-    background: #f4f4f4;
-    color: #333;
-    padding: 10px;
+    background: #454545;
+    height: 10em;
+    padding: 1.4em;
     margin-bottom: 5px;
     border-radius: 5px;
     border: 1px solid #333;
 }
 
 #ProjectTitle {
+    font-size: 1.4rem;
     font-weight: bold;
-    color: #333;
+    color: #fff;
 }
 
-#ProfilePicture img {
-    margin: 20px;
-}
-
-#EditProfile button{
-    background-color: transparent;
-    border: #f4f4f4 1px solid;
-    border-radius: 5px;
-}
-
-#EditProfile button:hover{
-    background-color: #9d9ea8;
-    color: #333;
-    transition: ease-in-out 0.3s;
+#ProjectsList .ProjectDescription {
+    font-size: 1.2rem;
 }
 
 #edit-page-content{

@@ -1,3 +1,4 @@
+/* Styling for createTask form */
 #createTask {
     width: 50%;
     margin: 1vw auto;
@@ -21,17 +22,17 @@ label {
 input,
 textarea,
 select {
-    margin-bottom: 0.5vw;
+    margin-bottom: 10px;
     padding: 0.6vw;
     width: 100%;
     box-sizing: border-box;
     border: none;
-    border-radius: 0.7vw;
+    border-radius: 3px;
 }
 
 #createTaskButton {
     background-color: #303030;
-    color: #f4f4f4;
+    color: #fff;
     cursor: pointer;
     border: none;
     border-radius: 0.7vw;
@@ -48,11 +49,6 @@ textarea {
 }
 
 #priority {
-    background-color: #f4f4f4;
+    background-color: #fff;
     margin-bottom: 3vw;
-}
-
-.createTaskForm h4 {
-    font-size: 1.2vw;
-    margin-bottom: 0;
 }
