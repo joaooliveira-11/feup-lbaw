@@ -54,6 +54,8 @@ class TaskController extends Controller {
         $task_id = $request->input('task_id');
         $task = Task::find($task_id);
 
+        $this->authorize('updatedetails', $task); 
+
         $task->title = $request->input('title');
         $task->description = $request->input('description');
         $task->priority = $request->input('priority');
