@@ -10,6 +10,7 @@
 
 #ProjectInfo {
     display: flex;
+    gap: 3em;
     background-color: rgba(231, 231, 231, 0.6);
     border-radius: 0.7vw;
     padding: 1.67vw;
