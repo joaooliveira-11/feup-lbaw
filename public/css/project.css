@@ -5,6 +5,7 @@
     background-repeat: no-repeat;
     min-height: 92.9vh; 
     display: flex;
+    width: 100%;
 }
 
 #ProjectInfo {
@@ -143,4 +144,10 @@
 #CreateTaskButton:hover,
 #InviteUserButton:hover {
     background-color: #454545;
+}
+
+.btn.btn-primary {
+    font-size: 0.8vw;
+    color:#303030;
+    right:0;
 }
