@@ -241,4 +241,42 @@ function addEventListeners() {
     }
   }
 
+  function searchProjects() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('projectSearch');
+    filter = input.value.toUpperCase();
+    ul = document.querySelector('.projects-list');
+    li = ul.getElementsByTagName('li');
+
+    for (i = 0; i < li.length; i++) {
+        a = li[i].querySelector('.project-title');
+        txtValue = a.textContent || a.innerText;
+        
+        // Alteração para pesquisa de texto completo
+        if (txtValue.toUpperCase().includes(filter)) {
+            li[i].style.display = '';
+        } else {
+            li[i].style.display = 'none';
+        }
+    }
+}
+
+function searchProjectsOnEnter(event) {
+    if (event.key === 'Enter') {
+        searchProjects();
+    }
+}
+
+  function searchProjectsOnEnter(event) {
+      if (event.key === 'Enter') {
+          searchProjects();
+      }
+  }
+
+  document.getElementById('projectSearch').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        searchProjects();
+    }
+  });
+
   addEventListeners();

@@ -2,6 +2,11 @@
 
 @section('content')
 <div id="projects-container">
+    <div class="search-bar">
+        <input type="text" id="projectSearch" placeholder="Search projects..." oninput="searchProjects()">
+        <button onclick="searchProjects()" class="rounded-button">Search</button>
+    </div>
+
     <p class="projects-label">Projects:</p>
     @if ($projects->isEmpty())
         <p>No projects yet!</p>
