@@ -28,3 +28,21 @@
 #Description p {
     font-size: 1.2rem;
 }
+
+.edit-task-details {
+    width: 70%;
+    text-align: center;
+}
+
+.edit-task-details label {
+    text-align: left;
+}
+
+.edit-task-details #priority {
+    margin-bottom: 2em;
+}
+
+.editTaskDetailsButton {
+    display: inline-block;
+    margin: auto;
+}
