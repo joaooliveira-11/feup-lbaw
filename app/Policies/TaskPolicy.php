@@ -27,6 +27,10 @@ class TaskPolicy {
         return $project->is_member($user) || $project->is_coordinator($user);  
     }
     
+    public function completetask(User $user, Task $task) : bool {
+        return $task->assigned_to == $user->id;
+    }
+
 /*
     public function create(User $user, Project $project): bool {
         return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user);

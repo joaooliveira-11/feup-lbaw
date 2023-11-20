@@ -67,4 +67,16 @@ class TaskController extends Controller {
             ->withSuccess('You have successfully updated the task details');
     }
 
+    public function completetask(Request $request){
+
+        $task_id = $request->input('task_id');
+        $task = Task::find($task_id);
+        $this->authorize('completetask', $task);    
+
+        $task->state = 'closed';
+        $task->save();
+    
+        return redirect()->route('task', ['task_id' => $task_id])
+            ->withSuccess('You have successfully completed an assigned task');
+    }
 }
