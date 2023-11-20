@@ -47,6 +47,7 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/projects', 'showAllProjects');
     Route::get('/project/{project_id}/members', 'showProjectMembers')->where(['project_id' => '[0-9]+'])->name('projectmembers');
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
+    Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
 });
 
 //Task

@@ -56,4 +56,9 @@ class ProjectController extends Controller {
         return view('pages.projectMembers', ['project'=> $project]);
     }
 
+    public function showProjectTasks(int $project_id) : View {
+        $project = Project::find($project_id); 
+        return view('pages.allTasks', ['project'=> $project]);
+    }
+
 }

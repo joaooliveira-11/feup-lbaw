@@ -15,8 +15,8 @@
             <a href="#" id="leaveProject" class="center-button">Leave Project</a>
         </div>
 
-        @include('partials.projectPage')
-        @yield('projectPage')
+        @include('partials.tasksInProject')
+        @yield('tasksInProject')
     </div>
 </div>
 
