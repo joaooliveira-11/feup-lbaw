@@ -151,3 +151,30 @@
     color:#303030;
     right:0;
 }
+
+.add-user-list {
+    margin: 0 auto;
+}
+
+#project-members-content {
+    width: 70%;
+    margin: 0 auto;
+}
+
+#project-members-content ul{
+    column-gap: 1em;
+    list-style: none;
+    column-count: 2;
+}
+
+#project-members-content li {
+    border: 1px solid #000;
+    border-radius: 0.7vw;
+    padding: 1em;
+}
+
+#project-members-content p {
+    color: #000;
+    font-size: 2rem;
+    margin: 0;
+}

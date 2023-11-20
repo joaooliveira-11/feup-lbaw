@@ -15,16 +15,16 @@
             <a href="#" id="leaveProject" class="center-button">Leave Project</a>
         </div>
         
-        <div id="add-user">
+        <div id="project-members-content">
 
             <div class="add-user-title">
-                <h3 class="add-user-title">Add User</h3>
+                <h3 class="add-user-title">Project Members</h3>
             </div>
             <div class="add-user-list">
                 <ul class="add-user-ul">
                     @foreach($project->users as $user)
                         <li class="add-user-element">
-                             <p>User: {{ $user->username }}</p>
+                            <p>{{ $user->name }} - <em>{{ '@' . $user->username }}</em></p>
                         </li>
                     @endforeach
                 </ul>
