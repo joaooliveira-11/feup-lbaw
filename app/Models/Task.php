@@ -14,6 +14,8 @@ class Task extends Model {
     /**
      * Get the project where the task is included.
      */
+    // protected $fillable = ['title', 'description', 'priority', 'finish_date', 'state'];
+
     public function project(): BelongsTo {
         return $this->belongsTo(Project::class);
     }

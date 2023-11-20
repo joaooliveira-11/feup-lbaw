@@ -1,0 +1,48 @@
+#TaskContent {
+    width: 70%;
+}
+
+.task-details {
+    display: flex;
+    justify-content: space-between;
+    background-color: #2E3399;
+    padding: 2em 3em;
+    border-radius: 0.7vw;
+}
+
+#EditTaskDetailsButton {
+    font-size: 1.2rem;
+    margin-top: 0.5em;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+#EditTaskDetailsButton:hover{
+    background-color: #DEDEDE;;
+    border: 2px solid #000;
+    color: #000;
+    transition: ease-in-out 0.2s;
+}
+
+#Description p {
+    font-size: 1.2rem;
+}
+
+.edit-task-details {
+    width: 70%;
+    text-align: center;
+}
+
+.edit-task-details label {
+    text-align: left;
+}
+
+.edit-task-details #priority {
+    margin-bottom: 2em;
+}
+
+.editTaskDetailsButton {
+    display: inline-block;
+    margin: auto;
+}

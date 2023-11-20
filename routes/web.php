@@ -49,6 +49,8 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
     Route::post('/search-projects', 'search');
+    Route::get('/project/{project_id}/adduser', 'showNonProjectMembers')->where(['project_id' => '[0-9]+'])->name('nonprojectmembers');
+    Route::post('/project/add-user', 'addUser')->name('adduser');
 });
 
 //Task
@@ -56,4 +58,7 @@ Route::controller(TaskController::class)->group(function() {
     Route::get('/project/{project_id}/task/create', 'createTaskForm')->where(['project_id' => '[0-9]+'])->name('createtaskform');
     Route::post('/task/create', 'create')->name('createtask');
     Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
+    Route::get('/task/{task_id}/edit', 'editDetailsForm')->name('editDetailsForm');
+    Route::patch('/task/edit', 'updateDetails')->name('updatetaskdetails');
+    Route::patch('/task/complete', 'completetask')->name('completeassignedtask');
 });

@@ -24,4 +24,8 @@ class ProjectPolicy
         // Only a profile owner can delete it
         return $user->id == $model->id;
     }
+
+    public function adduser(User $user, Project $project){
+        return $project->is_member($user) || $project->is_coordinator($user);
+    }
 }
