@@ -21,7 +21,7 @@
                     <h5><span class="profile-info-span">Task: </span>{{ $task->title }}</h5>
                     <h5><span class="profile-info-span">Deadline: </span>{{ $task->finish_date !== null ? $task->finish_date : 'Not defined' }}</h5>
                     <h5><span class="profile-info-span">Priority: </span>{{ $task->priority }}</h5>
-                    <button id="EditTaskDetailsButton">Edit Details</button>
+                    <a id="EditTaskDetailsButton" href="{{ route('editDetailsForm', ['task_id' => $task->task_id]) }}">Manage Details</a>
                 </div>
                 <div id="Description">
                     <h5 class = "label">Details</h5>
