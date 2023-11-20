@@ -1,54 +1,27 @@
-/* Styling for createTask form */
-#createTask {
-    width: 50%;
-    margin: 1vw auto;
-    padding: 1vw;
+.new-project-form {
+    width: 60em;
+    margin: 0 auto;
+    padding: 2em 0;
 }
 
-.createTaskForm {
-    display: flex;
-    flex-direction: column;
-}
-
-h4 {
+.new-project-form h2 {
     text-align: center;
-    color: #333;
+    color: #303030;
 }
 
-label {
-    margin-top: 1vw;
+.new-project-form label {
+    margin-top: 0;
 }
 
-input,
-textarea,
-select {
-    margin-bottom: 10px;
-    padding: 0.6vw;
-    width: 100%;
-    box-sizing: border-box;
-    border: none;
-    border-radius: 3px;
+.new-project-form #description {
+    height: 7em;
+    vertical-align: top;
+    border-radius: 0.6em;
 }
 
-#createTaskButton {
-    background-color: #303030;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    border-radius: 0.7vw;
-    width: 40%;
+#createProjectButton {
+    display: block;
     margin: auto;
-}
-
-#createTaskButton:hover {
-    background-color: #454545;
-}
-
-textarea {
-    resize: none;
-}
-
-#priority {
-    background-color: #fff;
-    margin-bottom: 3vw;
+    margin-top: 1em;
+    border-radius: 0.6em;
 }

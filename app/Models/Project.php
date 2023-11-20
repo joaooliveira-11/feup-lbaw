@@ -26,8 +26,17 @@ class Project extends Model
     public function is_member(User $user) {
         return ($this->hasMany('App\Models\Project_Users','project_id')->where('user_id', $user->id)->get()->isNotEmpty());
     }
+
+    public function is_coordinator(User $user) {
+        return $this->project_coordinator == $user->id;
+    }
+
     public function users() {
         return $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id');
+    }
+
+    public function coordinator() {
+        return $this->belongsTo(User::class, 'project_coordinator');
     }
     /**
      * Get the tasks for the project.
