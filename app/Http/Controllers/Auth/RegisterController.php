@@ -44,7 +44,8 @@ class RegisterController extends Controller
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
-        return redirect()->route('profile')
-            ->withSuccess('You have successfully registered & logged in!');
+        $user = User::find(Auth::user()->id);
+            return redirect()->route('show', ['id' => $user->id])
+            ->withSuccess('You have successfully created a new account!');
     }
 }

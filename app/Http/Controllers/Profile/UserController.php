@@ -19,7 +19,8 @@ class UserController extends Controller
         $user = User::find($id);
         $interests = $user->interests()->get();
         $skills = $user->skills()->get();
-        $projects = $user->projects()->get();
+        $workerprojects = $user->workerProjects()->get();
+        $coordinatorprojects = $user->coordinatorProjects()->get();
 
         if(!$user)
             return redirect()->route('home')
@@ -29,7 +30,8 @@ class UserController extends Controller
             'user' => $user,
             'interests' => $interests,
             'skills' => $skills,
-            'projects' => $projects
+            'workerprojects' => $workerprojects,
+            'coordinatorprojects' => $coordinatorprojects
         ]);
     }
 

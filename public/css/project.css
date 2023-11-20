@@ -18,6 +18,7 @@
     width: 100%;
     margin: auto; 
     margin-top: 4.5vw;
+    color: #303030;
 }
 
 #Sidebar {
@@ -120,6 +121,7 @@
 #ProjectDeadline {
     width: 100%;
     font-size: 1vw;
+    color: #303030;
 }
 
 #TitleInPage {

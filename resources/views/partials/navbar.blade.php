@@ -6,7 +6,7 @@
         <li><a class="navbar-list-element" href="">Home</a></li>
             <li><a class="navbar-list-element" href="">About</a></li>
             <li><a class="navbar-list-element" href="">FAQs</a></li>
-            <li><a class="navbar-list-element" href="">Projects</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
             <li>
                 @if (Auth::check())
                     <a class="navbar-list-element" href="{{ url('/profile', ['id' => Auth::id()]) }}">Profile</a>

@@ -1,0 +1,48 @@
+#allProjectsPage {
+    width: 80%;
+}
+
+.line-before-projects {
+    border-top: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.projects-label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #303030;
+}
+
+.projects-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+}
+
+.project-link {
+    text-decoration: none;
+    color: #333;
+    flex-basis: calc(50% - 10px);
+    width: 100%; 
+}
+
+.project-item {
+    background-color: #303030;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.project-title {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #fff; 
+}
+
+.project-description {
+    font-size: 16px;
+    padding: 10px;
+    color: #fff; 
+}

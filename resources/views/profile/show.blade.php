@@ -4,7 +4,10 @@
 <div id="ProjectPage">
     <div id="ProfilePage">
         <div class="Profile-LeftSection">
-            <img src="https://via.placeholder.com/150" alt="Profile Picture">
+            <label for="fileInput">
+                <img id="profilePicture" src="https://via.placeholder.com/150" alt="Profile Picture" style="cursor: pointer;">
+                <input id="fileInput" type="file">
+            </label>           
             <div class="profile-interests-skills">
                 <div id="Interests">
                     <h4>Interests</h4>
@@ -46,25 +49,41 @@
             </div>
 
             <div id="Projects">
-                <h4 class="label">Projects</h4>
+            <p class="label">Projects</p>
 
-                @if ($projects->isEmpty())
-                    <p>No projects yet!</p>
-                @else
+            @if ($workerprojects->isEmpty() && $coordinatorprojects->isEmpty() )
+                <p>No projects yet!</p>
+            @else
                 <ul id="ProjectsList">
-                    @foreach ($projects as $project)
-                        <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
-                            <li>
-                                <h5 id="ProjectTitle">{{ $project->title }}</h5>
-                                <p class="ProjectDescription">{{ $project->description }}</p>
-                            </li> 
-                        </a>
-                    @endforeach
-                </ul>
-                @endif
-            </div>
-        </div>
+                    @if (!$workerprojects->isEmpty())
+                        @foreach ($workerprojects as $project)
+                            <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
+                                <li>
+                                    <div>
+                                        <p id="ProjectTitle">{{ $project->title }}</p>
+                                        <p>{{ $project->description }}</p>
+                                    </div>
+                                </li> 
+                            </a>
+                        @endforeach
+                    @endif
 
+                    @if (!$coordinatorprojects->isEmpty())
+                        @foreach ($coordinatorprojects as $project)
+                            <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
+                                <li>
+                                    <div>
+                                        <p id="ProjectTitle">{{ $project->title }}</p>
+                                        <p>{{ $project->description }}</p>
+                                    </div>
+                                </li> 
+                            </a>
+                        @endforeach
+                    @endif
+
+                </ul>
+            @endif
+        </div>
     </div>
 </div>
 @endsection

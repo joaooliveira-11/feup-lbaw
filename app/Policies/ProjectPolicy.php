@@ -13,7 +13,7 @@ class ProjectPolicy
     use HandlesAuthorization;
 
     public function show(User $user, Project $project) {
-        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user);
+        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user) || $project->is_public;
     }
 
     public function create(User $user){

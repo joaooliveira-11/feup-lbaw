@@ -10,16 +10,29 @@ use App\Models\User;
 class ProjectController extends Controller {
 
     public function show(int $id){
+
+        if(!Auth::check()){
+            return redirect("/login");
+        }
+
         $project = Project::find($id);  
         $user = User::find(Auth::user()->id);
         $this->authorize('show', $project);
         return view('pages.project', ['project'=>$project]);
     }
 
+    public function showAllProjects() {
+        $project = Project::where('is_public', true)->get();
+        return view('pages.allProjects', ['projects'=>$project]);
+    }
+
     public function create(Request $request) {   
 
-        $this->authorize('create', Project::class);
+        if(!Auth::check()){
+            return redirect("/login");
+        }
 
+        $this->authorize('create', Project::class);
         // Set project details.
         $project = new Project();
         $project->title = $request->title;
@@ -29,22 +42,18 @@ class ProjectController extends Controller {
         $project->created_by = Auth::user()->id;
         $project->project_coordinator = Auth::user()->id;
         $project->save();
-  
+
         return redirect()->route('project', ['project_id' => $project->project_id])
             ->withSuccess('You have successfully created a new project!');
     }
 
-    public function showCreateForm(): View
-    {   
+    public function showCreateForm(): View {   
         return view('pages.createProject');
     }
 
     public function showProjectMembers(int $project_id) : View {
-        
         $project = Project::find($project_id); 
-
         return view('pages.projectMembers', ['project'=> $project]);
-        
     }
 
 }
