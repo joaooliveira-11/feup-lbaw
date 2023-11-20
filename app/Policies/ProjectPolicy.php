@@ -26,6 +26,6 @@ class ProjectPolicy
     }
 
     public function adduser(User $user, Project $project){
-        return $project->is_member($user) || $project->is_coordinator($user);
+        return $project->is_coordinator($user);
     }
 }
