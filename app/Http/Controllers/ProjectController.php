@@ -16,6 +16,11 @@ class ProjectController extends Controller {
         return view('pages.project', ['project'=>$project]);
     }
 
+    public function showAllProjects() {
+        $project = Project::where('is_public', true)->get();
+        return view('pages.allProjects', ['projects'=>$project]);
+    }
+
     public function create(Request $request) {   
 
         $this->authorize('create', Project::class);
@@ -29,22 +34,18 @@ class ProjectController extends Controller {
         $project->created_by = Auth::user()->id;
         $project->project_coordinator = Auth::user()->id;
         $project->save();
-  
+
         return redirect()->route('project', ['project_id' => $project->project_id])
             ->withSuccess('You have successfully created a new project!');
     }
 
-    public function showCreateForm(): View
-    {   
+    public function showCreateForm(): View {   
         return view('pages.createProject');
     }
 
     public function showProjectMembers(int $project_id) : View {
-        
         $project = Project::find($project_id); 
-
         return view('pages.projectMembers', ['project'=> $project]);
-        
     }
 
 }
