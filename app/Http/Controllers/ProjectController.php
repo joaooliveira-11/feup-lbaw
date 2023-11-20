@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Project_Users;
 
 class ProjectController extends Controller {
 
@@ -56,4 +57,21 @@ class ProjectController extends Controller {
         return view('pages.projectMembers', ['project'=> $project]);
     }
 
+    public function showNonProjectMembers(int $project_id) : View {
+        $project = Project::find($project_id); 
+        return view('pages.addUser', ['project'=> $project]);
+    }
+
+    public function addUser(Request $request) {   
+
+        $project_users = new Project_Users();
+        $project_users->project_id = $request->input('project_id');
+        $project_users->user_id = $request->input('user_id');
+        $project_users->save();
+
+        $project_id = $project_users->project_id;
+
+        $project = Project::find($project_id); 
+        return view('pages.projectMembers', ['project'=> $project]);
+    }
 }

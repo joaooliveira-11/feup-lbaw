@@ -35,6 +35,17 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id');
     }
 
+    public function usersNotInProject()
+{
+    $projectId = $this->project_id;
+
+    return User::whereNotIn('id', function ($query) use ($projectId) {
+        $query->select('user_id')
+            ->from('project_users')
+            ->where('project_id', '=', $projectId);
+    })->get();
+}
+
     public function coordinator() {
         return $this->belongsTo(User::class, 'project_coordinator');
     }
