@@ -21,16 +21,6 @@ use App\Http\Controllers\Profile\UserController;
 // Home
 Route::redirect('/', '/login');
 
-//Project
-Route::controller(ProjectController::class)->group(function () {
-    Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
-});
-
-//Task
-Route::controller(TaskController::class)->group(function () {
-    Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
-});
-
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
@@ -54,9 +44,12 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/create','showCreateForm')->name('createproject');
     Route::post('/project/create', 'create');
     Route::get('/project/{project_id}/members', 'showProjectMembers')->where(['project_id' => '[0-9]+'])->name('projectmembers');
+    Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
 });
+
 
 Route::controller(TaskController::class)->group(function() {
     Route::get('/project/{project_id}/task/create', 'createTaskForm')->where(['project_id' => '[0-9]+'])->name('createtaskform');
     Route::post('/task/create', 'create')->name('createtask');
+    Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
 });

@@ -6,6 +6,7 @@ use App\Models\Task;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Project;
 
 class TaskController extends Controller {
     public function show(int $id){
@@ -17,11 +18,9 @@ class TaskController extends Controller {
 
     public function create(Request $request){
 
-        // $this->authorize('create', $task);    
+        $project_id = $request->input('project_id');
 
         // Set task details.
-        $project_id = $request->input('project_id');
-        
         $task = new Task();
         $task->title = $request->input('title');
         $task->description = $request->input('description');
@@ -30,9 +29,14 @@ class TaskController extends Controller {
         $task->finish_date = $request->input('finish_date');
         $task->create_by = Auth::user()->id;
         $task->project_task = $project_id;
+        
+        $this->authorize('create', $task); 
+
         $task->save();
         
-        return response()->json($task);
+        return redirect()->route('project', ['project_id' => $project_id])
+            ->withSuccess('You have successfully created a new task!');
+            
     }
 
     public function createTaskForm($project_id) : View {

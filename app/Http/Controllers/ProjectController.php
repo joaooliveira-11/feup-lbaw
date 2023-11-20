@@ -30,11 +30,12 @@ class ProjectController extends Controller {
         $project->project_coordinator = Auth::user()->id;
         $project->save();
   
-        return response()->json($project);
+        return redirect()->route('project', ['project_id' => $project->project_id])
+            ->withSuccess('You have successfully created a new project!');
     }
 
     public function showCreateForm(): View
-    {
+    {   
         return view('pages.createProject');
     }
 
