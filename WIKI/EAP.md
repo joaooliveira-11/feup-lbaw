@@ -29,7 +29,7 @@ This artifact documents the  architecture of the web application to be developed
 | --- | --- | --- |
 | VST | Visitor | An unauthenticated user. |
 | AUS | User | An authenticated user. |
-| WRK | Worker | An authenticad user that is a member of a project.   |
+| WRK | Worker | An authenticad user that is a member of a project. |
 | COR | Coordinator | An authenticad user that is the creator of a project.|
 | ADM | Administrator | System administrator. |
 
@@ -358,7 +358,7 @@ paths:
                 description:
                   type: string
                 finish_date:
-                  type: date
+                  type: string
               required:
                 - title
                 - description
@@ -408,7 +408,7 @@ paths:
   /project/{project_id}/members:
     get:
       operationId: R304
-      summary: 'R304: View project members.
+      summary: 'R304: View project members'
       description: 'Show all project members. Access: USR, ADM'
       tags:
         - 'M03: Projects'
@@ -436,7 +436,7 @@ paths:
   /project/{project_id}/adduser:
     get:
       operationId: R305
-      summary: 'R305: View non project members.
+      summary: 'R305: View non project members'
       description: 'Show all non project members. Access: USR, ADM'
       tags:
         - 'M03: Projects'
@@ -476,9 +476,9 @@ paths:
               type: object
               properties:
                 project_id:
-                  type: int
+                  type: integer
                 user_id:
-                  type: int
+                  type: integer
       responses:
         '302':
           description: 'Redirect after processing the new project member.'
@@ -543,7 +543,7 @@ paths:
                 description:
                   type: string
                 finish_date:
-                  type: date
+                  type: string
                 priority:
                   type: string
               required:
@@ -644,7 +644,7 @@ paths:
                 description:
                   type: string
                 finish_date:
-                  type: date
+                  type: string
                 priority:
                   type: string
                  
@@ -668,36 +668,36 @@ paths:
                   description: 'Failed update. Redirect to edit task form.'
                   value: '/task/{task_id}/edit'
     
-    /task/complete:
-        patch:
-            operationId: R406
-            summary: 'R406: Complete Task'
-            description: 'When a task is completed'
-        tags:
-            - 'M04: Tasks'
-        parameters:
-            none 
-          name: complete
+  /task/complete:
+    patch:
+      operationId: R406
+      summary: 'R406: Complete Task'
+      description: 'When a task is completed'
+      tags:
+        - 'M04: Tasks'
+      parameters:
+        - name: complete
+          in: query
           schema:
-            type: none
-            required: false
-        requestBody:
-            required: true
-            content:
-              application/x-www-form-urlencoded:
-                schema:
-                  type: object
-                  properties:
-                    task_id:
-                      type: int
-        
-    
-############SEARCH############
-    /search-projects:
-        post:
-          operationId: R501
-          summary: 'R501: Search Project'
-          description: 'Search for a project in all the public projects.'
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                task_id:
+                  type: integer
+      responses:
+        '200':
+          description: Successful operation
+
+  /search-projects:
+    post:
+      operationId: R501
+      summary: 'R501: Search Project'
+      description: 'Search for a project in all the public projects.'
       tags:
         - 'M05: Search'
       requestBody:
@@ -714,10 +714,9 @@ paths:
               required:
                 - title
                 - description
-                
       responses:
         '302':
-          description: 'Redirect after processing the the projects that match the input.'
+          description: 'Redirect after processing the projects that match the input.'
           headers:
             Location:
               schema:
@@ -728,8 +727,6 @@ paths:
                   value: '/projects'
                 302Failure:
                   description: 'Failed creation. Redirect to create task'
-
-
 ```
 
 
