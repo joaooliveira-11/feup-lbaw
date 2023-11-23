@@ -67,24 +67,6 @@ function addEventListeners() {
   }
 
 
-  function searchTasks() {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById('taskSearch');
-    filter = input.value.toUpperCase();
-    ul = document.getElementById('TasksList');
-    li = ul.getElementsByTagName('li');
-
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName('p')[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = '';
-        } else {
-            li[i].style.display = 'none';
-        }
-    }
-  }
-
   function searchOnEnter(event) {
     if (event.key === 'Enter') {
         searchTasks();
@@ -96,10 +78,69 @@ function addEventListeners() {
       var filter = input.value;
       
   
-      sendAjaxRequest('POST', '/search-projects', { filter: filter }, handleSearchResponse);
+      sendAjaxRequest('POST', '/search-projects', { filter: filter }, handleSearchProject);
 }
 
-function handleSearchResponse() {
+function searchTasks() {
+      var input = document.getElementById('taskSearch');
+      var filter = input.value; 
+      var project_id = document.getElementById('tasks-container').className;
+      sendAjaxRequest('POST', '/search-tasks', { filter: filter, project_id : project_id}, handleSearchTask);
+}
+
+function handleSearchTask(){
+  if (this.status >= 200 && this.status < 400) {
+    var data = JSON.parse(this.response);
+    var container = document.querySelector('#tasks-container');
+    var ul = document.querySelector('.TasksList');
+    if (!ul) {
+        ul = document.createElement('ul');
+        ul.classList.add('TasksList');
+        container.appendChild(ul);
+    }
+    ul.innerHTML = '';
+
+    data.forEach(task => {
+        var li = document.createElement('li');
+        li.classList.add('task-item');
+
+        var div = document.createElement('div');
+
+        var a = document.createElement('a');
+        a.href = '/task/' + task.task_id;
+        a.classList.add('task-link');
+
+        var title = document.createElement('p');
+        title.classList.add('TaskTitle');
+        title.textContent = task.title;
+        div.appendChild(title);
+
+        var description = document.createElement('p');
+        description.classList.add('task-description');
+        
+        description.textContent = task.description;
+        div.appendChild(description);
+
+        var deadline = document.createElement('p');
+        deadline.classList.add('FinishDate');
+        if(task.finish_date == null) deadline.textContent = " Deadline: Not defined ";
+        else{
+        deadline.textContent = "Deadline: " + task.finish_date;
+        }
+        div.appendChild(deadline);
+
+        li.appendChild(div);
+        a.appendChild(li);
+        ul.appendChild(a);
+    });
+}
+  else {
+      console.error('Error:', this.status, this.statusText);
+  }
+}
+
+
+function handleSearchProject() {
   if (this.status >= 200 && this.status < 400) {
       var data = JSON.parse(this.response);
       var container = document.querySelector('#projects-container');

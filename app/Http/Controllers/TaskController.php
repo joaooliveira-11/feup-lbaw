@@ -79,4 +79,12 @@ class TaskController extends Controller {
         return redirect()->route('task', ['task_id' => $task_id])
             ->withSuccess('You have successfully completed an assigned task');
     }
+
+    public function search(Request $request){
+        $search = strtolower($request->input('filter'));
+        $project_id = $request->input('project_id');
+        $project = Project::find($project_id);
+        $tasks = $project->tasks()->whereRaw('LOWER(title) LIKE ?', ['%' . $search . '%'])->get();
+        return response()->json($tasks);
+    }
 }
