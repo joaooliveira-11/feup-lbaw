@@ -71,13 +71,10 @@ class User extends Authenticatable
         return $this->is_admin;
     }
 
-    public function workerProjects()
-    {
-        return $this->belongsToMany(Project::class, 'project_users', 'user_id', 'project_id');
-    }
-
-    public function coordinatorProjects() : HasMany {
-        return $this->hasMany(Project::class, 'project_coordinator');
+    public function projects(){
+        $worker_projects = $this->belongsToMany(Project::class, 'project_users', 'user_id', 'project_id')->get();
+        $coordinator_projects = $this->hasMany(Project::class, 'project_coordinator')->get();
+        return $worker_projects->merge($coordinator_projects);
     }
 
 }

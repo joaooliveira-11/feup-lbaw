@@ -3,7 +3,7 @@
 <div id="MainContent">
     <div id="ProjectDeadline">
         <p id="TitleInPage">Project Deadline:</p>
-        <p>{{ $project->deadline !== null ? $project->deadline : 'Not defined' }}</p>
+        <p>{{ $project->finish_date !== null ? $project->finish_date : 'Not defined' }}</p>
         <a id="CreateTaskButton" href="{{ route('createtaskform', ['project_id' => $project->project_id]) }}">Create Task</a>
         <a id="AddUserButton" href="{{ route('nonprojectmembers', ['project_id' => $project->project_id]) }}">Add member</a>
     </div>

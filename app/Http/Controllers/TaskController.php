@@ -6,28 +6,38 @@ use App\Models\Task;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Project;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TaskController extends Controller {
 
-    public function show(int $id){
-        $task = Task::find($id);  
-        $user = User::find(Auth::user()->id);
-        $this->authorize('show', $task);
-        return view('pages.task', ['task'=>$task]);
+    public function __construct(){
+        $this->middleware('auth');
     }
 
     public function create(Request $request){
 
-        $project_id = $request->input('project_id');
+        $validator = Validator::make($request->all(), [
+            'title' => 'min:15|string|max:50',
+            'description' => 'min:100|string|max:300',
+            'priority' => ['string', Rule::in(['low', 'medium', 'high'])],
+            'finish_date' => 'nullable|date|after:now',
+        ]);
+        
+        $project_id = $request->project_id;
 
-        // Set task details.
+        if ($validator->fails()) {
+            return redirect()->route('createtaskform', ['project_id' => $project_id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $task = new Task();
-        $task->title = $request->input('title');
-        $task->description = $request->input('description');
-        $task->priority = $request->input('priority');
+        $task->title = $request->title;
+        $task->description = $request->description;
+        $task->priority = $request->priority;
         $task->create_date = now();
-        $task->finish_date = $request->input('finish_date');
+        $task->finish_date = $request->finish_date;
         $task->create_by = Auth::user()->id;
         $task->project_task = $project_id;
         
@@ -44,6 +54,12 @@ class TaskController extends Controller {
         return view('pages.createTask', ['project_id' => $project_id]);
     }
 
+    public function show(int $task_id){
+        $task = Task::find($task_id);  
+        $this->authorize('show', $task);
+        return view('pages.task', ['task'=>$task]);
+    }
+
     public function editDetailsForm($task_id) : View {
         $task = Task::find($task_id);
         return view('pages.editTaskDetails', ['task' => $task]);
@@ -51,15 +67,28 @@ class TaskController extends Controller {
 
     public function updateDetails(Request $request){
 
-        $task_id = $request->input('task_id');
+        $task_id = $request->task_id;
         $task = Task::find($task_id);
 
         $this->authorize('updatedetails', $task); 
 
-        $task->title = $request->input('title');
-        $task->description = $request->input('description');
-        $task->priority = $request->input('priority');
-        $task->finish_date = $request->input('finish_date');
+        $validator = Validator::make($request->all(), [
+            'title' => 'min:15|string|max:50',
+            'description' => 'min:100|string|max:300',
+            'priority' => ['string', Rule::in(['low', 'medium', 'high'])],
+            'finish_date' => 'nullable|date|after:now',
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()->route('editDetailsForm',  ['task_id' => $task_id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $task->title = $request->title;
+        $task->description = $request->description;
+        $task->priority = $request->priority;
+        $task->finish_date = $request->finish_date;
 
         $task->save();
 
