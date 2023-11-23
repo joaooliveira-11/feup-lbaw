@@ -6,18 +6,16 @@ use App\Models\User;
 use App\Models\Project;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\Auth;
 
-class ProjectPolicy
-{
+class ProjectPolicy{
     use HandlesAuthorization;
 
-    public function show(User $user, Project $project) {
-        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user) || $project->is_public;
+    public function create(User $user) : bool {
+        return !($user->isAdmin());
     }
 
-    public function create(User $user){
-        return !($user->isAdmin());
+    public function show(User $user, Project $project) : bool {
+        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user) || $project->is_public;
     }
 
     public function delete(User $user, User $model) {
@@ -25,7 +23,7 @@ class ProjectPolicy
         return $user->id == $model->id;
     }
 
-    public function adduser(User $user, Project $project){
+    public function adduser(User $user, Project $project) : bool{
         return $project->is_coordinator($user);
     }
 }

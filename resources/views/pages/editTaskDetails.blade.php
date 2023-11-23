@@ -25,12 +25,21 @@
     
                 <label for="title">Title:</label>
                 <input type="text" name="title" class="form-control" id="title" value="{{ $task->title }}" required>
+                @if($errors->has('title'))
+                <div class="error">{{ $errors->first('title') }}</div>
+                @endif
     
                 <label for="description">Description:</label>
                 <textarea type="text" rows="4" col="55" name="description" class="form-control" id="description" required>{{ $task->description }}</textarea>
+                @if($errors->has('description'))
+                <div class="error">{{ $errors->first('description') }}</div>
+                @endif
     
                 <label for="finish_date">Finish Date:</label>
-                <input type="datetime-local" name="finish_date" class="form-control" id="finish_date" value="{{ \Carbon\Carbon::parse($task->finish_date)->format('Y-m-d\TH:i') }}">
+                <input type="datetime-local" name="finish_date" class="form-control" id="finish_date" value="{{ \Carbon\Carbon::parse($task->finish_date)->format('Y-m-d H:i') }}">
+                @if($errors->has('finish_date'))
+                    <div class="error">{{ $errors->first('finish_date') }}</div>
+                @endif
     
                 <label for="priority">Priority:</label>
                 <select name="priority" id="priority" class="form-control" required>
@@ -38,7 +47,10 @@
                     <option value="medium" {{ $task->priority == 'medium' ? 'selected' : '' }}>Medium</option>
                     <option value="high" {{ $task->priority == 'high' ? 'selected' : '' }}>High</option>
                 </select>
-    
+                @if($errors->has('priority'))
+                <div class="error">{{ $errors->first('priority') }}</div>
+                @endif
+
                 <button type="submit" class="btn btn-outline-dark editTaskDetailsButton" id="createTaskButton">Update Details</button>
             </form>
         </div>

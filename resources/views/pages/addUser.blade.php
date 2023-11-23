@@ -22,7 +22,7 @@
             </div>
             <div class="add-user-list">
                 <ul class="add-user-ul">
-                    @foreach($project->usersNotInProject()  as $user)
+                    @foreach($project->nonmembers()  as $user)
                         <li class="add-user-element">
                             <p>{{ $user->name }} - <em>{{ '@' . $user->username }}</em></p>
                             <form method="POST" action="{{ route('adduser') }}">

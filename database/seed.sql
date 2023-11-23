@@ -428,7 +428,7 @@ CREATE TRIGGER update_tasks_on_user_leave
 -- FULL-TEXT SEARCH INDEXES
 ----------------------------------------
 --Full-text search index 1 -> for the users based on matching names and usernames
-
+/*
 ALTER TABLE users ADD COLUMN tsvectors TSVECTOR;
 
 CREATE FUNCTION user_search_update() RETURNS trigger AS $$
@@ -519,7 +519,7 @@ create TRIGGER task_search_update BEFORE INSERT OR UPDATE ON task
     FOR EACH ROW EXECUTE PROCEDURE task_search_update();
 
 CREATE INDEX task_search__idx ON task USING GIN(tsvectors);
-
+*/
 -----------------------------------------
 -- end
 -----------------------------------------
