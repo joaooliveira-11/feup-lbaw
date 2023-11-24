@@ -54,8 +54,8 @@
 
 .navbar-register-button {
     padding: 0.5em 1.5em;
-    color: #000;
-    background-color: #E5B405;
+    color: #fff;
+    border: 2px solid #E5B405;
     border-radius: 1em;
 }
 
