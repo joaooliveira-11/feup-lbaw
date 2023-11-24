@@ -31,10 +31,13 @@
     <body>
         <main>
             <header>
-                @if(!Request::is('login') && !Request::is('register'))
+                @if(Auth::check())
                     @include('partials.navbar')
+                    @yield('navbar')
+                @else
+                    @include('partials.authNavbar')
+                    @yield('authNavbar')
                 @endif
-                @yield('navbar')
             </header>
 
             <section id="content">

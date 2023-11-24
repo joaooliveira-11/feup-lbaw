@@ -1,4 +1,5 @@
 .navbar {
+    padding: 0.5em 0;
     display: flex;
     justify-content: space-around;
     border-bottom: 1ps solid black;
@@ -13,7 +14,10 @@
     justify-content: space-between;
     align-items: center;
     list-style: none;
+}
 
+.navbar-list-ul li, .authnavbar-list-ul li {
+    margin-bottom: 0;
 }
 
 .navbar-list-element {
@@ -32,4 +36,57 @@
     font-size: 2rem;
     font-weight: bold;
     color: rgb(0, 0, 0);
+}
+
+
+#index-navbar {
+    padding: 0.2em 0;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1ps solid black;
+    background-color: #543CE7;
+}
+
+.navbar-register-button, .navbar-login-button {
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+.navbar-register-button {
+    padding: 0.5em 1.5em;
+    color: #000;
+    background-color: #E5B405;
+    border-radius: 1em;
+}
+
+.navbar-login-button {
+    padding: 0.5em 0;
+    color: #DEDEDE;
+}
+
+.navbar-separator {
+    color: #DEDEDE;
+    font-size: 2rem;
+}
+
+.navbar-auth{
+    display: flex;
+    align-items: center;
+    gap: 2em;
+}
+
+.authnavbar-list-ul {
+    height: 100%;
+    width: 30em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+}
+
+.authnavbar-list-element {
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #DEDEDE;
 }
