@@ -1,0 +1,40 @@
+.lp-header {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+}
+
+.lp-header-content {
+    z-index: 1;
+    max-width: 30%;
+    margin-bottom: 10em;
+}
+
+.lp-header-image {
+    width: 800px;
+    height: fit-content;
+}
+
+.lp-header-content h1 {
+    color: #454545;
+    font-size: 7rem;
+    width: 9em;
+    margin-bottom: 0.2em;
+}
+
+.lp-header-content h4 {
+    font-size: 2rem;
+    width: 23em;
+}
+
+.auth-register-button {
+    padding: 0.5em 1.2em;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000;
+    background-color: #E5B405;
+    border-radius: 0.5em;
+}

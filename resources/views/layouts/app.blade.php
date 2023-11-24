@@ -20,6 +20,7 @@
         <link href="{{ url('css/createTask.css') }}" rel="stylesheet">
         <link href="{{ url('css/allProjects.css') }}" rel="stylesheet">
         <link href="{{ url('css/createProject.css') }}" rel="stylesheet">
+        <link href="{{ url('css/index.css') }}" rel="stylesheet">
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
