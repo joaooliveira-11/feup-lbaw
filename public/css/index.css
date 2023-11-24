@@ -9,32 +9,55 @@
 
 .lp-header-content {
     z-index: 1;
-    max-width: 30%;
-    margin-bottom: 10em;
+    max-width: 35%;
+    margin-top: -8vw;
 }
 
 .lp-header-image {
-    width: 800px;
+    width:60vw;
     height: fit-content;
 }
 
 .lp-header-content h1 {
     color: #454545;
-    font-size: 7rem;
+    font-size: 5vw;
     width: 9em;
     margin-bottom: 0.2em;
 }
 
 .lp-header-content h4 {
-    font-size: 2rem;
+    font-size: 1.3vw;
     width: 23em;
 }
 
 .auth-register-button {
     padding: 0.5em 1.2em;
-    font-size: 2rem;
+    font-size: 1.3vw;
     font-weight: bold;
     color: #fff;
     background-color: #543CE7;
     border-radius: 0.5em;
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .lp-header {
+        width: 100%; /* Adjust the width for small screens */
+    }
+
+    .lp-header-content {
+        display: inline-flex;
+    }
+
+    .lp-header-image {
+        width: 100%; /* Make the image fill the container */
+        max-width: 800px; /* Set a maximum width for larger screens */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    .lp-header-content h1, .lp-header-content h4, .auth-register-button {
+        font-size: 150%;
+    }
+
 }

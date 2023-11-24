@@ -2,7 +2,7 @@
 
 <div id="index-navbar">
 
-    <img src="{{ asset('img/TeamSync_white.svg') }}" alt="TeamSync">
+    <img class="navbar-img" src="{{ asset('img/TeamSync_white.svg') }}" alt="TeamSync">
     <div class="navbar-list">
         <ul class="authnavbar-list-ul">
             <li><a class="authnavbar-list-element" href="">Home</a></li>
