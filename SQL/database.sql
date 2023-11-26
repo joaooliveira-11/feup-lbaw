@@ -477,7 +477,6 @@ BEGIN
             NEW.tsvectors :=
                 setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
                 setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
-            RETURN NEW;
         END IF;
     END IF;
 

@@ -183,22 +183,25 @@ function handleSearchProject() {
 }
 
 
-function searchProjectsOnEnter(event) {
-    if (event.key === 'Enter') {
-        searchProjects();
-    }
-}
 
-  function searchProjectsOnEnter(event) {
-      if (event.key === 'Enter') {
-          searchProjects();
-      }
-  }
+  const radios = document.querySelectorAll('#projectForm input[type="radio"]');
 
-  document.getElementById('projectSearch').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        searchProjects();
-    }
-  });
+  radios.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        const id = this.value;
+        document.querySelector('label.selected').classList.toggle('selected', false);
+        this.parentNode.classList.toggle('selected', this.checked);       
+        const toHide = document.querySelector('#MainContent .selected')
+        if (toHide) {
+            toHide.classList.toggle('selected', false);
+        }
+
+        const toDisplay = document.querySelector('#MainContent div#' + id);
+        if (toDisplay) {
+            toDisplay.classList.toggle('selected', this.checked);
+        }
+    });
+});
+
 
   addEventListeners();
