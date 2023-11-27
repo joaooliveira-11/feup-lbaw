@@ -428,7 +428,6 @@ CREATE TRIGGER update_tasks_on_user_leave
 -- FULL-TEXT SEARCH INDEXES
 ----------------------------------------
 --Full-text search index 1 -> for the users based on matching names and usernames
-
 ALTER TABLE users ADD COLUMN tsvectors TSVECTOR;
 
 CREATE FUNCTION user_search_update() RETURNS trigger AS $$
@@ -442,15 +441,15 @@ BEGIN
 
     IF TG_OP = 'UPDATE' THEN
         IF NEW.name <> OLD.name OR NEW.username <> OLD.username THEN
-            NEW.tsvectors :=
+            NEW.tsvectors = (
                 setweight(to_tsvector('english', coalesce(NEW.name, '')), 'A') ||
-                setweight(to_tsvector('english', coalesce(NEW.username, '')), 'B');
-            RETURN NEW;
+                setweight(to_tsvector('english', coalesce(NEW.username, '')), 'B')
+            );
         END IF;
     END IF;
-
-    RETURN NULL;
-END $$ LANGUAGE plpgsql;
+RETURN NEW;
+END $$ 
+LANGUAGE plpgsql;
 
 CREATE TRIGGER user_search_update BEFORE INSERT OR UPDATE ON users
     FOR EACH ROW EXECUTE PROCEDURE user_search_update();
@@ -474,15 +473,15 @@ BEGIN
 
     IF TG_OP = 'UPDATE' THEN
         IF NEW.title <> OLD.title OR NEW.description <> OLD.description THEN
-            NEW.tsvectors :=
+            NEW.tsvectors = (
                 setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
-                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
-            RETURN NEW;
+                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B')
+            );
         END IF;
     END IF;
-
-    RETURN NULL;
-END $$ LANGUAGE plpgsql;
+RETURN NEW;
+END $$ 
+LANGUAGE plpgsql;
 
 CREATE TRIGGER project_search_update BEFORE INSERT OR UPDATE ON project
     FOR EACH ROW EXECUTE PROCEDURE project_search_update();
@@ -505,21 +504,20 @@ BEGIN
 
     IF TG_OP = 'UPDATE' THEN
         IF NEW.title <> OLD.title OR NEW.description <> OLD.description THEN
-            NEW.tsvectors :=
+             NEW.tsvectors = (
                 setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
-                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
-            RETURN NEW;
+                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B')
+             );
         END IF;
     END IF;
-
-    RETURN NULL;
-END $$ LANGUAGE plpgsql;
+RETURN NEW;
+END $$ 
+LANGUAGE plpgsql;
 
 create TRIGGER task_search_update BEFORE INSERT OR UPDATE ON task
     FOR EACH ROW EXECUTE PROCEDURE task_search_update();
 
 CREATE INDEX task_search__idx ON task USING GIN(tsvectors);
-
 -----------------------------------------
 -- end
 -----------------------------------------
