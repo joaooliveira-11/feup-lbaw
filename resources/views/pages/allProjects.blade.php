@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div id="ProjectPage">
 <div id="projects-container">
     <div class="search-bar">
         <input type="text" id="projectSearch" placeholder="Search projects..." oninput="searchProjects()">
@@ -30,6 +31,19 @@
             </a>
         @endforeach
         </ul>
+
+        <div class="pagination-container">
+            @if ($projects->currentPage() != 1)
+                <a href="{{ $projects->previousPageUrl() }}" class="btn">Previous</a>
+            @endif
+
+            <span>Page {{ $projects->currentPage() }} of {{ $projects->lastPage() }}</span>
+
+            @if ($projects->hasMorePages())
+                <a href="{{ $projects->nextPageUrl() }}" class="btn">Next</a>
+            @endif
+        </div>
     @endif
+</div>
 </div>
 @endsection
