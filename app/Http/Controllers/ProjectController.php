@@ -58,10 +58,12 @@ class ProjectController extends Controller {
 
     public function showAllProjects() : View {
         $user = User::find(Auth::user()->id);
-        $projects = Project::get_all_projects($user);
-
-        return view('pages.allProjects', ['projects'=>$projects]);
+        $projectsQuery = Project::get_all_projects($user);
+        $projects = $projectsQuery->paginate(9); 
+    
+        return view('pages.allProjects', ['projects' => $projects]);
     }
+    
 
     public function showProjectMembers(int $project_id) : View {
         $project = Project::find($project_id); 
