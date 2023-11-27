@@ -37,6 +37,7 @@ DROP FUNCTION IF EXISTS comment_unassigned_or_archived_task;
 DROP FUNCTION IF EXISTS user_search_update;
 DROP FUNCTION IF EXISTS project_search_update;
 DROP FUNCTION IF EXISTS task_search_update;
+DROP FUNCTION IF EXISTS task_user_in_project;
 
 
 -----------------------------------------
@@ -423,6 +424,30 @@ CREATE TRIGGER update_tasks_on_user_leave
     AFTER DELETE ON project_users
     FOR EACH ROW
     EXECUTE PROCEDURE update_tasks_on_user_leave();
+
+
+--TRIGGER13 (The task has to be created by a user who is in the project)
+CREATE OR REPLACE FUNCTION task_user_in_project() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM project_users
+        WHERE project_id = NEW.project_task
+          AND user_id = NEW.create_by
+    ) THEN
+        RAISE EXCEPTION 'The task has to be created by a user who is in the project';
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER task_user_in_project
+    BEFORE INSERT ON task
+    FOR EACH ROW
+    EXECUTE PROCEDURE task_user_in_project();
+
 
 -----------------------------------------
 -- FULL-TEXT SEARCH INDEXES
