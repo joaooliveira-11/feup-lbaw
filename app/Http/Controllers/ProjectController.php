@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Project_Users;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller {
 
@@ -65,12 +66,10 @@ class ProjectController extends Controller {
     public function search(Request $request)
     {
         $filter = strtolower($request->get('filter'));
+        
+        $projects = Project::whereRaw('LOWER(title) LIKE ?', ["%{$filter}%"])->where("is_public", true)->get();
 
-        $projects = Project::whereRaw('LOWER(title) LIKE ?', ['%' . $filter . '%'])
-        ->where('is_public', 1)
-        ->get();
-
-    return response()->json($projects);
+        return response()->json($projects);
     }
 
     public function showNonProjectMembers(int $project_id) : View {

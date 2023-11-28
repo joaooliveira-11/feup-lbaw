@@ -1,4 +1,4 @@
-@section('tasksInProject')
+@section('tasks')
 
 <div id="Tasks">
     <p class="TaskLabel">All Tasks:</p>
