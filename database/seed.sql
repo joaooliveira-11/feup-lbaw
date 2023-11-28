@@ -56,12 +56,13 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
+    password TEXT,
     description TEXT,
     photo TEXT, 
     is_admin BOOLEAN NOT NULL DEFAULT FALSE, 
     is_banned BOOLEAN NOT NULL DEFAULT FALSE,
-    email_verification BOOLEAN NOT NULL DEFAULT FALSE 
+    email_verification BOOLEAN NOT NULL DEFAULT FALSE,
+    google_id VARCHAR
 );
 
 CREATE TABLE interest (
