@@ -143,15 +143,18 @@
 }
 
 
-#ProjectDeadline {
+#ProjectDeadline, #ProjectDescription , #MembersCounter, #ActiveTasks{
     width: 100%;
     font-size: 1vw;
     color: #303030;
+    display: flex;
+    justify-content:flex-start;
 }
 
-#TitleInPage {
-    font-weight: bold;
-    margin-bottom: 0;
+h2{
+    font-size: 1.5vw;
+    color: #303030;
+
 }
 
 #CreateTaskButton {
@@ -216,3 +219,11 @@
     font-size: 2rem;
     margin: 0;
 }
+
+#Dashboard p, #Members p {
+    font-size: 1.5vw;
+    color: #303030;
+    margin-left: 1vw;
+    line-height: normal;
+}
+
