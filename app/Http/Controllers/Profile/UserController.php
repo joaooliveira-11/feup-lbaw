@@ -14,13 +14,13 @@ class UserController extends Controller
     /**
      * Display profile info.
      */
-    public function show(int $id)
-    {
+    public function show(int $id){
         $user = User::find($id);
         $interests = $user->interests()->get();
         $skills = $user->skills()->get();
-        $workerprojects = $user->workerProjects()->get();
-        $coordinatorprojects = $user->coordinatorProjects()->get();
+        //$workerprojects = $user->workerProjects()->get();
+        //$coordinatorprojects = $user->coordinatorProjects()->get();
+        $projects = $user->projects();
 
         if(!$user)
             return redirect()->route('home')
@@ -30,8 +30,7 @@ class UserController extends Controller
             'user' => $user,
             'interests' => $interests,
             'skills' => $skills,
-            'workerprojects' => $workerprojects,
-            'coordinatorprojects' => $coordinatorprojects
+            'projects' => $projects,
         ]);
     }
 

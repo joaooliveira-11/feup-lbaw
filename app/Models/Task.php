@@ -11,12 +11,18 @@ class Task extends Model {
     protected $table = 'task';
     protected $primaryKey = 'task_id';
 
-    /**
-     * Get the project where the task is included.
-     */
     // protected $fillable = ['title', 'description', 'priority', 'finish_date', 'state'];
 
     public function project(): BelongsTo {
         return $this->belongsTo(Project::class);
     }
+
+    public function is_archived() {
+        return $this->state == 'archived';
+    }
+
+    public function is_assigned() {
+        return $this->state == 'assigned';
+    }
+
 }

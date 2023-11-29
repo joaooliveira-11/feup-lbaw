@@ -27,7 +27,10 @@
                 </span>
             @endif
             <div id="butons_signin">
-                <button type="submit">Sign In</button>
+                <button type="submit" id="LoginButton">Sign In</button>
+            </div>
+            <div id="register-mobile">
+                <span class="span-space">Don't have an account yet?</span><a id="register-mobile-link" href="{{ route('register') }}">Register</a>
             </div>
         </form>
     </div>

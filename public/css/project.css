@@ -183,7 +183,7 @@ h2{
 }
 
 .search-bar {
-    width: 80%;
+    width: 100%;
     display: flex;
     align-items: center;
     border-radius: 0.7vw; 

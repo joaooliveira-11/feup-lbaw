@@ -16,42 +16,49 @@ class Project extends Model
     protected $table = 'project';
     protected $primaryKey = 'project_id';
 
-    /**
-     * Get the user that owns the card.
-     */
-    public function user(): BelongsTo {
-        return $this->emitedBy(User::class);
-    }
-
-    public function is_member(User $user) {
-        return ($this->hasMany('App\Models\Project_Users','project_id')->where('user_id', $user->id)->get()->isNotEmpty());
+    public function is_member(User $user) { 
+        return $this->members()->contains('id', $user->id);
     }
 
     public function is_coordinator(User $user) {
         return $this->project_coordinator == $user->id;
     }
 
-    public function users() {
-        return $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id');
-    }
-
-    public function usersNotInProject()
-{
-    $projectId = $this->project_id;
-
-    return User::whereNotIn('id', function ($query) use ($projectId) {
-        $query->select('user_id')
-            ->from('project_users')
-            ->where('project_id', '=', $projectId);
-    })->get();
-}
-
     public function coordinator() {
         return $this->belongsTo(User::class, 'project_coordinator');
     }
-    /**
-     * Get the tasks for the project.
-     */
+
+    public function members() {
+        $project_users = $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id')->get();
+        $coordinator = $this->coordinator()->first();
+
+        return $project_users->push($coordinator);
+    }
+
+    public function nonmembers(){
+        $project_id = $this->project_id;
+
+        return User::whereNotIn('id', function ($query) use ($project_id) {
+                $query->select('user_id')
+                ->from('project_users')
+                ->where('project_id', '=', $project_id);
+        })
+        ->where('id', '!=', $this->project_coordinator)
+        ->where('is_admin', '=', false)
+        ->get();
+    }
+
+    public static function get_all_projects(User $user) {
+        if ($user->is_admin) {
+            return self::query();
+        } else {
+            $userProjectIds = $user->projects()->pluck('id');
+            return self::whereIn('id', $userProjectIds)
+                       ->orWhere('is_public', true);
+        }
+    }
+    
+
     public function tasks(): HasMany {
         return $this->hasMany(Task::class, 'project_task');
     }

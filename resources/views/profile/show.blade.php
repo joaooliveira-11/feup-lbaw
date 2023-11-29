@@ -51,12 +51,11 @@
             <div id="Projects">
             <p class="label">Projects</p>
 
-            @if ($workerprojects->isEmpty() && $coordinatorprojects->isEmpty() )
+            @if ($projects->isEmpty())
                 <p>No projects yet!</p>
             @else
                 <ul id="ProjectsList">
-                    @if (!$workerprojects->isEmpty())
-                        @foreach ($workerprojects as $project)
+                        @foreach ($projects as $project)
                             <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
                                 <li>
                                     <div>
@@ -66,21 +65,6 @@
                                 </li> 
                             </a>
                         @endforeach
-                    @endif
-
-                    @if (!$coordinatorprojects->isEmpty())
-                        @foreach ($coordinatorprojects as $project)
-                            <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
-                                <li>
-                                    <div>
-                                        <p id="ProjectTitle">{{ $project->title }}</p>
-                                        <p>{{ $project->description }}</p>
-                                    </div>
-                                </li> 
-                            </a>
-                        @endforeach
-                    @endif
-
                 </ul>
             @endif
         </div>
