@@ -1,20 +1,20 @@
-@section('tasksInProject')
+@section('tasks')
 
 <div id="Tasks">
     <p class="TaskLabel">All Tasks:</p>
 
     <div class="search-bar">
-        <input type="text" id="taskSearch" placeholder="Search tasks..." onkeyup="searchOnEnter(event)">
+        <input type="text" id="taskSearch" placeholder="Search tasks..." oninput="searchTasks()">
         <button onclick="searchTasks()">Search</button>
     </div>
-
+    <div id="tasks-container" class= "{{$project->project_id}}">
     @if($project->tasks->count() > 0)
-        <ul id="TasksList">
+        <ul class="TasksList">
             @foreach($project->tasks as $task)
-                <a href="{{ url('task/' . $task->task_id )}}" class="project-link">
+                <a href="{{ url('task/' . $task->task_id )}}" class="project-link task-link">
                     <li>
                         <div>
-                            <p id="TaskTitle">{{ $task->title }}</p>
+                            <p class="TaskTitle">{{ $task->title }}</p>
                             <p>{{ $task->description }}</p>
                             <p class="FinishDate">Deadline: {{ $task->finish_date !== null ? $task->finish_date : 'Not defined' }}</p>
                         </div>
@@ -22,6 +22,7 @@
                 </a>
             @endforeach
         </ul>
+        </div>
     @else
         <p>No tasks found for this project.</p>
     @endif

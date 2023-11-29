@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Project;
 use App\Models\Project_Users;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller {
 
@@ -70,14 +71,26 @@ class ProjectController extends Controller {
         return view('pages.projectMembers', ['project'=> $project]);
     }
 
+    public function showProjectTasks(int $project_id) : View {
+        $project = Project::find($project_id); 
+        return view('pages.allTasks', ['project'=> $project]);
+    }
+
+    public function search(Request $request)
+    {
+        $filter = strtolower($request->get('filter'));
+        $projects = Project::whereRaw('LOWER(title) LIKE ?', ["%{$filter}%"])->where("is_public", true)->get();
+
+        return response()->json($projects);
+    }
+
     public function showNonProjectMembers(int $project_id) : View {
         $project = Project::find($project_id); 
         return view('pages.addUser', ['project'=> $project]);
     }
 
-    public function showProjectTasks(int $project_id) : View {
-        $project = Project::find($project_id); 
-        return view('pages.allTasks', ['project'=> $project]);
+    public function tasks(){
+        return $this->hasMany(Task::class);
     }
 
     public function addUser(Request $request) {   
@@ -93,16 +106,6 @@ class ProjectController extends Controller {
         $project_users->save();
 
         return view('pages.projectMembers', ['project'=> $project]);
-    }
-
-    public function search(Request $request){
-        $filter = strtolower($request->get('filter'));
-
-        $projects = Project::whereRaw('LOWER(title) LIKE ?', ['%' . $filter . '%'])
-        ->where('is_public', 1)
-        ->get();
-
-        return response()->json($projects);
     }
 
 }
