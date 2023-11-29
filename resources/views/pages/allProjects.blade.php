@@ -13,10 +13,10 @@
     @else
         <ul class="projects-list">
         @foreach ($projects as $project)
-            <a href="{{ url('project/' . $project->project_id) }}" class="projects-link">
+            <a href="{{ url('project/' . $project->project_id) }}" class="project-link">
                 <li class="project-item">
-                    <div class="project-content">
-                        <h2 class="projects-title">{{ $project->title }}</h2>
+                    <div class="project-content {{ $project->project_id }}">
+                        <h2 class="project-title">{{ $project->title }}</h2>
                         <p class="project-info"><strong>Coordinator:</strong> {{ $project->coordinator->name }}</p>
                         <p class="project-info">
                             <strong>Deadline:</strong>

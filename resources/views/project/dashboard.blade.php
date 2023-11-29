@@ -10,7 +10,7 @@
     </div>
     <div id = "MembersCounter">
         <h2>Members:</h2>
-        <p> {{ $project->users->count() }} </p>
+        <p> {{ $project->members()->count() }} </p>
     </div>
     <div id = "ActiveTasks">
         <h2>Active Tasks:</h2>

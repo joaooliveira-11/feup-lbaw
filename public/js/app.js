@@ -66,20 +66,12 @@ function addEventListeners() {
     }
   }
 
-
-  function searchOnEnter(event) {
-    if (event.key === 'Enter') {
-        searchTasks();
-    }
-  }
-
-  function searchProjects() {
-      var input = document.getElementById('projectSearch');
-      var filter = input.value;
-      
-  
-      sendAjaxRequest('POST', '/search-projects', { filter: filter }, handleSearchProject);
+function searchProjects() {
+    var input = document.getElementById('projectSearch');
+    var filter = input.value;
+    sendAjaxRequest('POST', '/search-projects', { filter: filter }, handleSearchProject);
 }
+
 
 function searchTasks() {
       var input = document.getElementById('taskSearch');
@@ -141,8 +133,9 @@ function handleSearchTask(){
 
 
 function handleSearchProject() {
-  if (this.status >= 200 && this.status < 400) {
-      var data = JSON.parse(this.response);
+    if (this.status >= 200 && this.status < 400) {
+      var response = this.response.substring(1);
+      var data = JSON.parse(response);
       var container = document.querySelector('#projects-container');
       var ul = document.querySelector('.projects-list');
       if (!ul) {
@@ -157,6 +150,8 @@ function handleSearchProject() {
           li.classList.add('project-item');
 
           var div = document.createElement('div');
+          div.classList.add('project-content');
+          div.classList.add(project.project_id);
 
           var a = document.createElement('a');
           a.href = '/project/' + project.project_id;
@@ -167,15 +162,41 @@ function handleSearchProject() {
           title.textContent = project.title;
           div.appendChild(title);
 
-          var description = document.createElement('p');
-          description.classList.add('project-description');
-          description.textContent = project.description;
-          div.appendChild(description);
+          var coordinator = document.createElement('p');
+          coordinator.classList.add('project-info');
+          var strong = document.createElement('strong');
+          strong.textContent = "Coordinator: ";
+          coordinator.appendChild(strong);
+          
+          var id = project.created_by;
 
-
+          var deadline = document.createElement('p');
+          deadline.classList.add('project-info');
+          var strong = document.createElement('strong');
+          strong.textContent = "Deadline: ";
+          if(project.finish_date == null) deadline.textContent = " Not defined ";
+          else{ deadline.textContent = project.finish_date;}
+          div.appendChild(deadline);
           li.appendChild(div);
           a.appendChild(li);
           ul.appendChild(a);
+
+          sendAjaxRequest('POST', '/user-name' ,{id : id}, function() {
+            if (this.status >= 200 && this.status < 400) {
+                var response = this.response.substring(1);
+                var data = JSON.parse(response);
+                var userName = data.name;
+                var coordinator = document.createElement('p');
+                coordinator.classList.add('project-info');
+                var strong = document.createElement('strong');
+                strong.textContent = "Coordinator: ";
+                coordinator.appendChild(strong);
+                coordinator.textContent += userName;
+                var element = document.querySelector('[class="' + project.project_id + '"]');
+                div.appendChild(coordinator);
+            }
+        });
+
       });
   } else {
       console.error('Error:', this.status, this.statusText);

@@ -79,8 +79,7 @@ class ProjectController extends Controller {
     public function search(Request $request)
     {
         $filter = strtolower($request->get('filter'));
-        $projects = Project::whereRaw('LOWER(title) LIKE ?', ["%{$filter}%"])->where("is_public", true)->get();
-
+        $projects = Project::whereRaw('LOWER(title) LIKE ?', ['%' . $filter . '%'])->where('is_public', true)->get();
         return response()->json($projects);
     }
 

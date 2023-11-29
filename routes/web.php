@@ -38,6 +38,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
     Route::get('/edit-profile/{id}', 'edit')->where('id', '[0-9]+')->name('edit');
     Route::put('/profile/{id}', 'update')->name('user.update');
+    Route::post('/user-name', 'name');
 });
 
 //Project
