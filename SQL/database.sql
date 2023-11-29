@@ -500,8 +500,7 @@ BEGIN
         IF NEW.title <> OLD.title OR NEW.description <> OLD.description THEN
             NEW.tsvectors = (
                 setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
-                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B')
-            );
+                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
         END IF;
     END IF;
 RETURN NEW;

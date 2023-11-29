@@ -62,6 +62,7 @@ Route::controller(TaskController::class)->group(function() {
     Route::get('/task/{task_id}/edit', 'editDetailsForm')->name('editDetailsForm');
     Route::patch('/task/edit', 'updateDetails')->name('updatetaskdetails');
     Route::patch('/task/complete', 'completetask')->name('completeassignedtask');
+    Route::post('/search-tasks', 'search');
 });
 
 Route::controller(GoogleController::class)->group(function () {
