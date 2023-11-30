@@ -38,6 +38,42 @@
     background-color: #543CE7;
     border-radius: 0.5em;
 }
+#lp-services {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    position: relative;
+    align-items: center;
+}
+
+.lp-service {
+    width: 55vw;
+    display: flex;
+    justify-content: space-between;
+}
+
+.service-text h4 {
+    color: #000;
+    font-size: 1.4vw;
+    font-weight: bold;
+}
+
+.service-text p {
+    color: #000;
+    font-size: 1vw;
+}
+
+.service-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width:50%;
+}
+
+.service-image {
+    height: 15vw;
+    width: 20vw;;
+}
 
 
 

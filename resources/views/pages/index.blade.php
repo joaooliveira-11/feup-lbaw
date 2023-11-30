@@ -11,6 +11,31 @@
         </div>
         <img class="lp-header-image" src="{{ asset('img/lp_header_img.png') }}" alt="Programming">
     </div>
+    <div id="lp-services">
+        <h2>What We Offer</h2>
+        <div class="lp-service">
+            <div class="service-text">
+                <h4>Create Any Project You Imagine</h4>
+                <p>Turn your ideas into reality.  Code, create, and collaborate on any project you can imagine</p>
+            </div>
+            <img class="service-image" src="{{ asset('img/creation.png') }}" alt="Project Creation">
+        </div>
+        <div class="lp-service">
+            <img class="service-image" src="{{ asset('img/showcase.png') }}" alt="Project Showcase">
+            <div class="service-text">
+                <h4>Showcase Your Talent</h4>
+                <p>Elevate your profile by showcasing your noteworthy projects and accomplishments for all to see</p>
+            </div>
+        </div>
+        <div class="lp-service">
+            <div class="service-text">
+                <h4>Chat and Collaborate with Fellow Members</h4>
+                <p>Connect and collaborate effortlessly with other members through many chat channels</p>
+            </div>
+            <img class="service-image" src="{{ asset('img/communication.png') }}" alt="Communication">
+        </div>
+
+    </div>
 
 
 </div>
