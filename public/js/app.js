@@ -66,10 +66,11 @@ function addEventListeners() {
     }
   }
 
-function searchProjects() {
+  function searchProjects(page = 1) {
     var input = document.getElementById('projectSearch');
     var filter = input.value;
-    sendAjaxRequest('POST', '/search-projects', { filter: filter }, handleSearchProject);
+    var url = '/search-projects?filter=' + encodeURIComponent(filter) + '&page=' + page;
+    sendAjaxRequest('GET', url, {}, handleSearchProject);
 }
 
 
@@ -133,9 +134,9 @@ function handleSearchTask(){
 
 
 function handleSearchProject() {
+    console.log(this.response.currentPage)
     if (this.status >= 200 && this.status < 400) {
-      var response = this.response.substring(1);
-      var data = JSON.parse(response);
+      var data = JSON.parse(this.response);
       var container = document.querySelector('#projects-container');
       var ul = document.querySelector('.projects-list');
       if (!ul) {
@@ -144,8 +145,7 @@ function handleSearchProject() {
           container.appendChild(ul);
       }
       ul.innerHTML = ''; 
-
-      data.forEach(project => {
+      data.projects.forEach(project => {
           var li = document.createElement('li');
           li.classList.add('project-item');
 
@@ -163,17 +163,14 @@ function handleSearchProject() {
           div.appendChild(title);
 
           var coordinator = document.createElement('p');
+          coordinator.classList.add('project-coordinator');
           coordinator.classList.add('project-info');
-          var strong = document.createElement('strong');
-          strong.textContent = "Coordinator: ";
-          coordinator.appendChild(strong);
           
           var id = project.created_by;
 
           var deadline = document.createElement('p');
+          deadline.classList.add('project-deadline');
           deadline.classList.add('project-info');
-          var strong = document.createElement('strong');
-          strong.textContent = "Deadline: ";
           if(project.finish_date == null) deadline.textContent = " Not defined ";
           else{ deadline.textContent = project.finish_date;}
           div.appendChild(deadline);
@@ -183,19 +180,39 @@ function handleSearchProject() {
 
           sendAjaxRequest('POST', '/user-name' ,{id : id}, function() {
             if (this.status >= 200 && this.status < 400) {
-                var response = this.response.substring(1);
-                var data = JSON.parse(response);
+                var data = JSON.parse(this.response);
                 var userName = data.name;
                 var coordinator = document.createElement('p');
                 coordinator.classList.add('project-info');
-                var strong = document.createElement('strong');
-                strong.textContent = "Coordinator: ";
-                coordinator.appendChild(strong);
+                coordinator.classList.add('project-coordinator');
                 coordinator.textContent += userName;
                 var element = document.querySelector('[class="' + project.project_id + '"]');
                 div.appendChild(coordinator);
             }
         });
+
+        document.querySelector('.pagination-container').innerHTML = '';
+        if (data.currentPage != 1) {
+          const previousPageUrl = document.createElement('button');
+          previousPageUrl.onclick = function() {
+            searchProjects(data.currentPage - 1);
+        };
+          previousPageUrl.textContent = 'Previous';
+          previousPageUrl.classList.add('btn');
+          document.querySelector('.pagination-container').appendChild(previousPageUrl);
+        }
+        const currentPage = document.createElement('span');
+        currentPage.textContent = 'Page ' + data.currentPage + ' of ' + data.lastPage;
+        document.querySelector('.pagination-container').appendChild(currentPage);
+        if (data.hasMorePages) {
+          const nextPageUrl = document.createElement('button');
+          nextPageUrl.onclick = function() {
+            searchProjects(data.currentPage + 1);
+          };
+          nextPageUrl.textContent = 'Next';
+          nextPageUrl.classList.add('btn');
+          document.querySelector('.pagination-container').appendChild(nextPageUrl);
+        }
 
       });
   } else {

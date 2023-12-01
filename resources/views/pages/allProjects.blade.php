@@ -3,10 +3,7 @@
 @section('content')
 <div id="ProjectPage">
 <div id="projects-container">
-    <div class="search-bar">
-        <input type="text" id="projectSearch" placeholder="Search projects..." oninput="searchProjects()">
-        <button onclick="searchProjects()" class="rounded-button">Search</button>
-    </div>
+    <input type="text" id="projectSearch" placeholder="Search projects..." oninput="searchProjects({{ $projects->currentPage() }})">
 
     @if ($projects->isEmpty())
         <p>No projects yet!</p>
@@ -17,15 +14,14 @@
                 <li class="project-item">
                     <div class="project-content {{ $project->project_id }}">
                         <h2 class="project-title">{{ $project->title }}</h2>
-                        <p class="project-info"><strong>Coordinator:</strong> {{ $project->coordinator->name }}</p>
-                        <p class="project-info">
-                            <strong>Deadline:</strong>
+                        <p class="project-deadline project-info">
                             @if ($project->finish_date)
                                 {{ $project->finish_date }}
                             @else
                                 Not defined
                             @endif
                         </p>
+                        <p class="project-coordinator project-info"> {{ $project->coordinator->name }}</p>
                     </div>
                 </li>
             </a>
