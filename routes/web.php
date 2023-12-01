@@ -1,4 +1,4 @@
-\<?php
+<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
@@ -20,7 +20,10 @@ use App\Http\Controllers\Auth\GoogleController;
 */
 
 // Home
-Route::redirect('/', '/login');
+Route::redirect('/', '/index');
+Route::get('/index', function () {
+    return view('pages.index');
+})->name('index');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
