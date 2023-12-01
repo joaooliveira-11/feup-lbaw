@@ -34,7 +34,33 @@
             </div>
             <img class="service-image" src="{{ asset('img/communication.png') }}" alt="Communication">
         </div>
-
+    </div>
+    <div class="lp-cta">
+        <h3>Are you ready to take your work to the <span>next level?</span></h3>
+        <div class="cta-buttons">
+            <a class="auth-register-button" href="{{ url('/register') }}">Get Started</a>
+            <a class="learn-more-button" href="{{ url('/register') }}">Learn More</a>
+        </div>
+    </div>
+    <div id="footer">
+        <div class="footer-left">
+            <a class="footer-teamsync-button" href="{{ url('/register') }}">TeamSync</a>
+            <h6>Where collaboration meets inovation</h6>
+        </div>
+        <div class="footer-middle">
+            <h5>Pages</h5>
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>FAQs</li>
+            </ul>
+        </div>
+        <div class="footer-right">
+            <h5>Contact</h5>
+            <p>+351 912 345 678</p>
+            <p>contact@teamsync.com</p>
+            <p>Rua Olivia Rodrigo 123</p>
+        </div>
     </div>
 
 
