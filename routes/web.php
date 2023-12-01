@@ -25,6 +25,10 @@ Route::get('/index', function () {
     return view('pages.index');
 })->name('index');
 
+Route::get('/about', function () {
+    return view('pages.about');
+})->name('about');
+
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
