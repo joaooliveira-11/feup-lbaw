@@ -56,12 +56,10 @@ Route::controller(ProjectController::class)->group(function() {
 
 //Task
 Route::controller(TaskController::class)->group(function() {
-    Route::get('/project/{project_id}/task/create', 'createTaskForm')->where(['project_id' => '[0-9]+'])->name('createtaskform');
-    Route::post('/task/create', 'create')->name('createtask');
+    Route::post('/task/create', 'create')->name('task.create');
     Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
-    Route::get('/task/{task_id}/edit', 'editDetailsForm')->name('editDetailsForm');
-    Route::patch('/task/edit', 'updateDetails')->name('updatetaskdetails');
-    Route::patch('/task/complete', 'completetask')->name('completeassignedtask');
+    Route::patch('/task/edit', 'updatedetails')->name('task.update_details');
+    Route::patch('/task/complete', 'completetask')->name('task.complete');
     Route::post('/search-tasks', 'search');
 });
 

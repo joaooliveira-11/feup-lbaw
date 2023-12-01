@@ -36,40 +36,18 @@ class TaskController extends Controller {
             ->withSuccess('You have successfully created a new task!');         
     }
 
-    public function createTaskForm($project_id) : View {
-        return view('pages.createTask', ['project_id' => $project_id]);
-    }
-
     public function show(int $task_id){
         $task = Task::find($task_id);  
         $this->authorize('show', $task);
         return view('pages.task', ['task'=>$task]);
     }
 
-    public function editDetailsForm($task_id) : View {
-        $task = Task::find($task_id);
-        return view('pages.editTaskDetails', ['task' => $task]);
-    }
-
-    public function updateDetails(Request $request){
+    public function updatedetails(Request $request){
 
         $task_id = $request->task_id;
         $task = Task::find($task_id);
 
         $this->authorize('updatedetails', $task); 
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'min:15|string|max:50',
-            'description' => 'min:100|string|max:300',
-            'priority' => ['string', Rule::in(['low', 'medium', 'high'])],
-            'finish_date' => 'nullable|date|after:now',
-        ]);
-        
-        if ($validator->fails()) {
-            return redirect()->route('editDetailsForm',  ['task_id' => $task_id])
-                ->withErrors($validator)
-                ->withInput();
-        }
 
         $task->title = $request->title;
         $task->description = $request->description;

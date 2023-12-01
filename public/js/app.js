@@ -205,49 +205,56 @@ function handleSearchProject() {
 
 addEventListeners();
 
-document.addEventListener("DOMContentLoaded", function () {
+function handleTaskFormSubmit(event) {
+  if (!isTaskFormValid()) {
+    event.preventDefault();
+  }
+}
 
-  function handleSubmit(event) {
-    if (!validateForm()) {
-      event.preventDefault();
+function isTaskFormValid() {
+  let title = document.getElementById("title").value;
+  let description = document.getElementById("description").value;
+  let finishDate = document.getElementById("finish_date").value;
+
+  document.getElementById('titleError').innerHTML = '';
+  document.getElementById('descriptionError').innerHTML = '';
+  document.getElementById('finish_dateError').innerHTML = '';
+
+  if (title.length < 15 || title.length > 50) {
+      document.getElementById('title').classList.add('validation-err');
+      document.getElementById('titleError').innerHTML = 'Title must be between 15 and 50 characters long';
+      return false;
+  }
+
+  if (description.length < 100 || description.length > 300) {
+      document.getElementById('descriptionError').innerHTML = 'Description must be between 100 and 300 characters long';
+      return false;
+  }
+
+  if (finishDate) {
+    if(new Date(finishDate) <= new Date()){
+      document.getElementById('finish_dateError').innerHTML = 'Finish date must be after today';
+      return false;
     }
   }
 
-  document.getElementById("createtaskform").addEventListener("submit", handleSubmit);
+  return true;
+}
 
-  function validateForm() {
-      let title = document.getElementById("title").value;
-      let description = document.getElementById("description").value;
-      let finishDate = document.getElementById("finish_date").value;
+function setupTaskForm(formId, buttonId, modalId) {
+  document.getElementById(formId).addEventListener("submit", handleTaskFormSubmit);
 
-      document.getElementById('titleError').innerHTML = '';
-      document.getElementById('descriptionError').innerHTML = '';
-      document.getElementById('finish_dateError').innerHTML = '';
+  document.getElementById(buttonId).addEventListener('click', function () {
+    let modal = new bootstrap.Modal(document.getElementById(modalId));
+    modal.show();
+  });
+}
 
-      if (title.length < 15 || title.length > 50) {
-          document.getElementById('title').classList.add('validation-err');
-          document.getElementById('titleError').innerHTML = 'Title must be between 15 and 50 characters long';
-          return false;
-      }
-
-      if (description.length < 100 || description.length > 300) {
-          document.getElementById('descriptionError').innerHTML = 'Description must be between 100 and 300 characters long';
-          return false;
-      }
-
-      if (finishDate) {
-        if(new Date(finishDate) <= new Date()){
-          document.getElementById('finish_dateError').innerHTML = 'Finish date must be after today';
-          return false;
-        }
-      }
-
-      return true;
+document.addEventListener("DOMContentLoaded", function () {
+  if (document.getElementById("CreateTaskModalButton")) {
+    setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask');
+  }
+  if (document.getElementById("EditTaskModalButton")) {
+    setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
   }
 });
-
-
-document.getElementById('TaskModalButton').addEventListener('click', function () {
-  let createtaskmodal = new bootstrap.Modal(document.getElementById('ModalCreateTask'));
-  createtaskmodal.show();
-})

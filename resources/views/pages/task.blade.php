@@ -23,8 +23,9 @@
                     <h5><span class="profile-info-span">Priority: </span>{{ $task->priority }}</h5>
                     <h5><span class="profile-info-span">AssignedTo: </span>{{ $task->assigned_to !== null ? $task->assigned_to : 'Not defined' }}</h5>
                     <h5><span class="profile-info-span">State: </span>{{ $task->state }}</h5>
-                    <a id="EditTaskDetailsButton" href="{{ route('editDetailsForm', ['task_id' => $task->task_id]) }}">Manage Details</a>
-                    <form action="{{ route('completeassignedtask') }}" method="POST">
+                    <button type="button" id="EditTaskModalButton">Manage Details</button>
+                    @include('modal.edit_task', ['task_id' => $task->task_id])
+                    <form action="{{ route('task.complete') }}" method="POST">
                         @csrf
                         @method('PATCH')
                         <input type="hidden" name="task_id" value="{{ $task->task_id }}">
