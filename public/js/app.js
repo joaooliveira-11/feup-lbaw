@@ -103,34 +103,34 @@ function handleSearchResponse() {
   if (this.status >= 200 && this.status < 400) {
       var data = JSON.parse(this.response);
       var container = document.querySelector('#projects-container');
-      var ul = document.querySelector('.projects-list');
+      var ul = container.querySelector('.projects-list');
       if (!ul) {
           ul = document.createElement('ul');
           ul.classList.add('projects-list');
           container.appendChild(ul);
       }
-      ul.innerHTML = ''; 
+      ul.innerHTML = '';
 
       data.forEach(project => {
+          var a = document.createElement('a');
+          a.href = '/project/' + project.project_id;
+          a.classList.add('projects-link');
+
           var li = document.createElement('li');
           li.classList.add('project-item');
 
           var div = document.createElement('div');
-
-          var a = document.createElement('a');
-          a.href = '/project/' + project.project_id;
-          a.classList.add('project-link');
+          div.classList.add('project-content');
 
           var title = document.createElement('h2');
-          title.classList.add('project-title');
+          title.classList.add('projects-title');
           title.textContent = project.title;
           div.appendChild(title);
 
           var description = document.createElement('p');
-          description.classList.add('project-description');
+          description.classList.add('project-info');
           description.textContent = project.description;
           div.appendChild(description);
-
 
           li.appendChild(div);
           a.appendChild(li);

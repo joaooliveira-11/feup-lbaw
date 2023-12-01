@@ -53,7 +53,7 @@ class Project extends Model
             return self::query();
         } else {
             $userProjectIds = $user->projects()->pluck('id');
-            return self::whereIn('id', $userProjectIds)
+            return self::whereIn('project_id', $userProjectIds)
                        ->orWhere('is_public', true);
         }
     }
