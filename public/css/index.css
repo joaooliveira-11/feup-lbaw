@@ -174,10 +174,9 @@
     .auth-register-button, .service-text h4 , .service-text p {
         font-size: 150%;
     }
-    #footer a, #footer h6, #footer h5, #footer p, #footer li {
+    #footer a, #footer h5, #footer p, #footer li {
         font-size: 115%;
     }
-
     #lp-services {
         width: 100%;
     }
@@ -194,8 +193,11 @@
     .cta-buttons {
         width: 50vw;
     }
-
     .learn-more-button {
         font-size: 150%;
+    }
+    #footer h6 {
+        margin-top: 1vw;
+        font-size: 2vw
     }
 }

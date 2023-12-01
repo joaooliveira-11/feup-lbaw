@@ -94,3 +94,18 @@
     font-weight: bold;
     color: #DEDEDE;
 }
+
+@media screen and (max-width: 768px) {
+    .navbar-img {
+        width: 18vw;
+    }
+    .authnavbar-list-ul {
+        width: 30vw;
+    }
+    .authnavbar-list-element {
+        font-size: 130%;
+    }
+    .navbar-login-button, .navbar-separator, .navbar-register-button {
+        font-size: 2vw;
+    }
+}
