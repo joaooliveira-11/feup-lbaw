@@ -89,10 +89,6 @@ class ProjectController extends Controller {
         return view('pages.addUser', ['project'=> $project]);
     }
 
-    public function tasks(){
-        return $this->hasMany(Task::class);
-    }
-
     public function addUser(Request $request) {   
 
         $project_users = new Project_Users();

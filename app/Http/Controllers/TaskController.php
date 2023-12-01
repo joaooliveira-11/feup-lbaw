@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Models\Project;
 
 class TaskController extends Controller {
 
@@ -16,21 +17,8 @@ class TaskController extends Controller {
     }
 
     public function create(Request $request){
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'min:15|string|max:50',
-            'description' => 'min:100|string|max:300',
-            'priority' => ['string', Rule::in(['low', 'medium', 'high'])],
-            'finish_date' => 'nullable|date|after:now',
-        ]);
         
         $project_id = $request->project_id;
-
-        if ($validator->fails()) {
-            return redirect()->route('createtaskform', ['project_id' => $project_id])
-                ->withErrors($validator)
-                ->withInput();
-        }
 
         $task = new Task();
         $task->title = $request->title;
@@ -44,10 +32,8 @@ class TaskController extends Controller {
         $this->authorize('create', $task); 
 
         $task->save();
-        
         return redirect()->route('project', ['project_id' => $project_id])
-            ->withSuccess('You have successfully created a new task!');
-            
+            ->withSuccess('You have successfully created a new task!');         
     }
 
     public function createTaskForm($project_id) : View {

@@ -10,7 +10,7 @@
     </div>
     <div id = "MembersCounter">
         <h2>Members:</h2>
-        <p> {{ $project->users->count() }} </p>
+        <p> {{ $project->members()->count() }} </p>
     </div>
     <div id = "ActiveTasks">
         <h2>Active Tasks:</h2>
@@ -26,10 +26,9 @@
         @endforeach
     </div>
     <div id = "TasksDashboard">
-        <a id="CreateTaskButton" href="{{ route('createtaskform', ['project_id' => $project->project_id]) }}">Create Task</a>
         <a id="AddUserButton" href="{{ route('nonprojectmembers', ['project_id' => $project->project_id]) }}">Add member</a>
+        <button type="button" id="TaskModalButton">Create Task</button>
+        @include('modal.create_task', ['project_id' => $project->project_id])
     </div>
-    
 </div>
-
 @endsection
