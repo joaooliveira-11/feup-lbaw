@@ -1,5 +1,3 @@
-@section('projectSidebar')
-
 <div id="Sidebar">
     <h1>{{ $project->title }}</h1> 
     <form id="projectForm">
@@ -22,5 +20,3 @@
     </form>
     <p>Leave Project</a>
 </div>
-
-@endsection

@@ -1,5 +1,4 @@
-@section('projectMembers')       
-<div id="Members">
+ <div id="Members">
     <div class="add-user-title">
         <h3 class="add-user-title">Project Members</h3>
     </div>
@@ -16,4 +15,3 @@
     </div>
 </div>    
 
-@endsection

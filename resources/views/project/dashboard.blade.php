@@ -1,4 +1,3 @@
-@section ('projectDashboard')
 <div id = "Dashboard" class = "selected">
     <div id="ProjectDeadline">
         <h2 id="projectTitle">Project Deadline:</h2>
@@ -31,4 +30,3 @@
         @include('modal.create_task', ['project_id' => $project->project_id])
     </div>
 </div>
-@endsection

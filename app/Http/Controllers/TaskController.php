@@ -32,8 +32,19 @@ class TaskController extends Controller {
         $this->authorize('create', $task); 
 
         $task->save();
-        return redirect()->route('project', ['project_id' => $project_id])
-            ->withSuccess('You have successfully created a new task!');         
+        
+        if ($request->ajax()) {
+            $project = Project::find($project_id);
+            $dashboardView = view('project.dashboard', ['project' => $project])->render();
+            $tasksView = view('project.tasks', ['project' => $project])->render();
+            return response()->json([
+                'dashboard' => $dashboardView,
+                'tasks' => $tasksView,
+            ]);
+        } else {
+            return redirect()->route('project', ['project_id' => $project_id])
+            ->withSuccess('You have successfully created a new task!');
+        }
     }
 
     public function show(int $task_id){
