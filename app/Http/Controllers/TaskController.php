@@ -32,11 +32,11 @@ class TaskController extends Controller {
         $this->authorize('create', $task); 
 
         $task->save();
-        
+
         if ($request->ajax()) {
             $project = Project::find($project_id);
-            $dashboardView = view('project.dashboard', ['project' => $project])->render();
-            $tasksView = view('project.tasks', ['project' => $project])->render();
+            $dashboardView = view('partials.project.dashboard', ['project' => $project])->render();
+            $tasksView = view('partials.project.tasks', ['project' => $project])->render();
             return response()->json([
                 'dashboard' => $dashboardView,
                 'tasks' => $tasksView,

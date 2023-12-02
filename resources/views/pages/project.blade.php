@@ -3,12 +3,12 @@
 @section('content')
 <div id="ProjectPage">
     <div id="ProjectInfo">
-        @include('project.sidebar')
+        @include('partials.project.sidebar')
         <div id="MainContent">
-        @include('project.dashboard')
-        @include('project.members')
-        @include('project.chat')
-        @include('project.tasks')
+        @include('partials.project.dashboard')
+        @include('partials.project.members')
+        @include('partials.project.chat')
+        @include('partials.project.tasks'
         </div>
     </div>
 </div>
