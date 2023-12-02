@@ -5,16 +5,6 @@
 
 <div id="ProjectPage">
     <div id="ProjectInfo">
-        <div id="Sidebar">
-            <h1>{{ $task->title }}</h1> 
-            <div class="title-line"></div>
-            <a href="">Dashboard</a>
-            <a href="{{ url('project/' . $task->project_task )}}">Project</a>
-            <a href=" ">Chat</a>
-            <a href="">Members</a>
-            <a href="#" id="leaveProject" class="center-button">Leave Task</a>
-        </div>
-
         <div id="TaskContent">
             <div class="task-details">
                 <div id="TaskInfo">
