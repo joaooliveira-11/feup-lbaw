@@ -5,9 +5,7 @@
     <div id="signin_content">
         <h1>Login to Your Account</h1>
         <h2>Login Using Social Networks </h2>
-        <a href="{{ route('google-auth') }}">
-            <img src="{{ url('/img/gmail.png') }}" id="gmail_image" alt="Gmail Image"/>
-        </a>
+        <img src="{{ url('/img/gmail.png') }}" id="gmail_image" alt="Gmail Image"/>
         <span class="separator-text">or</span>
         <form class="form-group" method="POST" action="{{ route('login') }}" required autofocus>
             
@@ -30,7 +28,9 @@
             @endif
             <div id="butons_signin">
                 <button type="submit" id="LoginButton">Sign In</button>
+                <a id="forgot-password-link" href="{{ route('recoverpassword') }}">Forgot password?</a>
             </div>
+            
             <div id="register-mobile">
                 <span class="span-space">Don't have an account yet?</span><a id="register-mobile-link" href="{{ route('register') }}">Register</a>
             </div>

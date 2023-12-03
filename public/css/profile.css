@@ -164,7 +164,7 @@
 }
 
 input[type="text"], input[type="email"], input[type="password"]{
-    background-color: #f4f4f4;
+    background-color: #D9D9D9;
     border: none;
     border-radius: 0.5vw;
     padding: 1vw;
