@@ -7,6 +7,10 @@ header .navbar {
     padding: 1vw 0;
 }
 
+.navbar-img {
+    width: 10vw;
+    height: auto;
+}
 .navbar-list-ul {
     height: 100%;
     width: 50em;
@@ -14,17 +18,16 @@ header .navbar {
     justify-content: space-between;
     align-items: center;
     list-style: none;
-    margin-bottom: 0;
 }
 
-.navbar-list-ul li {
+.navbar-list-ul li, .authnavbar-list-ul li {
     margin-bottom: 0;
 }
 
 
 .navbar-list-element {
     text-decoration: none;
-    font-size: 2rem;
+    font-size: 1vw;
     font-weight: bold;
     color: #000000;
 }
@@ -38,4 +41,72 @@ header .navbar {
     font-size: 2rem;
     font-weight: bold;
     color: rgb(0, 0, 0);
+}
+
+
+#index-navbar {
+    padding: 0.2em 0;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1ps solid black;
+    background-color: #543CE7;
+}
+
+.navbar-register-button, .navbar-login-button {
+    font-size: 1vw;
+    font-weight: bold;
+}
+
+.navbar-register-button {
+    padding: 0.5em 1.5em;
+    color: #fff;
+    border: 2px solid #E5B405;
+    border-radius: 1em;
+}
+
+.navbar-login-button {
+    padding: 0.5em 0;
+    color: #DEDEDE;
+}
+
+.navbar-separator {
+    color: #DEDEDE;
+    font-size: 2rem;
+}
+
+.navbar-auth{
+    display: flex;
+    align-items: center;
+    gap: 2em;
+}
+
+.authnavbar-list-ul {
+    height: 100%;
+    width: 30em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+}
+
+.authnavbar-list-element {
+    text-decoration: none;
+    font-size: 1.25vw;
+    font-weight: bold;
+    color: #DEDEDE;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar-img {
+        width: 18vw;
+    }
+    .authnavbar-list-ul {
+        width: 30vw;
+    }
+    .authnavbar-list-element {
+        font-size: 130%;
+    }
+    .navbar-login-button, .navbar-separator, .navbar-register-button {
+        font-size: 2vw;
+    }
 }
