@@ -50,7 +50,7 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
     Route::get('/search-projects', 'search');
-    Route::post('/add-member', 'addMember')->name('addmember');
+    Route::post('/addMember', 'addMember')->name('addmember');
 });
 
 //Task

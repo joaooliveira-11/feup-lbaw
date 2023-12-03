@@ -27,6 +27,9 @@ function addEventListeners() {
         'Members': 'members',
       });
     }
+    document.getElementById("addmemberform").addEventListener("submit", function(event) {
+      console.log("Form submitted");
+    });
 
     setupRadioButtons()
 } 
@@ -289,6 +292,55 @@ function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
   .catch(error => console.error('Error:', error));
 }
 
+
+function handleAddMember(modalId, event) {
+  console.log("handleAddMember");
+  event.preventDefault();
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  let csrf = document.querySelector("input[name='_token']").content;
+  
+
+  console.log("URL:", url);
+for (var pair of formData.entries()) {
+    console.log(pair[0]+ ', ' + pair[1]); 
+}
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrf,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+    document.querySelector( '#MembersCounter p').innerHTML = data['members'].length ;
+    document.querySelector( ' .add-user-ul').innerHTML = '';
+    data['members'].forEach(member => {
+      var a = document.createElement('a');
+      a.href = '/profile/' + member.user_id;
+      a.classList.add('add-user-link');
+
+      var li = document.createElement('li');
+      li.classList.add('add-user-element');
+
+      var name = document.createElement('p');
+      name.textContent = member.name + " - ";
+
+      var username = document.createElement('em');
+      username.textContent = "@" + member.username;
+      name.appendChild(username);
+      li.appendChild(name);
+
+      a.appendChild(li);
+      document.querySelector( ' .add-user-ul').appendChild(a);
+    });
+  })
+}
+
 function isTaskFormValid() {
   let title = document.getElementById("title").value;
   let description = document.getElementById("description").value;
@@ -321,7 +373,11 @@ function isTaskFormValid() {
 
 function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
   let form = document.getElementById(formId);
-  document.getElementById(formId).addEventListener("submit", handleTaskFormSubmit.bind(form, modalId, viewsToUpdate));
+  switch (formId) {
+    case 'addmemberform':
+      document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
+      break;
+  }
 
   document.getElementById(buttonId).addEventListener('click', function () {
     let modal = new bootstrap.Modal(document.getElementById(modalId));

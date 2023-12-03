@@ -87,8 +87,26 @@ class ProjectController extends Controller {
     ]);
 }
 
-    public function addMember(int $project_id, int $user_id) : View{   
-        $project = Project::find($project_id);
-        return view('pages.project', ['project'=> $project]);
-    }
+public function addMember(Request $request){
+    
+    $request->validate([
+        'project_id' => 'required|integer',
+        'member_id' => 'required|integer',
+    ]);
+
+    $project = Project::find($request->get('project_id'));
+    $member = User::find($request->get('member_id'));
+    
+    DB::table('project_users')->insert([
+        'project_id' => $project->project_id,
+        'user_id' => $member->id,
+    ]);
+
+    return response()->json([
+        'members' => $project->members(), 
+        'success' => 'Member added successfully!',
+    ]);
+}
+
+    
 }

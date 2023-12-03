@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <button type="submit" class="btn btn-success">{{ __('Add to Project') }}</button>
+                        <button type="submit" class="btn btn-success"> {{ __('Add to Project') }}</button>
                     </div>
                 </div>
             </div>
