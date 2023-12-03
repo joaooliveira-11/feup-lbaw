@@ -134,7 +134,8 @@ function handleSearchTask(){
 
 
 function handleSearchProject() {
-    console.log(this.response.currentPage)
+
+    console.log(this.response)
     if (this.status >= 200 && this.status < 400) {
       var data = JSON.parse(this.response);
       var container = document.querySelector('#projects-container');
@@ -174,9 +175,21 @@ function handleSearchProject() {
           if(project.finish_date == null) deadline.textContent = " Not defined ";
           else{ deadline.textContent = project.finish_date;}
           div.appendChild(deadline);
+
+          var otherdiv = document.createElement('div');
+          otherdiv.classList.add('project-details');
+          var description = document.createElement('p');
+          description.classList.add('project-description');
+          description.textContent = project.description;
+          otherdiv.appendChild(description);
+        
+
           li.appendChild(div);
+          li.appendChild(otherdiv);
           a.appendChild(li);
           ul.appendChild(a);
+
+          
 
           sendAjaxRequest('POST', '/user-name' ,{id : id}, function() {
             if (this.status >= 200 && this.status < 400) {

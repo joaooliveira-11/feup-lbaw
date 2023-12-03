@@ -23,6 +23,9 @@
                         </p>
                         <p class="project-coordinator project-info"> {{ $project->coordinator->name }}</p>
                     </div>
+                    <div class = "project-details">
+                        <p class="project-description">{{ $project->description }}</p>
+                    </div>
                 </li>
             </a>
         @endforeach
@@ -30,13 +33,13 @@
 
         <div class="pagination-container">
             @if ($projects->currentPage() != 1)
-                <a href="{{ $projects->previousPageUrl() }}" class="btn">Previous</a>
+                <button class="btn " onclick = "searchProjects( {{ $projects->currentPage() - 1}})">Previous</button>
             @endif
 
             <span>Page {{ $projects->currentPage() }} of {{ $projects->lastPage() }}</span>
 
             @if ($projects->hasMorePages())
-                <a href="{{ $projects->nextPageUrl() }}" class="btn">Next</a>
+                <button class="btn " onclick = "searchProjects( {{ $projects->currentPage() + 1}})">Next</button>
             @endif
         </div>
     @endif
