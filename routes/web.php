@@ -36,9 +36,8 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(RecoverPasswordController::class)->group(function () {
-    Route::get('/recoverpassword', 'show')->name('password.request');
-    Route::post('/recoverpassword', 'request')->name('password.email');
-    Route::get('/recoverpassword', 'showRecoverPage')->name('password.reset');
+    Route::post('auth/recover', 'request')->name('password.email');
+    Route::get('auth/recover-page', 'show')->name('password.reset');
 });
 
 // User

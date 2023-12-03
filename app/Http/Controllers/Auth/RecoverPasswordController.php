@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Password;
 
 class RecoverPasswordController extends Controller {
     public function show() {
-        return view('auth.forgotPassword');
+        return view('auth.recoverPassword');
     }
 
     public function request(Request $request) {
@@ -26,9 +26,6 @@ class RecoverPasswordController extends Controller {
         : back()->withErrors(['email' => __($status)]);
     }
 
-    public function showRecoverPage(Request $request) {
-      return view('auth.recoverPassword', ['token' => $request->token]);
-    }
   
 }
 
