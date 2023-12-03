@@ -33,18 +33,12 @@ class TaskController extends Controller {
 
         $task->save();
 
-        if ($request->ajax()) {
-            $project = Project::find($project_id);
-            $dashboardView = view('partials.project.dashboard', ['project' => $project])->render();
-            $tasksView = view('partials.project.tasks', ['project' => $project])->render();
-            return response()->json([
-                'dashboard' => $dashboardView,
-                'tasks' => $tasksView,
-            ]);
-        } else {
-            return redirect()->route('project', ['project_id' => $project_id])
-            ->withSuccess('You have successfully created a new task!');
-        }
+        return response()->json([
+            'task_title' => $task->title,
+            'task_description' => $task->description,
+            'task_finish_date' => $task->finish_date,
+            'task_url' => url('task/' . $task->task_id),
+        ]);
     }
 
     public function show(int $task_id){
@@ -66,9 +60,12 @@ class TaskController extends Controller {
         $task->finish_date = $request->finish_date;
 
         $task->save();
-        $taskdetailsView= view('partials.task.details', ['task' => $task])->render();
+        
         return response()->json([
-            'details' => $taskdetailsView,
+            'task_title' => $task->title,
+            'task_description' => $task->description,
+            'task_priority' => $task->priority,
+            'task_finish_date' => $task->finish_date,
         ]);
     }
 

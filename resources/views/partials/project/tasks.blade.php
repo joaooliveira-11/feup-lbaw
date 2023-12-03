@@ -20,7 +20,7 @@
                 </a>
             @endforeach
         </ul>
-        </div>
+    </div>
     @else
         <p>No tasks found for this project.</p>
     @endif

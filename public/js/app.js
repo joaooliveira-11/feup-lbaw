@@ -11,18 +11,13 @@ function addEventListeners() {
     });
 
     if (document.getElementById("CreateTaskModalButton")) {
-      setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask', {
-        'Dashboard': 'dashboard',
-        'Tasks': 'tasks',
-      });
+      setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask');
     }
     if (document.getElementById("EditTaskModalButton")) {
-      setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask',{
-        'Details': 'details',
-      });
+      setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
     }
 
-    setupRadioButtons()
+    setupRadioButtons();
 } 
   
   function encodeForAjax(data) {
@@ -253,7 +248,7 @@ function setupRadioButtons() {
   });
 }
 
-function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
+function handleCreateTask(modalId, event) {
   event.preventDefault();
 
   if (!isTaskFormValid()) {
@@ -262,12 +257,64 @@ function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
 
   let url = this.getAttribute('action');
   let formData = new FormData(this);
+  let csrfToken = document.querySelector('input[name="_token"]').value;
 
   fetch(url, {
     method: 'POST',
     body: formData,
     headers: {
       'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrfToken,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+
+    let activeTasksCountElement = document.querySelector('#ActiveTasks p');
+    activeTasksCountElement.textContent = parseInt(activeTasksCountElement.textContent) + 1;
+
+    let newTask = document.createElement('li');
+    newTask.innerHTML = `
+      <a href="${data.task_url}" class="project-link task-link">
+        <div>
+          <p class="TaskTitle">${data.task_title}</p>
+          <p>${data.task_description}</p>
+          <p class="FinishDate">Deadline: ${data.task_finish_date !== null ? data.task_finish_date : 'Not defined'}</p>
+        </div>
+      </a>
+    `;
+
+    let tasksList = document.querySelector('.TasksList');
+    if (!tasksList) {
+      tasksList = document.createElement('ul');
+      tasksList.className = 'TasksList';
+      document.getElementById('tasks-container').appendChild(tasksList);
+    }
+    tasksList.appendChild(newTask);
+  })
+  .catch(error => console.error('Error:', error));
+}
+
+
+function handleEditTask(modalId, event) {
+  event.preventDefault();
+
+  if (!isTaskFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  let csrfToken = document.querySelector('input[name="_token"]').value;
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrfToken,
     },
   })
   .then(response => response.json())
@@ -275,10 +322,26 @@ function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
     let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
     modal.hide();
     
-    for (let sectionId in viewsToUpdate) {
-      document.getElementById(sectionId).innerHTML = data[viewsToUpdate[sectionId]];
-    }
-    addEventListeners();
+    let titleNode = document.createTextNode(data.task_title);
+    let finishDate = new Date(data.task_finish_date);
+    let formattedFinishDate = finishDate.getFullYear() + '-' +
+      String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
+      String(finishDate.getDate()).padStart(2, '0') + ' ' +
+      String(finishDate.getHours()).padStart(2, '0') + ':' +
+      String(finishDate.getMinutes()).padStart(2, '0') + ':' +
+      String(finishDate.getSeconds()).padStart(2, '0');
+      let finishDateNode = document.createTextNode(formattedFinishDate);
+      let priorityNode = document.createTextNode(data.task_priority);
+
+    let titleElement = document.getElementById('task-details-title');
+    let finishDateElement = document.getElementById('task-details-finish_date');
+    let priorityElement = document.getElementById('task-details-priority');
+
+    titleElement.parentNode.replaceChild(titleNode, titleElement.nextSibling);
+    finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
+    priorityElement.parentNode.replaceChild(priorityNode, priorityElement.nextSibling);
+    
+    document.querySelector('#task-description p').textContent = data.task_description;
   })
   .catch(error => console.error('Error:', error));
 }
@@ -313,10 +376,16 @@ function isTaskFormValid() {
   return true;
 }
 
-function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
+function setupTaskForm(formId, buttonId, modalId) {
   let form = document.getElementById(formId);
-  document.getElementById(formId).addEventListener("submit", handleTaskFormSubmit.bind(form, modalId, viewsToUpdate));
-
+  switch (formId) {
+    case 'createtaskform':
+      document.getElementById(formId).addEventListener("submit", handleCreateTask.bind(form, modalId));
+      break;
+    case 'edittaskform':
+      document.getElementById(formId).addEventListener("submit", handleEditTask.bind(form, modalId));
+      break;
+  }
   document.getElementById(buttonId).addEventListener('click', function () {
     let modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
