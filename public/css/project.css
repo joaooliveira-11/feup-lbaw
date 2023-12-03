@@ -32,31 +32,61 @@
     box-sizing: border-box;
 }
 
-#Sidebar h1 {
+#Sidebar>h1 {
     font-size: 1.6vw;
     margin-bottom: 1.2vw;
     text-align: center;
+    border-bottom: #000 solid 0.1vw;
+    padding: 0.5vw;
 }
 
-#Sidebar a {
+#Sidebar p , #projectForm label{
     display: block;
     font-size: 1vw;
-    margin-bottom: 2vw;
+    margin-bottom: 1vw;
     text-decoration: none;
     color: #000000;
+    padding: 0.5vw;
+    font-weight: inherit;
+    margin-top: 0;
+    border-radius: 0.5vw;
+}
+
+#Sidebar label:hover{
+    background-color: #c4c4c4;
+    transition: ease-in-out 0.2s;
+}
+
+#projectForm input[type="radio"]{
+    display: none;
+}
+
+#projectForm>label.selected {
+    border: #000 solid 0.1vw;
 }
 
 #MainContent {
-    flex-grow: 1;
     padding-left: 2vw; 
+    width: 80vw;
+
 }
+
+#MainContent>*{
+    display: none;
+}
+
+#MainContent .selected {
+    display: block;
+    border: none;
+}
+
 
 #Sidebar .title-line {
     border-bottom: 1.5px solid #000000;
     margin-bottom: 3.5vw; 
 }
 
-#Sidebar #leaveProject {
+#Sidebar>p {
     color: #fff;
     font-size: 0.9vw;
     background-color: #e83749;
@@ -97,7 +127,7 @@
     letter-spacing: 0.02vw;
 }
 
-#TaskTitle {
+.TaskTitle {
     font-size: 1.2vw;
 }
 
@@ -112,22 +142,19 @@
     margin-top: 1.5vw;
 }
 
-#MainContent {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1vw; 
-}
 
-#ProjectDescription,
-#ProjectDeadline {
+#ProjectDeadline, #ProjectDescription , #MembersCounter, #ActiveTasks{
     width: 100%;
     font-size: 1vw;
     color: #303030;
+    display: flex;
+    justify-content:flex-start;
 }
 
-#TitleInPage {
-    font-weight: bold;
-    margin-bottom: 0;
+h2{
+    font-size: 1.5vw;
+    color: #303030;
+
 }
 
 #CreateTaskButton {
@@ -192,3 +219,11 @@
     font-size: 2rem;
     margin: 0;
 }
+
+#Dashboard p, #Members p {
+    font-size: 1.5vw;
+    color: #303030;
+    margin-left: 1vw;
+    line-height: normal;
+}
+

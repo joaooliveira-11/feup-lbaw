@@ -4,8 +4,10 @@
 <div id="login_page_content">
     <div id="signin_content">
         <h1>Login to Your Account</h1>
-        <h2>Login Using Social Networks</h2>
-        <img src="{{ url('/img/gmail.png') }}" id="gmail_image"/>
+        <h2>Login Using Social Networks </h2>
+        <a href="{{ route('google-auth') }}">
+            <img src="{{ url('/img/gmail.png') }}" id="gmail_image" alt="Gmail Image"/>
+        </a>
         <span class="separator-text">or</span>
         <form class="form-group" method="POST" action="{{ route('login') }}" required autofocus>
             

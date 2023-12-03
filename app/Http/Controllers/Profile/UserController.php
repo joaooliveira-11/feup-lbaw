@@ -11,6 +11,10 @@ use App\Models\Skill;
 
 class UserController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+    
     /**
      * Display profile info.
      */
