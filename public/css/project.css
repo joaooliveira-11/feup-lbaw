@@ -20,10 +20,9 @@ header {
     display: flex;
     gap: 3em;
     background-color: rgba(231, 231, 231, 0.6);
-    border-radius: 0.7vw;
+    border-radius: 5px 5px 0 0;
     padding: 1.67vw;
-    max-width: 80vw; 
-    height: 38vw;
+    max-width: 80vw;
     width: 100%;
     margin: 0 auto; 
     margin-top: 4.5vw;

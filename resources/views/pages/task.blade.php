@@ -2,9 +2,9 @@
 
 @section('content')
 <div id="ProjectPage">
-    <div id="TaskInfo">
+    <div id="ProjectInfo">
         @include('partials.task.details')
-        <!-- @include('partials.task.comments') -->
+        @include('partials.task.comments')
     </div>
 </div>
 @endsection
