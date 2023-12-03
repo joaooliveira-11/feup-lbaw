@@ -48,15 +48,16 @@ class Project extends Model
         ->get();
     }
 
-    public static function get_all_projects(User $user){
-        if ($user->is_admin){
-            return self::all();
-        } else{
-            $user_projects = $user->projects();
-            $public_projects = self::where('is_public', true)->get();
-            return $user_projects->merge($public_projects);
+    public static function get_all_projects(User $user) {
+        if ($user->is_admin) {
+            return self::query();
+        } else {
+            $userProjectIds = $user->projects()->pluck('id');
+            return self::whereIn('id', $userProjectIds)
+                       ->orWhere('is_public', true);
         }
     }
+    
 
     public function tasks(): HasMany {
         return $this->hasMany(Task::class, 'project_task');

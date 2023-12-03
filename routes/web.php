@@ -6,6 +6,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
+use App\Http\Controllers\Auth\GoogleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,10 @@ Route::redirect('/', '/index');
 Route::get('/index', function () {
     return view('pages.index');
 })->name('index');
+
+Route::get('/about', function () {
+    return view('pages.about');
+})->name('about');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -64,4 +69,10 @@ Route::controller(TaskController::class)->group(function() {
     Route::get('/task/{task_id}/edit', 'editDetailsForm')->name('editDetailsForm');
     Route::patch('/task/edit', 'updateDetails')->name('updatetaskdetails');
     Route::patch('/task/complete', 'completetask')->name('completeassignedtask');
+    Route::post('/search-tasks', 'search');
+});
+
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirect')->name('google-auth');
+    Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });

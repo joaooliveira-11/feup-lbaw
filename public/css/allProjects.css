@@ -1,48 +1,143 @@
-#allProjectsPage {
-    width: 80%;
+#projects-container {
+    max-width: 1200px; 
+    margin: auto;
+    padding: 20px;
 }
 
-.line-before-projects {
-    border-top: 1px solid #ccc;
-    margin-bottom: 10px;
+.search-bar {
+    display: flex;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 20px;
 }
 
-.projects-label {
-    font-size: 18px;
-    font-weight: bold;
-    color: #303030;
+.projects-title {
+    font-size: 2vw;
+    color:#303030;
+    text-align: center;
 }
+
+#projectSearch {
+    flex-grow: 1;
+    margin-right: 10px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); }
 
 .projects-list {
-    list-style: none;
-    padding: 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; 
-}
-
-.project-link {
-    text-decoration: none;
-    color: #333;
-    flex-basis: calc(50% - 10px);
-    width: 100%; 
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px 2px;
 }
 
 .project-item {
-    background-color: #303030;
+    flex-basis: calc(33.333% - 10px); 
+    margin: 5px;
+    background-color: rgba(231, 231, 231, 0.6); 
     border: 1px solid #ddd;
-    border-radius: 10px;
-    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    margin: 5px;
+    border-radius: 0.7vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
 }
 
-.project-title {
-    font-size: 20px;
-    margin-bottom: 5px;
-    color: #fff; 
+.projects-link {
+    text-decoration: none; 
+    color: inherit; 
+    width: 30%;
+    min-width: 31%;
 }
 
-.project-description {
-    font-size: 16px;
-    padding: 10px;
-    color: #fff; 
+.projects-link > * {
+    width: 100%;
+    height: 100%;
+    gap: 1vw;
+}
+
+.project-title, .project-description, .project-info {
+    text-align: center;
+    padding: 5px 10px;
+}
+
+.project-info {
+    font-size: 0.8vw;
+    color: #303030;
+}
+
+.pagination-container {
+    text-align: center;
+    margin-top: 2.5vw;
+}
+
+.pagination-container .btn {
+    background-color: #4248ab;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 0 5px;
+    font-size: 0.7vw;
+}
+
+.pagination-container .btn:hover {
+    background-color: #353989;
+}
+
+.pagination-container span {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .project-item {
+        flex-basis: calc(33.333% - 10px); 
+        margin: 5px;
+        width: 100%; 
+    }
+
+    .projects-link {
+        width: 47%;
+    }
+
+    .project-info {
+        font-size: 1.2vw;
+    }
+
+    .projects-title {
+        font-size: 2.6vw;
+    }
+
+    .pagination-container .btn {
+        font-size: 1.3vw;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .projects-link {
+        width: 97%;
+    }
+
+    .project-info {
+        font-size: 1.6vw;
+    }
+
+    .projects-title {
+        font-size: 3.2vw;
+    }
+
+    .pagination-container .btn {
+        font-size: 1.7vw;
+    }
+
+    .pagination-container {
+        margin-top: 4vw;
+    }
 }
