@@ -106,7 +106,7 @@ public function addMember(Request $request){
         'members' => $project->members(), 
         'success' => 'Member added successfully!',
     ]);
-}
+    }
 
     
 }

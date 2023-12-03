@@ -27,8 +27,9 @@ function addEventListeners() {
         'Members': 'members',
       });
     }
-    document.getElementById("addmemberform").addEventListener("submit", function(event) {
-      console.log("Form submitted");
+    
+    document.getElementById("notifications-button").addEventListener("click", function(event) {
+      document.getElementById("notifications-dropdown").classList.toggle("hide");
     });
 
     setupRadioButtons()

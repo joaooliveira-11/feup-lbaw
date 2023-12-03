@@ -39,3 +39,38 @@ header .navbar {
     font-weight: bold;
     color: rgb(0, 0, 0);
 }
+
+#notifications-dropdown {
+    display: none;
+}
+
+#notifications-dropdown.hide {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    height: 100vh;
+    width: 20vw;
+    padding: 2vw;
+    background-color: rgb(227, 233, 246);
+    display: flex;
+    flex-direction: column;
+    animation: 0.3s ease-out 0s 1 slideInFromRight;
+}
+
+.navbar button{
+    border-radius: 50%;
+    padding: 1vh;
+    width: 5vh;
+    height: 5vh;
+}
+
+
+@keyframes slideInFromRight {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }

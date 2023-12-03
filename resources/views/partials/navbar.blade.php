@@ -11,7 +11,9 @@
                 @if (Auth::check())
                     <a class="navbar-list-element" href="{{ url('/profile', ['id' => Auth::id()]) }}">Profile</a>
                 @endif
-            </li>        
+            </li>
+            
+
         </ul>
     </div>
     <div class="navbar-logout">
@@ -19,6 +21,12 @@
             <a class="navbar-logout-button" href="{{ url('/logout') }}"> Logout </a>
         @endif
     </div>
+    <button id = "notifications-button" >N</button> 
+        <ul id ="notifications-dropdown" >
+            <li>Notification 1</li>
+            <li>Notification 2</li>
+            <li>Notification 3</li>
+        </ul>
 
 </div>
 @endsection
