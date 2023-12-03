@@ -91,5 +91,14 @@ class UserController extends Controller
         return redirect()->route('show', $user->id)
             ->withSuccess('You have successfully updated your profile!');
     }
+
+    public function name(Request $request){
+        $id = $request->get('id');
+        $name= User::find($id);
+
+        return response()->json($name);
+    }
+
+    
 }
 ?>

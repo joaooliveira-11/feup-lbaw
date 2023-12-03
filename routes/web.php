@@ -1,4 +1,4 @@
-\<?php
+<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
@@ -39,17 +39,17 @@ Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
     Route::get('/edit-profile/{id}', 'edit')->where('id', '[0-9]+')->name('edit');
     Route::put('/profile/{id}', 'update')->name('user.update');
+    Route::post('/user-name', 'name');
 });
 
 //Project
 Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/create','showCreateForm')->name('createproject');
     Route::post('/project/create', 'create');
-    Route::get('/projects', 'showAllProjects');
-    Route::get('/project/{project_id}/members', 'showProjectMembers')->where(['project_id' => '[0-9]+'])->name('projectmembers');
+    Route::get('/projects', 'showProjects')->name('allprojects');
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
-    Route::post('/search-projects', 'search');
+    Route::get('/search-projects', 'search');
     Route::get('/project/{project_id}/adduser', 'showNonProjectMembers')->where(['project_id' => '[0-9]+'])->name('nonprojectmembers');
     Route::post('/project/add-user', 'addUser')->name('adduser');
 });
