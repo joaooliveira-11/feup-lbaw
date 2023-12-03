@@ -9,7 +9,7 @@
     @if($project->tasks->count() > 0)
         <ul class="TasksList">
             @foreach($project->tasks as $task)
-                <a href="{{ url('task/' . $task->task_id )}}" class="project-link task-link">
+                <a href="{{ url('task/' . $task->task_id )}}" class="task-link">
                     <li>
                         <div>
                             <p class="TaskTitle">{{ $task->title }}</p>
