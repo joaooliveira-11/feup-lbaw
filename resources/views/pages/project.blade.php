@@ -8,7 +8,7 @@
         @include('partials.project.dashboard')
         @include('partials.project.members')
         @include('partials.project.chat')
-        @include('partials.project.tasks'
+        @include('partials.project.tasks')
         </div>
     </div>
 </div>
