@@ -1,23 +1,30 @@
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
 #ProjectPage {
     background-image: url('/img/background.png');
     background-size: cover; 
     background-position: center center;
     background-repeat: no-repeat;
-    min-height: 92.9vh; 
+    min-height: 100vh; 
     display: flex;
     width: 100%;
+    padding-top: 2.7vw;
 }
 
 #ProjectInfo {
     display: flex;
     gap: 3em;
     background-color: rgba(231, 231, 231, 0.6);
-    border-radius: 0.7vw;
+    border-radius: 5px 5px 0 0;
     padding: 1.67vw;
-    max-width: 80vw; 
-    height: 38vw;
+    max-width: 80vw;
     width: 100%;
-    margin: auto; 
+    margin: 0 auto; 
     margin-top: 4.5vw;
     color: #303030;
 }

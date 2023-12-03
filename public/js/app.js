@@ -4,11 +4,26 @@ function addEventListeners() {
     if (changePic != null)
     changePic.addEventListener('change', handleFileSelect);
 
-  /*
-    let displayCreateTaskbtn = document.getElementById('CreateTaskButton');
-    displayCreateTaskbtn.addEventListener('click', displayCreateTask);
-  */
-}
+    document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+          this.parentNode.parentNode.classList.toggle('selected', this.checked);
+      });
+    });
+
+    if (document.getElementById("CreateTaskModalButton")) {
+      setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask', {
+        'Dashboard': 'dashboard',
+        'Tasks': 'tasks',
+      });
+    }
+    if (document.getElementById("EditTaskModalButton")) {
+      setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask',{
+        'Details': 'details',
+      });
+    }
+
+    setupRadioButtons()
+} 
   
   function encodeForAjax(data) {
     if (data == null) return null;
@@ -35,22 +50,6 @@ function addEventListeners() {
     return tokenField;
   }  
   
-
-/*
-  function displayCreateTask(event) {
-    event.preventDefault();
-    let createTaskElement = document.getElementById('createTask');
-    createTaskElement.style.display = (createTaskElement.style.display === 'none') ? 'block' : 'none';
-  }
-*/
-
-  document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
-    checkbox.addEventListener('change', function() {
-        this.parentNode.parentNode.classList.toggle('selected', this.checked);
-    });
-  });
-
-
   function handleFileSelect(event) {
     const fileInput = event.target;
     console.log(event);
@@ -233,26 +232,98 @@ function handleSearchProject() {
   }
 }
 
-
-
+function setupRadioButtons() {
   const radios = document.querySelectorAll('#projectForm input[type="radio"]');
 
   radios.forEach(function(radio) {
     radio.addEventListener('change', function() {
-        const id = this.value;
-        document.querySelector('label.selected').classList.toggle('selected', false);
-        this.parentNode.classList.toggle('selected', this.checked);       
-        const toHide = document.querySelector('#MainContent .selected')
-        if (toHide) {
-            toHide.classList.toggle('selected', false);
-        }
+      const id = this.value;
+      document.querySelector('label.selected').classList.toggle('selected', false);
+      this.parentNode.classList.toggle('selected', this.checked);       
+      const toHide = document.querySelector('#MainContent .selected')
+      if (toHide) {
+        toHide.classList.toggle('selected', false);
+      }
 
-        const toDisplay = document.querySelector('#MainContent div#' + id);
-        if (toDisplay) {
-            toDisplay.classList.toggle('selected', this.checked);
-        }
+      const toDisplay = document.querySelector('#MainContent div#' + id);
+      if (toDisplay) {
+        toDisplay.classList.toggle('selected', this.checked);
+      }
     });
-});
+  });
+}
 
+function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
+  event.preventDefault();
 
+  if (!isTaskFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+    
+    for (let sectionId in viewsToUpdate) {
+      document.getElementById(sectionId).innerHTML = data[viewsToUpdate[sectionId]];
+    }
+    addEventListeners();
+  })
+  .catch(error => console.error('Error:', error));
+}
+
+function isTaskFormValid() {
+  let title = document.getElementById("title").value;
+  let description = document.getElementById("description").value;
+  let finishDate = document.getElementById("finish_date").value;
+
+  document.getElementById('titleError').innerHTML = '';
+  document.getElementById('descriptionError').innerHTML = '';
+  document.getElementById('finish_dateError').innerHTML = '';
+
+  if (title.length < 15 || title.length > 50) {
+      document.getElementById('title').classList.add('validation-err');
+      document.getElementById('titleError').innerHTML = 'Title must be between 15 and 50 characters long';
+      return false;
+  }
+
+  if (description.length < 100 || description.length > 300) {
+      document.getElementById('descriptionError').innerHTML = 'Description must be between 100 and 300 characters long';
+      return false;
+  }
+
+  if (finishDate) {
+    if(new Date(finishDate) <= new Date()){
+      document.getElementById('finish_dateError').innerHTML = 'Finish date must be after today';
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
+  let form = document.getElementById(formId);
+  document.getElementById(formId).addEventListener("submit", handleTaskFormSubmit.bind(form, modalId, viewsToUpdate));
+
+  document.getElementById(buttonId).addEventListener('click', function () {
+    let modal = new bootstrap.Modal(document.getElementById(modalId));
+    modal.show();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
   addEventListeners();
+});
+  
