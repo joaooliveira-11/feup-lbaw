@@ -4,34 +4,38 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Project;
-use App\Models\Project_Users;
 use App\Models\User;
+use App\Models\Project_Users;
 use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller {
 
-    public function __construct(){
-        $this->middleware('auth');
+    public function show(int $id){
+
+        if(!Auth::check()){
+            return redirect("/login");
+        }
+
+        $project = Project::find($id);  
+        $user = User::find(Auth::user()->id);
+        $this->authorize('show', $project);
+        return view('pages.project', ['project'=>$project]);
+    }
+
+    public function showAllProjects() {
+        $project = Project::where('is_public', true)->get();
+        return view('pages.allProjects', ['projects'=>$project]);
     }
 
     public function create(Request $request) {   
 
-        $this->authorize('create', Project::class);
-        
-        $validator = Validator::make($request->all(), [
-            'title' => 'min:15|string|max:50',
-            'description' => 'min:100|string|max:300',
-            'finish_date' => 'nullable|date|after:now',
-        ]);
-        
-        if ($validator->fails()) {
-            return redirect()->route('createproject')
-                ->withErrors($validator)
-                ->withInput();
+        if(!Auth::check()){
+            return redirect("/login");
         }
 
+        $this->authorize('create', Project::class);
+        // Set project details.
         $project = new Project();
         $project->title = $request->title;
         $project->description = $request->description;
@@ -45,26 +49,15 @@ class ProjectController extends Controller {
             ->withSuccess('You have successfully created a new project!');
     }
 
-    public function showCreateForm(): View {
+    public function showCreateForm(): View {   
         return view('pages.createProject');
     }
 
-    public function show(int $project_id) : View {
-
-        $project = Project::find($project_id); 
-        $this->authorize('show', $project);
-
-        return view('pages.project', ['project'=>$project]);
+    public function showProjects(): View {
+        $projects = Project::where('is_public', true)->paginate(9);
+        return view('pages.allProjects', ['projects'=>$projects]);
     }
 
-    public function showAllProjects() : View {
-        $user = User::find(Auth::user()->id);
-        $projectsQuery = Project::get_all_projects($user);
-        $projects = $projectsQuery->paginate(9); 
-    
-        return view('pages.allProjects', ['projects' => $projects]);
-    }
-    
 
     public function showProjectMembers(int $project_id) : View {
         $project = Project::find($project_id); 
@@ -78,11 +71,21 @@ class ProjectController extends Controller {
 
     public function search(Request $request)
     {
-        $filter = strtolower($request->get('filter'));
-        $projects = Project::whereRaw('LOWER(title) LIKE ?', ["%{$filter}%"])->where("is_public", true)->get();
+    $filter = strtolower($request->get('filter'));
+    $page = $request->get('page');
+    $projects = Project::whereRaw('LOWER(title) LIKE ?', ["%{$filter}%"])
+                        ->where("is_public", true)
+                        ->paginate(9, ['*'], 'page', $page);
 
-        return response()->json($projects);
-    }
+    return response()->json([
+        'projects' => $projects->items(),
+        'currentPage' => $projects->currentPage(),
+        'lastPage' => $projects->lastPage(),
+        'hasMorePages' => $projects->hasMorePages(),
+        'previousPageUrl' => $projects->previousPageUrl(),
+        'nextPageUrl' => $projects->nextPageUrl(),
+    ]);
+}
 
     public function showNonProjectMembers(int $project_id) : View {
         $project = Project::find($project_id); 
@@ -107,5 +110,4 @@ class ProjectController extends Controller {
 
         return view('pages.projectMembers', ['project'=> $project]);
     }
-
 }
