@@ -25,4 +25,7 @@ class Task extends Model {
         return $this->state == 'assigned';
     }
 
+    public function comments(){
+        return $this->hasMany(Comment::class, 'task_comment');
+    }
 }

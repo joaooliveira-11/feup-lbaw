@@ -16,10 +16,13 @@ function addEventListeners() {
     if (document.getElementById("EditTaskModalButton")) {
       setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
     }
-
+    if (document.getElementById("submit-comment-button")) {
+      setupCommentForm("createcommentform");
+    }
+    
     setupRadioButtons();
 } 
-  
+
   function encodeForAjax(data) {
     if (data == null) return null;
     return Object.keys(data).map(function(k){
@@ -307,6 +310,7 @@ function handleEditTask(modalId, event) {
 
   let url = this.getAttribute('action');
   let formData = new FormData(this);
+  formData.append('_method', 'PATCH');
   let csrfToken = document.querySelector('input[name="_token"]').value;
 
   fetch(url, {
@@ -346,6 +350,51 @@ function handleEditTask(modalId, event) {
   .catch(error => console.error('Error:', error));
 }
 
+function handleCreateComment(event) {
+  event.preventDefault();
+
+  if (!isCommentFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  let csrfToken = document.querySelector('input[name="_token"]').value;
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrfToken,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let commentsSection = document.querySelector('.comments-section');
+
+    let commentDiv = document.createElement('div');
+    commentDiv.className = 'comment';
+    commentDiv.id = 'comment-' + data.comment_id;
+
+    let contentP = document.createElement('p');
+    contentP.textContent = data.comment_content;
+    commentDiv.appendChild(contentP);
+
+    let createDateP = document.createElement('p');
+    createDateP.textContent = data.create_date;
+    commentDiv.appendChild(createDateP);
+
+    let editedP = document.createElement('p');
+    editedP.textContent = data.comment_edited;
+    commentDiv.appendChild(editedP);
+
+    commentsSection.appendChild(commentDiv);
+    document.getElementById('comment-content').value = '';
+  })
+  .catch(error => console.error('Error:', error));
+}
+
 function isTaskFormValid() {
   let title = document.getElementById("title").value;
   let description = document.getElementById("description").value;
@@ -376,6 +425,20 @@ function isTaskFormValid() {
   return true;
 }
 
+function isCommentFormValid() {
+  let content = document.getElementById("comment-content").value;
+
+  document.getElementById('contentError').innerHTML = '';
+
+  if (content.length < 1 || content.length > 300) {
+      document.getElementById('content').classList.add('validation-err');
+      document.getElementById('contentError').innerHTML = 'Comment content must be between 1 and 300 characters long';
+      return false;
+  }
+
+  return true;
+}
+
 function setupTaskForm(formId, buttonId, modalId) {
   let form = document.getElementById(formId);
   switch (formId) {
@@ -390,6 +453,11 @@ function setupTaskForm(formId, buttonId, modalId) {
     let modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
   });
+}
+
+function setupCommentForm(formId) {
+  let form = document.getElementById(formId);
+  document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
 }
 
 document.addEventListener("DOMContentLoaded", function () {

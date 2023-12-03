@@ -17,25 +17,41 @@ class CommentController extends Controller {
 
     public function create(Request $request){
 
-        $validator = Validator::make($request->all(), [
-            'content' => 'min:15|string|max:100'
-        ]);
-
-        if ($validator->fails()) {
-                return redirect()->route() // mudar a route 
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $comment = new Comment();
         $comment->content = $request->content;
         $comment->create_date = now();
         $comment->comment_by = Auth::user()->id;
-        $comment->task_comment = $request->task_id; // se for passado hidden no forms ou então receber como argumento na função
+        $comment->task_comment = $request->task_id;
         
-        $this->authorize('create', $comment); 
+        // $this->authorize('create', $comment); 
 
-        $comment->save(); 
+        $comment->save();
+
+        return response()->json([
+            'comment_id' => $comment->comment_id,
+            'comment_content' => $comment->content,
+            'create_date' => $comment->create_date,
+            'comment_edited' => $comment->edited,
+        ]);
+    }
+
+    public function edit(Request $request){
+
+        $comment_id = $request->comment_id;
+        $comment = Comment::find($comment_id);
+
+        $comment->content = $request->content;
+        $comment->edited = true;
+        
+        // $this->authorize('edit', $comment); 
+
+        $comment->save();
+
+        return response()->json([
+            'comment_content' => $comment->content,
+            'create_date' => $comment->create_date,
+            'comment_edited' => $comment->edited,
+        ]);
     }
 
 }

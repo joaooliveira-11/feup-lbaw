@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +63,12 @@ Route::controller(TaskController::class)->group(function() {
     Route::patch('/task/edit', 'updatedetails')->name('task.update_details');
     Route::patch('/task/complete', 'completetask')->name('task.complete');
     Route::post('/search-tasks', 'search');
+});
+
+//Comment
+Route::controller(CommentController::class)->group(function() {
+    Route::post('/comment/create', 'create')->name('comment.create');
+
 });
 
 Route::controller(GoogleController::class)->group(function () {
