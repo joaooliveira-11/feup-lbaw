@@ -1,5 +1,3 @@
-@section('tasks')
-
 <div id="Tasks">
     <p class="TaskLabel">All Tasks:</p>
 
@@ -28,4 +26,3 @@
     @endif
 </div>
 
-@endsection

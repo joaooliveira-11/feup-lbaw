@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Models\Project;
 
 class TaskController extends Controller {
 
@@ -16,21 +17,8 @@ class TaskController extends Controller {
     }
 
     public function create(Request $request){
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'min:15|string|max:50',
-            'description' => 'min:100|string|max:300',
-            'priority' => ['string', Rule::in(['low', 'medium', 'high'])],
-            'finish_date' => 'nullable|date|after:now',
-        ]);
         
         $project_id = $request->project_id;
-
-        if ($validator->fails()) {
-            return redirect()->route('createtaskform', ['project_id' => $project_id])
-                ->withErrors($validator)
-                ->withInput();
-        }
 
         $task = new Task();
         $task->title = $request->title;
@@ -44,14 +32,19 @@ class TaskController extends Controller {
         $this->authorize('create', $task); 
 
         $task->save();
-        
-        return redirect()->route('project', ['project_id' => $project_id])
-            ->withSuccess('You have successfully created a new task!');
-            
-    }
 
-    public function createTaskForm($project_id) : View {
-        return view('pages.createTask', ['project_id' => $project_id]);
+        if ($request->ajax()) {
+            $project = Project::find($project_id);
+            $dashboardView = view('partials.project.dashboard', ['project' => $project])->render();
+            $tasksView = view('partials.project.tasks', ['project' => $project])->render();
+            return response()->json([
+                'dashboard' => $dashboardView,
+                'tasks' => $tasksView,
+            ]);
+        } else {
+            return redirect()->route('project', ['project_id' => $project_id])
+            ->withSuccess('You have successfully created a new task!');
+        }
     }
 
     public function show(int $task_id){
@@ -60,30 +53,12 @@ class TaskController extends Controller {
         return view('pages.task', ['task'=>$task]);
     }
 
-    public function editDetailsForm($task_id) : View {
-        $task = Task::find($task_id);
-        return view('pages.editTaskDetails', ['task' => $task]);
-    }
-
-    public function updateDetails(Request $request){
+    public function updatedetails(Request $request){
 
         $task_id = $request->task_id;
         $task = Task::find($task_id);
 
         $this->authorize('updatedetails', $task); 
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'min:15|string|max:50',
-            'description' => 'min:100|string|max:300',
-            'priority' => ['string', Rule::in(['low', 'medium', 'high'])],
-            'finish_date' => 'nullable|date|after:now',
-        ]);
-        
-        if ($validator->fails()) {
-            return redirect()->route('editDetailsForm',  ['task_id' => $task_id])
-                ->withErrors($validator)
-                ->withInput();
-        }
 
         $task->title = $request->title;
         $task->description = $request->description;
@@ -91,9 +66,10 @@ class TaskController extends Controller {
         $task->finish_date = $request->finish_date;
 
         $task->save();
-
-        return redirect()->route('task', ['task_id' => $task_id])
-            ->withSuccess('You have successfully updated the task details');
+        $taskdetailsView= view('partials.task.details', ['task' => $task])->render();
+        return response()->json([
+            'details' => $taskdetailsView,
+        ]);
     }
 
     public function completetask(Request $request){

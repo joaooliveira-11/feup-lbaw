@@ -1,10 +1,10 @@
-.navbar {
-    padding: 0.5em 0;
+header .navbar {
     display: flex;
     justify-content: space-around;
     border-bottom: 1ps solid black;
     background-color: rgb(227, 233, 246);
     border-bottom: 1px solid black;
+    padding: 1vw 0;
 }
 
 .navbar-img {
@@ -23,6 +23,7 @@
 .navbar-list-ul li, .authnavbar-list-ul li {
     margin-bottom: 0;
 }
+
 
 .navbar-list-element {
     text-decoration: none;
