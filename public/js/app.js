@@ -18,13 +18,11 @@ function addEventListeners() {
     }
     if (document.getElementById("EditTaskModalButton")) {
       setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask',{
-        'Dashboard': 'dashboard',
-        'Tasks': 'tasks',
-      }); // falta corrigir isto porque as views vão ser diferentes
+        'Details': 'details',
+      });
     }
 
     setupRadioButtons()
-
 } 
   
   function encodeForAjax(data) {
@@ -230,24 +228,6 @@ function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
       document.getElementById(sectionId).innerHTML = data[viewsToUpdate[sectionId]];
     }
     addEventListeners();
-    /*
-    document.getElementById('Dashboard').innerHTML = data.dashboard;
-    document.getElementById('Members').innerHTML = data.members;
-    document.getElementById('Chat').innerHTML = data.chat;
-    document.getElementById('Tasks').innerHTML = data.tasks;
-    addEventListeners();
-    */
-  
-  
-    /*
-    if (document.getElementById("CreateTaskModalButton")) {
-      setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask');
-    }
-    if (document.getElementById("EditTaskModalButton")) {
-      setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
-    }
-    setupRadioButtons();
-    */
   })
   .catch(error => console.error('Error:', error));
 }

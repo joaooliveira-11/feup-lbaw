@@ -66,9 +66,10 @@ class TaskController extends Controller {
         $task->finish_date = $request->finish_date;
 
         $task->save();
-
-        return redirect()->route('task', ['task_id' => $task_id])
-            ->withSuccess('You have successfully updated the task details');
+        $taskdetailsView= view('partials.task.details', ['task' => $task])->render();
+        return response()->json([
+            'details' => $taskdetailsView,
+        ]);
     }
 
     public function completetask(Request $request){

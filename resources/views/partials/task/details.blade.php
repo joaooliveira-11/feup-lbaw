@@ -1,5 +1,4 @@
-
-<div class="task-left-section">
+<div class="task-left-section" id="Details">
     <div class="go-back-section">
         <img src="{{ url('/img/back_arrow.svg') }}" id="back-arrow" alt="Back Arrow"/>   <!-- falta meter clickable com redirect para tras-->
         <h5 href="">Nome do Projeto</a>
