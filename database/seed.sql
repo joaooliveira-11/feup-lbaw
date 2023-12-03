@@ -38,8 +38,8 @@ DROP FUNCTION IF EXISTS user_search_update;
 DROP FUNCTION IF EXISTS project_search_update;
 DROP FUNCTION IF EXISTS task_search_update;
 DROP FUNCTION IF EXISTS task_user_in_project;
-
-
+DROP FUNCTION IF EXISTS check_ProjMember_before_comment;
+DROP FUNCTION IF EXISTS check_ProjMember_before_message;
 -----------------------------------------
 -- Types
 -----------------------------------------
@@ -447,6 +447,49 @@ CREATE TRIGGER task_user_in_project
     BEFORE INSERT ON task
     FOR EACH ROW
     EXECUTE PROCEDURE task_user_in_project();
+
+
+--TRIGGER14 (The user cannot make a comment if they are not in the project.)
+CREATE FUNCTION check_ProjMember_before_comment() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM project_users pu
+        JOIN task t ON pu.project_id = t.project_task
+        WHERE pu.user_id = NEW.comment_by AND t.task_id = NEW.task_comment
+    ) THEN
+        RAISE EXCEPTION 'User cannot make a comment if they are not in the project.';
+    END IF;
+    RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER check_ProjMember_before_comment
+    BEFORE INSERT ON comment
+    FOR EACH ROW 
+    EXECUTE PROCEDURE check_ProjMember_before_comment();
+
+
+--TRIGGER15 (Sender is not a member of this project.)
+CREATE FUNCTION check_ProjMember_before_message() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM project_users WHERE user_id = NEW.message_by AND project_id = NEW.project_message
+    ) THEN
+        RAISE EXCEPTION 'User cannot send a message if they are not in the project..';
+    END IF;
+    RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER check_ProjMember_before_message
+    BEFORE INSERT ON message
+    FOR EACH ROW 
+    EXECUTE PROCEDURE check_ProjMember_before_message();
+
 
 
 -----------------------------------------
@@ -1184,17 +1227,13 @@ INSERT INTO task (title, description, priority, create_date, finish_date, state,
 
 INSERT INTO comment (content, create_date, edited, comment_by, task_comment) VALUES
 ('Great progress on this task!', '2022-10-17 08:30:00', FALSE, 8, 1),
-('The new design looks fantastic!', '2022-10-17 14:15:00', FALSE, 7, 3),
-('I need some more information to proceed.', '2022-10-17 16:30:00', FALSE, 13, 4),
-('I am making good progress on this task.', '2022-10-18 12:45:00', FALSE, 15, 6), 
-('Looking forward to seeing the content!', '2022-10-19 09:30:00', TRUE, 17, 8),
-('Tool implementation is on track.', '2022-10-19 13:55:00', FALSE, 4, 9), 
-('Keep up the good work!', '2022-10-20 14:25:00', FALSE, 5, 11),
-('Let me know if you need assistance.', '2022-10-21 15:30:00', FALSE, 8, 13),
-('Looking forward to the festival!', '2022-10-23 10:00:00', FALSE, 18, 16),
-('The mobile app UI is looking great!', '2022-10-23 14:15:00', FALSE, 6, 17),
-('We should analyze the sales trends further.', '2022-10-24 08:30:00', TRUE, 11, 18),
-('Please make sure the content aligns with our brand.', '2022-10-24 12:45:00', FALSE, 13, 19);
+('The new design looks fantastic!', '2022-10-17 14:15:00', FALSE, 11, 15),
+('I need some more information to proceed.', '2022-10-17 16:30:00', FALSE, 5, 28),
+('I am making good progress on this task.', '2022-10-18 12:45:00', FALSE, 6, 33), 
+('Looking forward to seeing the content!', '2022-10-19 09:30:00', TRUE, 14, 39),
+('Tool implementation is on track.', '2022-10-19 13:55:00', FALSE, 15, 41), 
+('Keep up the good work!', '2022-10-20 14:25:00', FALSE, 10, 46),
+('Let me know if you need assistance.', '2022-10-21 15:30:00', FALSE, 18, 51);
 
 
 INSERT INTO invite (title, description, create_date, invited_by, invited_to, project_invite) VALUES
@@ -1207,11 +1246,11 @@ INSERT INTO invite (title, description, create_date, invited_by, invited_to, pro
 
 
 INSERT INTO message (content, create_date, edited, message_by, project_message) VALUES 
-('Welcome to our project! We are excited to have you on board.', '2022-10-25', FALSE, 3, 1),
+('Welcome to our project! We are excited to have you on board.', '2022-10-25', FALSE, 13, 3),
 ('Lets collaborate and make this project a success!', '2022-10-26', TRUE, 10, 8),
 ('Important update: We will have a team meeting tomorrow at 2 PM.', '2022-10-27', FALSE, 15, 5),
-('Great job on completing your tasks ahead of schedule!', '2022-10-28', FALSE, 6, 14),
-('Reminder: The project deadline is approaching. Keep up the good work!', '2022-10-29', FALSE, 9, 17);
+('Great job on completing your tasks ahead of schedule!', '2022-10-28', FALSE, 16, 14),
+('Reminder: The project deadline is approaching. Keep up the good work!', '2022-10-29', FALSE, 2, 17);
 
 
 -----------------------------------------
