@@ -38,8 +38,8 @@ DROP FUNCTION IF EXISTS user_search_update;
 DROP FUNCTION IF EXISTS project_search_update;
 DROP FUNCTION IF EXISTS task_search_update;
 DROP FUNCTION IF EXISTS task_user_in_project;
-
-
+DROP FUNCTION IF EXISTS check_ProjMember_before_comment;
+DROP FUNCTION IF EXISTS check_ProjMember_before_message;
 -----------------------------------------
 -- Types
 -----------------------------------------
@@ -447,6 +447,49 @@ CREATE TRIGGER task_user_in_project
     BEFORE INSERT ON task
     FOR EACH ROW
     EXECUTE PROCEDURE task_user_in_project();
+
+
+--TRIGGER14 (The user cannot make a comment if they are not in the project.)
+CREATE FUNCTION check_ProjMember_before_comment() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM project_users pu
+        JOIN task t ON pu.project_id = t.project_task
+        WHERE pu.user_id = NEW.comment_by AND t.task_id = NEW.task_comment
+    ) THEN
+        RAISE EXCEPTION 'User cannot make a comment if they are not in the project.';
+    END IF;
+    RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER check_ProjMember_before_comment
+    BEFORE INSERT ON comment
+    FOR EACH ROW 
+    EXECUTE PROCEDURE check_ProjMember_before_comment();
+
+
+--TRIGGER15 (Sender is not a member of this project.)
+CREATE FUNCTION check_ProjMember_before_message() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM project_users WHERE user_id = NEW.message_by AND project_id = NEW.project_message
+    ) THEN
+        RAISE EXCEPTION 'User cannot send a message if they are not in the project..';
+    END IF;
+    RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER check_ProjMember_before_message
+    BEFORE INSERT ON message
+    FOR EACH ROW 
+    EXECUTE PROCEDURE check_ProjMember_before_message();
+
 
 
 -----------------------------------------

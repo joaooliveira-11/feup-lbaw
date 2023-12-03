@@ -139,7 +139,7 @@ function handleSearchProject() {
     if (this.status >= 200 && this.status < 400) {
       var data = JSON.parse(this.response);
       var container = document.querySelector('#projects-container');
-      var ul = document.querySelector('.projects-list');
+      var ul = container.querySelector('.projects-list');
       if (!ul) {
           ul = document.createElement('ul');
           ul.classList.add('projects-list');
@@ -159,7 +159,7 @@ function handleSearchProject() {
           a.classList.add('project-link');
 
           var title = document.createElement('h2');
-          title.classList.add('project-title');
+          title.classList.add('projects-title');
           title.textContent = project.title;
           div.appendChild(title);
 
@@ -179,7 +179,7 @@ function handleSearchProject() {
           var otherdiv = document.createElement('div');
           otherdiv.classList.add('project-details');
           var description = document.createElement('p');
-          description.classList.add('project-description');
+          description.classList.add('project-info');
           description.textContent = project.description;
           otherdiv.appendChild(description);
         
