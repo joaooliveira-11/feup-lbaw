@@ -92,9 +92,18 @@ li.notification p{
     color: #333;
 }
 
-button.notification-dismiss{
-    content:icon;
+
+
+button.notification-dismiss:hover{
+    background-color: #e83749;
+    transition: 0.3s ease-in-out;
 }
+
+button.invite-accept:hover{
+    background-color: #32de84;
+    transition: 0.3s ease-in-out;
+}
+
 
 
 

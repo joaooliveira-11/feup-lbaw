@@ -396,6 +396,15 @@ function dismiss_notification(notificationId) {
   });
 }
 
+function accept_invite(project_id, notification_id, member_id) {
+  sendAjaxRequest('POST', '/addMember', {project_id: project_id, member_id: member_id}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      dismiss_notification(notification_id);
+    }
+  });
+
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   addEventListeners();
 });

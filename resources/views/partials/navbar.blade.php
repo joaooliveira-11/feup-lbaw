@@ -25,7 +25,7 @@
         <div id = "notifications-dropdown">
             <div>
                 <h1 id = "notifications-title">Notifications</h1>
-                <button class = "dismiss-all-notis" onclick = "dismissAll()"></button>
+                <button class = "dismiss-all-notis" onclick = "dismissAll()">All</button>
             </div>
             <ul id ="notifications-list" >
                 @if (Auth::check() )
@@ -35,14 +35,15 @@
                                 @case('invite')
                                     <li class="notification">
                                             <p class="notification-text">You have been invited to join the project</p>
-                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'></button>
+                                            <button class = "invite-accept" onclick = 'accept_invite({{ $notification->reference_id }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'>Y</button>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
                                     </li>
                                     @break
                                 @case('comment')
                                     <li class="notification">
                                         <a href="{{ url('project/' . $notification->reference_id) }}">
                                             <p class="notification-text">You have a new comment in the project</p>
-                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'></button>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
                                         </a>
                                     </li>
                                     @break
@@ -50,7 +51,7 @@
                                     <li class="notification">
                                         <a href="{{ url('project/' . $notification->reference_id) }}">
                                             <p class="notification-text">You have a new task in the project</p>
-                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'></button>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
                                         </a>
                                     </li>
                                     @break
@@ -58,7 +59,7 @@
                                     <li class="notification">
                                         <a href="{{ url('project/' . $notification->reference_id) }}">
                                             <p class="notification-text">Your invite to the project has been accepted</p>
-                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'></button>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
                                         </a>
                                     </li>
                                     @break
