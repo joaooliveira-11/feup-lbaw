@@ -28,7 +28,7 @@ class ProjectController extends Controller {
         return view('pages.allProjects', ['projects'=>$project]);
     }
 
-    public function create(Request $request) {   
+    public function createInvite(Request $request) {   
 
         if(!Auth::check()){
             return redirect("/login");
@@ -45,8 +45,9 @@ class ProjectController extends Controller {
         $project->project_coordinator = Auth::user()->id;
         $project->save();
 
-        return redirect()->route('project', ['project_id' => $project->project_id])
-            ->withSuccess('You have successfully created a new project!');
+        return response()->json([
+            'success' => 'Project created successfully!',
+        ]);
     }
 
     public function showCreateForm(): View {   
@@ -87,26 +88,26 @@ class ProjectController extends Controller {
     ]);
 }
 
-public function addMember(Request $request){
-    
-    $request->validate([
-        'project_id' => 'required|integer',
-        'member_id' => 'required|integer',
-    ]);
+    public function addMember(Request $request){
+        $request->validate([
+            'project_id' => 'required|integer',
+            'member_id' => 'required|integer',
+        ]);
 
-    $project = Project::find($request->get('project_id'));
-    $member = User::find($request->get('member_id'));
-    
-    DB::table('project_users')->insert([
-        'project_id' => $project->project_id,
-        'user_id' => $member->id,
-    ]);
+        $project = Project::find($request->get('project_id'));
+        $member = User::find($request->get('member_id'));
+        
+        DB::table('project_users')->insert([
+            'project_id' => $project->project_id,
+            'user_id' => $member->id,
+        ]);
 
-    return response()->json([
-        'members' => $project->members(), 
-        'success' => 'Member added successfully!',
-    ]);
+        return response()->json([
+            'members' => $project->members(), 
+            'success' => 'Member added successfully!',
+        ]);
+        
     }
-
+    
     
 }

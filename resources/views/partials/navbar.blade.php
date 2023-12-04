@@ -23,6 +23,11 @@
     </div>
     <button id = "notifications-button" >N</button> 
         <ul id ="notifications-dropdown" >
+            @if (Auth::check() )
+                @foreach ($notifications as $notification)
+                    <div>{{ $notification->type }}</div>
+                @endforeach
+            @endif
             <li>Notification 1</li>
             <li>Notification 2</li>
             <li>Notification 3</li>

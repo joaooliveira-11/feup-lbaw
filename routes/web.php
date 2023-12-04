@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\InviteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +63,13 @@ Route::controller(TaskController::class)->group(function() {
     Route::post('/search-tasks', 'search');
 });
 
+//Invite
+Route::controller(InviteController::class)->group(function() {
+    Route::post('/invite/create', 'create')->name('invite.create');
+});	
+
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google-auth');
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
+

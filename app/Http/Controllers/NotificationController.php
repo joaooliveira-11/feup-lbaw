@@ -10,7 +10,12 @@ class NotificationController extends Controller {
         $this->middleware('auth');
     }
     
-
+    public function userNotifications(){
+        $user = Auth::user();
+        $notifications = $user->notifications()->get();
+        return response()->json([
+            'notifications' => $notifications,
+        ]);
+    }
     
-
 }

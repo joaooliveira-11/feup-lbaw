@@ -1,4 +1,4 @@
-<form action="{{ route('addmember') }}" id="addmemberform" method="post">
+<form action="{{ route('invite.create') }}" id="addmemberform" method="post">
     @csrf
     <input type="hidden" name="project_id" id="project_id" value="{{ $project->project_id }}">
     <div class="modal fade text-left" id="ModalAddMember" tabindex="-1" role="dialog" aria-hidden="true">

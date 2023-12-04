@@ -316,6 +316,7 @@ for (var pair of formData.entries()) {
   })
   .then(response => response.json())
   .then(data => {
+    console.log(data);
     let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
     modal.hide();
     document.querySelector( '#MembersCounter p').innerHTML = data['members'].length ;
