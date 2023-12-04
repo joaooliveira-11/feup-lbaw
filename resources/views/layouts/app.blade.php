@@ -30,6 +30,7 @@
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/70585eb28b.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <main>

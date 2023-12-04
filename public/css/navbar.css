@@ -40,8 +40,16 @@ header .navbar {
     color: rgb(0, 0, 0);
 }
 
+#notifications-button:hover {
+    transition: 0.3s ease-in-out;
+}
+
 #notifications-dropdown {
     display: none;
+}
+
+.dismiss-all-notis{
+    margin: 1rem;
 }
 
 #notifications-dropdown.hide {
@@ -71,6 +79,7 @@ header .navbar {
     padding: 1vh;
     width: 5vh;
     height: 5vh;
+    z-index: 1;
 }
 
 li.notification{
@@ -92,10 +101,13 @@ li.notification p{
     color: #333;
 }
 
-
+button.notification-deny:hover{
+    background-color: #e74c3c;
+    transition: 0.3s ease-in-out;
+}
 
 button.notification-dismiss:hover{
-    background-color: #e83749;
+    background-color: #333;
     transition: 0.3s ease-in-out;
 }
 
