@@ -43,6 +43,93 @@ header .navbar {
     color: rgb(0, 0, 0);
 }
 
+#notifications-button:hover {
+    transition: 0.3s ease-in-out;
+}
+
+#notifications-dropdown {
+    display: none;
+}
+
+.dismiss-all-notis{
+    margin: 1rem;
+}
+
+#notifications-dropdown.hide {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    height: 100rem;
+    width: 40rem;
+    padding: 4rem;
+    background-color: rgb(227, 233, 246);
+    display: flex;
+    flex-direction: column;
+    animation: 0.3s ease-out 0s 1 slideInFromRight;
+}
+
+#notifications-list{
+    overflow-y: scroll;
+}
+
+#notifications-list::-webkit-scrollbar {
+    width: 0.5vw;
+}
+
+.navbar button{
+    border-radius: 50%;
+    padding: 1vh;
+    width: 5vh;
+    height: 5vh;
+    z-index: 1;
+}
+
+li.notification{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1vh;
+    padding: 1vh;
+    border-radius: 1vh;
+    background-color: rgb(255, 255, 255);
+}
+
+li.notification  a{
+    text-decoration: none;
+    color: #333;
+}
+
+li.notification p{
+    color: #333;
+}
+
+button.notification-deny:hover{
+    background-color: #e74c3c;
+    transition: 0.3s ease-in-out;
+}
+
+button.notification-dismiss:hover{
+    background-color: #333;
+    transition: 0.3s ease-in-out;
+}
+
+button.invite-accept:hover{
+    background-color: #32de84;
+    transition: 0.3s ease-in-out;
+}
+
+
+
+
+@keyframes slideInFromRight {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
 
 #index-navbar {
     padding: 0.2em 0;

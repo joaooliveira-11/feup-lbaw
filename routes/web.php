@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\InviteController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,8 +59,7 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
     Route::get('/search-projects', 'search');
-    Route::get('/project/{project_id}/adduser', 'showNonProjectMembers')->where(['project_id' => '[0-9]+'])->name('nonprojectmembers');
-    Route::post('/project/add-user', 'addUser')->name('adduser');
+    Route::post('/addMember', 'addMember')->name('addmember');
 });
 
 //Task
@@ -70,7 +71,18 @@ Route::controller(TaskController::class)->group(function() {
     Route::post('/search-tasks', 'search');
 });
 
+//Invite
+Route::controller(InviteController::class)->group(function() {
+    Route::post('/invite/create', 'create')->name('invite.create');
+});	
+
+//Notifications
+Route::controller(NotificationController::class)->group(function() {
+    Route::post('/dismiss-notification', 'dismiss')->name('notification.dismiss');
+});
+
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google-auth');
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
+

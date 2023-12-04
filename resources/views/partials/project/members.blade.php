@@ -12,6 +12,8 @@
             </a>
             @endforeach
         </ul>
+        <button type="button" id= "AddMemberModalButton" > Add Member</button>
+        @include('modal.add_member', ['project' => $project])
     </div>
 </div>    
 

@@ -16,4 +16,18 @@ class Notification extends Model
     public $timestamps  = false;
     protected $table = 'notification';
     protected $primaryKey = 'notification_id';
+
+    protected $fillable = [
+        'create_Date',
+        'emited_by',
+        'emited_to',
+        'viewed',
+        'type',
+        'date',
+        'reference_id'
+    ];
+
+    public function invite(){
+        return $this->hasOne(Invite::class, 'invite_id', 'reference_id');
+    }
 }

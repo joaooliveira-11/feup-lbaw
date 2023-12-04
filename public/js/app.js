@@ -22,6 +22,16 @@ function addEventListeners() {
       });
     }
 
+    if (document.getElementById("AddMemberModalButton")) {
+      setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
+        'Members': 'members',
+      });
+    }
+    
+    document.getElementById("notifications-button").addEventListener("click", function(event) {
+      document.getElementById("notifications-dropdown").classList.toggle("hide");
+    });
+
     setupRadioButtons()
 } 
   
@@ -283,6 +293,34 @@ function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
   .catch(error => console.error('Error:', error));
 }
 
+
+function handleAddMember(modalId, event) {
+  console.log("handleAddMember");
+  event.preventDefault();
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  let csrf = document.querySelector("input[name='_token']").content;
+  
+
+  console.log("URL:", url);
+for (var pair of formData.entries()) {
+    console.log(pair[0]+ ', ' + pair[1]); 
+}
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrf,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+  })
+}
+
 function isTaskFormValid() {
   let title = document.getElementById("title").value;
   let description = document.getElementById("description").value;
@@ -315,12 +353,39 @@ function isTaskFormValid() {
 
 function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
   let form = document.getElementById(formId);
-  document.getElementById(formId).addEventListener("submit", handleTaskFormSubmit.bind(form, modalId, viewsToUpdate));
+  switch (formId) {
+    case 'addmemberform':
+      document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
+      break;
+  }
 
   document.getElementById(buttonId).addEventListener('click', function () {
     let modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
   });
+}
+
+function dismiss_notification(notificationId) {
+  console.log(notificationId);
+  sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      let notificationElement = document.getElementById('n'+notificationId);
+      notificationElement.style.transition = "transform 0.5s ease-out";
+      notificationElement.style.transform = "translateX(100%)";
+      setTimeout(function() {
+          notificationElement.style.display = "none";
+      }, 500);
+    }
+  });
+}
+
+function accept_invite(project_id, notification_id, member_id) {
+  sendAjaxRequest('POST', '/addMember', {project_id: project_id, member_id: member_id}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      dismiss_notification(notification_id);
+    }
+  });
+
 }
 
 document.addEventListener("DOMContentLoaded", function () {

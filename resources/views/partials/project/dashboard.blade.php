@@ -25,7 +25,8 @@
         @endforeach
     </div>
     <div id = "TasksDashboard">
-        <a id="AddUserButton" href="{{ route('nonprojectmembers', ['project_id' => $project->project_id]) }}">Add member</a>
+        <button type="button" id= "AddMemberModalButton" > Add Member</button>
+        @include('modal.add_member', ['project' => $project])
         <button type="button" id="CreateTaskModalButton">Create Task</button>
         @include('modal.create_task', ['project_id' => $project->project_id])
     </div>
