@@ -35,7 +35,7 @@
                                 @case('invite')
                                     <li class="notification">
                                             <p class="notification-text">You have been invited to join the project</p>
-                                            <button class = "invite-accept" onclick = 'accept_invite({{ $notification->reference_id }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'>Y</button>
+                                            <button class = "invite-accept" onclick = 'accept_invite({{ $notification->invite->project_invite }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'>Y</button>
                                             <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
                                     </li>
                                     @break

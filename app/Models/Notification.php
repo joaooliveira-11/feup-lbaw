@@ -23,6 +23,11 @@ class Notification extends Model
         'emited_to',
         'viewed',
         'type',
-        'date'
+        'date',
+        'reference_id'
     ];
+
+    public function invite(){
+        return $this->hasOne(Invite::class, 'invite_id', 'reference_id');
+    }
 }

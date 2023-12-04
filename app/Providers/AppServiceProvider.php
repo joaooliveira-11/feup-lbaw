@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use App\Models\Notification;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,10 +24,9 @@ class AppServiceProvider extends ServiceProvider
     {
         \View::composer('*', function ($view) {
             if (\Auth::check()) {
-                $notifications = \DB::table('notification')
-                    ->where('emited_to', \Auth::user()->id)
-                    ->orderBy('notification_id', 'desc')
-                    ->get();
+                $notifications = Notification::where('emited_to', \Auth::user()->id)
+                                ->orderBy('notification_id', 'desc')
+                                ->get();
                 $view->with('notifications', $notifications);
             }
         });

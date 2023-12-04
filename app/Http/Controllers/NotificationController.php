@@ -30,6 +30,7 @@ class NotificationController extends Controller {
             'success' => 'Notification dismissed successfully!',
         ]);
     }
+
     
 }
 ?>
