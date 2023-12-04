@@ -22,6 +22,12 @@ function addEventListeners() {
       });
     }
 
+    if (document.getElementById("AddMemberModalButton")) {
+      setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
+        'Members': 'members',
+      });
+    }
+
     setupRadioButtons()
 } 
   

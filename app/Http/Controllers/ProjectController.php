@@ -87,23 +87,8 @@ class ProjectController extends Controller {
     ]);
 }
 
-    public function showNonProjectMembers(int $project_id) : View {
-        $project = Project::find($project_id); 
-        return view('pages.addUser', ['project'=> $project]);
-    }
-
-    public function addUser(Request $request) {   
-
-        $project_users = new Project_Users();
-        $project_users->project_id = $request->input('project_id');
-        $project_users->user_id = $request->input('user_id');
-        $project_id = $project_users->project_id;
-        $project = Project::find($project_id); 
-
-        $this->authorize('adduser', $project);
-
-        $project_users->save();
-
-        return view('pages.projectMembers', ['project'=> $project]);
+    public function addMember(int $project_id, int $user_id) : View{   
+        $project = Project::find($project_id);
+        return view('pages.project', ['project'=> $project]);
     }
 }
