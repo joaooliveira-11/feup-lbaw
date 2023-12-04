@@ -33,41 +33,33 @@
                         @if ($notification->viewed == false)
                             @switch($notification->type)
                                 @case('invite')
-                                    <li class="notification">
+                                    <li class = "notification" id="n{{ $notification->notification_id}}">
                                             <p class="notification-text">You have been invited to join the project</p>
                                             <button class = "invite-accept" onclick = 'accept_invite({{ $notification->invite->project_invite }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'>Y</button>
                                             <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
                                     </li>
                                     @break
                                 @case('comment')
-                                    <li class="notification">
-                                        <a href="{{ url('project/' . $notification->reference_id) }}">
+                                    <li class = "notification" id="n{{ $notification->notification_id}}">
                                             <p class="notification-text">You have a new comment in the project</p>
                                             <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
-                                        </a>
                                     </li>
                                     @break
                                 @case('task')
-                                    <li class="notification">
-                                        <a href="{{ url('project/' . $notification->reference_id) }}">
+                                    <li class = "notification" id="n{{ $notification->notification_id}}">
                                             <p class="notification-text">You have a new task in the project</p>
                                             <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
-                                        </a>
                                     </li>
                                     @break
                                 @case('acceptedinvite')
-                                    <li class="notification">
-                                        <a href="{{ url('project/' . $notification->reference_id) }}">
+                                    <li class = "notification" id="n{{ $notification->notification_id}}">
                                             <p class="notification-text">Your invite to the project has been accepted</p>
                                             <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'>X</button>
-                                        </a>
                                     </li>
                                     @break
                                 @default
-                                    <li class="notification">
-                                        <a href="{{ url('/projects', ['id' => $notification->reference_id]) }}">
+                                    <li class = "notification" id="n{{ $notification->notification_id}}">
                                             <p class="notification-text">You have a new notification in the project</p>
-                                        </a>
                                     </li>
                             @endswitch
                         @endif

@@ -316,30 +316,8 @@ for (var pair of formData.entries()) {
   })
   .then(response => response.json())
   .then(data => {
-    console.log(data);
     let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
     modal.hide();
-    document.querySelector( '#MembersCounter p').innerHTML = data['members'].length ;
-    document.querySelector( ' .add-user-ul').innerHTML = '';
-    data['members'].forEach(member => {
-      var a = document.createElement('a');
-      a.href = '/profile/' + member.user_id;
-      a.classList.add('add-user-link');
-
-      var li = document.createElement('li');
-      li.classList.add('add-user-element');
-
-      var name = document.createElement('p');
-      name.textContent = member.name + " - ";
-
-      var username = document.createElement('em');
-      username.textContent = "@" + member.username;
-      name.appendChild(username);
-      li.appendChild(name);
-
-      a.appendChild(li);
-      document.querySelector( ' .add-user-ul').appendChild(a);
-    });
   })
 }
 
@@ -391,7 +369,12 @@ function dismiss_notification(notificationId) {
   console.log(notificationId);
   sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
     if (this.status >= 200 && this.status < 400) {
-      location.reload();
+      let notificationElement = document.getElementById('n'+notificationId);
+      notificationElement.style.transition = "transform 0.5s ease-out";
+      notificationElement.style.transform = "translateX(100%)";
+      setTimeout(function() {
+          notificationElement.style.display = "none";
+      }, 500);
     }
   });
 }
