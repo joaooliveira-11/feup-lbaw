@@ -49,13 +49,21 @@ header .navbar {
     top: 0;
     right: 0;
     display: block;
-    height: 100vh;
-    width: 20vw;
-    padding: 2vw;
+    height: 100rem;
+    width: 40rem;
+    padding: 4rem;
     background-color: rgb(227, 233, 246);
     display: flex;
     flex-direction: column;
     animation: 0.3s ease-out 0s 1 slideInFromRight;
+}
+
+#notifications-list{
+    overflow-y: scroll;
+}
+
+#notifications-list::-webkit-scrollbar {
+    width: 0.5vw;
 }
 
 .navbar button{
@@ -64,6 +72,30 @@ header .navbar {
     width: 5vh;
     height: 5vh;
 }
+
+li.notification{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1vh;
+    padding: 1vh;
+    border-radius: 1vh;
+    background-color: rgb(255, 255, 255);
+}
+
+li.notification  a{
+    text-decoration: none;
+    color: #333;
+}
+
+li.notification p{
+    color: #333;
+}
+
+button.notification-dismiss{
+    content:icon;
+}
+
 
 
 @keyframes slideInFromRight {

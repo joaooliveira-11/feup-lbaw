@@ -387,6 +387,15 @@ function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
   });
 }
 
+function dismiss_notification(notificationId) {
+  console.log(notificationId);
+  sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      location.reload();
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   addEventListeners();
 });

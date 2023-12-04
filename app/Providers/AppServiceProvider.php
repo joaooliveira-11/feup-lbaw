@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
             if (\Auth::check()) {
                 $notifications = \DB::table('notification')
                     ->where('emited_to', \Auth::user()->id)
+                    ->orderBy('notification_id', 'desc')
                     ->get();
                 $view->with('notifications', $notifications);
             }

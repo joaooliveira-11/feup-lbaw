@@ -21,10 +21,9 @@ class InviteController extends Controller {
         $invite->description = "This is an invite to join a project.";
         $invite->create_date = now();
         $invite->invited_by = Auth::user()->id;
-        $invite->invited_to = Auth::user()->id;
+        $invite->invited_to = (int) $request->member_id;
         $invite->project_invite = (int) $request->project_id; 
         //$this->authorize('create', $invite); 
-
         $invite->save(); 
 
         return response()->json([

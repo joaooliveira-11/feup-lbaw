@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,11 @@ Route::controller(TaskController::class)->group(function() {
 Route::controller(InviteController::class)->group(function() {
     Route::post('/invite/create', 'create')->name('invite.create');
 });	
+
+//Notifications
+Route::controller(NotificationController::class)->group(function() {
+    Route::post('/dismiss-notification', 'dismiss')->name('notification.dismiss');
+});
 
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google-auth');

@@ -21,17 +21,59 @@
             <a class="navbar-logout-button" href="{{ url('/logout') }}"> Logout </a>
         @endif
     </div>
-    <button id = "notifications-button" >N</button> 
-        <ul id ="notifications-dropdown" >
-            @if (Auth::check() )
-                @foreach ($notifications as $notification)
-                    <div>{{ $notification->type }}</div>
-                @endforeach
-            @endif
-            <li>Notification 1</li>
-            <li>Notification 2</li>
-            <li>Notification 3</li>
-        </ul>
-
+    <button id = "notifications-button" >N</button>
+        <div id = "notifications-dropdown">
+            <div>
+                <h1 id = "notifications-title">Notifications</h1>
+                <button class = "dismiss-all-notis" onclick = "dismissAll()"></button>
+            </div>
+            <ul id ="notifications-list" >
+                @if (Auth::check() )
+                    @foreach ($notifications as $notification)
+                        @if ($notification->viewed == false)
+                            @switch($notification->type)
+                                @case('invite')
+                                    <li class="notification">
+                                            <p class="notification-text">You have been invited to join the project</p>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'></button>
+                                    </li>
+                                    @break
+                                @case('comment')
+                                    <li class="notification">
+                                        <a href="{{ url('project/' . $notification->reference_id) }}">
+                                            <p class="notification-text">You have a new comment in the project</p>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'></button>
+                                        </a>
+                                    </li>
+                                    @break
+                                @case('task')
+                                    <li class="notification">
+                                        <a href="{{ url('project/' . $notification->reference_id) }}">
+                                            <p class="notification-text">You have a new task in the project</p>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'></button>
+                                        </a>
+                                    </li>
+                                    @break
+                                @case('acceptedinvite')
+                                    <li class="notification">
+                                        <a href="{{ url('project/' . $notification->reference_id) }}">
+                                            <p class="notification-text">Your invite to the project has been accepted</p>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'></button>
+                                        </a>
+                                    </li>
+                                    @break
+                                @default
+                                    <li class="notification">
+                                        <a href="{{ url('/projects', ['id' => $notification->reference_id]) }}">
+                                            <p class="notification-text">You have a new notification in the project</p>
+                                        </a>
+                                    </li>
+                            @endswitch
+                        @endif
+                    @endforeach
+                @endif
+                
+            </ul>
+        </div>
 </div>
 @endsection
