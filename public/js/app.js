@@ -51,6 +51,7 @@ function addEventListeners() {
           const projectId = pathParts[pathParts.length - 1];
           console.log(projectId);
             removeFromProject(projectId);
+            location.reload();
         }
       });
     });
@@ -414,7 +415,6 @@ function accept_invite(project_id, notification_id, member_id) {
 function removeFromProject(projectId){
   sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
     if (this.status >= 200 && this.status < 400) {
-      window.reload();
     }
   });
 }
