@@ -1,15 +1,21 @@
 <div id="comments">
     <div class="comments-section">
         @foreach($task->comments as $comment)
-            <div class="comment" id="comment-{{ $comment->comment_id }}"> <!-- estrutura de um comentario -->
-                <img src="" alt=""> <!-- imagem do user -->
-                <p>{{ $comment->content }}</p> <!-- conteudo -->
-                <p>{{ $comment->create_date }}</p> <!-- conteudo -->
-                <p>{{ $comment->edited }}</p> <!-- conteudo -->
-                <div class="comment-buttons">
-                    <button type="button" class="comment-button">Edit</button>
-                    <button type="button" class="comment-button">Delete</button>
+            <div class="comment" id="comment-{{ $comment->comment_id }}">
+
+            <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
+                <div class="comment-content">
+                    <p>{{ $comment->content }}</p>
+                    <div class="comment-info-buttons">
+                        <h6>{{ $comment->create_date }}</h6>
+                        <!-- <p>{{ $comment->edited }}</p> -->
+                        <div class="comment-buttons">
+                            <button type="button" class="comment-manage-button">Edit</button>
+                            <button type="button" class="comment-manage-button">Delete</button>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         @endforeach
     </div>

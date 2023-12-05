@@ -464,3 +464,5 @@ document.addEventListener("DOMContentLoaded", function () {
   addEventListeners();
 });
   
+var commentsSection = document.querySelector(".comments-section");
+    commentsSection.scrollTop = commentsSection.scrollHeight;
