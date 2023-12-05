@@ -32,6 +32,30 @@ function addEventListeners() {
       document.getElementById("notifications-dropdown").classList.toggle("hide");
     });
 
+    document.getElementById('leaveProject').addEventListener('click', function(event) {
+      event.preventDefault();
+      Swal.fire({
+          title: "Are you sure?",
+          text: "Once left, you will not be able to rejoin the project!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, I am sure!',          
+
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          const urlPath = window.location.pathname;
+          const pathParts = urlPath.split('/');
+          const projectId = pathParts[pathParts.length - 1];
+          console.log(projectId);
+            removeFromProject(projectId);
+            location.reload();
+        }
+      });
+    });
+
     setupRadioButtons()
 } 
   
@@ -386,6 +410,13 @@ function accept_invite(project_id, notification_id, member_id) {
     }
   });
 
+}
+
+function removeFromProject(projectId){
+  sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
+    if (this.status >= 200 && this.status < 400) {
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
