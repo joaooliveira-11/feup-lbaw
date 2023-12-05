@@ -107,8 +107,19 @@ header {
     
 }
 
+#Sidebar #leaveProject{
+    background: #d52536;
+    border-radius: 0.7vw;
+    color: #ffffff;
+}
+
 #Sidebar #leaveProject:hover {
-    background-color: #d52536;
+    transition: 0.3s ease-in-out;
+    background-color: #ffffff;
+    color: #d52536;
+    border-width: 0.1vw;
+    border-color: #d52536;
+    border-style: solid;
 }
 
 #Tasks{

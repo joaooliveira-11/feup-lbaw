@@ -108,6 +108,20 @@ class ProjectController extends Controller {
         ]);
         
     }
+
+    public function leaveProject($id){
+        
+        $project = Project::find($id);
+        $user = User::find(Auth::user()->id);
+
+        Project_Users::where('project_id', $project->project_id)
+                    ->where('user_id', $user->id)
+                    ->delete();
+
+        return response()->json([
+            'success' => 'You left the project successfully!',
+        ]);
+    }
     
     
 }

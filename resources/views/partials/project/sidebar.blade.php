@@ -18,5 +18,5 @@
         Members
     </label>
     </form>
-    <p>Leave Project</a>
+    <button id="leaveProject">Leave Project</button>
 </div>

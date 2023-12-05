@@ -60,6 +60,7 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
     Route::get('/search-projects', 'search');
     Route::post('/addMember', 'addMember')->name('addmember');
+    Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
 });
 
 //Task
