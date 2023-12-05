@@ -2,20 +2,20 @@
     <div class="comments-section">
         @foreach($task->comments as $comment)
             <div class="comment" id="comment-{{ $comment->comment_id }}">
-
             <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
                 <div class="comment-content">
                     <p>{{ $comment->content }}</p>
                     <div class="comment-info-buttons">
                         <h6>{{ $comment->create_date }}</h6>
-                        <!-- <p>{{ $comment->edited }}</p> -->
+                        @if ($comment->edited == true)
+                            <p>Edited</p>
+                        @endif
                         <div class="comment-buttons">
                             <button type="button" class="comment-manage-button">Edit</button>
                             <button type="button" class="comment-manage-button">Delete</button>
                         </div>
                     </div>
                 </div>
-
             </div>
         @endforeach
     </div>

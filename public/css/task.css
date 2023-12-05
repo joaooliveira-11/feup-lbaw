@@ -146,6 +146,10 @@
     padding: 1vw 0 2vw 0;
 }
 
+.comments-section::-webkit-scrollbar {
+    display: none;
+}
+
 .comment-form {
     display: flex;
     margin: 0;

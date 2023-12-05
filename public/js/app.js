@@ -377,20 +377,64 @@ function handleCreateComment(event) {
     commentDiv.className = 'comment';
     commentDiv.id = 'comment-' + data.comment_id;
 
+    let userImage = document.createElement('img');
+    userImage.src = '/img/gmail.png';
+    userImage.className = 'user-image';
+    userImage.alt = 'Gmail Image';
+    commentDiv.appendChild(userImage);
+
+    let commentContentDiv = document.createElement('div');
+    commentContentDiv.className = 'comment-content';
+
     let contentP = document.createElement('p');
     contentP.textContent = data.comment_content;
-    commentDiv.appendChild(contentP);
+    commentContentDiv.appendChild(contentP);
 
-    let createDateP = document.createElement('p');
-    createDateP.textContent = data.create_date;
-    commentDiv.appendChild(createDateP);
+    let commentInfoButtonsDiv = document.createElement('div');
+    commentInfoButtonsDiv.className = 'comment-info-buttons';
 
-    let editedP = document.createElement('p');
-    editedP.textContent = data.comment_edited;
-    commentDiv.appendChild(editedP);
+    let createDate = new Date(data.comment_create_date);
+    let formattedCreateDate = createDate.getFullYear() + '-' +
+    String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
+    String(createDate.getDate()).padStart(2, '0') + ' ' +
+    String(createDate.getHours()).padStart(2, '0') + ':' +
+    String(createDate.getMinutes()).padStart(2, '0') + ':' +
+    String(createDate.getSeconds()).padStart(2, '0');
 
+    let createDateH6 = document.createElement('h6');
+    createDateH6.textContent = formattedCreateDate;
+    commentInfoButtonsDiv.appendChild(createDateH6);
+
+    if (data.comment_edited) {
+      let editedP = document.createElement('p');
+      editedP.textContent = data.comment_edited;
+      commentInfoButtonsDiv.appendChild(editedP);
+    } else {
+      let commentButtonsDiv = document.createElement('div');
+      commentButtonsDiv.className = 'comment-buttons';
+    
+      let editButton = document.createElement('button');
+      editButton.type = 'button';
+      editButton.className = 'comment-manage-button';
+      editButton.id = 'editcommentbtn';
+      editButton.textContent = 'Edit';
+      commentButtonsDiv.appendChild(editButton);
+    
+      let deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'comment-manage-button';
+      deleteButton.id = 'deletecommentbtn';
+      deleteButton.textContent = 'Delete';
+      commentButtonsDiv.appendChild(deleteButton);
+    
+      commentInfoButtonsDiv.appendChild(commentButtonsDiv);
+    }
+    commentContentDiv.appendChild(commentInfoButtonsDiv);
+    commentDiv.appendChild(commentContentDiv);
     commentsSection.appendChild(commentDiv);
     document.getElementById('comment-content').value = '';
+
+    commentsSection.scrollTop = commentsSection.scrollHeight;
   })
   .catch(error => console.error('Error:', error));
 }
@@ -462,7 +506,8 @@ function setupCommentForm(formId) {
 
 document.addEventListener("DOMContentLoaded", function () {
   addEventListeners();
-});
-  
-var commentsSection = document.querySelector(".comments-section");
+  let commentsSection = document.querySelector(".comments-section");
+  if (commentsSection) {
     commentsSection.scrollTop = commentsSection.scrollHeight;
+  }
+});
