@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 use App\Models\User;
 use App\Models\Interest;
 use App\Models\Skill;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
     public function __construct(){
         $this->middleware('auth');
     }
@@ -102,27 +103,26 @@ class UserController extends Controller
 
     public function updateImage(Request $request) {
         $user = Auth::user();
-        
+
         $request->validate([
             'profilePic' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-    
+
         $this->authorize('update', $user);
-    
+
         $file = $request->file('profilePic');
         $extension = $file->getClientOriginalExtension();
         $imageName = "user" . $user->id . "." . $extension;
-        
+
         $path = public_path('profilePics/') . $imageName;
         if(file_exists($path)) {
             unlink($path);
         }
-    
+
         $file->move(public_path('profilePics/'), $imageName);
-    
+
         $user->photo = 'profilePics/' . $imageName;
         $user->save();
-    
         return redirect("profile/".$user->id );
     }
     
