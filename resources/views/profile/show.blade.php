@@ -6,7 +6,11 @@
         <div class="Profile-LeftSection">
             <label for="fileInput">
                 <img id="profilePicture" src="https://via.placeholder.com/150" alt="Profile Picture" style="cursor: pointer;">
-                <input id="fileInput" type="file">
+                <form method="POST" action="{{ route('profile.updateImage') }}" enctype="multipart/form-data">
+                    @csrf
+                    <input id="fileInput" name="profilePic" type="file" data-update-url="{{route('profile.updateImage')}}">
+                    <button type="submit">Upload Image</button>
+                </form>
             </label>           
             <div class="profile-interests-skills">
                 <div id="Interests">

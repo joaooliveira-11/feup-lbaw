@@ -66,13 +66,6 @@ function addEventListeners() {
     }
   }
 
-  function searchProjects(page = 1) {
-    var input = document.getElementById('projectSearch');
-    var filter = input.value;
-    var url = '/search-projects?filter=' + encodeURIComponent(filter) + '&page=' + page;
-    sendAjaxRequest('GET', url, {}, handleSearchProject);
-}
-
 
 function searchTasks() {
       var input = document.getElementById('taskSearch');

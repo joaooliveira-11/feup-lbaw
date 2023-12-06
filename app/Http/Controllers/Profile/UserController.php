@@ -99,6 +99,32 @@ class UserController extends Controller
         return response()->json($name);
     }
 
+
+    public function updateImage(Request $request) {
+        $user = Auth::user();
+        
+        $request->validate([
+            'profilePic' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    
+        $this->authorize('update', $user);
+    
+        $file = $request->file('profilePic');
+        $extension = $file->getClientOriginalExtension();
+        $imageName = "user" . $user->id . "." . $extension;
+        
+        $path = public_path('profilePics/') . $imageName;
+        if(file_exists($path)) {
+            unlink($path);
+        }
+    
+        $file->move(public_path('profilePics/'), $imageName);
+    
+        $user->photo = 'profilePics/' . $imageName;
+        $user->save();
+    
+        return redirect("profile/".$user->id );
+    }
     
 }
 ?>
