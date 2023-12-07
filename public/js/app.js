@@ -19,6 +19,10 @@ function addEventListeners() {
     if (document.getElementById("submit-comment-button")) {
       setupCommentForm("createcommentform");
     }
+    let commentsSection = document.querySelector('.comments-section');
+    if (commentsSection) {
+    commentsSection.addEventListener('click', handleDeleteComment);
+  }
     
     setupRadioButtons();
 } 
@@ -378,7 +382,7 @@ function handleCreateComment(event) {
     commentDiv.id = 'comment-' + data.comment_id;
 
     let userImage = document.createElement('img');
-    userImage.src = '/img/gmail.png';
+    userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
     userImage.className = 'user-image';
     userImage.alt = 'Gmail Image';
     commentDiv.appendChild(userImage);
@@ -405,30 +409,18 @@ function handleCreateComment(event) {
     createDateH6.textContent = formattedCreateDate;
     commentInfoButtonsDiv.appendChild(createDateH6);
 
-    if (data.comment_edited) {
-      let editedP = document.createElement('p');
-      editedP.textContent = data.comment_edited;
-      commentInfoButtonsDiv.appendChild(editedP);
-    } else {
-      let commentButtonsDiv = document.createElement('div');
-      commentButtonsDiv.className = 'comment-buttons';
+    let commentButtonsDiv = document.createElement('div');
+    commentButtonsDiv.className = 'comment-buttons';
     
-      let editButton = document.createElement('button');
-      editButton.type = 'button';
-      editButton.className = 'comment-manage-button';
-      editButton.id = 'editcommentbtn';
-      editButton.textContent = 'Edit';
-      commentButtonsDiv.appendChild(editButton);
+    let deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'comment-manage-button';
+    deleteButton.id = 'deletecommentbtn';
+    deleteButton.textContent = 'Delete';
+    commentButtonsDiv.appendChild(deleteButton);
     
-      let deleteButton = document.createElement('button');
-      deleteButton.type = 'button';
-      deleteButton.className = 'comment-manage-button';
-      deleteButton.id = 'deletecommentbtn';
-      deleteButton.textContent = 'Delete';
-      commentButtonsDiv.appendChild(deleteButton);
-    
-      commentInfoButtonsDiv.appendChild(commentButtonsDiv);
-    }
+    commentInfoButtonsDiv.appendChild(commentButtonsDiv);
+
     commentContentDiv.appendChild(commentInfoButtonsDiv);
     commentDiv.appendChild(commentContentDiv);
     commentsSection.appendChild(commentDiv);
@@ -511,3 +503,43 @@ document.addEventListener("DOMContentLoaded", function () {
     commentsSection.scrollTop = commentsSection.scrollHeight;
   }
 });
+
+function handleDeleteComment(event) {
+  if (event.target.classList.contains('comment-manage-button')) {
+    let commentDiv = event.target.closest('.comment');
+    let commentId = commentDiv.id.split('-')[1];
+    let csrfToken = document.querySelector('#csrf-token').value;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch('/comment/delete/' + commentId, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            commentDiv.remove();
+          } 
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }
+    })
+  }
+}

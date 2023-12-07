@@ -68,6 +68,7 @@ Route::controller(TaskController::class)->group(function() {
 //Comment
 Route::controller(CommentController::class)->group(function() {
     Route::post('/comment/create', 'create')->name('comment.create');
+    Route::delete('/comment/delete/{id}', 'delete')->name('comment.delete');
 
 });
 

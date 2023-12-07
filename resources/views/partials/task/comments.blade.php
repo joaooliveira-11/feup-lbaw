@@ -1,5 +1,6 @@
 <div id="comments">
     <div class="comments-section">
+        <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($task->comments as $comment)
             <div class="comment" id="comment-{{ $comment->comment_id }}">
             <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
@@ -11,8 +12,9 @@
                             <p>Edited</p>
                         @endif
                         <div class="comment-buttons">
-                            <button type="button" class="comment-manage-button">Edit</button>
-                            <button type="button" class="comment-manage-button">Delete</button>
+                            @if ($comment->comment_by == auth()->user()->id)
+                                <button type="button" class="comment-manage-button">Delete</button>
+                            @endif
                         </div>
                     </div>
                 </div>
