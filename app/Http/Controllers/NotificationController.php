@@ -31,6 +31,16 @@ class NotificationController extends Controller {
         ]);
     }
 
+    public function show(){
+        $notifications = Notification::where('emited_to', Auth::user()->id)
+                        ->where('viewed', false)
+                        ->orderBy('create_date', 'desc')
+                        ->get();
+        return response()->json([
+            'notifications' => $notifications,
+        ]);
+    }
+
     
 }
 ?>

@@ -1,4 +1,7 @@
 @section('navbar')
+<script>
+    var userId = "{{ Auth::check() ? Auth::id() : 'null' }}";
+</script>
 <div class="navbar">
     <img src="{{ asset('img/TeamSync.svg') }}" alt="TeamSync">
     <div class="navbar-list">
@@ -21,28 +24,27 @@
             <a class="navbar-logout-button" href="{{ url('/logout') }}"> Logout </a>
         @endif
     </div>
-    <button id = "notifications-button" ><i class="fa-solid fa-bell"></i></button>
+    <button id = "notifications-button" ><i class="fa-solid fa-bell"></i><span id = "new-notification"></span></button>
         <div id = "notifications-dropdown">
             <div>
                 <h1 id = "notifications-title">Notifications</h1>
-                <button class = "dismiss-all-notis" onclick = "dismissAll()">All</button>
+                <button class = "dismiss-all-notis" onclick = "dismissAll()"><i class="fa-solid fa-eye"></i>All</button>
             </div>
             <ul id ="notifications-list" >
                 @if (Auth::check() )
                     @foreach ($notifications as $notification)
-                        @if ($notification->viewed == false)
                             @switch($notification->type)
                                 @case('invite')
                                     <li class = "notification" id="n{{ $notification->notification_id}}">
                                             <p class="notification-text">You have been invited to join the project</p>
-                                            <button class = "invite-accept" onclick = 'accept_invite({{ $notification->invite->project_invite }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'><i class="fa-solid fa-check"></i></button>
-                                            <button class = "notification-deny" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-ban"></i></i></button>
+                                            <button class = "invite-accept" onclick = 'accept_invite({{ $notification->reference_id }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'><i class="fa-solid fa-check"></i></button>
+                                            <button class = "notification-deny" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-ban"></i></button>
                                     </li>
                                     @break
                                 @case('comment')
                                     <li class = "notification" id="n{{ $notification->notification_id}}">
                                             <p class="notification-text">You have a new comment in the project</p>
-                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></button>
+                                            <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                                     </li>
                                     @break
                                 @case('task')
@@ -62,7 +64,6 @@
                                             <p class="notification-text">You have a new notification in the project</p>
                                     </li>
                             @endswitch
-                        @endif
                     @endforeach
                 @endif
                 
