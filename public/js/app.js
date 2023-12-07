@@ -403,8 +403,8 @@ function dismiss_notification(notificationId) {
   });
 }
 
-function accept_invite(project_id, notification_id, member_id) {
-  sendAjaxRequest('POST', '/addMember', {project_id: project_id, member_id: member_id}, function() {
+function accept_invite(reference_id, notification_id, member_id) {
+  sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
     if (this.status >= 200 && this.status < 400) {
       dismiss_notification(notification_id);
     }
@@ -429,21 +429,26 @@ document.addEventListener("DOMContentLoaded", function () {
 const pusherAppKey = "fb8ef8f4fa10afc9c38c";
 const pusherCluster = "eu";
 
-console.log(pusherAppKey);
-console.log(pusherCluster);
 
 const pusher = new Pusher(pusherAppKey, {
   cluster: pusherCluster,
   encrypted: true
 });
 
-const channel = pusher.subscribe('project-invite');
+const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
-  console.log(data);
   if(data.user_id == userId){
     document.getElementById('notifications-button').style.backgroundColor = "red";
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
   }
+});
+
+channel.bind('accepted-invite', function(data) {
+  console.log(data);
+  //if(data.user_id == userId){
+    document.getElementById('notifications-button').style.backgroundColor = "red";
+    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
+  //}
 });
 
 function handleRefreshNotifications() {
@@ -465,7 +470,7 @@ function handleRefreshNotifications() {
             const accept = document.createElement('button');
             accept.classList.add('invite-accept');
             accept.onclick = function() {
-              accept_invite(notification.project_id, notification.notification_id, notification.emited_to);
+              accept_invite(notification.reference_id, notification.notification_id, notification.emited_to);
           };
             const iconaccept = document.createElement('i');
             iconaccept.classList.add('fa-solid');
