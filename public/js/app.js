@@ -22,9 +22,42 @@ function addEventListeners() {
     let commentsSection = document.querySelector('.comments-section');
     if (commentsSection) {
     commentsSection.addEventListener('click', handleDeleteComment);
-  }
+    }
+    if (document.getElementById("AddMemberModalButton")) {
+      setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
+        'Members': 'members',
+      });
+    }
     
-    setupRadioButtons();
+    document.getElementById("notifications-button").addEventListener("click", function(event) {
+      document.getElementById("notifications-dropdown").classList.toggle("hide");
+    });
+
+    document.getElementById('leaveProject').addEventListener('click', function(event) {
+      event.preventDefault();
+      Swal.fire({
+          title: "Are you sure?",
+          text: "Once left, you will not be able to rejoin the project!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, I am sure!',          
+
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          const urlPath = window.location.pathname;
+          const pathParts = urlPath.split('/');
+          const projectId = pathParts[pathParts.length - 1];
+          console.log(projectId);
+            removeFromProject(projectId);
+            location.reload();
+        }
+      });
+    });
+
+    setupRadioButtons()
 } 
 
   function encodeForAjax(data) {
@@ -431,6 +464,34 @@ function handleCreateComment(event) {
   .catch(error => console.error('Error:', error));
 }
 
+
+function handleAddMember(modalId, event) {
+  console.log("handleAddMember");
+  event.preventDefault();
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  let csrf = document.querySelector("input[name='_token']").content;
+  
+
+  console.log("URL:", url);
+for (var pair of formData.entries()) {
+    console.log(pair[0]+ ', ' + pair[1]); 
+}
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrf,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+  })
+}
+
 function isTaskFormValid() {
   let title = document.getElementById("title").value;
   let description = document.getElementById("description").value;
@@ -461,9 +522,17 @@ function isTaskFormValid() {
   return true;
 }
 
+function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
+  let form = document.getElementById(formId);
+  switch (formId) {
+    case 'addmemberform':
+      document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
+      break;
+  }
+}
+
 function isCommentFormValid() {
   let content = document.getElementById("comment-content").value;
-
   document.getElementById('contentError').innerHTML = '';
 
   if (content.length < 1 || content.length > 300) {
@@ -494,6 +563,36 @@ function setupTaskForm(formId, buttonId, modalId) {
 function setupCommentForm(formId) {
   let form = document.getElementById(formId);
   document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
+}
+
+function dismiss_notification(notificationId) {
+  console.log(notificationId);
+  sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      let notificationElement = document.getElementById('n'+notificationId);
+      notificationElement.style.transition = "transform 0.5s ease-out";
+      notificationElement.style.transform = "translateX(100%)";
+      setTimeout(function() {
+          notificationElement.style.display = "none";
+      }, 500);
+    }
+  });
+}
+
+function accept_invite(project_id, notification_id, member_id) {
+  sendAjaxRequest('POST', '/addMember', {project_id: project_id, member_id: member_id}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      dismiss_notification(notification_id);
+    }
+  });
+
+}
+
+function removeFromProject(projectId){
+  sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
+    if (this.status >= 200 && this.status < 400) {
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function () {

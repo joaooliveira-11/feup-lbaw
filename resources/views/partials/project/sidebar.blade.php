@@ -18,5 +18,7 @@
         Members
     </label>
     </form>
-    <p>Leave Project</a>
+    @if($project->is_member(auth()->user()))
+        <button id="leaveProject">Leave Project</button>
+    @endif
 </div>

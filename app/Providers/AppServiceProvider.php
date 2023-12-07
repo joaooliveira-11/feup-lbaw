@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use App\Models\Notification;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,15 +20,15 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot()
     {
-        if(env('FORCE_HTTPS',false)) {
-            error_log('configuring https');
-
-            $app_url = config("app.url");
-            URL::forceRootUrl($app_url);
-            $schema = explode(':', $app_url)[0];
-            URL::forceScheme($schema);
-        }
+        \View::composer('*', function ($view) {
+            if (\Auth::check()) {
+                $notifications = Notification::where('emited_to', \Auth::user()->id)
+                                ->orderBy('notification_id', 'desc')
+                                ->get();
+                $view->with('notifications', $notifications);
+            }
+        });
     }
 }

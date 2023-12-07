@@ -1,0 +1,223 @@
+.lp-header {
+    width: 80%;
+    margin: auto;
+    margin-top: 4em;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+}
+
+.lp-header-content {
+    z-index: 1;
+    max-width: 35%;
+    margin-top: -8vw;
+}
+
+.lp-header-image {
+    width:50vw;
+    height: fit-content;
+}
+
+.lp-header-content h1 {
+    color: #454545;
+    font-size: 5vw;
+    width: 9em;
+    margin-bottom: 0.2em;
+}
+
+.lp-header-content h4 {
+    font-size: 1.3vw;
+    width: 23em;
+    margin-bottom: 2em;
+}
+
+.auth-register-button {
+    padding: 0.5em 1.2em;
+    font-size: 1.3vw;
+    font-weight: bold;
+    color: #fff;
+    background-color: #543CE7;
+    border-radius: 0.5em;
+}
+#lp-services {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 5em;
+    position: relative;
+    align-items: center;
+}
+
+.lp-service {
+    width: 86%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.service-text h4 {
+    color: #000;
+    font-size: 2vw;
+    font-weight: bold;
+}
+
+.service-text p {
+    color: #000;
+    font-size: 1.2vw;
+    text-align: justify;
+}
+
+.service-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 64%;
+}
+
+.service-image {
+    height: 15vw;
+    width: 20vw;;
+}
+
+.lp-cta {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 5em;
+    position: relative;
+    align-items: center;
+}
+
+.cta-buttons {
+    width: 30vw;
+    display: flex;
+    margin: auto;
+    margin-top: 4vw;
+    justify-content: space-around;
+}
+
+.learn-more-button {
+    padding: 0.5vw 1.2em;
+    font-size: 1.3vw;
+    font-weight: bold;
+    color: #454545;
+    border: 1px solid #543CE7;
+    border-radius: 0.5em;
+}
+
+#footer {
+    margin-top: 12vw;
+    padding: 3em;
+    background-color: #222222;
+    display: flex;
+    justify-content: space-around;
+}
+
+.footer-left {
+    width: 16vw;
+}
+
+#footer a {
+    color: #dedede;
+    font-size: 1.8vw;
+}
+
+#footer h6 {
+    font-size: 1.1vw;
+    letter-spacing: 4px;
+}
+
+#footer h5 {
+    font-size: 1.5vw;
+}
+
+.footer-middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-middle ul {
+    list-style: none;
+}
+
+.footer-middle li {
+    color: #dedede;
+    font-size: 1.1vw;
+}
+
+.footer-right p {
+    font-size: 1vw;
+    letter-spacing: 2px;
+}
+
+.about-header {
+    width: 76%;
+    margin: auto;
+    margin-top: 4em;
+}
+
+.about-header p {
+    color: #000000;
+    font-size: 1.2vw;
+    letter-spacing: 1.1px;
+    margin-bottom: 1.6em;
+}
+
+@media screen and (max-width: 768px) {
+    .lp-header {
+        width: 90%;
+        margin-top: 10vw;
+    }
+    .lp-header-content h4{
+        width: 42vw;
+        font-size: 140%;
+        letter-spacing: 1.2px;
+        text-align: justify;
+    }
+    .lp-header-content h1 {
+        font-size: 250%;
+        width: 80vw;
+    }
+    .lp-header-image {
+        margin-bottom: -4vw;
+    }
+    .auth-register-button, .service-text h4 , .service-text p, .learn-more-button {
+        font-size: 150%;
+    }
+    #footer a, #footer h5, #footer p, #footer li {
+        font-size: 115%;
+    }
+    #lp-services {
+        width: 90%;
+    }
+    #lp-services h2, .about-header h1 {
+        font-size: 250%;
+    }
+    .lp-service {
+        width: 85%;
+        margin-bottom: 3vw;
+    }
+    .service-text {
+        width: 100%;
+    }
+    .service-image {
+        display: none;
+    }
+    .lp-cta h3 {
+        font-size: 175%;
+    }
+    .cta-buttons {
+        width: 50vw;
+    }
+    .about-header p {
+        font-size: 125%;
+    }
+    #footer h6 {
+        margin-top: 1vw;
+        font-size: 2vw
+    }
+}
