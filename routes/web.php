@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\RecoverPasswordController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,4 +78,10 @@ Route::controller(TaskController::class)->group(function() {
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google-auth');
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
+});
+
+
+Route::controller(AdminController::class)->group(function () {
+    Route::post('admin/ban','banUser')->name('admin.banUser');
+    Route::post('admin/unban','unbanUser')->name('admin.unbanUser');
 });

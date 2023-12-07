@@ -16,8 +16,8 @@ class InviteController extends Controller {
     public function create(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'title' => 'min:15|string|max:100',        // mudar valores
-            'description' => 'min:100|string|max:300' // mudar valores
+            'title' => 'min:15|string|max:100',
+            'description' => 'min:100|string|max:300'
         ]);
 
         if ($validator->fails()) {
