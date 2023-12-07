@@ -4,11 +4,11 @@
         <h5 href="">Nome do Projeto</a>
     </div>
     <div id="task-details">
-        <h5><span class="task-info-span">Task: </span>{{ $task->title }}</h5>
-        <h5><span class="task-info-span">Deadline: </span>{{ $task->finish_date !== null ? $task->finish_date : 'Not defined' }}</h5>
-        <h5><span class="task-info-span">Priority: </span>{{ $task->priority }}</h5>
-        <h5><span class="task-info-span">Assigned: </span>{{ $task->assigned_to !== null ? $task->assigned_to : 'Not defined' }}</h5>
-        <h5><span class="task-info-span">State: </span>{{ $task->state }}</h5>
+        <h5><span class="task-info-span" id="task-details-title">Task: </span>{{ $task->title }}</h5>
+        <h5><span class="task-info-span" id="task-details-finish_date">Deadline: </span>{{ $task->finish_date !== null ? $task->finish_date : 'Not defined' }}</h5>
+        <h5><span class="task-info-span" id="task-details-priority">Priority: </span>{{ $task->priority }}</h5>
+        <h5><span class="task-info-span" id="task-details-assigned_to">Assigned: </span>{{ $task->assigned_to !== null ? $task->assigned_to : 'Not defined' }}</h5>
+        <h5><span class="task-info-span" id="task-details-state">State: </span>{{ $task->state }}</h5>
         <div class="task-details-buttons">
             <button type="button" id="EditTaskModalButton" class="task-details-button">Manage Details</button>
             @include('modal.edit_task', ['task_id' => $task->task_id])

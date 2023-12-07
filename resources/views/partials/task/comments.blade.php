@@ -1,14 +1,31 @@
 <div id="comments">
     <div class="comments-section">
-        <div class="comment">       <!-- estrutura de um comentario -->
-            <img src="" alt="">     <!-- imagem do user -->
-            <p></p>                 <!-- conteudo -->
-        </div>
+        <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
+        @foreach($task->comments as $comment)
+            <div class="comment" id="comment-{{ $comment->comment_id }}">
+            <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
+                <div class="comment-content">
+                    <p>{{ $comment->content }}</p>
+                    <div class="comment-info-buttons">
+                        <h6>{{ $comment->create_date }}</h6>
+                        @if ($comment->edited == true)
+                            <p>Edited</p>
+                        @endif
+                        <div class="comment-buttons">
+                            @if ($comment->comment_by == auth()->user()->id)
+                                <button type="button" class="comment-manage-button">Delete</button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
-    <form class="comment-form" action="{{ route('task.complete') }}" method="POST">
+    <form class="comment-form" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
         @csrf
         <input type="hidden" name="task_id" value="{{ $task->task_id }}">
-        <textarea name="" id="" placeholder="Type comment"></textarea>
-        <button id="submit-comment-button" type="submit" id="SubmitComment">Send</button>
+        <textarea name="content" id="comment-content" placeholder="Type comment" required></textarea>
+        <div class="error" id="contentError"></div>
+        <button id="submit-comment-button" type="submit">Send</button>
     </form>
 </div>
