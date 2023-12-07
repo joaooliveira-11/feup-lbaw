@@ -29,6 +29,23 @@ header {
     color: #303030;
 }
 
+#MainContent {
+    padding-left: 2vw; 
+    width: 80vw;
+
+}
+
+#MainContent>*{
+    display: none;
+}
+
+#MainContent .selected {
+    display: block;
+    border: none;
+}
+
+/*----------------------------  Sidebar ----------------------------*/
+
 #Sidebar {
     width: 20vw;
     background-color: #ffffff;
@@ -37,9 +54,12 @@ header {
     border-radius: 0.7vw;
     height: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-#Sidebar>h1 {
+.sidebar-project-title {
     font-size: 1.6vw;
     margin-bottom: 1.2vw;
     text-align: center;
@@ -72,43 +92,28 @@ header {
     border: #000 solid 0.1vw;
 }
 
-#MainContent {
-    padding-left: 2vw; 
-    width: 80vw;
-
-}
-
-#MainContent>*{
-    display: none;
-}
-
-#MainContent .selected {
-    display: block;
-    border: none;
-}
-
-
 #Sidebar .title-line {
     border-bottom: 1.5px solid #000000;
     margin-bottom: 3.5vw; 
 }
 
-#Sidebar>p {
+#leaveProjectForm button {
+    width: 100%;
+    padding: 0.4vw 1vw;
+    margin-top: 3.5vw;
     color: #fff;
     font-size: 0.9vw;
     background-color: #e83749;
-    padding: 0.4vw 1vw;
-    margin-top: 3.5vw;
     border-radius: 0.7vw;
     text-decoration: none;
     transition: background-color 0.3s;
     display: inline-block;
     text-align: center;
-    
+    transition: color 0.3s ease;
 }
 
-#Sidebar #leaveProject:hover {
-    background-color: #d52536;
+#leaveProjectForm button:hover {
+    color: #000;
 }
 
 #Tasks{
@@ -150,18 +155,55 @@ header {
 }
 
 
+/*----------------------------  Dasboard ----------------------------*/
+
+.dashboard-content {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1.4vw;
+    border-bottom: 1px solid #303030;
+}
+
+.dashboard-left {
+    width: 50%;
+}
+
 #ProjectDeadline, #ProjectDescription , #MembersCounter, #ActiveTasks{
     width: 100%;
     font-size: 1vw;
     color: #303030;
     display: flex;
-    justify-content:flex-start;
+    align-items: baseline;
 }
 
-h2{
-    font-size: 1.5vw;
+#dashboard-project-title {
+    font-size: 1.2vw;
     color: #303030;
+    font-weight: 500;
+}
 
+#dashboard-project-content {
+    font-size: 1vw;
+    color: #303030;
+    font-weight: 500;
+    margin-bottom: 0;
+    margin-left: 0.5vw;
+}
+
+#dashboard-project-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 1.6vw;
+}
+
+.dashboard-project-button {
+    background-color: #303030;
+    border-radius: 0.8vw;
+    color: #fff;
+    font-size: 0.7vw;
+    font-weight: 600;
+    padding: 0.8vw;
+    width: 7.6vw;
 }
 
 #CreateTaskButton {
@@ -227,7 +269,7 @@ h2{
     margin: 0;
 }
 
-#Dashboard p, #Members p {
+#Members p {
     font-size: 1.5vw;
     color: #303030;
     margin-left: 1vw;
