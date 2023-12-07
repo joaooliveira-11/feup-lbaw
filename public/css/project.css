@@ -116,29 +116,6 @@ header {
     color: #000;
 }
 
-#Tasks{
-    grid-column: span 2;
-    grid-row: span 2;
-}
-
-#Tasks ul {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5vw;
-}
-
-#Tasks li {
-    list-style-type: none;
-    background: #303030;
-    color: #ffffff;
-    padding: 10px;
-    margin-bottom: 0.8vw;
-    border-radius: 0.7vw;
-    border: 1px solid #333;
-    font-size: 0.6vw;
-    letter-spacing: 0.02vw;
-}
-
 .TaskTitle {
     font-size: 1.2vw;
 }
@@ -235,23 +212,60 @@ header {
 
 /*----------------------------  Tasks ----------------------------*/
 
-.btn.btn-primary {
-    font-size: 0.8vw;
-    color:#303030;
-    right:0;
+#Tasks ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
-.search-bar {
-    width: 100%;
+#Tasks li {
+    list-style-type: none;
+    background: #303030;
+    color: #ffffff;
+    padding: 10px;
+    margin-bottom: 0.8vw;
+    border-radius: 0.7vw;
+    border: 1px solid #333;
+    font-size: 0.6vw;
+    letter-spacing: 0.02vw;
+}
+
+.task-content {
     display: flex;
-    align-items: center;
-    border-radius: 0.7vw; 
+    flex-direction: column;
+    justify-content: space-around;
 }
 
-.rounded-button {
-    border-radius: 0.7vw; 
+.project-tasks-title {
+    font-size: 1.4vw;
+    font-weight: 500;
 }
 
+.project-members-search-bar {
+    display: flex;
+    height: 3vw;
+}
+#Tasks .members-searchbar {
+    height: 100%;
+    border-radius: 10px 0 0 10px;
+    font-size: 0.7vw;
+}
+
+#Tasks .search-users-button {
+    border-radius: 0 10px 10px 0;
+    height: 100%;
+    background-color: #454545;
+    color: #fff;
+    font-size: 0.8vw;
+}
+
+#tasks-container {
+    padding: 1vw 0;
+    height: 31.5vw;
+    overflow-y: auto;
+}
+#tasks-container ul {
+    padding-left: 0;
+}
 
 /*----------------------------  Members ----------------------------*/
 
@@ -263,6 +277,8 @@ header {
 .project-members-content {
     margin: 0 auto;
     margin-top: 2vw;
+    overflow-y: auto;
+    height: 32vw;
 }
 
 .project-members-ul {
