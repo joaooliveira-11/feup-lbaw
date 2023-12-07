@@ -101,6 +101,14 @@
     transition: ease-in-out 0.2s;
 }
 
+#profilePicture {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
 #Description {
     width: 50%;
 }

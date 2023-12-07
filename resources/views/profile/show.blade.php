@@ -5,12 +5,14 @@
     <div id="ProfilePage">
         <div class="Profile-LeftSection">
             <label for="fileInput">
-                <img id="profilePicture" src="{{ asset(Auth::user()->photo) }}" alt="Profile Picture" style="cursor: pointer;">
-                <form method="POST" action="{{ route('profile.updateImage') }}" enctype="multipart/form-data">
-                    @csrf
-                    <input id="fileInput" name="profilePic" type="file" data-update-url="{{route('profile.updateImage')}}">
-                    <button type="submit">Upload Image</button>
-                </form>
+                <img id="profilePicture" src="{{ asset($user->photo ?? asset('profilePics/user_default.jpg')) }}" alt="Profile Picture" style="cursor: pointer;">
+                    @if(Auth::check() && (Auth::user()->id == $user->id || Auth::user()->isAdmin()))
+                        <form method="POST" action="{{ route('profile.updateImage') }}" enctype="multipart/form-data">
+                            @csrf
+                            <input id="fileInput" name="profilePic" type="file">
+                            <button type="submit">Upload Image</button>
+                        </form>
+                    @endif
             </label>           
             <div class="profile-interests-skills">
                 <div id="Interests">

@@ -19,7 +19,6 @@ class ProjectPolicy{
     }
 
     public function delete(User $user, User $model) {
-        // Only a profile owner can delete it
         return $user->id == $model->id;
     }
 
