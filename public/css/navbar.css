@@ -11,19 +11,10 @@ header .navbar {
     width: 10vw;
     height: auto;
 }
-.navbar-list-ul {
-    height: 100%;
-    width: 50em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    list-style: none;
-}
 
-.navbar-list-ul li, .authnavbar-list-ul li {
+.navbar-list-ul li {
     margin-bottom: 0;
 }
-
 
 .navbar-list-element {
     text-decoration: none;
@@ -120,8 +111,6 @@ button.invite-accept:hover{
 }
 
 
-
-
 @keyframes slideInFromRight {
     0% {
       transform: translateX(100%);
@@ -132,28 +121,37 @@ button.invite-accept:hover{
   }
 
 #index-navbar {
-    padding: 0.2em 0;
+    padding: 0.5vw 0;
     display: flex;
     justify-content: space-around;
     border-bottom: 1ps solid black;
     background-color: #543CE7;
 }
 
-.navbar-register-button, .navbar-login-button {
-    font-size: 1vw;
-    font-weight: bold;
-}
-
 .navbar-register-button {
+    font-size: 1vw;
+    background-color: transparent;
+    font-weight: bold;
     padding: 0.5em 1.5em;
     color: #fff;
     border: 2px solid #E5B405;
-    border-radius: 1em;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar-register-button:hover {
+    color: #000;
+    background-color: #E5B405;
 }
 
 .navbar-login-button {
+    font-size: 1.1vw;
+    font-weight: 700;
     padding: 0.5em 0;
-    color: #DEDEDE;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .navbar-separator {
@@ -167,7 +165,7 @@ button.invite-accept:hover{
     gap: 2em;
 }
 
-.authnavbar-list-ul {
+.navbar-list-ul {
     height: 100%;
     width: 30em;
     display: flex;
@@ -176,21 +174,26 @@ button.invite-accept:hover{
     list-style: none;
 }
 
-.authnavbar-list-element {
+.navbar-list-element{
     text-decoration: none;
     font-size: 1.25vw;
     font-weight: bold;
-    color: #DEDEDE;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+#index-navbar .navbar-list-element:hover, .navbar-login-button:hover {
+    color: #000;
 }
 
 @media screen and (max-width: 768px) {
     .navbar-img {
         width: 18vw;
     }
-    .authnavbar-list-ul {
+    .navbar-list-ul {
         width: 30vw;
     }
-    .authnavbar-list-element {
+    .navbar-list-element {
         font-size: 130%;
     }
     .navbar-login-button, .navbar-separator, .navbar-register-button {

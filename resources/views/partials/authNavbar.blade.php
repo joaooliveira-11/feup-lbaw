@@ -4,10 +4,10 @@
 
     <img class="navbar-img" src="{{ asset('img/TeamSync_white.svg') }}" alt="TeamSync">
     <div class="navbar-list">
-        <ul class="authnavbar-list-ul">
-            <li><a class="authnavbar-list-element" href="">Home</a></li>
-            <li><a class="authnavbar-list-element" href="">About</a></li>
-            <li><a class="authnavbar-list-element" href="">FAQs</a></li>   
+        <ul class="navbar-list-ul">
+            <li><a class="navbar-list-element" href="">Home</a></li>
+            <li><a class="navbar-list-element" href="">About</a></li>
+            <li><a class="navbar-list-element" href="">FAQs</a></li>   
         </ul>
     </div>
     <div class="navbar-auth">

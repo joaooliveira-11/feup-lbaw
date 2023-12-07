@@ -1,12 +1,14 @@
 #ProfilePage {
     display: flex;
+    gap: 3em;
     background-color: rgba(231, 231, 231, 0.6);
-    border-radius: 0.7vw;
-    max-width: 80vw; 
-    height: 38vw;
+    border-radius: 5px 5px 0 0;
+    padding: 1.67vw;
+    max-width: 80vw;
     width: 100%;
-    margin: auto; 
+    margin: 0 auto; 
     margin-top: 4.5vw;
+    color: #303030;
 }
 
 #fileInput {
@@ -113,22 +115,21 @@
 
 #Projects h4 {
     color: #000;
+    font-size: 1.2vw;
     text-align: left;
     font-weight: bold;
     margin-bottom: 1em;
 }
 
-#Projects ul {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.4em;
+.project-link {
+    padding: 1em;
 }
 
 #Projects li {
+    height: 14vh;
     list-style-type: none;
     background: #454545;
-    height: 10em;
-    padding: 1.4em;
+    padding: 1em;
     margin-bottom: 5px;
     border-radius: 5px;
     border: 1px solid #333;
@@ -142,6 +143,19 @@
 
 #ProjectsList .ProjectDescription {
     font-size: 1.2rem;
+}
+
+#ProjectsList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 45vh;
+    overflow-y: auto;
+}
+#ProjectsList .project-element {
+    height: 100%;
+}
+#ProjectsList p {
+    height: 4vh;
 }
 
 #edit-page-content{
