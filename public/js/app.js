@@ -30,6 +30,7 @@ function addEventListeners() {
     
     document.getElementById("notifications-button").addEventListener("click", function(event) {
       document.getElementById("notifications-dropdown").classList.toggle("hide");
+      document.getElementById("new-notification").classList.remove("show");
     });
 
     document.getElementById('leaveProject').addEventListener('click', function(event) {
@@ -403,6 +404,14 @@ function dismiss_notification(notificationId) {
   });
 }
 
+function dismissAll() {
+  const notifications = document.querySelectorAll('.notification');
+  notifications.forEach(notification => {
+    const notification_id = notification.id.substring(1); 
+    dismiss_notification(notification_id);
+  });
+}
+
 function accept_invite(reference_id, notification_id, member_id) {
   sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
     if (this.status >= 200 && this.status < 400) {
@@ -438,7 +447,7 @@ const pusher = new Pusher(pusherAppKey, {
 const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
   if(data.user_id == userId){
-    document.getElementById('notifications-button').style.backgroundColor = "red";
+    document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
   }
 });
@@ -446,7 +455,7 @@ channel.bind('notification-invite', function(data) {
 channel.bind('accepted-invite', function(data) {
   console.log(data);
   //if(data.user_id == userId){
-    document.getElementById('notifications-button').style.backgroundColor = "red";
+    document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
   //}
 });
@@ -513,7 +522,7 @@ function handleRefreshNotifications() {
           else {
               let description_default = document.createElement('p');
               description_default.classList.add('notification-text');
-              description_default.textContent = "default notification";
+              description_default.textContent = "You have a new notification in the project";
               li.appendChild(description_default);
           }
 

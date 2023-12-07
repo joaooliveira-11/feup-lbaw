@@ -34,7 +34,7 @@ header .navbar {
 
 .navbar-logout {
     display: flex;
-    align-items: center;
+    
 }
 
 .navbar-logout-button {
@@ -119,7 +119,27 @@ button.invite-accept:hover{
     transition: 0.3s ease-in-out;
 }
 
+#notifications-button {
+    position: relative;
+    padding: 1vh;
+    background-color: #f8f9fa;
+    border: none;
+    cursor: pointer;
+}
 
+#new-notification {
+    display: hidden;
+}
+
+#new-notification.show {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.3vw 0.3vw;
+    border-radius: 50%;
+    background-color: #e74c3c;
+    color: #f8f9fa
+}
 
 
 @keyframes slideInFromRight {
