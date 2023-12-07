@@ -204,6 +204,13 @@ header {
     font-weight: 600;
     padding: 0.8vw;
     width: 7.6vw;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-project-button:hover {
+    background-color: #543CE7;
+    color: #000;
+    box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
 }
 
 #CreateTaskButton {
@@ -225,6 +232,9 @@ header {
     background-color: #454545;
 }
 
+
+/*----------------------------  Tasks ----------------------------*/
+
 .btn.btn-primary {
     font-size: 0.8vw;
     color:#303030;
@@ -242,37 +252,47 @@ header {
     border-radius: 0.7vw; 
 }
 
-.add-user-list {
-    margin: 0 auto;
+
+/*----------------------------  Members ----------------------------*/
+
+.project-members-title {
+    font-size: 1.4vw;
+    font-weight: 500;
 }
 
-#project-members-content {
-    width: 70%;
+.project-members-content {
     margin: 0 auto;
+    margin-top: 2vw;
 }
 
-#project-members-content ul{
-    column-gap: 1em;
+.project-members-ul {
     list-style: none;
     column-count: 2;
 }
 
-#project-members-content li {
+.project-members-ul a {
+    text-decoration: none;
+}
+
+.project-member {
     border: 1px solid #000;
     border-radius: 0.7vw;
     padding: 1em;
+    width: 24vw;
+    margin-bottom: 1vw;
+    transition: box-shadow 0.3s ease;
 }
 
-#project-members-content p {
-    color: #000;
-    font-size: 2rem;
-    margin: 0;
+.project-member:hover {
+    box-shadow: 0 0 15px rgba(84, 60, 231, 0.4);
 }
 
 #Members p {
     font-size: 1.5vw;
     color: #303030;
     margin-left: 1vw;
-    line-height: normal;
+    margin-bottom: 0;
+    text-decoration: none;
 }
+
 
