@@ -66,27 +66,35 @@ function addEventListeners() {
     }
   }
 
+  function searchProjects(page = 1) {
+    var input = document.getElementById('projectSearch');
+    var filter = input.value;
+    var url = '/search-projects?filter=' + encodeURIComponent(filter) + '&page=' + page;
+    sendAjaxRequest('GET', url, {}, handleSearchProject);
+  }
 
-function searchTasks() {
-      var input = document.getElementById('taskSearch');
-      var filter = input.value; 
-      var project_id = document.getElementById('tasks-container').className;
-      sendAjaxRequest('POST', '/search-tasks', { filter: filter, project_id : project_id}, handleSearchTask);
-}
 
-function handleSearchTask(){
-  if (this.status >= 200 && this.status < 400) {
-    var data = JSON.parse(this.response);
-    var container = document.querySelector('#tasks-container');
-    var ul = document.querySelector('.TasksList');
-    if (!ul) {
-        ul = document.createElement('ul');
-        ul.classList.add('TasksList');
-        container.appendChild(ul);
-    }
-    ul.innerHTML = '';
 
-    data.forEach(task => {
+  function searchTasks() {
+    var input = document.getElementById('taskSearch');
+    var filter = input.value; 
+    var project_id = document.getElementById('tasks-container').className;
+    sendAjaxRequest('POST', '/search-tasks', { filter: filter, project_id : project_id}, handleSearchTask);
+  }
+
+  function handleSearchTask(){
+    if (this.status >= 200 && this.status < 400) {
+      var data = JSON.parse(this.response);
+      var container = document.querySelector('#tasks-container');
+      var ul = document.querySelector('.TasksList');
+      if (!ul) {
+          ul = document.createElement('ul');
+          ul.classList.add('TasksList');
+          container.appendChild(ul);
+      }
+      ul.innerHTML = '';
+
+      data.forEach(task => {
         var li = document.createElement('li');
         li.classList.add('task-item');
 
@@ -118,15 +126,15 @@ function handleSearchTask(){
         li.appendChild(div);
         a.appendChild(li);
         ul.appendChild(a);
-    });
-}
-  else {
-      console.error('Error:', this.status, this.statusText);
+      });
+    }
+    else {
+        console.error('Error:', this.status, this.statusText);
+    }
   }
-}
 
 
-function handleSearchProject() {
+  function handleSearchProject() {
 
     console.log(this.response)
     if (this.status >= 200 && this.status < 400) {
@@ -221,10 +229,10 @@ function handleSearchProject() {
         }
 
       });
-  } else {
+    } else {
       console.error('Error:', this.status, this.statusText);
+    }
   }
-}
 
 
 
@@ -245,7 +253,7 @@ function handleSearchProject() {
             toDisplay.classList.toggle('selected', this.checked);
         }
     });
-});
+  });
 
 
   addEventListeners();

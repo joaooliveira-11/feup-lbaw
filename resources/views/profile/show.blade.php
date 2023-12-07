@@ -13,7 +13,23 @@
                             <button type="submit">Upload Image</button>
                         </form>
                     @endif
-            </label>           
+                </img>
+            </label>
+            <div id="banUserButton">
+            @if(Auth::check() && Auth::user()->isAdmin())
+                @if($user->is_banned)
+                    <form action="{{ route('admin.unbanUser', $user->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-warning">Unban User</button>
+                    </form>
+                @else
+                    <form action="{{ route('admin.banUser', $user->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Ban User</button>
+                    </form>
+                @endif
+            @endif
+            </div>
             <div class="profile-interests-skills">
                 <div id="Interests">
                     <h4>Interests</h4>

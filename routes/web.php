@@ -45,7 +45,7 @@ Route::controller(RecoverPasswordController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
     Route::get('/edit-profile/{id}', 'edit')->where('id', '[0-9]+')->name('edit');
-    Route::put('/profile/{id}', 'update')->name('user.update');
+    Route::put('/profile/{id}', 'update')->where('id', '[0-9]+')->name('user.update');
     Route::post('profile/updateImage','updateImage')->name('profile.updateImage');  
     Route::post('/user-name', 'name');
 });
@@ -80,8 +80,8 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
 
-
+//Admin
 Route::controller(AdminController::class)->group(function () {
-    Route::post('admin/ban','banUser')->name('admin.banUser');
-    Route::post('admin/unban','unbanUser')->name('admin.unbanUser');
+    Route::post('admin/ban/{id}','banUser')->where('id', '[0-9]+')->name('admin.banUser');
+    Route::post('admin/unban/{id}','unbanUser')->where('id', '[0-9]+')->name('admin.unbanUser');
 });
