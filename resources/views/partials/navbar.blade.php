@@ -15,8 +15,8 @@
         @if (Auth::check())
             <a class="navbar-list-element" href="{{ url('/profile', ['id' => Auth::id()]) }}">Profile</a>
 
-            <button id = "notifications-button" ><i class="fa-solid fa-bell"></i></button>
-            <div id = "notifications-dropdown">
+            <button id="notifications-button" ><i class="fa-solid fa-bell"></i></button>
+            <div id="notifications-dropdown">
                 <div>
                     <h1 id = "notifications-title">Notifications</h1>
                     <button class = "dismiss-all-notis" onclick = "dismissAll()">All</button>

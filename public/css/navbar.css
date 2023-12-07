@@ -23,15 +23,17 @@ header .navbar {
     color: #000000;
 }
 
-.navbar-logout {
+.navbar-profile-logout-notifications {
     display: flex;
+    gap: 1vw;
     align-items: center;
 }
 
-.navbar-logout-button {
-    font-size: 2rem;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
+#notifications-button {
+    border-radius: 100px;
+    padding: 0;
+    height: 2.4vw;
+    width: 2.4vw;
 }
 
 #notifications-button:hover {
@@ -154,6 +156,19 @@ button.invite-accept:hover{
     transition: color 0.3s ease;
 }
 
+.navbar-logout-button {
+    font-size: 1.25vw;
+    font-weight: 700;
+    padding: 0.5em 0;
+    color: #000;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navbar-logout-button:hover {
+    color: #FF0000;
+}
+
 .navbar-separator {
     color: #DEDEDE;
     font-size: 2rem;
@@ -167,7 +182,7 @@ button.invite-accept:hover{
 
 .navbar-list-ul {
     height: 100%;
-    width: 30em;
+    width: 26vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
