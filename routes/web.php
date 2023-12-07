@@ -80,6 +80,7 @@ Route::controller(InviteController::class)->group(function() {
 //Notifications
 Route::controller(NotificationController::class)->group(function() {
     Route::post('/dismiss-notification', 'dismiss')->name('notification.dismiss');
+    Route::get('/notifications', 'show')->name('notifications');
 });
 
 Route::controller(GoogleController::class)->group(function () {

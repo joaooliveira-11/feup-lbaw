@@ -422,4 +422,100 @@ function removeFromProject(projectId){
 document.addEventListener("DOMContentLoaded", function () {
   addEventListeners();
 });
+
+
+// pusher notifications
+
+const pusherAppKey = "fb8ef8f4fa10afc9c38c";
+const pusherCluster = "eu";
+
+console.log(pusherAppKey);
+console.log(pusherCluster);
+
+const pusher = new Pusher(pusherAppKey, {
+  cluster: pusherCluster,
+  encrypted: true
+});
+
+const channel = pusher.subscribe('project-invite');
+channel.bind('notification-invite', function(data) {
+  console.log(data);
+  if(data.user_id == userId){
+    document.getElementById('notifications-button').style.backgroundColor = "red";
+    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
+  }
+});
+
+function handleRefreshNotifications() {
+    if(this.status >= 200 && this.status < 400) {
+      var data = JSON.parse(this.response);
+      document.getElementById('notifications-list').innerHTML = "";
+      console.log(data);
+      data.notifications.forEach(notification => {
+        if(!notification.viewed){
+        const li = document.createElement('li');
+        li.classList.add('notification');
+        li.classList.add(notification.type);
+        li.id = 'n' + notification.notification_id;
+        if(notification.type == "invite") {
+            let description_invite = document.createElement('p');
+            description_invite.classList.add('notification-text');
+            description_invite.textContent = "You have been invited to join the project ";
+          
+            const accept = document.createElement('button');
+            accept.classList.add('invite-accept');
+            accept.onclick = function() {
+              accept_invite(notification.project_id, notification.notification_id, notification.emited_to);
+          };
+            const iconaccept = document.createElement('i');
+            iconaccept.classList.add('fa-solid');
+            iconaccept.classList.add('fa-check');
+            accept.appendChild(iconaccept);
+    
+            const deny = document.createElement('button');
+            deny.classList.add('notification-deny');
+            deny.onclick = function() {
+              dismiss_notification(notification.notification_id);
+            };
+            const icondeny = document.createElement('i');
+            icondeny.classList.add('fa-solid');
+            icondeny.classList.add('fa-ban');
+            deny.appendChild(icondeny);
+    
+            li.appendChild(description_invite);
+            li.appendChild(accept);
+            li.appendChild(deny);
+          }
+          else if(notification.type == "acceptedinvite") {
+              let description_accepted = document.createElement('p');
+              description_accepted.classList.add('notification-text');
+              description_accepted.textContent = "Your invite to the project has been accepted";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_accepted);
+              li.appendChild(dismiss);
+          }
+          else {
+              let description_default = document.createElement('p');
+              description_default.classList.add('notification-text');
+              description_default.textContent = "default notification";
+              li.appendChild(description_default);
+          }
+
+        document.getElementById('notifications-list').appendChild(li);
+      }
+      });
+    }
+}
+
   

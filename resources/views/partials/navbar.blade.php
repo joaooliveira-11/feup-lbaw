@@ -1,4 +1,7 @@
 @section('navbar')
+<script>
+    var userId = "{{ Auth::check() ? Auth::id() : 'null' }}";
+</script>
 <div class="navbar">
     <img src="{{ asset('img/TeamSync.svg') }}" alt="TeamSync">
     <div class="navbar-list">
@@ -36,7 +39,7 @@
                                     <li class = "notification" id="n{{ $notification->notification_id}}">
                                             <p class="notification-text">You have been invited to join the project</p>
                                             <button class = "invite-accept" onclick = 'accept_invite({{ $notification->invite->project_invite }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'><i class="fa-solid fa-check"></i></button>
-                                            <button class = "notification-deny" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-ban"></i></i></button>
+                                            <button class = "notification-deny" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-ban"></i></button>
                                     </li>
                                     @break
                                 @case('comment')
