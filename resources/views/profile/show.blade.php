@@ -10,7 +10,7 @@
             </label>           
             <div class="profile-interests-skills">
                 <div id="Interests">
-                    <h4>Interests</h4>
+                    <h4 class="interests-title">Interests</h4>
                     @if ($interests->isEmpty())
                     <p>No interests yet!</p>
                     @else
@@ -20,7 +20,7 @@
                     @endif
                 </div>
                 <div id="Skills">
-                    <h4>Skills</h4>
+                    <h4 class="skills-title">Skills</h4>
                     @if ($skills->isEmpty())
                     <p>No skills yet!</p>
                     @else
@@ -43,7 +43,7 @@
                 </div>
                 
                 <div id="Description">
-                    <h5 class = "label">About me </h5>
+                    <h5 class="profile-info-span">About me </h5>
                     <p>{{ $user->description }}</p>
                 </div>
             </div>
@@ -59,8 +59,8 @@
                     @foreach ($projects as $project)
                         <a href="{{ url('project/' . $project->project_id )}}" class="project-link project-element">
                             <li>
-                                <p id="ProjectTitle">{{ $project->title }}</p>
-                                <p>{{ $project->description }}</p>
+                                <p id="ProjectTitle" class="project-list-title">{{ $project->title }}</p>
+                                <p class="project-list-description">{{ $project->description }}</p>
                             </li> 
                         </a>
                     @endforeach
