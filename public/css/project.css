@@ -317,6 +317,7 @@ header {
 }
 
 .project-member {
+    break-inside: avoid-column;
     border: 1px solid #000;
     border-radius: 0.7vw;
     padding: 1em;
@@ -344,6 +345,7 @@ header {
 }
 
 .kick-member{
-    border: #e83749 solid 0.2vw;
-    border-radius: 50%;
+    border-radius: 0.5vw;
+    margin: 0;
+    padding: 0.5vw;
 }
