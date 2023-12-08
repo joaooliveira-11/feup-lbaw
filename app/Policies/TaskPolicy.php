@@ -31,11 +31,5 @@ class TaskPolicy {
         return $task->assigned_to == $user->id;
     }
 
-/*
-    public function create(User $user, Project $project): bool {
-        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user);
-    }
 
-    DUVIDA PORQUE NAO POSSO USAR ISTO
-*/
 }

@@ -3,12 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\NotificationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +62,7 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
     Route::get('/search-projects', 'search');
     Route::post('/addMember', 'addMember')->name('addmember');
+    Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
 });
 
 //Task
@@ -71,6 +74,12 @@ Route::controller(TaskController::class)->group(function() {
     Route::post('/search-tasks', 'search');
 });
 
+//Comment
+Route::controller(CommentController::class)->group(function() {
+    Route::post('/comment/create', 'create')->name('comment.create');
+    Route::delete('/comment/delete/{id}', 'delete')->name('comment.delete');
+});
+
 //Invite
 Route::controller(InviteController::class)->group(function() {
     Route::post('/invite/create', 'create')->name('invite.create');
@@ -79,6 +88,7 @@ Route::controller(InviteController::class)->group(function() {
 //Notifications
 Route::controller(NotificationController::class)->group(function() {
     Route::post('/dismiss-notification', 'dismiss')->name('notification.dismiss');
+    Route::get('/notifications', 'show')->name('notifications');
 });
 
 Route::controller(GoogleController::class)->group(function () {

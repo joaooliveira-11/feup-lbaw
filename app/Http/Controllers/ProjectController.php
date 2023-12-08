@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Project_Users;
+use App\Models\Invite;
 use Illuminate\Support\Facades\DB;
+use App\Events\AcceptedProjectInvite;
 
 class ProjectController extends Controller {
 
@@ -90,11 +92,13 @@ class ProjectController extends Controller {
 
     public function addMember(Request $request){
         $request->validate([
-            'project_id' => 'required|integer',
+            'reference_id' => 'required|integer',
             'member_id' => 'required|integer',
         ]);
 
-        $project = Project::find($request->get('project_id'));
+        event (new AcceptedProjectInvite());
+        $invite = Invite::find($request->get('reference_id'));
+        $project = Project::find($invite->project_invite);
         $member = User::find($request->get('member_id'));
         
         DB::table('project_users')->insert([
@@ -107,6 +111,20 @@ class ProjectController extends Controller {
             'success' => 'Member added successfully!',
         ]);
         
+    }
+
+    public function leaveProject($id){
+        
+        $project = Project::find($id);
+        $user = User::find(Auth::user()->id);
+
+        Project_Users::where('project_id', $project->project_id)
+                    ->where('user_id', $user->id)
+                    ->delete();
+
+        return response()->json([
+            'success' => 'You left the project successfully!',
+        ]);
     }
     
     

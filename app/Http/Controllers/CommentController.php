@@ -17,25 +17,30 @@ class CommentController extends Controller {
 
     public function create(Request $request){
 
-        $validator = Validator::make($request->all(), [
-            'content' => 'min:15|string|max:100'
-        ]);
-
-        if ($validator->fails()) {
-                return redirect()->route() // mudar a route 
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $comment = new Comment();
         $comment->content = $request->content;
         $comment->create_date = now();
         $comment->comment_by = Auth::user()->id;
-        $comment->task_comment = $request->task_id; // se for passado hidden no forms ou então receber como argumento na função
+        $comment->task_comment = $request->task_id;
         
-        $this->authorize('create', $comment); 
+        //$this->authorize('create', $comment);   falta decidir se dá para comentar em qualquer task independentemente do estado dela
 
-        $comment->save(); 
+        $comment->save();
+
+        return response()->json([
+            'comment_id' => $comment->comment_id,
+            'comment_content' => $comment->content,
+            'comment_create_date' => $comment->create_date,
+        ]);
+    }
+
+    public function delete($id){
+        $comment = Comment::find($id);
+        $this->authorize('delete', $comment); 
+        $comment->delete();
+        return response()->json([
+            'success' => true
+        ]);
     }
 
 }

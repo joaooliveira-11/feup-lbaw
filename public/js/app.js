@@ -11,17 +11,18 @@ function addEventListeners() {
     });
 
     if (document.getElementById("CreateTaskModalButton")) {
-      setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask', {
-        'Dashboard': 'dashboard',
-        'Tasks': 'tasks',
-      });
+      setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask');
     }
     if (document.getElementById("EditTaskModalButton")) {
-      setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask',{
-        'Details': 'details',
-      });
+      setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
     }
-
+    if (document.getElementById("submit-comment-button")) {
+      setupCommentForm("createcommentform");
+    }
+    let commentsSection = document.querySelector('.comments-section');
+    if (commentsSection) {
+    commentsSection.addEventListener('click', handleDeleteComment);
+    }
     if (document.getElementById("AddMemberModalButton")) {
       setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
         'Members': 'members',
@@ -30,11 +31,36 @@ function addEventListeners() {
     
     document.getElementById("notifications-button").addEventListener("click", function(event) {
       document.getElementById("notifications-dropdown").classList.toggle("hide");
+      document.getElementById("new-notification").classList.remove("show");
+    });
+
+    document.getElementById('leaveProject').addEventListener('click', function(event) {
+      event.preventDefault();
+      Swal.fire({
+          title: "Are you sure?",
+          text: "Once left, you will not be able to rejoin the project!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, I am sure!',          
+
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          const urlPath = window.location.pathname;
+          const pathParts = urlPath.split('/');
+          const projectId = pathParts[pathParts.length - 1];
+          console.log(projectId);
+            removeFromProject(projectId);
+            location.reload();
+        }
+      });
     });
 
     setupRadioButtons()
 } 
-  
+
   function encodeForAjax(data) {
     if (data == null) return null;
     return Object.keys(data).map(function(k){
@@ -263,7 +289,7 @@ function setupRadioButtons() {
   });
 }
 
-function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
+function handleCreateTask(modalId, event) {
   event.preventDefault();
 
   if (!isTaskFormValid()) {
@@ -272,12 +298,65 @@ function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
 
   let url = this.getAttribute('action');
   let formData = new FormData(this);
+  let csrfToken = document.querySelector('input[name="_token"]').value;
 
   fetch(url, {
     method: 'POST',
     body: formData,
     headers: {
       'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrfToken,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+
+    let activeTasksCountElement = document.querySelector('#ActiveTasks p');
+    activeTasksCountElement.textContent = parseInt(activeTasksCountElement.textContent) + 1;
+
+    let newTask = document.createElement('li');
+    newTask.innerHTML = `
+      <a href="${data.task_url}" class="project-link task-link">
+        <div>
+          <p class="TaskTitle">${data.task_title}</p>
+          <p>${data.task_description}</p>
+          <p class="FinishDate">Deadline: ${data.task_finish_date !== null ? data.task_finish_date : 'Not defined'}</p>
+        </div>
+      </a>
+    `;
+
+    let tasksList = document.querySelector('.TasksList');
+    if (!tasksList) {
+      tasksList = document.createElement('ul');
+      tasksList.className = 'TasksList';
+      document.getElementById('tasks-container').appendChild(tasksList);
+    }
+    tasksList.appendChild(newTask);
+  })
+  .catch(error => console.error('Error:', error));
+}
+
+
+function handleEditTask(modalId, event) {
+  event.preventDefault();
+
+  if (!isTaskFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  formData.append('_method', 'PATCH');
+  let csrfToken = document.querySelector('input[name="_token"]').value;
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrfToken,
     },
   })
   .then(response => response.json())
@@ -285,10 +364,103 @@ function handleTaskFormSubmit(modalId, viewsToUpdate, event) {
     let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
     modal.hide();
     
-    for (let sectionId in viewsToUpdate) {
-      document.getElementById(sectionId).innerHTML = data[viewsToUpdate[sectionId]];
-    }
-    addEventListeners();
+    let titleNode = document.createTextNode(data.task_title);
+    let finishDate = new Date(data.task_finish_date);
+    let formattedFinishDate = finishDate.getFullYear() + '-' +
+      String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
+      String(finishDate.getDate()).padStart(2, '0') + ' ' +
+      String(finishDate.getHours()).padStart(2, '0') + ':' +
+      String(finishDate.getMinutes()).padStart(2, '0') + ':' +
+      String(finishDate.getSeconds()).padStart(2, '0');
+      let finishDateNode = document.createTextNode(formattedFinishDate);
+      let priorityNode = document.createTextNode(data.task_priority);
+
+    let titleElement = document.getElementById('task-details-title');
+    let finishDateElement = document.getElementById('task-details-finish_date');
+    let priorityElement = document.getElementById('task-details-priority');
+
+    titleElement.parentNode.replaceChild(titleNode, titleElement.nextSibling);
+    finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
+    priorityElement.parentNode.replaceChild(priorityNode, priorityElement.nextSibling);
+    
+    document.querySelector('#task-description p').textContent = data.task_description;
+  })
+  .catch(error => console.error('Error:', error));
+}
+
+function handleCreateComment(event) {
+  event.preventDefault();
+
+  if (!isCommentFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  let csrfToken = document.querySelector('input[name="_token"]').value;
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrfToken,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let commentsSection = document.querySelector('.comments-section');
+
+    let commentDiv = document.createElement('div');
+    commentDiv.className = 'comment';
+    commentDiv.id = 'comment-' + data.comment_id;
+
+    let userImage = document.createElement('img');
+    userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+    userImage.className = 'user-image';
+    userImage.alt = 'Gmail Image';
+    commentDiv.appendChild(userImage);
+
+    let commentContentDiv = document.createElement('div');
+    commentContentDiv.className = 'comment-content';
+
+    let contentP = document.createElement('p');
+    contentP.textContent = data.comment_content;
+    commentContentDiv.appendChild(contentP);
+
+    let commentInfoButtonsDiv = document.createElement('div');
+    commentInfoButtonsDiv.className = 'comment-info-buttons';
+
+    let createDate = new Date(data.comment_create_date);
+    let formattedCreateDate = createDate.getFullYear() + '-' +
+    String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
+    String(createDate.getDate()).padStart(2, '0') + ' ' +
+    String(createDate.getHours()).padStart(2, '0') + ':' +
+    String(createDate.getMinutes()).padStart(2, '0') + ':' +
+    String(createDate.getSeconds()).padStart(2, '0');
+
+    let createDateH6 = document.createElement('h6');
+    createDateH6.textContent = formattedCreateDate;
+    commentInfoButtonsDiv.appendChild(createDateH6);
+
+    let commentButtonsDiv = document.createElement('div');
+    commentButtonsDiv.className = 'comment-buttons';
+    
+    let deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'comment-manage-button';
+    deleteButton.id = 'deletecommentbtn';
+    deleteButton.textContent = 'Delete';
+    commentButtonsDiv.appendChild(deleteButton);
+    
+    commentInfoButtonsDiv.appendChild(commentButtonsDiv);
+
+    commentContentDiv.appendChild(commentInfoButtonsDiv);
+    commentDiv.appendChild(commentContentDiv);
+    commentsSection.appendChild(commentDiv);
+    document.getElementById('comment-content').value = '';
+
+    commentsSection.scrollTop = commentsSection.scrollHeight;
   })
   .catch(error => console.error('Error:', error));
 }
@@ -358,11 +530,40 @@ function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
       document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
       break;
   }
+}
 
+function isCommentFormValid() {
+  let content = document.getElementById("comment-content").value;
+  document.getElementById('contentError').innerHTML = '';
+
+  if (content.length < 1 || content.length > 300) {
+      document.getElementById('content').classList.add('validation-err');
+      document.getElementById('contentError').innerHTML = 'Comment content must be between 1 and 300 characters long';
+      return false;
+  }
+
+  return true;
+}
+
+function setupTaskForm(formId, buttonId, modalId) {
+  let form = document.getElementById(formId);
+  switch (formId) {
+    case 'createtaskform':
+      document.getElementById(formId).addEventListener("submit", handleCreateTask.bind(form, modalId));
+      break;
+    case 'edittaskform':
+      document.getElementById(formId).addEventListener("submit", handleEditTask.bind(form, modalId));
+      break;
+  }
   document.getElementById(buttonId).addEventListener('click', function () {
     let modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
   });
+}
+
+function setupCommentForm(formId) {
+  let form = document.getElementById(formId);
+  document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
 }
 
 function dismiss_notification(notificationId) {
@@ -379,8 +580,16 @@ function dismiss_notification(notificationId) {
   });
 }
 
-function accept_invite(project_id, notification_id, member_id) {
-  sendAjaxRequest('POST', '/addMember', {project_id: project_id, member_id: member_id}, function() {
+function dismissAll() {
+  const notifications = document.querySelectorAll('.notification');
+  notifications.forEach(notification => {
+    const notification_id = notification.id.substring(1); 
+    dismiss_notification(notification_id);
+  });
+}
+
+function accept_invite(reference_id, notification_id, member_id) {
+  sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
     if (this.status >= 200 && this.status < 400) {
       dismiss_notification(notification_id);
     }
@@ -388,7 +597,158 @@ function accept_invite(project_id, notification_id, member_id) {
 
 }
 
+function removeFromProject(projectId){
+  sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
+    if (this.status >= 200 && this.status < 400) {
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   addEventListeners();
+  let commentsSection = document.querySelector(".comments-section");
+  if (commentsSection) {
+    commentsSection.scrollTop = commentsSection.scrollHeight;
+  }
 });
-  
+
+
+
+function handleDeleteComment(event) {
+  if (event.target.classList.contains('comment-manage-button')) {
+    let commentDiv = event.target.closest('.comment');
+    let commentId = commentDiv.id.split('-')[1];
+    let csrfToken = document.querySelector('#csrf-token').value;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch('/comment/delete/' + commentId, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            commentDiv.remove();
+          } 
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }
+    })
+  }
+}
+
+// pusher notifications
+
+const pusherAppKey = "fb8ef8f4fa10afc9c38c";
+const pusherCluster = "eu";
+
+
+const pusher = new Pusher(pusherAppKey, {
+  cluster: pusherCluster,
+  encrypted: true
+});
+
+const channel = pusher.subscribe('notifications');
+channel.bind('notification-invite', function(data) {
+  if(data.user_id == userId){
+    document.getElementById('new-notification').classList.add('show');
+    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
+  }
+});
+
+channel.bind('accepted-invite', function(data) {
+  console.log(data);
+  //if(data.user_id == userId){
+    document.getElementById('new-notification').classList.add('show');
+    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
+  //}
+});
+
+function handleRefreshNotifications() {
+    if(this.status >= 200 && this.status < 400) {
+      var data = JSON.parse(this.response);
+      document.getElementById('notifications-list').innerHTML = "";
+      console.log(data);
+      data.notifications.forEach(notification => {
+        if(!notification.viewed){
+        const li = document.createElement('li');
+        li.classList.add('notification');
+        li.classList.add(notification.type);
+        li.id = 'n' + notification.notification_id;
+        if(notification.type == "invite") {
+            let description_invite = document.createElement('p');
+            description_invite.classList.add('notification-text');
+            description_invite.textContent = "You have been invited to join the project ";
+          
+            const accept = document.createElement('button');
+            accept.classList.add('invite-accept');
+            accept.onclick = function() {
+              accept_invite(notification.reference_id, notification.notification_id, notification.emited_to);
+          };
+            const iconaccept = document.createElement('i');
+            iconaccept.classList.add('fa-solid');
+            iconaccept.classList.add('fa-check');
+            accept.appendChild(iconaccept);
+    
+            const deny = document.createElement('button');
+            deny.classList.add('notification-deny');
+            deny.onclick = function() {
+              dismiss_notification(notification.notification_id);
+            };
+            const icondeny = document.createElement('i');
+            icondeny.classList.add('fa-solid');
+            icondeny.classList.add('fa-ban');
+            deny.appendChild(icondeny);
+    
+            li.appendChild(description_invite);
+            li.appendChild(accept);
+            li.appendChild(deny);
+          }
+          else if(notification.type == "acceptedinvite") {
+              let description_accepted = document.createElement('p');
+              description_accepted.classList.add('notification-text');
+              description_accepted.textContent = "Your invite to the project has been accepted";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_accepted);
+              li.appendChild(dismiss);
+          }
+          else {
+              let description_default = document.createElement('p');
+              description_default.classList.add('notification-text');
+              description_default.textContent = "You have a new notification in the project";
+              li.appendChild(description_default);
+          }
+
+        document.getElementById('notifications-list').appendChild(li);
+      }
+      });
+    }
+}
