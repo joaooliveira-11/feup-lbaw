@@ -7,12 +7,12 @@
         <div class="lp-header-content">
             <h1>Where Collaboration Meets Inovation</h1>
             <h4>Explore, create, and collaborate seamlessly on a diverse range of projects, fostering innovation and collective achievement with ease</h3>
-            <a class="auth-register-button" href="{{ url('/register') }}">Get Started</a>
+            <a class="lp-button" href="{{ url('/register') }}">Get Started</a>
         </div>
         <img class="lp-header-image" src="{{ asset('img/lp_header_img.png') }}" alt="Programming">
     </div>
     <div id="lp-services">
-        <h2>What We Offer</h2>
+        <h2 class="lp-section-title">What We Offer</h2>
         <div class="lp-service">
             <div class="service-text">
                 <h4>Create Any Project You Imagine</h4>
@@ -36,13 +36,14 @@
         </div>
     </div>
     <div class="lp-cta">
-        <h3>Are you ready to take your work to the <span>next level?</span></h3>
+        <h2 class="lp-section-title">Are you ready to take your work to the <span>next level?</span></h2>
         <div class="cta-buttons">
-            <a class="auth-register-button" href="{{ url('/register') }}">Get Started</a>
+            <a class="lp-button" href="{{ url('/register') }}">Get Started</a>
             <a class="learn-more-button" href="{{ url('/register') }}">Learn More</a>
         </div>
     </div>
-    <div id="footer">
+</div>
+<div id="footer">
         <div class="footer-left">
             <a class="footer-teamsync-button" href="{{ url('/register') }}">TeamSync</a>
             <h6>Where collaboration meets inovation</h6>
@@ -62,8 +63,5 @@
             <p>Rua Olivia Rodrigo 123</p>
         </div>
     </div>
-
-
-</div>
 
 @endsection
