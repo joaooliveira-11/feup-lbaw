@@ -58,6 +58,35 @@ function addEventListeners() {
       });
     });
 
+    const members = document.getElementsByClassName('kick-member');
+    for (let i = 0; i < members.length; i++) {
+      members[i].addEventListener('click', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Once kicked, the member will not be able to rejoin the project!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, I am sure!',          
+  
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            const urlPath = window.location.pathname;
+            const pathParts = urlPath.split('/');
+            const projectId = pathParts[pathParts.length - 1];
+            const memberId = document.querySelectorAll('.user-id')[i].id.substring(4);
+            console.log("Project: "+projectId);
+            console.log("Member: "+ memberId);
+            kickFromProject(memberId, projectId);
+            location.reload();
+          }
+        });
+      });
+  }
+
     setupRadioButtons()
 } 
 
@@ -602,6 +631,13 @@ function accept_invite(reference_id, notification_id, member_id) {
 
 function removeFromProject(projectId){
   sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
+    if (this.status >= 200 && this.status < 400) {
+    }
+  });
+}
+
+function kickFromProject(memberId, projectId){
+  sendAjaxRequest('DELETE', '/kickMember/'+memberId+'/'+projectId, {}, function() {
     if (this.status >= 200 && this.status < 400) {
     }
   });

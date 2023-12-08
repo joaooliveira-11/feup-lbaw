@@ -5,7 +5,16 @@
             @foreach($project->members() as $user)
             <a href="{{ route('show', ['id' => $user->id]) }}">
                 <li class="project-member">
-                    <p>{{ $user->name }} - <em>{{ '@' . $user->username }}</em></p>
+                    <p id="user{{ $user->id}}" class= "user-id" >{{ $user->name }} - <em>{{ '@' . $user->username }}</em> 
+                    @if (Auth::user()->id == $project->project_coordinator)
+                    <button class="kick-member" ><i class="fa-solid fa-user-xmark"></i></button>
+                    @endif
+                    @if($user->id == $project->project_coordinator) 
+                    <p id="coordinator-tag">Coordinator</p>
+                    @endif</p>
+                    @if (Auth::user()->id == $user->id)
+                    <p id="you-tag">You</p>
+                    @endif
                 </li>
             </a>
             @endforeach
