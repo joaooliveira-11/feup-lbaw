@@ -31,6 +31,7 @@ class CommentController extends Controller {
             'comment_id' => $comment->comment_id,
             'comment_content' => $comment->content,
             'comment_create_date' => $comment->create_date,
+            'comment_comment_by' => Auth::user()->username,
         ]);
     }
 
