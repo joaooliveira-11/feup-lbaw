@@ -65,6 +65,8 @@
 .lp-section-title {
     font-size: 1.6vw;
     font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.6vw;
 }
 
 .lp-service {
@@ -77,7 +79,7 @@
 
 .service-text h4 {
     color: #000;
-    font-size: 1.8vw;
+    font-size: 1.3vw;
     font-weight: bold;
 }
 
@@ -187,8 +189,12 @@
     margin-bottom: 0;
 }
 
+#about-wrapper {
+    margin-top: 6vw;
+}
+
 .about-header {
-    width: 76%;
+    width: 80%;
     margin: auto;
     margin-top: 4em;
 }
@@ -197,7 +203,10 @@
     color: #000000;
     font-size: 1.2vw;
     letter-spacing: 1.1px;
+    margin: auto;
     margin-bottom: 1.6em;
+    width: 60vw;
+    text-align: center;
 }
 
 @media screen and (max-width: 768px) {

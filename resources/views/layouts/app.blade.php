@@ -38,11 +38,13 @@
             <header>
                 @if(!Request::is('login') && !Request::is('register'))
                     @if(Auth::check())
-                        @include('partials.navbar')
-                        @yield('navbar')
-                    @else
-                        @include('partials.authNavbar')
-                        @yield('authNavbar')
+                        @if(Request::is('index'))
+                            @include('partials.authNavbar')
+                            @yield('authNavbar')
+                        @else
+                            @include('partials.navbar')
+                            @yield('navbar')
+                        @endif
                     @endif
                 @endif
             </header>
