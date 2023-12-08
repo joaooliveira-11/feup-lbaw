@@ -33,4 +33,13 @@ class MessageController extends Controller {
         ]);
     }
 
+    public function delete($id){
+        $message = Message::find($id);
+        $this->authorize('delete', $message); 
+        $message->delete();
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
 } 

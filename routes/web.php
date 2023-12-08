@@ -89,6 +89,7 @@ Route::controller(InviteController::class)->group(function() {
 //Message
 Route::controller(MessageController::class)->group(function() {
     Route::post('/message/create', 'create')->name('message.create');
+    Route::delete('/message/delete/{id}', 'delete')->name('message.delete');
 });	
 
 //Notifications

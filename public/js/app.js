@@ -28,12 +28,10 @@ function addEventListeners() {
     commentsSection.addEventListener('click', handleDeleteComment);
     }
 
-    /*
     let chatSection = document.querySelector('.chat-section');
     if (chatSection) {
       chatSection.addEventListener('click', handleDeleteMessage);
     }
-    */
 
     if (document.getElementById("AddMemberModalButton")) {
       setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
@@ -301,7 +299,7 @@ function setupRadioButtons() {
         let chatSection = document.querySelector('.chat-section');
         chatSection.scrollTop = chatSection.scrollHeight;
     }
-    
+
     });
   });
 }
@@ -751,6 +749,46 @@ function handleDeleteComment(event) {
         .then(data => {
           if (data.success) {
             commentDiv.remove();
+          } 
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }
+    })
+  }
+}
+
+function handleDeleteMessage(event) {
+  if (event.target.classList.contains('message-manage-button')) {
+    let messageDiv = event.target.closest('.message');
+    let messageId = messageDiv.id.split('-')[1];
+    let csrfToken = document.querySelector('#csrf-token').value;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch('/message/delete/' + messageId, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            messageDiv.remove();
           } 
         })
         .catch((error) => {
