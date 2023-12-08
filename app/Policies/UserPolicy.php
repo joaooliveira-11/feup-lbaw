@@ -13,5 +13,9 @@ class UserPolicy {
     public function update(User $user) {
         return $user->id === Auth::id() || $user->isAdmin();
     }
+
+    public function ban(User $user, User $model) {
+        return $user->isAdmin() && !$model->isAdmin();
+    }
     
 }

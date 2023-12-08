@@ -45,6 +45,7 @@ class Project extends Model
         })
         ->where('id', '!=', $this->project_coordinator)
         ->where('is_admin', '=', false)
+        ->where('is_banned', '=', false)
         ->get();
     }
 
@@ -56,8 +57,7 @@ class Project extends Model
             return self::whereIn('project_id', $userProjectIds)
                        ->orWhere('is_public', true);
         }
-    }
-    
+    }  
 
     public function tasks(): HasMany {
         return $this->hasMany(Task::class, 'project_task');

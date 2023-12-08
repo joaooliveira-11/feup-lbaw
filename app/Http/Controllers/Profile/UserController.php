@@ -125,6 +125,26 @@ class UserController extends Controller {
         $user->save();
         return redirect("profile/".$user->id );
     }
+
+    public function deleteUser(int $id) {
+        $user = User::find($id);
+
+        $user->projects()->detach();
+
+        $deletedName = 'deletedUser' . $user->id;
+        $deletedUsername = 'deletedUser_' . $user->id;
+        $deletedEmail = 'deletedUser_' . $user->id . '@email.com';
+        $deletedDescription = 'This user has been deleted';
+
+        $user->name = $deletedName;
+        $user->username = $deletedUsername;
+        $user->email = $deletedEmail;
+        $user->description = $deletedDescription;
+
+        $user->save();
+
+        return redirect()->back();
+    }
     
 }
 ?>

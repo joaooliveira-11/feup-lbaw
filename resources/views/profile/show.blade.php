@@ -16,7 +16,7 @@
                 </img>
             </label>
             <div id="banUserButton">
-            @if(Auth::check() && Auth::user()->isAdmin())
+            @if(Auth::check() && Auth::user()->isAdmin() && Auth::user()->id !== $user->id)
                 @if($user->is_banned)
                     <form action="{{ route('admin.unbanUser', $user->id) }}" method="POST">
                         @csrf
@@ -30,6 +30,16 @@
                 @endif
             @endif
             </div>
+
+            <div id="deleteButton">
+            @if(Auth::check() && Auth::user()->isAdmin() && Auth::user()->id !== $user->id)
+                <form action="{{ route('deleteUser', $user->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-warning">Delete</button>
+                </form>
+            @endif
+            </div>
+
             <div class="profile-interests-skills">
                 <div id="Interests">
                     <h4>Interests</h4>
