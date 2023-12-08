@@ -97,7 +97,7 @@ header {
     margin-bottom: 3.5vw; 
 }
 
-#leaveProjectForm button {
+#leaveProject{
     width: 100%;
     padding: 0.4vw 1vw;
     margin-top: 3.5vw;
@@ -112,7 +112,7 @@ header {
     transition: color 0.3s ease;
 }
 
-#leaveProjectForm button:hover {
+#leaveProject button:hover {
     color: #000;
 }
 
@@ -241,8 +241,9 @@ header {
 }
 
 .project-members-search-bar {
-    display: flex;
-    height: 3vw;
+    display: grid;
+    grid-template-columns: 1.2fr 0.2fr;
+    height: 5vw;
 }
 #Tasks .members-searchbar {
     height: 100%;
@@ -251,6 +252,7 @@ header {
 }
 
 #Tasks .search-users-button {
+
     border-radius: 0 10px 10px 0;
     height: 100%;
     background-color: #454545;
@@ -267,6 +269,30 @@ header {
     padding-left: 0;
 }
 
+#status-filter {
+    grid-row: 2;
+    grid-column: 1;
+    display: flex;
+    justify-content:space-between;
+    margin-top: 1.2vw;
+}
+
+#status-filter label {
+    font-size: 0.8vw;
+    color: #303030;
+    margin: auto;
+}
+
+#status-filter  select {
+    font-size: 0.8vw;
+    color: #303030;
+    margin: auto;
+    border-radius: 0.5vw;
+    margin-right: 8vw;
+    border: #303030 solid 1px;
+    padding: 0;
+    height: 4vh;
+}
 /*----------------------------  Members ----------------------------*/
 
 .project-members-title {

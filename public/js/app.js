@@ -110,10 +110,12 @@ function addEventListeners() {
 
 
 function searchTasks() {
-      var input = document.getElementById('taskSearch');
-      var filter = input.value; 
-      var project_id = document.getElementById('tasks-container').className;
-      sendAjaxRequest('POST', '/search-tasks', { filter: filter, project_id : project_id}, handleSearchTask);
+      const input = document.getElementById('taskSearch');
+      const filter = input.value; 
+      const project_id = document.getElementById('tasks-container').className;
+      const statusFilter = document.getElementById('status-selected').value;
+      const priorityFilter = document.getElementById('priority-selected').value;
+      sendAjaxRequest('POST', '/search-tasks', { filter: filter, project_id : project_id, statusFilter: statusFilter, priorityFilter: priorityFilter}, handleSearchTask);
 }
 
 function handleSearchTask(){
@@ -137,6 +139,7 @@ function handleSearchTask(){
         var a = document.createElement('a');
         a.href = '/task/' + task.task_id;
         a.classList.add('task-link');
+        a.classList.add('project-link');
 
         var title = document.createElement('p');
         title.classList.add('TaskTitle');
