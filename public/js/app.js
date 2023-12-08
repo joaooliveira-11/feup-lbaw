@@ -719,10 +719,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-function handleDeleteComment(event) {
-  if (event.target.classList.contains('comment-manage-button')) {
-    let commentDiv = event.target.closest('.comment');
-    let commentId = commentDiv.id.split('-')[1];
+function handleDelete(event, buttonClass, itemClass, deleteUrl) {
+  if (event.target.classList.contains(buttonClass)) {
+    let itemDiv = event.target.closest('.' + itemClass);
+    let itemId = itemDiv.id.split('-')[1];
     let csrfToken = document.querySelector('#csrf-token').value;
     Swal.fire({
       title: 'Are you sure?',
@@ -734,7 +734,7 @@ function handleDeleteComment(event) {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('/comment/delete/' + commentId, {
+        fetch(deleteUrl + itemId, {
           method: 'DELETE',
           headers: {
             'X-CSRF-TOKEN': csrfToken
@@ -748,7 +748,7 @@ function handleDeleteComment(event) {
         })
         .then(data => {
           if (data.success) {
-            commentDiv.remove();
+            itemDiv.remove();
           } 
         })
         .catch((error) => {
@@ -759,42 +759,10 @@ function handleDeleteComment(event) {
   }
 }
 
+function handleDeleteComment(event) {
+  handleDelete(event, 'comment-manage-button', 'comment', '/comment/delete/');
+}
+
 function handleDeleteMessage(event) {
-  if (event.target.classList.contains('message-manage-button')) {
-    let messageDiv = event.target.closest('.message');
-    let messageId = messageDiv.id.split('-')[1];
-    let csrfToken = document.querySelector('#csrf-token').value;
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch('/message/delete/' + messageId, {
-          method: 'DELETE',
-          headers: {
-            'X-CSRF-TOKEN': csrfToken
-          }
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.success) {
-            messageDiv.remove();
-          } 
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      }
-    })
-  }
+  handleDelete(event, 'message-manage-button', 'message', '/message/delete/');
 }
