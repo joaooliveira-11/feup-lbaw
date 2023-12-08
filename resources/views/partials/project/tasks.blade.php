@@ -4,6 +4,23 @@
         <div class="project-members-search-bar">
             <input type="text" id="taskSearch" class="members-searchbar"placeholder="Search tasks..." oninput="searchTasks()">
             <button class="search-users-button" onclick="searchTasks()">Search</button>
+            <form id = "status-filter">
+                <label for="status-selected">Status:</label>
+                <select id="status-selected" onchange="searchTasks()">
+                    <option value="all">All</option>
+                    <option value="open">Open</option>
+                    <option value="assigned">Assigned</option>
+                    <option value="closed">Closed</option>
+                    <option value="archived">Archived</option>
+                </select>
+                <label for="priority-selected">Priority:</label>
+                <select id="priority-selected" onchange="searchTasks()">
+                    <option value="all">All</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </form>
         </div>
         <div id="tasks-container" class= "{{$project->project_id}}">
             @if($project->tasks->count() > 0)
