@@ -3,12 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
-use App\Http\Controllers\Auth\RecoverPasswordController;
+use App\Http\Controllers\InviteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +26,14 @@ use App\Http\Controllers\AdminController;
 */
 
 // Home
-Route::redirect('/', '/login');
+Route::redirect('/', '/index');
+Route::get('/index', function () {
+    return view('pages.index');
+})->name('index');
+
+Route::get('/about', function () {
+    return view('pages.about');
+})->name('about');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -36,17 +47,11 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-Route::controller(RecoverPasswordController::class)->group(function () {
-    Route::post('auth/recover', 'request')->name('password.email');
-    Route::get('auth/recover-page', 'show')->name('password.reset');
-});
-
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
     Route::get('/edit-profile/{id}', 'edit')->where('id', '[0-9]+')->name('edit');
-    Route::put('/profile/{id}', 'update')->where('id', '[0-9]+')->name('user.update');
-    Route::post('profile/updateImage','updateImage')->name('profile.updateImage');  
+    Route::put('/profile/{id}', 'update')->name('user.update');
     Route::post('/user-name', 'name');
 });
 
@@ -58,23 +63,36 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
     Route::get('/search-projects', 'search');
-    Route::get('/project/{project_id}/adduser', 'showNonProjectMembers')->where(['project_id' => '[0-9]+'])->name('nonprojectmembers');
-    Route::post('/project/add-user', 'addUser')->name('adduser');
+    Route::post('/addMember', 'addMember')->name('addmember');
+    Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
 });
 
 //Task
 Route::controller(TaskController::class)->group(function() {
-    Route::get('/project/{project_id}/task/create', 'createTaskForm')->where(['project_id' => '[0-9]+'])->name('createtaskform');
-    Route::post('/task/create', 'create')->name('createtask');
+    Route::post('/task/create', 'create')->name('task.create');
     Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
-    Route::get('/task/{task_id}/edit', 'editDetailsForm')->name('editDetailsForm');
-    Route::patch('/task/edit', 'updateDetails')->name('updatetaskdetails');
-    Route::patch('/task/complete', 'completetask')->name('completeassignedtask');
+    Route::patch('/task/edit', 'updatedetails')->name('task.update_details');
+    Route::patch('/task/complete', 'completetask')->name('task.complete');
     Route::post('/search-tasks', 'search');
 });
 
+//Comment
+Route::controller(CommentController::class)->group(function() {
+    Route::post('/comment/create', 'create')->name('comment.create');
+    Route::delete('/comment/delete/{id}', 'delete')->name('comment.delete');
+});
 
-// OAuth
+//Invite
+Route::controller(InviteController::class)->group(function() {
+    Route::post('/invite/create', 'create')->name('invite.create');
+});	
+
+//Notifications
+Route::controller(NotificationController::class)->group(function() {
+    Route::post('/dismiss-notification', 'dismiss')->name('notification.dismiss');
+    Route::get('/notifications', 'show')->name('notifications');
+});
+
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google-auth');
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');

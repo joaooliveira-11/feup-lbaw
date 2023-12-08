@@ -20,27 +20,39 @@
         <link href="{{ url('css/createTask.css') }}" rel="stylesheet">
         <link href="{{ url('css/allProjects.css') }}" rel="stylesheet">
         <link href="{{ url('css/createProject.css') }}" rel="stylesheet">
+        <link href="{{ url('css/index.css') }}" rel="stylesheet">
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+        <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/70585eb28b.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <main>
             <header>
                 @if(!Request::is('login') && !Request::is('register'))
-                    @include('partials.navbar')
+                    @if(Auth::check())
+                        @include('partials.navbar')
+                        @yield('navbar')
+                    @else
+                        @include('partials.authNavbar')
+                        @yield('authNavbar')
+                    @endif
                 @endif
-                @yield('navbar')
             </header>
 
             <section id="content">
                 @yield('content')
             </section>
         </main>
+        @include('sweetalert::alert')
     </body>
 </html>
 

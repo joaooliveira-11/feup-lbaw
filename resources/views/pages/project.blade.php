@@ -1,23 +1,15 @@
 @extends('layouts.app')
 
-@include('project.dashboard')
-@include('project.members')
-@include('project.chat')
-@include('project.tasks')
-@include('project.sidebar')
-
 @section('content')
-
 <div id="ProjectPage">
     <div id="ProjectInfo">
-        @yield('projectSidebar')
+        @include('partials.project.sidebar')
         <div id="MainContent">
-        @yield('projectDashboard')
-        @yield('projectMembers')
-        @yield('projectChat')
-        @yield('tasks')
+        @include('partials.project.dashboard')
+        @include('partials.project.members')
+        @include('partials.project.chat')
+        @include('partials.project.tasks')
         </div>
     </div>
 </div>
-
 @endsection

@@ -1252,7 +1252,11 @@ INSERT INTO comment (content, create_date, edited, comment_by, task_comment) VAL
 ('Looking forward to seeing the content!', '2022-10-19 09:30:00', TRUE, 14, 39),
 ('Tool implementation is on track.', '2022-10-19 13:55:00', FALSE, 15, 41), 
 ('Keep up the good work!', '2022-10-20 14:25:00', FALSE, 10, 46),
-('Let me know if you need assistance.', '2022-10-21 15:30:00', FALSE, 18, 51);
+('Let me know if you need assistance.', '2022-10-21 15:30:00', FALSE, 18, 51),
+('Let me know if you need assistance.', '2022-10-21 15:30:00', FALSE, 18, 32),
+('Let me know if you need assistance.', '2022-10-21 15:30:00', FALSE, 18, 32),
+('Let me know if you need assistance.', '2022-10-21 15:30:00', FALSE, 18, 32),
+('Let me know if you need assistance.', '2022-10-21 15:30:00', FALSE, 18, 32);
 
 
 INSERT INTO invite (title, description, create_date, invited_by, invited_to, project_invite) VALUES

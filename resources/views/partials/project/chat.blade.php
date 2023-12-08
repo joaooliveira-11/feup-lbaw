@@ -1,5 +1,3 @@
-@section('projectChat')
-
 <div id="Chat">
     <div class="chat-messages">
         <!-- Display chat messages here -->
@@ -9,5 +7,3 @@
         <button>Send</button>
     </div>
 </div>
-
-@endsection

@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Invite;
+use App\Events\ProjectInvite;
 
 class InviteController extends Controller {
 
@@ -15,28 +16,21 @@ class InviteController extends Controller {
 
     public function create(Request $request){
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'min:15|string|max:100',
-            'description' => 'min:100|string|max:300'
-        ]);
-
-        if ($validator->fails()) {
-                return redirect()->route() // mudar a route 
-                ->withErrors($validator)
-                ->withInput();
-        }
-
+        event(new ProjectInvite((int) $request->project_id, (int) $request->member_id));
         $invite = new Invite();
-        $invite->title = $request->title;
-        $invite->description = $request->description;
+        $invite->title = "Project Invite";
+        $invite->description = "This is an invite to join a project.";
         $invite->create_date = now();
         $invite->invited_by = Auth::user()->id;
-        $invite->invited_to = $request->invited_to;
-        $invite->project_invite = $request->project_id; // se for passado hidden no forms ou então receber como argumento na função
-        
-        $this->authorize('create', $invite); 
-
+        $invite->invited_to = (int) $request->member_id;
+        $invite->project_invite = (int) $request->project_id; 
+        //$this->authorize('create', $invite); 
         $invite->save(); 
+
+        return response()->json([
+            'invite' => $invite,
+            'success' => 'Invite created successfully!',
+        ]);
     }
 
 }

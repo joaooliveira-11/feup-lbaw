@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\View\View;
 use App\Models\User;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
 {
@@ -49,10 +50,8 @@ class LoginController extends Controller
             return redirect()->route('show', ['id' => $user->id])
                 ->withSuccess('You have successfully logged in!');
         }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        Alert::error('Error', 'Invalid credentials!');
+        return back()->withInput($request->only('email'));
     }
 
 

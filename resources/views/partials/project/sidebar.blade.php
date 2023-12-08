@@ -1,5 +1,3 @@
-@section('projectSidebar')
-
 <div id="Sidebar">
     <h1>{{ $project->title }}</h1> 
     <form id="projectForm">
@@ -20,7 +18,7 @@
         Members
     </label>
     </form>
-    <p>Leave Project</a>
+    @if($project->is_member(auth()->user()))
+        <button id="leaveProject">Leave Project</button>
+    @endif
 </div>
-
-@endsection

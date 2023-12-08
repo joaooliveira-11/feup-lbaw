@@ -1,5 +1,3 @@
-@section('tasks')
-
 <div id="Tasks">
     <p class="TaskLabel">All Tasks:</p>
 
@@ -11,7 +9,7 @@
     @if($project->tasks->count() > 0)
         <ul class="TasksList">
             @foreach($project->tasks as $task)
-                <a href="{{ url('task/' . $task->task_id )}}" class="project-link task-link">
+                <a href="{{ url('task/' . $task->task_id )}}" class="task-link">
                     <li>
                         <div>
                             <p class="TaskTitle">{{ $task->title }}</p>
@@ -22,10 +20,9 @@
                 </a>
             @endforeach
         </ul>
-        </div>
+    </div>
     @else
         <p>No tasks found for this project.</p>
     @endif
 </div>
 
-@endsection

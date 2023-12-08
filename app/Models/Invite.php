@@ -16,4 +16,13 @@ class Invite extends Model
     public $timestamps  = false;
     protected $table = 'invite';
     protected $primaryKey = 'invite_id';
+
+    protected $fillable = [
+        'title',
+        'description',
+        'create_date',
+        'invited_by',
+        'invited_to',
+        'project_invite'
+    ];
 }

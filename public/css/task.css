@@ -1,3 +1,12 @@
+::-webkit-scrollbar {
+    width: 0.5vw;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #303030;
+    border-radius: 10px;
+}
+
 #TaskContent {
     width: 70%;
 }
@@ -45,4 +54,172 @@
 .editTaskDetailsButton {
     display: inline-block;
     margin: auto;
+}
+
+.task-left-section {
+    width: 35%;
+    position: relative;
+}
+
+.task-left-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 0.07vw;
+    background-color: #303030;
+    border-radius: 10px;
+}
+
+.go-back-section {
+    display: flex;
+    gap: 0.6vw;
+}
+
+.go-back-section h5 {
+    color: #000;
+    font-size: 1.1vw;
+    font-weight: bold;
+    margin: 0;
+}
+
+.task-info-span {
+    color: #303030;
+    font-size: 1.2vw;
+    font-weight: bold;
+}
+
+#task-details {
+    margin-top: 1.4vw;
+}
+
+#task-details h5 {
+    margin-top: 0.7vw;
+    color: #000000;
+    font-size: 1.1vw;
+}
+
+.task-details-buttons {
+    margin-top: 2vw;
+    width: 24vw;
+    display: flex;
+    justify-content: space-between;
+}
+
+#task-details .task-details-buttons .task-details-button {
+    margin: 0;
+    background-color: #303030;
+    width: 11vw;
+    color: #FFF;
+    font-size: 0.8vw;
+    border: none;
+    border-radius: 6px;
+}
+
+#task-description {
+    margin-top: 1.8vw;
+    width: 90%;
+}
+
+#task-description h5 {
+    font-size: 1.4vw;
+}
+
+#task-description p {
+    color: #000;
+    letter-spacing: 0.2px;
+    font-size: 1vw;
+    text-align: justify;
+}
+
+#comments {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+}
+
+.comments-section {
+    height: 69vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1vw 0 2vw 0;
+}
+
+.comments-section::-webkit-scrollbar {
+    display: none;
+}
+
+.comment-form {
+    display: flex;
+    margin: 0;
+    height: 3vw;
+    margin-top: 2vh;
+}
+
+.comment-form textarea {
+    resize: none;
+    min-height: 3vw;
+    border-radius: 5px 0 0 5px;
+    font-size: 0.8vw;
+}
+
+#submit-comment-button {
+    height: 100%;
+    background-color: #3C5EE7;
+    color: white;
+    font-size: 0.8vw;
+    border-radius: 0 5px 5px 0;
+}
+
+.comment {
+    display: flex;
+    width: 40vw;
+    margin-top: 1vw;
+}
+
+.user-image {
+    height: 4vw;
+    width: 4vw;
+    border-radius: 100px;
+}
+
+.comment-content {
+    width: 70%;
+}
+
+.comment-content p {
+    margin: 0.4vw 0 0 0;
+    padding: 0.5vw 1vw;
+    background-color: #FFF;
+    color: #303030;
+    font-size: 1vw;
+    border-radius: 5px;
+}
+
+.comment-content h6 {
+    color: #000;
+    font-size: 0.7vw;
+}
+
+.comment-info-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-buttons {
+    display: flex;
+    gap: 1.2vw;
+}
+
+.comment-manage-button {
+    padding: 0;
+    background-color: transparent;
+    height: 1.2vw;
+    font-size: 0.7vw;
+}
+
+.comment-manage-button:hover {
+    background-color: transparent;
+    color: #303030;
 }
