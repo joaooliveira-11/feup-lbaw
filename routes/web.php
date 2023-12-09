@@ -52,14 +52,14 @@ Route::controller(UserController::class)->group(function () {
 
 //Project
 Route::controller(ProjectController::class)->group(function() {
-    Route::get('/project/create','showCreateForm')->name('createproject');
+    Route::get('/project/create','showCreateForm')->name('createproject'); // vai deixar de existir na home
     Route::post('/project/create', 'create');
     Route::get('/projects', 'showProjects')->name('allprojects');
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
-    Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
     Route::get('/search-projects', 'search');
     Route::post('/addMember', 'addMember')->name('addmember');
     Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
+    Route::patch('/project/edit', 'updatedetails')->name('project.update_details');
 });
 
 //Task

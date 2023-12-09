@@ -11,11 +11,15 @@ function addEventListeners() {
     });
 
     if (document.getElementById("CreateTaskModalButton")) {
-      setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask');
+      setupModalForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask');
     }
     if (document.getElementById("EditTaskModalButton")) {
-      setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
+      setupModalForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
     }
+    if (document.getElementById("EditProjectModalButton")) {
+      setupModalForm("editprojectform", 'EditProjectModalButton', 'ModalEditProject');
+    }
+
     if (document.getElementById("submit-comment-button")) {
       setupCommentForm("createcommentform");
     }
@@ -388,6 +392,49 @@ function handleEditTask(modalId, event) {
   .catch(error => console.error('Error:', error));
 }
 
+function handleEditProject(modalId, event) {
+  event.preventDefault();
+  if (!isProjectFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  formData.append('_method', 'PATCH');
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+    if(data.project_finish_date){
+      let finishDate = new Date(data.project_finish_date);
+      let formattedFinishDate = finishDate.getFullYear() + '-' +
+        String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
+        String(finishDate.getDate()).padStart(2, '0') + ' ' +
+        String(finishDate.getHours()).padStart(2, '0') + ':' +
+        String(finishDate.getMinutes()).padStart(2, '0') + ':' +
+        String(finishDate.getSeconds()).padStart(2, '0');
+
+        let finishDateElement = document.querySelector('#ProjectDeadline #dashboard-project-content');
+        finishDateElement.textContent = formattedFinishDate;
+    }
+
+    let titleElement = document.querySelector('.sidebar-project-title');
+    let descriptionElement = document.querySelector('#ProjectDescription #dashboard-project-content');
+
+    titleElement.textContent = data.project_title;
+    descriptionElement.textContent = data.project_description;
+  })
+  .catch(error => console.error('Error:', error));
+}
+
 function handleCreateComment(event) {
   event.preventDefault();
 
@@ -587,7 +634,6 @@ function isTaskFormValid() {
   document.getElementById('finish_dateError').innerHTML = '';
 
   if (title.length < 15 || title.length > 50) {
-      document.getElementById('title').classList.add('validation-err');
       document.getElementById('titleError').innerHTML = 'Title must be between 15 and 50 characters long';
       return false;
   }
@@ -600,6 +646,35 @@ function isTaskFormValid() {
   if (finishDate) {
     if(new Date(finishDate) <= new Date()){
       document.getElementById('finish_dateError').innerHTML = 'Finish date must be after today';
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isProjectFormValid() {
+  let title = document.getElementById("proj_title").value;
+  let description = document.getElementById("proj_description").value;
+  let finishDate = document.getElementById("proj_finish_date").value;
+
+  document.getElementById('proj_titleError').innerHTML = '';
+  document.getElementById('proj_descriptionError').innerHTML = '';
+  document.getElementById('proj_finish_dateError').innerHTML = '';
+
+  if (title.length < 15 || title.length > 50) {
+      document.getElementById('proj_titleError').innerHTML = 'Title must be between 15 and 50 characters long';
+      return false;
+  }
+
+  if (description.length < 100 || description.length > 300) {
+      document.getElementById('proj_descriptionError').innerHTML = 'Description must be between 100 and 300 characters long';
+      return false;
+  }
+
+  if (finishDate) {
+    if(new Date(finishDate) <= new Date()){
+      document.getElementById('proj_finish_dateError').innerHTML = 'Finish date must be after today';
       return false;
     }
   }
@@ -642,7 +717,7 @@ function isMessageFormValid() {
   return true;
 }
 
-function setupTaskForm(formId, buttonId, modalId) {
+function setupModalForm(formId, buttonId, modalId) {
   let form = document.getElementById(formId);
   switch (formId) {
     case 'createtaskform':
@@ -651,6 +726,9 @@ function setupTaskForm(formId, buttonId, modalId) {
     case 'edittaskform':
       document.getElementById(formId).addEventListener("submit", handleEditTask.bind(form, modalId));
       break;
+    case 'editprojectform':
+      document.getElementById(formId).addEventListener("submit", handleEditProject.bind(form, modalId));
+      break; 
   }
   document.getElementById(buttonId).addEventListener('click', function () {
     let modal = new bootstrap.Modal(document.getElementById(modalId));

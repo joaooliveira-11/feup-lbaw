@@ -13,6 +13,9 @@ class ProjectPolicy{
     public function create(User $user) : bool {
         return !($user->isAdmin());
     }
+    public function updatedetails(User $user, Project $project) : bool {
+        return $project->is_coordinator($user);
+    }
 
     public function show(User $user, Project $project) : bool {
         return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user) || $project->is_public;
