@@ -5,7 +5,7 @@
     <div id="ProfilePage">
         <div class="Profile-LeftSection">
             <label for="fileInput">
-                <img id="profilePicture" src="{{ asset($user->photo ?? asset('profilePics/user_default.jpg')) }}" alt="Profile Picture" style="cursor: pointer;">
+                <img id="profilePicture" src="{{ asset($user->photo) }}" alt="Profile Picture" style="cursor: pointer;">
                     @if(Auth::check() && (Auth::user()->id == $user->id || Auth::user()->isAdmin()))
                         <form method="POST" action="{{ route('profile.updateImage') }}" enctype="multipart/form-data">
                             @csrf
@@ -42,7 +42,7 @@
 
             <div class="profile-interests-skills">
                 <div id="Interests">
-                    <h4>Interests</h4>
+                    <h4 class="interests-title">Interests</h4>
                     @if ($interests->isEmpty())
                     <p>No interests yet!</p>
                     @else
@@ -52,7 +52,7 @@
                     @endif
                 </div>
                 <div id="Skills">
-                    <h4>Skills</h4>
+                    <h4 class="skills-title">Skills</h4>
                     @if ($skills->isEmpty())
                     <p>No skills yet!</p>
                     @else
@@ -75,28 +75,28 @@
                 </div>
                 
                 <div id="Description">
-                    <h5 class = "label">About me </h5>
+                    <h5 class="profile-info-span">About me </h5>
                     <p>{{ $user->description }}</p>
                 </div>
             </div>
 
             <div id="Projects">
-            <p class="label">Projects</p>
+            <h4 class="label">Projects</h4>
 
             @if ($projects->isEmpty())
                 <p>No projects yet!</p>
             @else
                 <ul id="ProjectsList">
-                        @foreach ($projects as $project)
-                            <a href="{{ url('project/' . $project->project_id )}}" class="project-link">
-                                <li>
-                                    <div>
-                                        <p id="ProjectTitle">{{ $project->title }}</p>
-                                        <p>{{ $project->description }}</p>
-                                    </div>
-                                </li> 
-                            </a>
-                        @endforeach
+
+                    @foreach ($projects as $project)
+                        <a href="{{ url('project/' . $project->project_id )}}" class="project-link project-element">
+                            <li>
+                                <p id="ProjectTitle" class="project-list-title">{{ $project->title }}</p>
+                                <p class="project-list-description">{{ $project->description }}</p>
+                            </li> 
+                        </a>
+                    @endforeach
+
                 </ul>
             @endif
         </div>

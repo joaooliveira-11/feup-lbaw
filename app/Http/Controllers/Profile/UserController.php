@@ -142,12 +142,12 @@ class UserController extends Controller {
         $deletedEmail = 'deletedUser_' . $user->id . '@email.com';
         $deletedDescription = 'This user has been deleted';
        
-        if ($user->photo !== NULL) {
-            $currentImage = public_path('profilePics/') . $user->photo;
-            if (file_exists($currentImage)) {
-                unlink($currentImage);
-            }
+       
+        $currentImage = public_path('profilePics/') . $user->photo;
+        if (file_exists($currentImage)) {
+            unlink($currentImage);
         }
+        
 
         $user->name = $deletedName;
         $user->username = $deletedUsername;

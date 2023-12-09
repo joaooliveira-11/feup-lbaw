@@ -1,4 +1,3 @@
-@section('projectMembers')       
 <div id="Members">
     <div class="add-user-title">
         <h3 class="add-user-title">Project Members</h3>
@@ -15,7 +14,7 @@
                 @endif
             @endforeach
         </ul>
-        <button type="button" id= "AddMemberModalButton" > Add Member</button>
+        <button type="button" id="AddMemberModalButton" class="dashboard-project-button">Add Member</button>
         @include('modal.add_member', ['project' => $project])
     </div>
 
@@ -34,4 +33,3 @@
         </ul>
     </div>
 </div>    
-@endsection

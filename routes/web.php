@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RecoverPasswordController;
@@ -28,13 +29,9 @@ use App\Http\Controllers\Auth\RecoverPasswordController;
 
 // Home
 Route::redirect('/', '/index');
-Route::get('/index', function () {
-    return view('pages.index');
-})->name('index');
+Route::view('/index', 'pages.index')->name('index');
+// Route::view('/about', 'pages.about')->name('about'); vai deixar de existir
 
-Route::get('/about', function () {
-    return view('pages.about');
-})->name('about');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -65,14 +62,14 @@ Route::controller(UserController::class)->group(function () {
 
 //Project
 Route::controller(ProjectController::class)->group(function() {
-    Route::get('/project/create','showCreateForm')->name('createproject');
+    Route::get('/project/create','showCreateForm')->name('createproject'); // vai deixar de existir na home
     Route::post('/project/create', 'create');
     Route::get('/projects', 'showProjects')->name('allprojects');
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
-    Route::get('/project/{project_id}/tasks', 'showProjectTasks')->where(['project_id' => '[0-9]+'])->name('showProjectTasks');
     Route::get('/search-projects', 'search');
     Route::post('/addMember', 'addMember')->name('addmember');
     Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
+    Route::patch('/project/edit', 'updatedetails')->name('project.update_details');
 });
 
 //Task
@@ -95,12 +92,19 @@ Route::controller(InviteController::class)->group(function() {
     Route::post('/invite/create', 'create')->name('invite.create');
 });	
 
+//Message
+Route::controller(MessageController::class)->group(function() {
+    Route::post('/message/create', 'create')->name('message.create');
+    Route::delete('/message/delete/{id}', 'delete')->name('message.delete');
+});	
+
 //Notifications
 Route::controller(NotificationController::class)->group(function() {
     Route::post('/dismiss-notification', 'dismiss')->name('notification.dismiss');
     Route::get('/notifications', 'show')->name('notifications');
 });
 
+// Google API
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google-auth');
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');

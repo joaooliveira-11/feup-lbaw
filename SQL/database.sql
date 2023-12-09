@@ -6,6 +6,7 @@ SET search_path TO lbaw23117;
 -----------------------------------------
 
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS password_resets CASCADE;
 DROP TABLE IF EXISTS interest CASCADE;
 DROP TABLE IF EXISTS user_interests CASCADE;
 DROP TABLE IF EXISTS skill CASCADE;
@@ -56,12 +57,19 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
+    password TEXT,
     description TEXT,
-    photo TEXT, 
+    photo TEXT NOT NULL DEFAULT 'profilePics/user_default.jpg', 
     is_admin BOOLEAN NOT NULL DEFAULT FALSE, 
     is_banned BOOLEAN NOT NULL DEFAULT FALSE,
-    email_verification BOOLEAN NOT NULL DEFAULT FALSE 
+    email_verification BOOLEAN NOT NULL DEFAULT FALSE,
+    google_id VARCHAR
+);
+
+CREATE TABLE password_resets (
+    email VARCHAR NOT NULL,
+    token VARCHAR NOT NULL,
+    created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
 );
 
 CREATE TABLE interest (
@@ -181,6 +189,17 @@ CLUSTER message USING projectMessage_message;
 CREATE INDEX projectTask_task ON task USING hash(project_task);
 
 CREATE INDEX task_comment ON comment USING hash(task_comment);
+
+
+-----------------------------------------
+-- LARAVEL INDEXES
+-----------------------------------------
+
+DROP INDEX IF EXISTS password_resets_email_index;
+DROP INDEX IF EXISTS password_resets_token_index;
+
+CREATE INDEX password_resets_email_index ON password_resets (email);
+CREATE INDEX password_resets_token_index ON password_resets (token);
 
 
 -----------------------------------------
@@ -543,7 +562,8 @@ BEGIN
         IF NEW.title <> OLD.title OR NEW.description <> OLD.description THEN
             NEW.tsvectors = (
                 setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
-                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B');
+                setweight(to_tsvector('english', coalesce(NEW.description, '')), 'B')
+            );
         END IF;
     END IF;
 RETURN NEW;

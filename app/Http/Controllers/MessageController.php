@@ -15,24 +15,31 @@ class MessageController extends Controller {
 
     public function create(Request $request){
 
-        $validator = Validator::make($request->all(), [
-            'content' => 'min:1|string|max:4096'
-        ]);
-
-        if ($validator->fails()) {
-                return redirect()->route() // mudar a route 
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $message = new Message();
         $message->content = $request->content;
         $message->create_date = now();
         $message->message_by = Auth::user()->id;
-        $message->project_message = $request->project_id; // se for passado hidden no forms ou então receber como argumento na função
-        $this->authorize('create', $message); 
+        $message->project_message = $request->project_id;
+        
+        //$this->authorize('create', $message);
 
-        $message->save(); 
+        $message->save();
+
+        return response()->json([
+            'message_id' => $message->message_id,
+            'message_content' => $message->content,
+            'message_create_date' => $message->create_date,
+            'message_message_by' => Auth::user()->username,
+        ]);
+    }
+
+    public function delete($id){
+        $message = Message::find($id);
+        $this->authorize('delete', $message); 
+        $message->delete();
+        return response()->json([
+            'success' => true
+        ]);
     }
 
 } 

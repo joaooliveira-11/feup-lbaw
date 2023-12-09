@@ -16,4 +16,8 @@ class Comment extends Model
     public $timestamps  = false;
     protected $table = 'comment';
     protected $primaryKey = 'comment_id';
+
+    public function commented_by(){
+        return $this->belongsTo(User::class, 'comment_by');
+    }
 }

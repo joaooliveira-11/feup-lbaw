@@ -1,7 +1,10 @@
+#lp-content {
+    width: 95%;
+    margin: auto;
+}
 .lp-header {
     width: 80%;
     margin: auto;
-    margin-top: 4em;
     display: flex;
     justify-content: space-between;
     position: relative;
@@ -11,12 +14,12 @@
 .lp-header-content {
     z-index: 1;
     max-width: 35%;
-    margin-top: -8vw;
 }
 
 .lp-header-image {
-    width:50vw;
+    width:46vw;
     height: fit-content;
+    margin-top: 5vw;
 }
 
 .lp-header-content h1 {
@@ -32,14 +35,23 @@
     margin-bottom: 2em;
 }
 
-.auth-register-button {
+.lp-button {
     padding: 0.5em 1.2em;
     font-size: 1.3vw;
     font-weight: bold;
     color: #fff;
     background-color: #543CE7;
     border-radius: 0.5em;
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+.lp-button:hover {
+    background-color: #dedede;
+    color: #000;
+    box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
+}
+
 #lp-services {
     width: 80%;
     display: flex;
@@ -50,22 +62,30 @@
     align-items: center;
 }
 
+.lp-section-title {
+    font-size: 1.6vw;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.6vw;
+}
+
 .lp-service {
     width: 86%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 2vw;
 }
 
 .service-text h4 {
     color: #000;
-    font-size: 2vw;
+    font-size: 1.3vw;
     font-weight: bold;
 }
 
 .service-text p {
     color: #000;
-    font-size: 1.2vw;
+    font-size: 1vw;
     text-align: justify;
 }
 
@@ -104,13 +124,21 @@
     font-size: 1.3vw;
     font-weight: bold;
     color: #454545;
-    border: 1px solid #543CE7;
+    border: 2px solid #543CE7;
     border-radius: 0.5em;
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.learn-more-button:hover {
+    color: #fff;
+    background-color: #303030;
+    box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
 }
 
 #footer {
-    margin-top: 12vw;
-    padding: 3em;
+    margin-top: 4vw;
+    padding: 1vw;
     background-color: #222222;
     display: flex;
     justify-content: space-around;
@@ -123,15 +151,18 @@
 #footer a {
     color: #dedede;
     font-size: 1.8vw;
+    text-decoration: none;
 }
 
 #footer h6 {
-    font-size: 1.1vw;
+    font-size: 1vw;
     letter-spacing: 4px;
+    color: #dedede;
 }
 
 #footer h5 {
-    font-size: 1.5vw;
+    font-size: 1.3vw;
+    color: #dedede;
 }
 
 .footer-middle {
@@ -142,20 +173,28 @@
 
 .footer-middle ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .footer-middle li {
     color: #dedede;
-    font-size: 1.1vw;
+    font-size: 0.9vw;
+    margin-bottom: 0;
 }
 
 .footer-right p {
-    font-size: 1vw;
+    font-size: 0.9vw;
     letter-spacing: 2px;
+    margin-bottom: 0;
+}
+
+#about-wrapper {
+    margin-top: 6vw;
 }
 
 .about-header {
-    width: 76%;
+    width: 80%;
     margin: auto;
     margin-top: 4em;
 }
@@ -164,7 +203,10 @@
     color: #000000;
     font-size: 1.2vw;
     letter-spacing: 1.1px;
+    margin: auto;
     margin-bottom: 1.6em;
+    width: 60vw;
+    text-align: center;
 }
 
 @media screen and (max-width: 768px) {

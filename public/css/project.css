@@ -29,6 +29,23 @@ header {
     color: #303030;
 }
 
+#MainContent {
+    padding-left: 2vw; 
+    width: 80vw;
+
+}
+
+#MainContent>*{
+    display: none;
+}
+
+#MainContent .selected {
+    display: block;
+    border: none;
+}
+
+/*----------------------------  Sidebar ----------------------------*/
+
 #Sidebar {
     width: 20vw;
     background-color: #ffffff;
@@ -37,9 +54,12 @@ header {
     border-radius: 0.7vw;
     height: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-#Sidebar>h1 {
+.sidebar-project-title {
     font-size: 1.6vw;
     margin-bottom: 1.2vw;
     text-align: center;
@@ -72,77 +92,28 @@ header {
     border: #000 solid 0.1vw;
 }
 
-#MainContent {
-    padding-left: 2vw; 
-    width: 80vw;
-
-}
-
-#MainContent>*{
-    display: none;
-}
-
-#MainContent .selected {
-    display: block;
-    border: none;
-}
-
-
 #Sidebar .title-line {
     border-bottom: 1.5px solid #000000;
     margin-bottom: 3.5vw; 
 }
 
-#Sidebar>p {
+#leaveProject{
+    width: 100%;
+    padding: 0.4vw 1vw;
+    margin-top: 3.5vw;
     color: #fff;
     font-size: 0.9vw;
     background-color: #e83749;
-    padding: 0.4vw 1vw;
-    margin-top: 3.5vw;
     border-radius: 0.7vw;
     text-decoration: none;
     transition: background-color 0.3s;
     display: inline-block;
     text-align: center;
-    
+    transition: color 0.3s ease;
 }
 
-#Sidebar #leaveProject{
-    background: #d52536;
-    border-radius: 0.7vw;
-    color: #ffffff;
-}
-
-#Sidebar #leaveProject:hover {
-    transition: 0.3s ease-in-out;
-    background-color: #ffffff;
-    color: #d52536;
-    border-width: 0.1vw;
-    border-color: #d52536;
-    border-style: solid;
-}
-
-#Tasks{
-    grid-column: span 2;
-    grid-row: span 2;
-}
-
-#Tasks ul {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5vw;
-}
-
-#Tasks li {
-    list-style-type: none;
-    background: #303030;
-    color: #ffffff;
-    padding: 10px;
-    margin-bottom: 0.8vw;
-    border-radius: 0.7vw;
-    border: 1px solid #333;
-    font-size: 0.6vw;
-    letter-spacing: 0.02vw;
+#leaveProject button:hover {
+    color: #000;
 }
 
 .TaskTitle {
@@ -161,18 +132,62 @@ header {
 }
 
 
+/*----------------------------  Dasboard ----------------------------*/
+
+.dashboard-content {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1.4vw;
+    border-bottom: 1px solid #303030;
+}
+
+.dashboard-left {
+    width: 50%;
+}
+
 #ProjectDeadline, #ProjectDescription , #MembersCounter, #ActiveTasks{
     width: 100%;
     font-size: 1vw;
     color: #303030;
     display: flex;
-    justify-content:flex-start;
+    align-items: baseline;
 }
 
-h2{
-    font-size: 1.5vw;
+#dashboard-project-title {
+    font-size: 1.2vw;
     color: #303030;
+    font-weight: 500;
+}
 
+#dashboard-project-content {
+    font-size: 1vw;
+    color: #303030;
+    font-weight: 500;
+    margin-bottom: 0;
+    margin-left: 0.5vw;
+}
+
+#dashboard-project-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 1.6vw;
+}
+
+.dashboard-project-button {
+    background-color: #303030;
+    border-radius: 0.8vw;
+    color: #fff;
+    font-size: 0.7vw;
+    font-weight: 600;
+    padding: 0.8vw;
+    width: 7.6vw;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-project-button:hover {
+    background-color: #543CE7;
+    color: #000;
+    box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
 }
 
 #CreateTaskButton {
@@ -194,54 +209,227 @@ h2{
     background-color: #454545;
 }
 
-.btn.btn-primary {
-    font-size: 0.8vw;
-    color:#303030;
-    right:0;
+
+/*----------------------------  Tasks ----------------------------*/
+
+#Tasks ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
-.search-bar {
-    width: 100%;
+#Tasks li {
+    list-style-type: none;
+    background: #303030;
+    color: #ffffff;
+    padding: 10px;
+    margin-bottom: 0.8vw;
+    border-radius: 0.7vw;
+    border: 1px solid #333;
+    font-size: 0.6vw;
+    letter-spacing: 0.02vw;
+}
+
+.task-content {
     display: flex;
-    align-items: center;
-    border-radius: 0.7vw; 
+    flex-direction: column;
+    justify-content: space-around;
 }
 
-.rounded-button {
-    border-radius: 0.7vw; 
+.project-tasks-title {
+    font-size: 1.4vw;
+    font-weight: 500;
 }
 
-.add-user-list {
+.project-members-search-bar {
+    display: grid;
+    grid-template-columns: 1.2fr 0.2fr;
+    height: 5vw;
+}
+#Tasks .members-searchbar {
+    height: 100%;
+    border-radius: 10px 0 0 10px;
+    font-size: 0.7vw;
+}
+
+#Tasks .search-users-button {
+
+    border-radius: 0 10px 10px 0;
+    height: 100%;
+    background-color: #454545;
+    color: #fff;
+    font-size: 0.8vw;
+}
+
+#tasks-container {
+    padding: 1vw 0;
+    height: 31.5vw;
+    overflow-y: auto;
+}
+#tasks-container ul {
+    padding-left: 0;
+}
+
+#status-filter {
+    grid-row: 2;
+    grid-column: 1;
+    display: flex;
+    justify-content:space-between;
+    margin-top: 1.2vw;
+}
+
+#status-filter label {
+    font-size: 0.8vw;
+    color: #303030;
+    margin: auto;
+}
+
+#status-filter  select {
+    font-size: 0.8vw;
+    color: #303030;
+    margin: auto;
+    border-radius: 0.5vw;
+    margin-right: 8vw;
+    border: #303030 solid 1px;
+    padding: 0;
+    height: 4vh;
+}
+/*----------------------------  Members ----------------------------*/
+
+.project-members-title {
+    font-size: 1.4vw;
+    font-weight: 500;
+}
+
+.project-members-content {
     margin: 0 auto;
+    margin-top: 2vw;
+    overflow-y: auto;
+    height: 32vw;
 }
 
-#project-members-content {
-    width: 70%;
-    margin: 0 auto;
-}
-
-#project-members-content ul{
-    column-gap: 1em;
+.project-members-ul {
     list-style: none;
     column-count: 2;
 }
 
-#project-members-content li {
+.project-members-ul a {
+    text-decoration: none;
+}
+
+.project-member {
     border: 1px solid #000;
     border-radius: 0.7vw;
     padding: 1em;
+    width: 24vw;
+    margin-bottom: 1vw;
+    transition: box-shadow 0.3s ease;
 }
 
-#project-members-content p {
-    color: #000;
-    font-size: 2rem;
-    margin: 0;
+.project-member:hover {
+    box-shadow: 0 0 15px rgba(84, 60, 231, 0.4);
 }
 
-#Dashboard p, #Members p {
+#Members p {
     font-size: 1.5vw;
     color: #303030;
     margin-left: 1vw;
-    line-height: normal;
+    margin-bottom: 0;
+    text-decoration: none;
 }
 
+.chat-section {
+    height: 69vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1vw 0 2vw 0;
+}
+
+.chat-section::-webkit-scrollbar {
+    display: none;
+}
+
+.message-form {
+    display: flex;
+    margin: 0;
+    height: 3vw;
+    margin-top: 2vh;
+}
+
+.message-form textarea {
+    resize: none;
+    min-height: 3vw;
+    border-radius: 5px 0 0 5px;
+    font-size: 0.8vw;
+}
+
+#submit-message-button {
+    height: 100%;
+    background-color: #3C5EE7;
+    color: white;
+    font-size: 0.8vw;
+    border-radius: 0 5px 5px 0;
+}
+
+.message {
+    display: flex;
+    width: 40vw;
+    margin-top: 1vw;
+}
+
+.message-username {
+    color: #303030;
+    font-size: 0.8vw;
+}
+
+.message-chat {
+    display: flex;
+    width: 50vw;
+    margin-top: 1vw;
+    align-items: center;
+}
+
+.user-image {
+    height: 4vw;
+    width: 4vw;
+    border-radius: 100px;
+}
+
+.message-content {
+    width: 70%;
+}
+
+.message-content p {
+    margin: 0.4vw 0 0 0;
+    padding: 0.5vw 1vw;
+    background-color: #FFF;
+    color: #303030;
+    font-size: 1vw;
+    border-radius: 5px;
+}
+
+.message-content h6 {
+    color: #000;
+    font-size: 0.7vw;
+}
+
+.message-info-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.message-buttons {
+    display: flex;
+    gap: 1.2vw;
+}
+
+.message-manage-button {
+    padding: 0;
+    background-color: transparent;
+    height: 1.2vw;
+    font-size: 0.7vw;
+}
+
+.message-manage-button:hover {
+    background-color: transparent;
+    color: #303030;
+}
