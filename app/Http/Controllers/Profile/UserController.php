@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 
 use App\Models\User;
+use App\Models\Project_Users;
 use App\Models\Interest;
 use App\Models\Skill;
 
@@ -129,17 +130,30 @@ class UserController extends Controller {
     public function deleteUser(int $id) {
         $user = User::find($id);
 
-        $user->projects()->detach();
+        Project_Users::where('user_id', $user->id)
+        ->delete();
+
+        $user->skills()->detach();
+        $user->interests()->detach();
+
 
         $deletedName = 'deletedUser' . $user->id;
         $deletedUsername = 'deletedUser_' . $user->id;
         $deletedEmail = 'deletedUser_' . $user->id . '@email.com';
         $deletedDescription = 'This user has been deleted';
+       
+        if ($user->photo !== NULL) {
+            $currentImage = public_path('profilePics/') . $user->photo;
+            if (file_exists($currentImage)) {
+                unlink($currentImage);
+            }
+        }
 
         $user->name = $deletedName;
         $user->username = $deletedUsername;
         $user->email = $deletedEmail;
         $user->description = $deletedDescription;
+        $user->photo = 'profilePics/user_default.jpg';
 
         $user->save();
 

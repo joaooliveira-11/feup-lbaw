@@ -32,10 +32,10 @@
             </div>
 
             <div id="deleteButton">
-            @if(Auth::check() && Auth::user()->isAdmin() && Auth::user()->id !== $user->id)
+            @if(Auth::check() && (Auth::user()->isAdmin() || Auth::user()->id === $user->id))
                 <form action="{{ route('deleteUser', $user->id) }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-warning">Delete</button>
+                    <button type="submit" class="btn btn-warning">Delete Account</button>
                 </form>
             @endif
             </div>
