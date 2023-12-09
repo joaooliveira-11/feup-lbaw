@@ -19,10 +19,20 @@ function addEventListeners() {
     if (document.getElementById("submit-comment-button")) {
       setupCommentForm("createcommentform");
     }
+    if (document.getElementById("submit-message-button")) {
+      setupMessageForm("createmessageform");
+    }
+
     let commentsSection = document.querySelector('.comments-section');
     if (commentsSection) {
     commentsSection.addEventListener('click', handleDeleteComment);
     }
+
+    let chatSection = document.querySelector('.chat-section');
+    if (chatSection) {
+      chatSection.addEventListener('click', handleDeleteMessage);
+    }
+
     if (document.getElementById("AddMemberModalButton")) {
       setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
         'Members': 'members',
@@ -288,6 +298,12 @@ function setupRadioButtons() {
       if (toDisplay) {
         toDisplay.classList.toggle('selected', this.checked);
       }
+
+      if (id === 'Chat') {
+        let chatSection = document.querySelector('.chat-section');
+        chatSection.scrollTop = chatSection.scrollHeight;
+    }
+
     });
   });
 }
@@ -427,6 +443,11 @@ function handleCreateComment(event) {
     let commentContentDiv = document.createElement('div');
     commentContentDiv.className = 'comment-content';
 
+    let usernameH5 = document.createElement('h5');
+    usernameH5.className = 'message-username';
+    usernameH5.textContent = data.comment_comment_by;
+    commentContentDiv.appendChild(usernameH5);
+
     let contentP = document.createElement('p');
     contentP.textContent = data.comment_content;
     commentContentDiv.appendChild(contentP);
@@ -452,7 +473,6 @@ function handleCreateComment(event) {
     let deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'comment-manage-button';
-    deleteButton.id = 'deletecommentbtn';
     deleteButton.textContent = 'Delete';
     commentButtonsDiv.appendChild(deleteButton);
     
@@ -468,6 +488,86 @@ function handleCreateComment(event) {
   .catch(error => console.error('Error:', error));
 }
 
+function handleCreateMessage(event) {
+  event.preventDefault();
+
+  if (!isMessageFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  let csrfToken = document.querySelector('input[name="_token"]').value;
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrfToken,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let chatSection = document.querySelector('.chat-section');
+
+    let messageDiv = document.createElement('div');
+    messageDiv.className = 'message-chat';
+    messageDiv.id = 'message-' + data.message_id;
+
+    let userImage = document.createElement('img');
+    userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+    userImage.className = 'user-image';
+    userImage.alt = 'Gmail Image';
+    messageDiv.appendChild(userImage);
+
+    let messageContentDiv = document.createElement('div');
+    messageContentDiv.className = 'message-content';
+
+    let usernameH5 = document.createElement('h5');
+    usernameH5.className = 'message-username';
+    usernameH5.textContent = data.message_message_by;
+    messageContentDiv.appendChild(usernameH5);
+
+    let contentP = document.createElement('p');
+    contentP.textContent = data.message_content;
+    messageContentDiv.appendChild(contentP);
+
+    let messageInfoButtonsDiv = document.createElement('div');
+    messageInfoButtonsDiv.className = 'message-info-buttons';
+
+    let createDate = new Date(data.message_create_date);
+    let formattedCreateDate = createDate.getFullYear() + '-' +
+    String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
+    String(createDate.getDate()).padStart(2, '0') + ' ' +
+    String(createDate.getHours()).padStart(2, '0') + ':' +
+    String(createDate.getMinutes()).padStart(2, '0') + ':' +
+    String(createDate.getSeconds()).padStart(2, '0');
+
+    let createDateH6 = document.createElement('h6');
+    createDateH6.textContent = formattedCreateDate;
+    messageInfoButtonsDiv.appendChild(createDateH6);
+
+    let messageButtonsDiv = document.createElement('div');
+    messageButtonsDiv.className = 'message-buttons';
+    
+    let deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'message-manage-button';
+    deleteButton.textContent = 'Delete';
+    messageButtonsDiv.appendChild(deleteButton);
+    
+    messageInfoButtonsDiv.appendChild(messageButtonsDiv);
+
+    messageContentDiv.appendChild(messageInfoButtonsDiv);
+    messageDiv.appendChild(messageContentDiv);
+    chatSection.appendChild(messageDiv);
+    document.getElementById('message-content').value = '';
+
+    chatSection.scrollTop = chatSection.scrollHeight;
+  })
+  .catch(error => console.error('Error:', error));
+}
 
 function handleAddMember(modalId, event) {
   console.log("handleAddMember");
@@ -548,6 +648,19 @@ function isCommentFormValid() {
   return true;
 }
 
+function isMessageFormValid() {
+  let content = document.getElementById("message-content").value;
+  document.getElementById('contentError').innerHTML = '';
+
+  if (content.length < 1 || content.length > 300) {
+      document.getElementById('content').classList.add('validation-err');
+      document.getElementById('contentError').innerHTML = 'Message content must be between 1 and 300 characters long';
+      return false;
+  }
+
+  return true;
+}
+
 function setupTaskForm(formId, buttonId, modalId) {
   let form = document.getElementById(formId);
   switch (formId) {
@@ -567,6 +680,11 @@ function setupTaskForm(formId, buttonId, modalId) {
 function setupCommentForm(formId) {
   let form = document.getElementById(formId);
   document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
+}
+
+function setupMessageForm(formId) {
+  let form = document.getElementById(formId);
+  document.getElementById(formId).addEventListener("submit", handleCreateMessage.bind(form));
 }
 
 function dismiss_notification(notificationId) {
@@ -615,12 +733,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-
-
-function handleDeleteComment(event) {
-  if (event.target.classList.contains('comment-manage-button')) {
-    let commentDiv = event.target.closest('.comment');
-    let commentId = commentDiv.id.split('-')[1];
+function handleDelete(event, buttonClass, itemClass, deleteUrl) {
+  if (event.target.classList.contains(buttonClass)) {
+    let itemDiv = event.target.closest('.' + itemClass);
+    let itemId = itemDiv.id.split('-')[1];
     let csrfToken = document.querySelector('#csrf-token').value;
     Swal.fire({
       title: 'Are you sure?',
@@ -632,7 +748,7 @@ function handleDeleteComment(event) {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('/comment/delete/' + commentId, {
+        fetch(deleteUrl + itemId, {
           method: 'DELETE',
           headers: {
             'X-CSRF-TOKEN': csrfToken
@@ -646,7 +762,7 @@ function handleDeleteComment(event) {
         })
         .then(data => {
           if (data.success) {
-            commentDiv.remove();
+            itemDiv.remove();
           } 
         })
         .catch((error) => {
@@ -655,6 +771,14 @@ function handleDeleteComment(event) {
       }
     })
   }
+}
+
+function handleDeleteComment(event) {
+  handleDelete(event, 'comment-manage-button', 'comment', '/comment/delete/');
+}
+
+function handleDeleteMessage(event) {
+  handleDelete(event, 'message-manage-button', 'message-chat', '/message/delete/');
 }
 
 // pusher notifications
@@ -754,4 +878,5 @@ function handleRefreshNotifications() {
       }
       });
     }
+>>>>>>> public/js/app.js
 }

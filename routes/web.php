@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Profile\UserController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 
 
@@ -85,12 +86,19 @@ Route::controller(InviteController::class)->group(function() {
     Route::post('/invite/create', 'create')->name('invite.create');
 });	
 
+//Message
+Route::controller(MessageController::class)->group(function() {
+    Route::post('/message/create', 'create')->name('message.create');
+    Route::delete('/message/delete/{id}', 'delete')->name('message.delete');
+});	
+
 //Notifications
 Route::controller(NotificationController::class)->group(function() {
     Route::post('/dismiss-notification', 'dismiss')->name('notification.dismiss');
     Route::get('/notifications', 'show')->name('notifications');
 });
 
+// Google API
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google-auth');
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
