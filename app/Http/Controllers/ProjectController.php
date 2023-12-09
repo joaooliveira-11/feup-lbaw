@@ -13,14 +13,13 @@ use App\Events\AcceptedProjectInvite;
 
 class ProjectController extends Controller {
 
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function show(int $id){
 
-        if(!Auth::check()){
-            return redirect("/login");
-        }
-
         $project = Project::find($id);  
-        $user = User::find(Auth::user()->id);
         $this->authorize('show', $project);
         return view('pages.project', ['project'=>$project]);
     }
@@ -31,10 +30,6 @@ class ProjectController extends Controller {
     }
 
     public function createInvite(Request $request) {   
-
-        if(!Auth::check()){
-            return redirect("/login");
-        }
 
         $this->authorize('create', Project::class);
         // Set project details.

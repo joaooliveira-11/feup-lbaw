@@ -26,13 +26,9 @@ use App\Http\Controllers\NotificationController;
 
 // Home
 Route::redirect('/', '/index');
-Route::get('/index', function () {
-    return view('pages.index');
-})->name('index');
+Route::view('/index', 'pages.index')->name('index');
+// Route::view('/about', 'pages.about')->name('about'); vai deixar de existir
 
-Route::get('/about', function () {
-    return view('pages.about');
-})->name('about');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {

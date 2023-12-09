@@ -22,6 +22,7 @@
             </div>
         @endforeach
     </div>
+    @if($project->is_member(auth()->user()))
     <form class="message-form" id="createmessageform" action="{{ route('message.create') }}" method="POST">
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->project_id}}">
@@ -29,4 +30,5 @@
         <div class="error" id="contentError"></div>
         <button id="submit-message-button" type="submit">Send</button>
     </form>
+    @endif
 </div>

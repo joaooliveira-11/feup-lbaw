@@ -22,6 +22,7 @@
             </div>
         @endforeach
     </div>
+    @if($project->is_member(auth()->user()))
     <form class="comment-form" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
         @csrf
         <input type="hidden" name="task_id" value="{{ $task->task_id }}">
@@ -29,4 +30,5 @@
         <div class="error" id="contentError"></div>
         <button id="submit-comment-button" type="submit">Send</button>
     </form>
+    @endif
 </div>
