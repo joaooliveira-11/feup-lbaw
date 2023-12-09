@@ -5,7 +5,7 @@
             <div class="comment" id="comment-{{ $comment->comment_id }}">
             <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
                 <div class="comment-content">
-                    <h5>{{ $comment->commented_by->username }}</h5>
+                    <h5 class="message-username">{{ $comment->commented_by->username }}</h5>
                     <p>{{ $comment->content }}</p>
                     <div class="comment-info-buttons">
                         <h6>{{ $comment->create_date }}</h6>

@@ -2,10 +2,10 @@
     <div class="chat-section">
         <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($project->messages as $message)
-            <div class="message" id="message-{{ $message->message_id }}">
-            <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
+            <div class="message-chat" id="message-{{ $message->message_id }}">
+                <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
                 <div class="message-content">
-                    <h5>{{ $message->messaged_by->username }}</h5>
+                    <h5 class="message-username">{{ $message->messaged_by->username }}</h5>
                     <p>{{ $message->content }}</p>
                     <div class="message-info-buttons">
                         <h6>{{ $message->create_date }}</h6>
