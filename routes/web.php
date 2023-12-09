@@ -64,6 +64,7 @@ Route::controller(ProjectController::class)->group(function() {
     Route::post('/addMember', 'addMember')->name('addmember');
     Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
     Route::delete('/kickMember/{user_id}/{project_id}', 'kickMember')->name('kickmember');
+    Route::post('/changeCoordinator/{username}/{project_id}', 'changeCoordinator')->name('changeCoordinator');
 });
 
 //Task

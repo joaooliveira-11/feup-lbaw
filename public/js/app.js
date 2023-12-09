@@ -78,10 +78,11 @@ function addEventListeners() {
             const pathParts = urlPath.split('/');
             const projectId = pathParts[pathParts.length - 1];
             const memberId = document.querySelectorAll('.user-id')[i].id.substring(4);
+            const coordinatorId = document.querySelector('.coordinator').id.substring(4);
             console.log("Project: "+projectId);
             console.log("Member: "+ memberId);
-            kickFromProject(memberId, projectId);
-            location.reload();
+            console.log("Coordinator: "+ coordinatorId);
+            kickFromProject(memberId, projectId, coordinatorId);
           }
         });
       });
@@ -636,11 +637,45 @@ function removeFromProject(projectId){
   });
 }
 
-function kickFromProject(memberId, projectId){
-  sendAjaxRequest('DELETE', '/kickMember/'+memberId+'/'+projectId, {}, function() {
-    if (this.status >= 200 && this.status < 400) {
+function kickFromProject(memberId, projectId, coordinatorId){
+  if(memberId == coordinatorId){
+    const members = document.getElementsByClassName('user-id');
+    
+    const options = {};
+    for(let i = 0; i < members.length; i++){
+      const memberId = document.querySelectorAll('.user-id em')[i].textContent;
+      options[i] = memberId;
     }
-  });
+    Swal.fire({
+      title: "You are the coordinator of this project!",
+      text: "You need to nominate another coordinator before leaving the project!",
+      icon: "warning",
+      input: 'select',
+      inputOptions: options,
+      inputPlaceholder: 'Select a member',
+      showCancelButton: false,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Ok',          
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        const username = options[result.value].substring(1);
+        sendAjaxRequest('POST', '/changeCoordinator/'+username+'/'+projectId, {}, function() {
+          if (this.status >= 200 && this.status < 400) {
+            location.reload(); 
+            console.log("Coordinator changed");
+          }
+        });
+      }
+    });
+}else{
+    sendAjaxRequest('DELETE', '/kickMember/'+memberId+'/'+projectId, {}, function() {
+      if (this.status >= 200 && this.status < 400) {
+        location.reload();
+        console.log("Member kicked");
+      }
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {

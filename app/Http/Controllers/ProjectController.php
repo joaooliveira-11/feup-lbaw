@@ -140,6 +140,23 @@ class ProjectController extends Controller {
                 'success' => 'User kicked from project successfully!',
             ]);
     }
+
+    public function changeCoordinator($username, $project_id){
+        
+        
+        $project = Project::find($project_id);
+        $coordinator = User::where('username', $username)->first();
+
+        $this->kickMember($coordinator->id, $project_id);
+
+        $project->project_coordinator = $coordinator->id;
+        
+        $project->save();
+        
+        return response()->json([
+            'success' => 'Coordinator changed successfully!',
+        ]);
+    }
     
     
 }
