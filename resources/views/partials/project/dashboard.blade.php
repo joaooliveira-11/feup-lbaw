@@ -3,7 +3,7 @@
         <div class="dashboard-left">
             <div id="ProjectDeadline">
                 <h2 id="dashboard-project-title">Project Deadline:</h2>
-                <p id="dashboard-project-content">{{ $project->deadline !== null ? $project->deadline : 'Not defined' }}</p>
+                <p id="dashboard-project-content">{{ $project->finish_date !== null ? $project->finish_date : 'Not defined' }}</p>
             </div>
             <div id="MembersCounter">
                 <h2 id="dashboard-project-title">Members:</h2>
@@ -23,10 +23,16 @@
                 @endforeach
             </div>
             <div id="dashboard-project-buttons">
-                <button type="button" id="AddMemberModalButton" class="dashboard-project-button"> Add Member</button>
-                @include('modal.add_member', ['project' => $project])
+                @if($project->is_coordinator(auth()->user()))
+                    <button type="button" id="AddMemberModalButton" class="dashboard-project-button"> Add Member</button>
+                    @include('modal.add_member', ['project' => $project])
+                @endif
                 <button type="button" id="CreateTaskModalButton" class="dashboard-project-button">Create Task</button>
                 @include('modal.create_task', ['project_id' => $project->project_id])
+                @if($project->is_coordinator(auth()->user()))
+                    <button type="button" id="EditProjectModalButton" class="dashboard-project-button">Manage Details</button>
+                    @include('modal.edit_proj', ['project' => $project])
+                @endif
             </div>
         </div>
         <div id="ProjectDescription">
