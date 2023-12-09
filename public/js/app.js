@@ -440,6 +440,7 @@ function handleCreateComment(event) {
     commentContentDiv.className = 'comment-content';
 
     let usernameH5 = document.createElement('h5');
+    usernameH5.className = 'message-username';
     usernameH5.textContent = data.comment_comment_by;
     commentContentDiv.appendChild(usernameH5);
 
@@ -507,7 +508,7 @@ function handleCreateMessage(event) {
     let chatSection = document.querySelector('.chat-section');
 
     let messageDiv = document.createElement('div');
-    messageDiv.className = 'message';
+    messageDiv.className = 'message-chat';
     messageDiv.id = 'message-' + data.message_id;
 
     let userImage = document.createElement('img');
@@ -520,6 +521,7 @@ function handleCreateMessage(event) {
     messageContentDiv.className = 'message-content';
 
     let usernameH5 = document.createElement('h5');
+    usernameH5.className = 'message-username';
     usernameH5.textContent = data.message_message_by;
     messageContentDiv.appendChild(usernameH5);
 
@@ -764,5 +766,5 @@ function handleDeleteComment(event) {
 }
 
 function handleDeleteMessage(event) {
-  handleDelete(event, 'message-manage-button', 'message', '/message/delete/');
+  handleDelete(event, 'message-manage-button', 'message-chat', '/message/delete/');
 }
