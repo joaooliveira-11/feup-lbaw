@@ -23,6 +23,7 @@
         <link href="{{ url('css/index.css') }}" rel="stylesheet">
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+        <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
@@ -38,11 +39,13 @@
             <header>
                 @if(!Request::is('login') && !Request::is('register'))
                     @if(Auth::check())
-                        @include('partials.navbar')
-                        @yield('navbar')
-                    @else
-                        @include('partials.authNavbar')
-                        @yield('authNavbar')
+                        @if(Request::is('index'))
+                            @include('partials.authNavbar')
+                            @yield('authNavbar')
+                        @else
+                            @include('partials.navbar')
+                            @yield('navbar')
+                        @endif
                     @endif
                 @endif
             </header>

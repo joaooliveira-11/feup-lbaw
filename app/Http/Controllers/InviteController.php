@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Invite;
+use App\Events\ProjectInvite;
 
 class InviteController extends Controller {
 
@@ -15,7 +16,7 @@ class InviteController extends Controller {
 
     public function create(Request $request){
 
-
+        event(new ProjectInvite((int) $request->project_id, (int) $request->member_id));
         $invite = new Invite();
         $invite->title = "Project Invite";
         $invite->description = "This is an invite to join a project.";

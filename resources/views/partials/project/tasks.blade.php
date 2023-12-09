@@ -1,28 +1,44 @@
 <div id="Tasks">
-    <p class="TaskLabel">All Tasks:</p>
-
-    <div class="search-bar">
-        <input type="text" id="taskSearch" placeholder="Search tasks..." oninput="searchTasks()">
-        <button onclick="searchTasks()">Search</button>
-    </div>
-    <div id="tasks-container" class= "{{$project->project_id}}">
-    @if($project->tasks->count() > 0)
-        <ul class="TasksList">
-            @foreach($project->tasks as $task)
-                <a href="{{ url('task/' . $task->task_id )}}" class="task-link">
-                    <li>
-                        <div>
+    <div class="task-content">
+        <h2 class="project-tasks-title">Tasks</h2>
+        <div class="project-members-search-bar">
+            <input type="text" id="taskSearch" class="members-searchbar"placeholder="Search tasks..." oninput="searchTasks()">
+            <button class="search-users-button" onclick="searchTasks()">Search</button>
+            <form id = "status-filter">
+                <label for="status-selected">Status:</label>
+                <select id="status-selected" onchange="searchTasks()">
+                    <option value="all">All</option>
+                    <option value="open">Open</option>
+                    <option value="assigned">Assigned</option>
+                    <option value="closed">Closed</option>
+                    <option value="archived">Archived</option>
+                </select>
+                <label for="priority-selected">Priority:</label>
+                <select id="priority-selected" onchange="searchTasks()">
+                    <option value="all">All</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </form>
+        </div>
+        <div id="tasks-container" class= "{{$project->project_id}}">
+            @if($project->tasks->count() > 0)
+            <ul class="TasksList">
+                @foreach($project->tasks as $task)
+                    <a href="{{ url('task/' . $task->task_id )}}" class="project-link task-link">
+                        <li>
                             <p class="TaskTitle">{{ $task->title }}</p>
                             <p>{{ $task->description }}</p>
                             <p class="FinishDate">Deadline: {{ $task->finish_date !== null ? $task->finish_date : 'Not defined' }}</p>
-                        </div>
-                    </li> 
-                </a>
-            @endforeach
-        </ul>
+                        </li> 
+                    </a>
+                @endforeach
+            </ul>
+        </div>
+        @else
+            <p>No tasks found for this project.</p>
+        @endif
     </div>
-    @else
-        <p>No tasks found for this project.</p>
-    @endif
 </div>
 

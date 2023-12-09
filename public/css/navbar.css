@@ -2,7 +2,7 @@ header .navbar {
     display: flex;
     justify-content: space-around;
     border-bottom: 1ps solid black;
-    background-color: rgb(227, 233, 246);
+    background-color: #543CE7;
     border-bottom: 1px solid black;
     padding: 1vw 0;
 }
@@ -11,19 +11,10 @@ header .navbar {
     width: 10vw;
     height: auto;
 }
-.navbar-list-ul {
-    height: 100%;
-    width: 50em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    list-style: none;
-}
 
-.navbar-list-ul li, .authnavbar-list-ul li {
+.navbar-list-ul li {
     margin-bottom: 0;
 }
-
 
 .navbar-list-element {
     text-decoration: none;
@@ -32,15 +23,17 @@ header .navbar {
     color: #000000;
 }
 
-.navbar-logout {
+.navbar-profile-logout-notifications {
     display: flex;
+    gap: 1vw;
     align-items: center;
 }
 
-.navbar-logout-button {
-    font-size: 2rem;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
+#notifications-button {
+    border-radius: 100px;
+    padding: 0;
+    height: 2.4vw;
+    width: 2.4vw;
 }
 
 #notifications-button:hover {
@@ -119,7 +112,27 @@ button.invite-accept:hover{
     transition: 0.3s ease-in-out;
 }
 
+#notifications-button {
+    position: relative;
+    padding: 1vh;
+    background-color: #f8f9fa;
+    border: none;
+    cursor: pointer;
+}
 
+#new-notification {
+    display: hidden;
+}
+
+#new-notification.show {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.3vw 0.3vw;
+    border-radius: 50%;
+    background-color: #e74c3c;
+    color: #f8f9fa
+}
 
 
 @keyframes slideInFromRight {
@@ -132,28 +145,50 @@ button.invite-accept:hover{
   }
 
 #index-navbar {
-    padding: 0.2em 0;
+    padding: 0.5vw 0;
     display: flex;
     justify-content: space-around;
     border-bottom: 1ps solid black;
     background-color: #543CE7;
 }
 
-.navbar-register-button, .navbar-login-button {
-    font-size: 1vw;
-    font-weight: bold;
-}
-
 .navbar-register-button {
+    font-size: 1vw;
+    background-color: transparent;
+    font-weight: bold;
     padding: 0.5em 1.5em;
     color: #fff;
     border: 2px solid #E5B405;
-    border-radius: 1em;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar-register-button:hover {
+    color: #000;
+    background-color: #E5B405;
 }
 
 .navbar-login-button {
+    font-size: 1.1vw;
+    font-weight: 700;
     padding: 0.5em 0;
-    color: #DEDEDE;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navbar-logout-button {
+    font-size: 1.25vw;
+    font-weight: 700;
+    padding: 0.5em 0;
+    color: #000;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navbar-logout-button:hover {
+    color: #FF0000;
 }
 
 .navbar-separator {
@@ -167,30 +202,35 @@ button.invite-accept:hover{
     gap: 2em;
 }
 
-.authnavbar-list-ul {
+.navbar-list-ul {
     height: 100%;
-    width: 30em;
+    width: 26vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
     list-style: none;
 }
 
-.authnavbar-list-element {
+.navbar-list-element{
     text-decoration: none;
     font-size: 1.25vw;
     font-weight: bold;
-    color: #DEDEDE;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+#index-navbar .navbar-list-element:hover, .navbar-login-button:hover {
+    color: #000;
 }
 
 @media screen and (max-width: 768px) {
     .navbar-img {
         width: 18vw;
     }
-    .authnavbar-list-ul {
+    .navbar-list-ul {
         width: 30vw;
     }
-    .authnavbar-list-element {
+    .navbar-list-element {
         font-size: 130%;
     }
     .navbar-login-button, .navbar-separator, .navbar-register-button {
