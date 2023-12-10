@@ -1,9 +1,8 @@
 header .navbar {
     display: flex;
     justify-content: space-around;
-    border-bottom: 1ps solid black;
-    background-color: #d1d0dd;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(175, 184, 191);
+    background-color: #f4f7fa;
     padding: 0.4vw 0;
 }
 
@@ -203,7 +202,7 @@ button.invite-accept:hover{
 }
 
 .navbar-logout-button {
-    font-size: 1.25vw;
+    font-size: 2em;
     font-weight: 700;
     padding: 0.5em 0;
     color: #000;
@@ -235,7 +234,7 @@ button.invite-accept:hover{
     text-decoration: none;
     font-size: 1.25vw;
     font-weight: bold;
-    color: #fff;
+    color: #000000;
     transition: color 0.3s ease;
 }
 

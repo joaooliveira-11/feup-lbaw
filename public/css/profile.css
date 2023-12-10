@@ -5,7 +5,7 @@
     max-width: 80vw;
     width: 100%;
     margin: 0 auto; 
-    margin-top: 4.5vw;
+    margin-top: 6em;
     color: #303030;
 }
 
@@ -65,7 +65,6 @@
     background-color: rgba(231, 231, 231, 0.6);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     padding: 2.4em 2.4em 0 2.4em;
     border-radius: 0 0.7vw 0 0;
 }
@@ -114,7 +113,21 @@
     height: 160px;
     border-radius: 50%;
     object-fit: cover;
-    cursor: pointer;
+}
+
+#userActions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#banUserButton, #deleteButton {
+    flex: 1;
+    margin: 0 5px;
+}
+
+#banUserButton button, #deleteButton button {
+    width: 100%;
 }
 
 #Description {
@@ -124,7 +137,8 @@
 #Projects {
     background-color: #fff;
     padding: 2.4em;
-    border-radius: 0.7vw 0.7vw 0 0;
+    border-radius: 0.7vw;
+    margin-top: 2em;
 }
 
 #Projects h4 {
@@ -169,14 +183,48 @@
 #ProjectsList {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 45vh;
+    height: 35vh;
     overflow-y: auto;
 }
+
 #ProjectsList .project-element {
     height: 100%;
 }
+
 #ProjectsList p {
     height: 4vh;
+}
+
+.profile-photo-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.profile-photo-container img {
+    display: block; 
+    width: 160px; 
+    height: 160px; 
+    border-radius: 50%;
+    border: 2px solid rgb(175, 175, 175);
+}
+
+.edit-icon-label {
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.edit-icon-circle {
+    width: 40px; 
+    height: 40px;
+    background-color: #FFF; 
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); 
 }
 
 #edit-page-content{
