@@ -34,29 +34,10 @@ function addEventListeners() {
       document.getElementById("new-notification").classList.remove("show");
     });
 
-    //leave project
-    document.getElementById('leaveProject').addEventListener('click', function(event) {
-      event.preventDefault();
-      Swal.fire({
-          title: "Are you sure?",
-          text: "Once left, you will not be able to rejoin the project!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, I am sure!',          
-
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          const urlPath = window.location.pathname;
-          const pathParts = urlPath.split('/');
-          const projectId = pathParts[pathParts.length - 1];
-          console.log(projectId);
-          removeFromProject(projectId);
-        }
-      });
-    });
+    let leaveProjectButton = document.getElementById('leaveProject');
+    if (leaveProjectButton) {
+      leaveProjectButton.addEventListener('click', handleLeaveProjectClick);
+    }
 
     //kick members as coordinator
     const members = document.getElementsByClassName('kick-member');
@@ -834,4 +815,27 @@ function handleRefreshNotifications() {
       }
       });
     }
+}
+
+function handleLeaveProjectClick(event) {
+  event.preventDefault();
+  Swal.fire({
+      title: "Are you sure?",
+      text: "Once left, you will not be able to rejoin the project!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, I am sure!',          
+
+  })
+  .then((result) => {
+    if (result.isConfirmed) {
+      const urlPath = window.location.pathname;
+      const pathParts = urlPath.split('/');
+      const projectId = pathParts[pathParts.length - 1];
+      console.log(projectId);
+      removeFromProject(projectId);
+    }
+  });
 }
