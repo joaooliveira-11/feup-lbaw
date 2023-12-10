@@ -24,13 +24,13 @@
             </div>
             <div id="dashboard-project-buttons">
                 @if($project->is_coordinator(auth()->user()))
-                    <button type="button" id="AddMemberModalButton" class="dashboard-project-button"> Add Member</button>
+                    <button type="button" id="AddMemberModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}"> Add Member</button>
                     @include('modal.add_member', ['project' => $project])
                 @endif
-                <button type="button" id="CreateTaskModalButton" class="dashboard-project-button">Create Task</button>
+                <button type="button" id="CreateTaskModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}">Create Task</button>
                 @include('modal.create_task', ['project_id' => $project->project_id])
                 @if($project->is_coordinator(auth()->user()))
-                    <button type="button" id="EditProjectModalButton" class="dashboard-project-button">Manage Details</button>
+                    <button type="button" id="EditProjectModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}">Manage Details</button>
                     @include('modal.edit_proj', ['project' => $project])
                 @endif
             </div>
@@ -38,6 +38,20 @@
         <div id="ProjectDescription">
             <h2 id="dashboard-project-title">Description:</h2>
             <p id="dashboard-project-content">{{ $project->description }}</p>
+        </div>
+        <div>
+            <span>Private</span>
+            <label class="switch" data-project-id="{{ $project->project_id }}">
+                <input type="checkbox" id="visibilitySwitch" {{ !($project->is_public) ? 'checked' : '' }}>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div>
+            <span>Archived</span>
+            <label class="switch" data-project-id="{{ $project->project_id }}">
+                <input type="checkbox" id="statusSwitch" {{ $project->archived ? 'checked' : '' }}>
+                <span class="slider"></span>
+            </label>
         </div>
     </div>
 </div>

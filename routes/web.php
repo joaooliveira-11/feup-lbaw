@@ -60,6 +60,8 @@ Route::controller(ProjectController::class)->group(function() {
     Route::post('/addMember', 'addMember')->name('addmember');
     Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
     Route::patch('/project/edit', 'updatedetails')->name('project.update_details');
+    Route::patch('/project/{id}/changevisibility', 'update_visibility')->name('project.update_visibility');
+    Route::patch('/project/{id}/changestatus', 'update_status')->name('project.update_status');
 });
 
 //Task

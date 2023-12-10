@@ -24,7 +24,7 @@ class ProjectController extends Controller {
         return view('pages.project', ['project'=>$project]);
     }
 
-    public function showAllProjects() {
+    public function showAllProjects() { // isto está mal, é preciso adicionar os do user e no caso de ser admin todos
         $project = Project::where('is_public', true)->get();
         return view('pages.allProjects', ['projects'=>$project]);
     }
@@ -128,5 +128,24 @@ class ProjectController extends Controller {
         ]);
     }
     
+    public function update_visibility(Request $request, $id){
+        $project = Project::find($id);
+        $project->is_public = $request->input('is_public');
+        $project->save();
+        return response()->json([
+            'message' => 'Project visibility updated successfully',
+            'is_public' => $project->is_public,
+        ]);
+    }
+
+    public function update_status(Request $request, $id){
+        $project = Project::find($id);
+        $project->archived = $request->input('archived');
+        $project->save();
+        return response()->json([
+            'message' => 'Project status updated successfully',
+            'archived' => $project->archived,
+        ]);
+    }
     
 }
