@@ -74,11 +74,11 @@ function addEventListeners() {
             const pathParts = urlPath.split('/');
             const projectId = pathParts[pathParts.length - 1];
             const memberId = document.querySelectorAll('.user-id')[i].id.substring(4);
-            const coordinatorId = document.querySelector('.coordinator').id.substring(4);
+            const coordinatorId = document.querySelector('.coordinator-kick').id.substring(4);
             console.log("Project: "+projectId);
             console.log("Member: "+memberId);
             console.log("Coordinator: "+coordinatorId);
-            kickFromProject(projectId, memberId, coordinatorId);
+            kickFromProject(memberId, projectId, coordinatorId);
           }
         });
       });
