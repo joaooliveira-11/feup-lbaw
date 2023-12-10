@@ -29,7 +29,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
                             <strong>{{ __('Finish Date') }}:</strong>
-                            <input type="datetime-local" name="finish_date" class="form-control" id="finish_date" value="{{ \Carbon\Carbon::parse($task->finish_date)->format('Y-m-d H:i') }}">
+                            <input type="datetime-local" name="finish_date" class="form-control" id="finish_date" value="{{ optional($task->finish_date)->format('Y-m-d H:i') }}">
                             <div class="error" id="finish_dateError"></div>
                         </div>
                     </div>

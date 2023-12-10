@@ -63,4 +63,8 @@ class Project extends Model
         return $this->hasMany(Task::class, 'project_task');
     }
     
+    public function messages(): HasMany {
+        return $this->hasMany(Message::class, 'project_message');
+    }
+
 }

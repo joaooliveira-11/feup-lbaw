@@ -11,18 +11,32 @@ function addEventListeners() {
     });
 
     if (document.getElementById("CreateTaskModalButton")) {
-      setupTaskForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask');
+      setupModalForm("createtaskform", 'CreateTaskModalButton', 'ModalCreateTask');
     }
     if (document.getElementById("EditTaskModalButton")) {
-      setupTaskForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
+      setupModalForm("edittaskform", 'EditTaskModalButton', 'ModalEditTask');
     }
+    if (document.getElementById("EditProjectModalButton")) {
+      setupModalForm("editprojectform", 'EditProjectModalButton', 'ModalEditProject');
+    }
+
     if (document.getElementById("submit-comment-button")) {
       setupCommentForm("createcommentform");
     }
+    if (document.getElementById("submit-message-button")) {
+      setupMessageForm("createmessageform");
+    }
+
     let commentsSection = document.querySelector('.comments-section');
     if (commentsSection) {
     commentsSection.addEventListener('click', handleDeleteComment);
     }
+
+    let chatSection = document.querySelector('.chat-section');
+    if (chatSection) {
+      chatSection.addEventListener('click', handleDeleteMessage);
+    }
+
     if (document.getElementById("AddMemberModalButton")) {
       setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
         'Members': 'members',
@@ -300,6 +314,12 @@ function setupRadioButtons() {
       if (toDisplay) {
         toDisplay.classList.toggle('selected', this.checked);
       }
+
+      if (id === 'Chat') {
+        let chatSection = document.querySelector('.chat-section');
+        chatSection.scrollTop = chatSection.scrollHeight;
+    }
+
     });
   });
 }
@@ -403,6 +423,49 @@ function handleEditTask(modalId, event) {
   .catch(error => console.error('Error:', error));
 }
 
+function handleEditProject(modalId, event) {
+  event.preventDefault();
+  if (!isProjectFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  formData.append('_method', 'PATCH');
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+    if(data.project_finish_date){
+      let finishDate = new Date(data.project_finish_date);
+      let formattedFinishDate = finishDate.getFullYear() + '-' +
+        String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
+        String(finishDate.getDate()).padStart(2, '0') + ' ' +
+        String(finishDate.getHours()).padStart(2, '0') + ':' +
+        String(finishDate.getMinutes()).padStart(2, '0') + ':' +
+        String(finishDate.getSeconds()).padStart(2, '0');
+
+        let finishDateElement = document.querySelector('#ProjectDeadline #dashboard-project-content');
+        finishDateElement.textContent = formattedFinishDate;
+    }
+
+    let titleElement = document.querySelector('.sidebar-project-title');
+    let descriptionElement = document.querySelector('#ProjectDescription #dashboard-project-content');
+
+    titleElement.textContent = data.project_title;
+    descriptionElement.textContent = data.project_description;
+  })
+  .catch(error => console.error('Error:', error));
+}
+
 function handleCreateComment(event) {
   event.preventDefault();
 
@@ -439,6 +502,11 @@ function handleCreateComment(event) {
     let commentContentDiv = document.createElement('div');
     commentContentDiv.className = 'comment-content';
 
+    let usernameH5 = document.createElement('h5');
+    usernameH5.className = 'message-username';
+    usernameH5.textContent = data.comment_comment_by;
+    commentContentDiv.appendChild(usernameH5);
+
     let contentP = document.createElement('p');
     contentP.textContent = data.comment_content;
     commentContentDiv.appendChild(contentP);
@@ -464,7 +532,6 @@ function handleCreateComment(event) {
     let deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'comment-manage-button';
-    deleteButton.id = 'deletecommentbtn';
     deleteButton.textContent = 'Delete';
     commentButtonsDiv.appendChild(deleteButton);
     
@@ -480,6 +547,86 @@ function handleCreateComment(event) {
   .catch(error => console.error('Error:', error));
 }
 
+function handleCreateMessage(event) {
+  event.preventDefault();
+
+  if (!isMessageFormValid()) {
+    return;
+  }
+
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  let csrfToken = document.querySelector('input[name="_token"]').value;
+
+  fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-CSRF-TOKEN': csrfToken,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    let chatSection = document.querySelector('.chat-section');
+
+    let messageDiv = document.createElement('div');
+    messageDiv.className = 'message-chat';
+    messageDiv.id = 'message-' + data.message_id;
+
+    let userImage = document.createElement('img');
+    userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+    userImage.className = 'user-image';
+    userImage.alt = 'Gmail Image';
+    messageDiv.appendChild(userImage);
+
+    let messageContentDiv = document.createElement('div');
+    messageContentDiv.className = 'message-content';
+
+    let usernameH5 = document.createElement('h5');
+    usernameH5.className = 'message-username';
+    usernameH5.textContent = data.message_message_by;
+    messageContentDiv.appendChild(usernameH5);
+
+    let contentP = document.createElement('p');
+    contentP.textContent = data.message_content;
+    messageContentDiv.appendChild(contentP);
+
+    let messageInfoButtonsDiv = document.createElement('div');
+    messageInfoButtonsDiv.className = 'message-info-buttons';
+
+    let createDate = new Date(data.message_create_date);
+    let formattedCreateDate = createDate.getFullYear() + '-' +
+    String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
+    String(createDate.getDate()).padStart(2, '0') + ' ' +
+    String(createDate.getHours()).padStart(2, '0') + ':' +
+    String(createDate.getMinutes()).padStart(2, '0') + ':' +
+    String(createDate.getSeconds()).padStart(2, '0');
+
+    let createDateH6 = document.createElement('h6');
+    createDateH6.textContent = formattedCreateDate;
+    messageInfoButtonsDiv.appendChild(createDateH6);
+
+    let messageButtonsDiv = document.createElement('div');
+    messageButtonsDiv.className = 'message-buttons';
+    
+    let deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'message-manage-button';
+    deleteButton.textContent = 'Delete';
+    messageButtonsDiv.appendChild(deleteButton);
+    
+    messageInfoButtonsDiv.appendChild(messageButtonsDiv);
+
+    messageContentDiv.appendChild(messageInfoButtonsDiv);
+    messageDiv.appendChild(messageContentDiv);
+    chatSection.appendChild(messageDiv);
+    document.getElementById('message-content').value = '';
+
+    chatSection.scrollTop = chatSection.scrollHeight;
+  })
+  .catch(error => console.error('Error:', error));
+}
 
 function handleAddMember(modalId, event) {
   console.log("handleAddMember");
@@ -518,7 +665,6 @@ function isTaskFormValid() {
   document.getElementById('finish_dateError').innerHTML = '';
 
   if (title.length < 15 || title.length > 50) {
-      document.getElementById('title').classList.add('validation-err');
       document.getElementById('titleError').innerHTML = 'Title must be between 15 and 50 characters long';
       return false;
   }
@@ -531,6 +677,35 @@ function isTaskFormValid() {
   if (finishDate) {
     if(new Date(finishDate) <= new Date()){
       document.getElementById('finish_dateError').innerHTML = 'Finish date must be after today';
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isProjectFormValid() {
+  let title = document.getElementById("proj_title").value;
+  let description = document.getElementById("proj_description").value;
+  let finishDate = document.getElementById("proj_finish_date").value;
+
+  document.getElementById('proj_titleError').innerHTML = '';
+  document.getElementById('proj_descriptionError').innerHTML = '';
+  document.getElementById('proj_finish_dateError').innerHTML = '';
+
+  if (title.length < 15 || title.length > 50) {
+      document.getElementById('proj_titleError').innerHTML = 'Title must be between 15 and 50 characters long';
+      return false;
+  }
+
+  if (description.length < 100 || description.length > 300) {
+      document.getElementById('proj_descriptionError').innerHTML = 'Description must be between 100 and 300 characters long';
+      return false;
+  }
+
+  if (finishDate) {
+    if(new Date(finishDate) <= new Date()){
+      document.getElementById('proj_finish_dateError').innerHTML = 'Finish date must be after today';
       return false;
     }
   }
@@ -560,7 +735,20 @@ function isCommentFormValid() {
   return true;
 }
 
-function setupTaskForm(formId, buttonId, modalId) {
+function isMessageFormValid() {
+  let content = document.getElementById("message-content").value;
+  document.getElementById('contentError').innerHTML = '';
+
+  if (content.length < 1 || content.length > 300) {
+      document.getElementById('content').classList.add('validation-err');
+      document.getElementById('contentError').innerHTML = 'Message content must be between 1 and 300 characters long';
+      return false;
+  }
+
+  return true;
+}
+
+function setupModalForm(formId, buttonId, modalId) {
   let form = document.getElementById(formId);
   switch (formId) {
     case 'createtaskform':
@@ -569,6 +757,9 @@ function setupTaskForm(formId, buttonId, modalId) {
     case 'edittaskform':
       document.getElementById(formId).addEventListener("submit", handleEditTask.bind(form, modalId));
       break;
+    case 'editprojectform':
+      document.getElementById(formId).addEventListener("submit", handleEditProject.bind(form, modalId));
+      break; 
   }
   document.getElementById(buttonId).addEventListener('click', function () {
     let modal = new bootstrap.Modal(document.getElementById(modalId));
@@ -579,6 +770,11 @@ function setupTaskForm(formId, buttonId, modalId) {
 function setupCommentForm(formId) {
   let form = document.getElementById(formId);
   document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
+}
+
+function setupMessageForm(formId) {
+  let form = document.getElementById(formId);
+  document.getElementById(formId).addEventListener("submit", handleCreateMessage.bind(form));
 }
 
 function dismiss_notification(notificationId) {
@@ -676,12 +872,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-
-
-function handleDeleteComment(event) {
-  if (event.target.classList.contains('comment-manage-button')) {
-    let commentDiv = event.target.closest('.comment');
-    let commentId = commentDiv.id.split('-')[1];
+function handleDelete(event, buttonClass, itemClass, deleteUrl) {
+  if (event.target.classList.contains(buttonClass)) {
+    let itemDiv = event.target.closest('.' + itemClass);
+    let itemId = itemDiv.id.split('-')[1];
     let csrfToken = document.querySelector('#csrf-token').value;
     Swal.fire({
       title: 'Are you sure?',
@@ -693,7 +887,7 @@ function handleDeleteComment(event) {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('/comment/delete/' + commentId, {
+        fetch(deleteUrl + itemId, {
           method: 'DELETE',
           headers: {
             'X-CSRF-TOKEN': csrfToken
@@ -707,7 +901,7 @@ function handleDeleteComment(event) {
         })
         .then(data => {
           if (data.success) {
-            commentDiv.remove();
+            itemDiv.remove();
           } 
         })
         .catch((error) => {
@@ -716,6 +910,14 @@ function handleDeleteComment(event) {
       }
     })
   }
+}
+
+function handleDeleteComment(event) {
+  handleDelete(event, 'comment-manage-button', 'comment', '/comment/delete/');
+}
+
+function handleDeleteMessage(event) {
+  handleDelete(event, 'message-manage-button', 'message-chat', '/message/delete/');
 }
 
 // pusher notifications

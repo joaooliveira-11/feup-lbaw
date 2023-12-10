@@ -349,3 +349,100 @@ header {
     margin: 0;
     padding: 0.5vw;
 }
+
+.chat-section {
+    height: 69vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1vw 0 2vw 0;
+}
+
+.chat-section::-webkit-scrollbar {
+    display: none;
+}
+
+.message-form {
+    display: flex;
+    margin: 0;
+    height: 3vw;
+    margin-top: 2vh;
+}
+
+.message-form textarea {
+    resize: none;
+    min-height: 3vw;
+    border-radius: 5px 0 0 5px;
+    font-size: 0.8vw;
+}
+
+#submit-message-button {
+    height: 100%;
+    background-color: #3C5EE7;
+    color: white;
+    font-size: 0.8vw;
+    border-radius: 0 5px 5px 0;
+}
+
+.message {
+    display: flex;
+    width: 40vw;
+    margin-top: 1vw;
+}
+
+.message-username {
+    color: #303030;
+    font-size: 0.8vw;
+}
+
+.message-chat {
+    display: flex;
+    width: 50vw;
+    margin-top: 1vw;
+    align-items: center;
+}
+
+.user-image {
+    height: 4vw;
+    width: 4vw;
+    border-radius: 100px;
+}
+
+.message-content {
+    width: 70%;
+}
+
+.message-content p {
+    margin: 0.4vw 0 0 0;
+    padding: 0.5vw 1vw;
+    background-color: #FFF;
+    color: #303030;
+    font-size: 1vw;
+    border-radius: 5px;
+}
+
+.message-content h6 {
+    color: #000;
+    font-size: 0.7vw;
+}
+
+.message-info-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.message-buttons {
+    display: flex;
+    gap: 1.2vw;
+}
+
+.message-manage-button {
+    padding: 0;
+    background-color: transparent;
+    height: 1.2vw;
+    font-size: 0.7vw;
+}
+
+.message-manage-button:hover {
+    background-color: transparent;
+    color: #303030;
+}

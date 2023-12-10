@@ -15,4 +15,9 @@ class MessagePolicy{
         return ($project->is_member($user) || $project->is_coordinator($user));
     }
     
+    public function delete(User $user, Message $message) : bool {
+        $project = Project::find($message->project_message);
+
+        return ($project->is_member($user) && $message->message_by == $user->id);
+    }
 }

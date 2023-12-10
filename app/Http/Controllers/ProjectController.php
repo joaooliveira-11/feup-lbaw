@@ -13,14 +13,13 @@ use App\Events\AcceptedProjectInvite;
 
 class ProjectController extends Controller {
 
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function show(int $id){
 
-        if(!Auth::check()){
-            return redirect("/login");
-        }
-
         $project = Project::find($id);  
-        $user = User::find(Auth::user()->id);
         $this->authorize('show', $project);
         return view('pages.project', ['project'=>$project]);
     }
@@ -30,11 +29,7 @@ class ProjectController extends Controller {
         return view('pages.allProjects', ['projects'=>$project]);
     }
 
-    public function createInvite(Request $request) {   
-
-        if(!Auth::check()){
-            return redirect("/login");
-        }
+    public function create(Request $request) {   
 
         $this->authorize('create', Project::class);
         // Set project details.
@@ -46,9 +41,25 @@ class ProjectController extends Controller {
         $project->created_by = Auth::user()->id;
         $project->project_coordinator = Auth::user()->id;
         $project->save();
+    }
 
+    public function updatedetails(Request $request){
+
+        $project_id = $request->project_id;
+        $project = Project::find($project_id);
+
+        $this->authorize('updatedetails', $project); 
+
+        $project->title = $request->title;
+        $project->description = $request->description;
+        $project->finish_date = $request->finish_date;
+
+        $project->save();
+        
         return response()->json([
-            'success' => 'Project created successfully!',
+            'project_title' => $project->title,
+            'project_description' => $project->description,
+            'project_finish_date' => $project->finish_date,
         ]);
     }
 
@@ -61,16 +72,6 @@ class ProjectController extends Controller {
         return view('pages.allProjects', ['projects'=>$projects]);
     }
 
-
-    public function showProjectMembers(int $project_id) : View {
-        $project = Project::find($project_id); 
-        return view('pages.projectMembers', ['project'=> $project]);
-    }
-
-    public function showProjectTasks(int $project_id) : View {
-        $project = Project::find($project_id); 
-        return view('pages.allTasks', ['project'=> $project]);
-    }
 
     public function search(Request $request)
     {
