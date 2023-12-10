@@ -127,6 +127,37 @@ class ProjectController extends Controller {
             'success' => 'You left the project successfully!',
         ]);
     }
+
+    public function kickMember($user_id, $project_id){
+            
+            $project = Project::find($project_id);
+            $user = User::find($user_id);
+    
+            Project_Users::where('project_id', $project->project_id)
+                        ->where('user_id', $user->id)
+                        ->delete();
+    
+            return response()->json([
+                'success' => 'User kicked from project successfully!',
+            ]);
+    }
+
+    public function changeCoordinator($username, $project_id){
+        
+        
+        $project = Project::find($project_id);
+        $coordinator = User::where('username', $username)->first();
+
+        $this->kickMember($coordinator->id, $project_id);
+
+        $project->project_coordinator = $coordinator->id;
+        
+        $project->save();
+        
+        return response()->json([
+            'success' => 'Coordinator changed successfully!',
+        ]);
+    }
     
     
 }

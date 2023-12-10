@@ -317,6 +317,7 @@ header {
 }
 
 .project-member {
+    break-inside: avoid-column;
     border: 1px solid #000;
     border-radius: 0.7vw;
     padding: 1em;
@@ -337,7 +338,18 @@ header {
     text-decoration: none;
 }
 
-<<<<<<< public/css/project.css
+#coordinator-tag, #you-tag {
+    font-style: italic;
+    font-weight: 700;
+
+}
+
+.kick-member{
+    border-radius: 0.5vw;
+    margin: 0;
+    padding: 0.5vw;
+}
+
 .chat-section {
     height: 69vh;
     overflow-y: auto;
