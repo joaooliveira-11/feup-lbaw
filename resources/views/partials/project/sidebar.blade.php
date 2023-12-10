@@ -19,7 +19,7 @@
         </label>
     </form>
     @if($project->is_member(auth()->user()))
-        <button id="leaveProject">Leave Project</button>
+        <button id="leaveProject" @if(Auth::user()->id == $project->project_coordinator) class =  "coordinator" @endif >Leave Project</button>
     @endif
 </div>
 
