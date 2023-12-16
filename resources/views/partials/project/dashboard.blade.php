@@ -16,9 +16,15 @@
             <div id="Favorites">
                 <h2 class="dashboard-project-title">Favorites: </h2>
                 <p id="dashboard-project-content"> {{ $project->favorites()->count() }} </p>
-                <i class="fa-regular fa-heart"></i>	
+                <button id = "favorite-btn" onclick = "favoriteProject({{auth()->user()->id}})">
+                    @if($project->is_favorite(auth()->user()))
+                        <i class="fa-solid fa-heart"></i>
+                    @else
+                        <i class="fa-regular fa-heart"></i>
+                    @endif
+                </button>
             </div>
-            <div id="dashboard-project-buttons">
+            <div class="dashboard-project-buttons">
                 @if($project->is_coordinator(auth()->user()))
                     <button type="button" id="AddMemberModalButton" class="dashboard-project-button"> Add Member</button>
                     @include('modal.add_member', ['project' => $project])

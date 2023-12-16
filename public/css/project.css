@@ -167,7 +167,7 @@ header {
     margin-left: 0.5vw;
 }
 
-#dashboard-project-buttons {
+.dashboard-project-buttons {
     display: flex;
     justify-content: space-between;
     padding-right: 1.6vw;
@@ -188,6 +188,15 @@ header {
     background-color: #543CE7;
     color: #000;
     box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
+}
+
+#favorite-btn{
+    background-color: transparent;
+    
+}
+
+#favorite-btn i{
+    color: #e83749;
 }
 
 #CreateTaskButton {

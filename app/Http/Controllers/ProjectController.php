@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\Project_Users;
 use App\Models\Invite;
+use App\Models\Favorite_Projects;
 use Illuminate\Support\Facades\DB;
 use App\Events\AcceptedProjectInvite;
 
@@ -159,5 +160,42 @@ class ProjectController extends Controller {
         ]);
     }
     
+    public function favoriteProject(Request $request){
+
+        $project = Project::find($request->get('projectId'));
+        $user = User::find($request->get('userId'));
+        
+        $favorite = Favorite_Projects::where('project_id', $project->project_id)
+                             ->where('user_id', $user->id)
+                             ->first();
+        
+        //delete if already favorited
+        if ($favorite) {
+            Favorite_Projects::where('project_id', $project->project_id)
+                 ->where('user_id', $user->id)
+                 ->delete();
+
+            $favoritesCount = $project->favorites()->count();
+
+            return response()->json([
+                'success' => 'Project unfavorited successfully!',
+                'favoritesCount' => $favoritesCount,
+                'job' => 'remove',
+            ]);
+        }
+
+        $favorite = new Favorite_Projects;
+        $favorite->project_id = $project->project_id;
+        $favorite->user_id = $user->id;
+        $favorite->save();
+        
+        $favoritesCount = $project->favorites()->count();
+
+        return response()->json([
+            'success' => 'Project favorited successfully!',
+            'favoritesCount' => $favoritesCount,
+            'job' => 'add',
+        ]);
+    }
     
 }

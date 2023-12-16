@@ -1041,3 +1041,25 @@ function handleLeaveProjectClick(event) {
     }
   });
 }
+
+function favoriteProject(userId){
+  const urlPath = window.location.pathname;
+  const pathParts = urlPath.split('/');
+  const projectId = pathParts[pathParts.length - 1];
+
+  sendAjaxRequest('POST', '/favoriteProject', {projectId: projectId, userId: userId}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      const response = JSON.parse(this.responseText);
+      const favoriteCount = document.querySelector('#Favorites p');
+      favoriteCount.textContent = response.favoritesCount;
+      const favoriteButton = document.querySelector('#favorite-btn');
+      if(response.job === "add"){
+        favoriteButton.innerHTML = '<i class="fa-solid fa-heart"></i>';
+      }
+      if(response.job  === "remove"){
+        favoriteButton.innerHTML = '<i class="fa-regular fa-heart"></i>';
+      }
+    }
+  });
+  
+}
