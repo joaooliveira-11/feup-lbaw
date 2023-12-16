@@ -197,5 +197,25 @@ class ProjectController extends Controller {
             'job' => 'add',
         ]);
     }
+
+    public function update_visibility(Request $request, $id){
+        $project = Project::find($id);
+        $project->is_public = $request->input('is_public');
+        $project->save();
+        return response()->json([
+            'message' => 'Project visibility updated successfully',
+            'is_public' => $project->is_public,
+        ]);
+    }
+
+    public function update_status(Request $request, $id){
+        $project = Project::find($id);
+        $project->archived = $request->input('archived');
+        $project->save();
+        return response()->json([
+            'message' => 'Project status updated successfully',
+            'archived' => $project->archived,
+        ]);
+    }
     
 }

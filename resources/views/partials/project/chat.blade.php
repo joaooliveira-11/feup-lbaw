@@ -23,7 +23,7 @@
         @endforeach
     </div>
     @if($project->is_member(auth()->user()))
-    <form class="message-form" id="createmessageform" action="{{ route('message.create') }}" method="POST">
+    <form class="message-form {{ $project->archived ? 'archived-btn' : '' }}" id="createmessageform" action="{{ route('message.create') }}" method="POST">
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->project_id}}">
         <textarea name="content" id="message-content" placeholder="Type message" required></textarea>

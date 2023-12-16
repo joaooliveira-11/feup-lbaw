@@ -22,11 +22,13 @@
             </div>
         @endforeach
     </div>
-    <form class="comment-form" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
-        @csrf
-        <input type="hidden" name="task_id" value="{{ $task->task_id }}">
-        <textarea name="content" id="comment-content" placeholder="Type comment" required></textarea>
-        <div class="error" id="contentError"></div>
-        <button id="submit-comment-button" type="submit">Send</button>
-    </form>
+    @if($task->task_project->is_member(auth()->user()))
+        <form class="comment-form" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
+            @csrf
+            <input type="hidden" name="task_id" value="{{ $task->task_id }}">
+            <textarea name="content" id="comment-content" placeholder="Type comment" required></textarea>
+            <div class="error" id="contentError"></div>
+            <button id="submit-comment-button" type="submit">Send</button>
+        </form>
+    @endif
 </div>

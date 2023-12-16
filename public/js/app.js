@@ -1,5 +1,7 @@
 function addEventListeners() {
 
+  setupRadioButtons();
+  
     let changePic = document.querySelector('#fileInput');
     if (changePic != null)
     changePic.addEventListener('change', handleFileSelect);
@@ -47,10 +49,21 @@ function addEventListeners() {
       document.getElementById("notifications-dropdown").classList.toggle("hide");
       document.getElementById("new-notification").classList.remove("show");
     });
+    
 
     let leaveProjectButton = document.getElementById('leaveProject');
     if (leaveProjectButton) {
       leaveProjectButton.addEventListener('click', handleLeaveProjectClick);
+    }
+    
+    let changeProjectvisibility = document.getElementById('visibilitySwitch');
+    if (changeProjectvisibility) {
+      changeProjectvisibility.addEventListener('change', handleProjectVisibility);
+    }
+
+    let changeProjectStatus = document.getElementById('statusSwitch');
+    if (changeProjectStatus) {
+      changeProjectStatus.addEventListener('change', handleProjectStatus);
     }
 
     //kick members as coordinator
@@ -83,8 +96,6 @@ function addEventListeners() {
         });
       });
   }
-
-    setupRadioButtons()
 } 
 
   function encodeForAjax(data) {
@@ -304,16 +315,17 @@ function setupRadioButtons() {
     radio.addEventListener('change', function() {
       const id = this.value;
       document.querySelector('label.selected').classList.toggle('selected', false);
-      this.parentNode.classList.toggle('selected', this.checked);       
-      const toHide = document.querySelector('#MainContent .selected')
-      if (toHide) {
-        toHide.classList.toggle('selected', false);
-      }
+      this.parentNode.classList.toggle('selected', this.checked);
 
-      const toDisplay = document.querySelector('#MainContent div#' + id);
-      if (toDisplay) {
-        toDisplay.classList.toggle('selected', this.checked);
-      }
+      const toHide = document.querySelectorAll('#MainContent .selected');
+      toHide.forEach(element => {
+        element.classList.remove('selected');
+      });
+
+      const toDisplay = document.querySelectorAll('#MainContent div#' + id);
+      toDisplay.forEach(element => {
+        element.classList.add('selected');
+      });
 
       if (id === 'Chat') {
         let chatSection = document.querySelector('.chat-section');
@@ -383,7 +395,7 @@ function handleEditTask(modalId, event) {
 
   let url = this.getAttribute('action');
   let formData = new FormData(this);
-  formData.append('_method', 'PATCH');
+  // formData.append('_method', 'PATCH');
   let csrfToken = document.querySelector('input[name="_token"]').value;
 
   fetch(url, {
@@ -1039,6 +1051,71 @@ function handleLeaveProjectClick(event) {
       console.log(projectId);
       removeFromProject(projectId);
     }
+  });
+}
+
+function handleProjectVisibility() {
+
+  const projectId = this.closest('.switch').dataset.projectId;
+  const is_public = this.checked ? false : true;
+
+  fetch(`/project/${projectId}/changevisibility`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({
+          is_public: is_public
+      })
+  })
+  .then(response => response.json())
+  .then(data => {
+    this.checked = !(data.is_public);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    this.checked = !this.checked;
+  });
+}
+
+function updateButtonsVisibility(archived) {
+  const buttons = ['AddMemberModalButton', 'CreateTaskModalButton', 'EditProjectModalButton', 'createmessageform'];
+
+  buttons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      if (archived) {
+        button.classList.add('archived-btn');
+      } else {
+        button.classList.remove('archived-btn');
+      }
+    }
+  });
+}
+
+function handleProjectStatus() {
+  const projectId = this.closest('.switch').dataset.projectId;
+  const archived = this.checked;
+
+  fetch(`/project/${projectId}/changestatus`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({
+          archived: archived
+      })
+  })
+  .then(response => response.json())
+  .then(data => {
+      this.checked = data.archived;
+      updateButtonsVisibility(data.archived)
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      this.checked = !this.checked;
   });
 }
 
