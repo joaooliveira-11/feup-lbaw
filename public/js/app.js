@@ -21,6 +21,9 @@ function addEventListeners() {
     if (document.getElementById("EditProjectModalButton")) {
       setupModalForm("editprojectform", 'EditProjectModalButton', 'ModalEditProject');
     }
+    if (document.getElementById("assignUserButton")) {
+      setupModalForm('assignTaskForm', 'assignUserButton', 'ModalAssignTask');
+    }
 
     if (document.getElementById("submit-comment-button")) {
       setupCommentForm("createcommentform");
@@ -771,7 +774,10 @@ function setupModalForm(formId, buttonId, modalId) {
       break;
     case 'editprojectform':
       document.getElementById(formId).addEventListener("submit", handleEditProject.bind(form, modalId));
-      break; 
+      break;
+    case'assignTaskForm':
+      assign_task_to();
+      break;
   }
   document.getElementById(buttonId).addEventListener('click', function () {
     let modal = new bootstrap.Modal(document.getElementById(modalId));
@@ -1139,4 +1145,22 @@ function favoriteProject(userId){
     }
   });
   
+}
+
+function assign_task_to(){
+  const members = document.querySelectorAll('.assign_task_member');
+  members.forEach(function(member) {
+    member.addEventListener('click', function() {
+      members.forEach(function(member) {
+        member.classList.remove('selected');
+      });
+      this.classList.add('selected');
+      document.getElementById('assign_task_to').value = this.getAttribute('data-id');
+    });
+  });
+
+  // Select the first member by default
+  if (members.length > 0) {
+    members[0].click();
+  }
 }

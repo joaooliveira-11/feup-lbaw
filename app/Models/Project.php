@@ -32,7 +32,9 @@ class Project extends Model
         $project_users = $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id')->get();
         $coordinator = $this->coordinator()->first();
 
-        return $project_users->push($coordinator);
+        $members = $project_users->push($coordinator);
+
+        return $members->sortBy('username');
     }
 
     public function nonmembers(){

@@ -74,6 +74,7 @@ Route::controller(TaskController::class)->group(function() {
     Route::patch('/task/edit', 'updatedetails')->name('task.update_details');
     Route::patch('/task/complete', 'completetask')->name('task.complete');
     Route::post('/search-tasks', 'search');
+    Route::patch('/task/assign', 'assign')->name('task.assign');
 });
 
 //Comment

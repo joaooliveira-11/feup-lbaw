@@ -82,6 +82,19 @@ class TaskController extends Controller {
             ->withSuccess('You have successfully completed an assigned task');
     }
 
+    public function assign(Request $request){
+
+        $task_id = $request->input('task_id');
+        $task = Task::find($task_id);
+        // $this->authorize('assign', $task);    
+
+        $task->state = 'assigned';
+        $task->assigned_to = $request->assign_task_to;
+        $task->save();
+    
+        return view('pages.task', ['task'=>$task]);
+    }
+
     public function search(Request $request){
 
         $search = strtolower($request->input('filter'));
