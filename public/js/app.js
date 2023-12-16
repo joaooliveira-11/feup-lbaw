@@ -66,6 +66,36 @@ function addEventListeners() {
       changeProjectStatus.addEventListener('change', handleProjectStatus);
     }
 
+    //kick members as coordinator
+    const members = document.getElementsByClassName('kick-member');
+    for (let i = 0; i < members.length; i++) {
+      members[i].addEventListener('click', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Once kicked, the member will not be able to rejoin the project!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, I am sure!',          
+  
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            const urlPath = window.location.pathname;
+            const pathParts = urlPath.split('/');
+            const projectId = pathParts[pathParts.length - 1];
+            const memberId = document.querySelectorAll('.user-id')[i].id.substring(4);
+            const coordinatorId = document.querySelector('.coordinator-kick').id.substring(4);
+            console.log("Project: "+projectId);
+            console.log("Member: "+memberId);
+            console.log("Coordinator: "+coordinatorId);
+            kickFromProject(memberId, projectId, coordinatorId);
+          }
+        });
+      });
+  }
 } 
 
   function encodeForAjax(data) {
@@ -790,11 +820,60 @@ function accept_invite(reference_id, notification_id, member_id) {
 
 }
 
-function removeFromProject(projectId){
-  sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
-    if (this.status >= 200 && this.status < 400) {
+function removeFromProject(projectId,){
+  const is_coordinator = document.querySelector('#leaveProject.coordinator');
+  if(is_coordinator != null){
+    assignCoordinator(projectId);
+  }else{
+    sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
+      if (this.status >= 200 && this.status < 400) {
+        location.reload();
+      }
+    });
+  }
+}
+
+function kickFromProject(memberId, projectId, coordinatorId){
+  if(memberId == coordinatorId){
+    assignCoordinator(projectId);
+}else{
+    sendAjaxRequest('DELETE', '/kickMember/'+memberId+'/'+projectId, {}, function() {
+      if (this.status >= 200 && this.status < 400) {
+        location.reload();
+      }
+    });
+  }
+}
+
+function assignCoordinator(projectId){
+  const members = document.getElementsByClassName('user-id');
+    
+    const options = {};
+    for(let i = 0; i < members.length; i++){
+      const memberId = document.querySelectorAll('.user-id em')[i].textContent;
+      options[i] = memberId;
     }
-  });
+    Swal.fire({
+      title: "You are the coordinator of this project!",
+      text: "You need to nominate another coordinator before leaving the project!",
+      icon: "warning",
+      input: 'select',
+      inputOptions: options,
+      inputPlaceholder: 'Select a member',
+      showCancelButton: false,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Ok',          
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        const username = options[result.value].substring(1);
+        sendAjaxRequest('POST', '/changeCoordinator/'+username+'/'+projectId, {}, function() {
+          if (this.status >= 200 && this.status < 400) {
+            location.reload(); 
+          }
+        });
+      }
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -955,13 +1034,14 @@ function handleRefreshNotifications() {
 function handleLeaveProjectClick(event) {
   event.preventDefault();
   Swal.fire({
-    title: "Are you sure?",
-    text: "Once left, you will not be able to rejoin the project!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, I am sure!',          
+      title: "Are you sure?",
+      text: "Once left, you will not be able to rejoin the project!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, I am sure!',          
+
   })
   .then((result) => {
     if (result.isConfirmed) {
@@ -970,7 +1050,6 @@ function handleLeaveProjectClick(event) {
       const projectId = pathParts[pathParts.length - 1];
       console.log(projectId);
       removeFromProject(projectId);
-      location.reload();
     }
   });
 }
@@ -1038,4 +1117,26 @@ function handleProjectStatus() {
       console.error('Error:', error);
       this.checked = !this.checked;
   });
+}
+
+function favoriteProject(userId){
+  const urlPath = window.location.pathname;
+  const pathParts = urlPath.split('/');
+  const projectId = pathParts[pathParts.length - 1];
+
+  sendAjaxRequest('POST', '/favoriteProject', {projectId: projectId, userId: userId}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      const response = JSON.parse(this.responseText);
+      const favoriteCount = document.querySelector('#Favorites p');
+      favoriteCount.textContent = response.favoritesCount;
+      const favoriteButton = document.querySelector('#favorite-btn');
+      if(response.job === "add"){
+        favoriteButton.innerHTML = '<i class="fa-solid fa-heart"></i>';
+      }
+      if(response.job  === "remove"){
+        favoriteButton.innerHTML = '<i class="fa-regular fa-heart"></i>';
+      }
+    }
+  });
+  
 }

@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\Project_Users;
 use App\Models\Invite;
+use App\Models\Favorite_Projects;
 use Illuminate\Support\Facades\DB;
 use App\Events\AcceptedProjectInvite;
 
@@ -24,7 +25,7 @@ class ProjectController extends Controller {
         return view('pages.project', ['project'=>$project]);
     }
 
-    public function showAllProjects() { // isto está mal, é preciso adicionar os do user e no caso de ser admin todos
+    public function showAllProjects() {
         $project = Project::where('is_public', true)->get();
         return view('pages.allProjects', ['projects'=>$project]);
     }
@@ -127,7 +128,76 @@ class ProjectController extends Controller {
             'success' => 'You left the project successfully!',
         ]);
     }
+
+    public function kickMember($user_id, $project_id){
+            
+            $project = Project::find($project_id);
+            $user = User::find($user_id);
     
+            Project_Users::where('project_id', $project->project_id)
+                        ->where('user_id', $user->id)
+                        ->delete();
+    
+            return response()->json([
+                'success' => 'User kicked from project successfully!',
+            ]);
+    }
+
+    public function changeCoordinator($username, $project_id){
+        
+        
+        $project = Project::find($project_id);
+        $coordinator = User::where('username', $username)->first();
+
+        $this->kickMember($coordinator->id, $project_id);
+
+        $project->project_coordinator = $coordinator->id;
+        
+        $project->save();
+        
+        return response()->json([
+            'success' => 'Coordinator changed successfully!',
+        ]);
+    }
+    
+    public function favoriteProject(Request $request){
+
+        $project = Project::find($request->get('projectId'));
+        $user = User::find($request->get('userId'));
+        
+        $favorite = Favorite_Projects::where('project_id', $project->project_id)
+                             ->where('user_id', $user->id)
+                             ->first();
+        
+        //delete if already favorited
+        if ($favorite) {
+            Favorite_Projects::where('project_id', $project->project_id)
+                 ->where('user_id', $user->id)
+                 ->delete();
+
+            $favoritesCount = $project->favorites()->count();
+
+            return response()->json([
+                'success' => 'Project unfavorited successfully!',
+                'favoritesCount' => $favoritesCount,
+                'job' => 'remove',
+            ]);
+        }
+
+        $favorite = new Favorite_Projects;
+        $favorite->project_id = $project->project_id;
+        $favorite->user_id = $user->id;
+        $favorite->save();
+        
+        $favoritesCount = $project->favorites()->count();
+
+        return response()->json([
+            'success' => 'Project favorited successfully!',
+            'favoritesCount' => $favoritesCount,
+            'job' => 'add',
+        ]);
+    }
+
     public function update_visibility(Request $request, $id){
         $project = Project::find($id);
         $project->is_public = $request->input('is_public');
