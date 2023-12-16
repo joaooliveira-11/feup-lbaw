@@ -3,10 +3,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project_Users extends Model {
+class Favorite_Projects extends Model {
     use HasFactory;
 
-    public $timestamps  = false;
-
     protected $table = 'favorite_projects';
+    public $timestamps = false;
+    protected $primaryKey = ['project_id', 'user_id'];
+    public $incrementing = false;
+
+    public function project()
+    {
+        return $this->belongsTo('App\Project', 'project_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
 }

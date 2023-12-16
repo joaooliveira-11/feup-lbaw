@@ -145,7 +145,7 @@ header {
     width: 50%;
 }
 
-#ProjectDeadline, #ProjectDescription , #MembersCounter, #ActiveTasks{
+#ProjectDeadline, #ProjectDescription , #MembersCounter, #ActiveTasks, #Favorites {
     width: 100%;
     font-size: 1vw;
     color: #303030;
@@ -153,7 +153,7 @@ header {
     align-items: baseline;
 }
 
-#dashboard-project-title {
+.dashboard-project-title {
     font-size: 1.2vw;
     color: #303030;
     font-weight: 500;
