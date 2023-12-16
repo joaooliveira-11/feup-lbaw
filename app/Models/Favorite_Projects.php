@@ -3,10 +3,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project_Users extends Model {
+class Favorite_Projects extends Model {
     use HasFactory;
 
-    public $timestamps  = false;
-
     protected $table = 'favorite_projects';
+    public $timestamps = false;
+    public $incrementing = false;
+
 }

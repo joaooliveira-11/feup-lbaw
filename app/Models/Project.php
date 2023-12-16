@@ -67,4 +67,12 @@ class Project extends Model
         return $this->hasMany(Message::class, 'project_message');
     }
 
+    public function favorites(): HasMany {
+        return $this->hasMany(Favorite_Projects::class, 'project_id');
+    }
+
+    public function is_favorite(User $user) {
+        return $this->favorites()->where('user_id', $user->id)->exists();
+    }
+
 }
