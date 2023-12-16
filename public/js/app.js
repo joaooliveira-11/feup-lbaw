@@ -1032,7 +1032,6 @@ function handleProjectStatus() {
   .then(response => response.json())
   .then(data => {
       this.checked = data.archived;
-      setupRadioButtons();
       updateButtonsVisibility(data.archived)
   })
   .catch(error => {
