@@ -77,4 +77,8 @@ class Project extends Model
         return $this->favorites()->where('user_id', $user->id)->exists();
     }
 
+    public function users(): BelongsToMany {
+        return $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id');
+    }
+
 }

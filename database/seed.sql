@@ -415,7 +415,7 @@ BEGIN
     UPDATE task
     SET state = 'open', assigned_to = NULL
     WHERE project_task = OLD.project_id
-    AND ((state = 'assigned' OR state = 'closed') AND assigned_to = OLD.user_id);
+    AND ((state = 'assigned' OR state = 'completed') AND assigned_to = OLD.user_id);
     RETURN OLD;
 END
 $BODY$
