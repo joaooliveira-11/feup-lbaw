@@ -145,8 +145,15 @@ header {
     width: 50%;
 }
 
-#ProjectDeadline, #ProjectDescription , #MembersCounter, #ActiveTasks, #Favorites {
+#ProjectDeadline, #MembersCounter, #ActiveTasks, #Favorites {
     width: 100%;
+    font-size: 1vw;
+    color: #303030;
+    display: flex;
+    align-items: baseline;
+}
+
+#ProjectDescription {
     font-size: 1vw;
     color: #303030;
     display: flex;
@@ -220,6 +227,7 @@ header {
 
 
 /*----------------------------  Tasks ----------------------------*/
+
 
 #Tasks ul {
     display: grid;
@@ -310,16 +318,22 @@ header {
     font-weight: 500;
 }
 
+.project-members-title-2 {
+    font-size: 1.4vw;
+    font-weight: 500;
+    margin-top: 1em;
+}
+
 .project-members-content {
     margin: 0 auto;
-    margin-top: 2vw;
     overflow-y: auto;
-    height: 32vw;
+    flex-grow: 1;
 }
 
 .project-members-ul {
     list-style: none;
     column-count: 2;
+    flex-grow: 1;
 }
 
 .project-members-ul a {
@@ -338,6 +352,10 @@ header {
 
 .project-member:hover {
     box-shadow: 0 0 15px rgba(84, 60, 231, 0.4);
+}
+
+#Members {
+    height: 100%;
 }
 
 #Members p {

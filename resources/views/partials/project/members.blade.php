@@ -1,27 +1,30 @@
- <div id="Members">
-    <h3 class="project-members-title">Project Members</h3>
-    <div class="project-members-content">
+ <div id="Members" class="container">
+    <h3 class="project-members-title">Project Coordinator</h3>
+    <div class="container project-members-content">
+        @foreach($project->members() as $user)
+            @if($user->id == $project->project_coordinator)
+                <ul style="width: 20em;">
+                    <a href="{{ route('show', ['id' => $user->id]) }}" style="text-decoration: none;">
+                        <li class="row project-member">
+                            <p id="user{{ $user->id}}">{{ $user->name }} - <em>{{ '@' . $user->username }}</em> 
+                        </li>
+                    </a>
+                </ul>
+            @endif
+        @endforeach
+        <h3 class="project-members-title-2">Project Members</h3>
         <ul class="project-members-ul">
             @foreach($project->members() as $user)
-            <a href="{{ route('show', ['id' => $user->id]) }}">
-                <li class="project-member">
-                    <p id="user{{ $user->id}}" class= "user-id @if ( $user->id == $project->project_coordinator)coordinator-kick @endif" >{{ $user->name }} - <em>{{ '@' . $user->username }}</em> 
-                    @if (Auth::user()->id == $project->project_coordinator)
-                        <button class="kick-member" ><i class="fa-solid fa-user-xmark"></i></button>
-                        </p>
-                    @else
-                    </p>
-                    @endif
-                    @if($user->id == $project->project_coordinator) 
-                    <p id="coordinator-tag">Coordinator</p>
-                    @endif
-
-                </li>
-            </a>
+                @if($user->id != $project->project_coordinator)
+                    <a href="{{ route('show', ['id' => $user->id]) }}" class="container">
+                        <li class="row project-member">
+                            <p id="user{{ $user->id}}" class="user-id @if ( $user->id == $project->project_coordinator)coordinator-kick @endif" >{{ $user->name }} - <em>{{ '@' . $user->username }}</em> 
+                            </p>
+                        </li>
+                    </a>
+                @endif
             @endforeach
         </ul>
-        <button type="button" id="AddMemberModalButton" class="dashboard-project-button">Add Member</button>
-        @include('modal.add_member', ['project' => $project])
     </div>
 </div>    
 
