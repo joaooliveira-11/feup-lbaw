@@ -121,11 +121,25 @@ class ProjectController extends Controller {
         $project = Project::find($id);
         $user = User::find(Auth::user()->id);
 
-        Project_Users::where('project_id', $project->project_id)
+        $instance = Project_Users::where('project_id', $project->project_id)
+        ->where('user_id', $user->id)
+        ->first();
+
+        if($instance){
+            try {
+                DB::table('project_users')
+                    ->where('project_id', $project->project_id)
                     ->where('user_id', $user->id)
                     ->delete();
-
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => 'Failed to delete instance: ' . $e->getMessage(),
+                ]);
+            }
+        }
+  
         return response()->json([
+            'instance' => $instance,
             'success' => 'You left the project successfully!',
         ]);
     }
@@ -135,10 +149,11 @@ class ProjectController extends Controller {
             $project = Project::find($project_id);
             $user = User::find($user_id);
     
-            Project_Users::where('project_id', $project->project_id)
-                        ->where('user_id', $user->id)
-                        ->delete();
-    
+            DB::table('project_users')
+                    ->where('project_id', $project->project_id)
+                    ->where('user_id', $user->id)
+                    ->delete();
+
             return response()->json([
                 'success' => 'User kicked from project successfully!',
             ]);

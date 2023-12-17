@@ -831,13 +831,14 @@ function accept_invite(reference_id, notification_id, member_id) {
 
 }
 
-function removeFromProject(projectId,){
+function removeFromProject(projectId){
   const is_coordinator = document.querySelector('#leaveProject.coordinator');
   if(is_coordinator != null){
     assignCoordinator(projectId);
   }else{
     sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
       if (this.status >= 200 && this.status < 400) {
+        const response = JSON.parse(this.response);
         location.reload();
       }
     });
