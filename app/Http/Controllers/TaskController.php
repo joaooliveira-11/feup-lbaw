@@ -134,8 +134,12 @@ class TaskController extends Controller {
             'task_file' => ['file']
         ]);     
         $task = Task::find($request->task_id);
-        // $this->authorize('upload', $task);
+        // $this->authorize('upload', $task);  já funciona, é só para dar para testar em qualquer conta
         
+        if ($task->file_path) {
+            Storage::disk('local')->delete($task->file_path);
+        }
+
         $task_file = $request->file('task_file');
         $file_path = Storage::disk('local')->putFileAs(
             'tasks',
@@ -144,11 +148,13 @@ class TaskController extends Controller {
         );   
         $task->file_path = $file_path;
         $task->save();
+
+        return back()->with('success', 'File uploaded successfully');
     }
 
     public function download_file($id){
         $task = Task::find($id);
-        // $this->authorize('download', $task);     
+        $this->authorize('download', $task);     
         $fileName = $task->title . '.' . pathinfo($task->file_path, PATHINFO_EXTENSION);
         return Storage::disk('local')->download($task->file_path, $fileName);
     }
