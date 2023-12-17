@@ -46,6 +46,9 @@
                             @include('partials.navbar')
                             @yield('navbar')
                         @endif
+                    @else
+                        @include('partials.authNavbar')
+                        @yield('authNavbar')
                     @endif
                 @endif
             </header>

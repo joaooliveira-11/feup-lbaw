@@ -1,10 +1,9 @@
 #lp-content {
-    width: 95%;
-    margin: auto;
+    margin-top: 4vw;
 }
 .lp-header {
-    width: 80%;
     margin: auto;
+    margin-top: 4vw;
     display: flex;
     justify-content: space-between;
     position: relative;
@@ -36,6 +35,7 @@
 }
 
 .lp-button {
+    text-align: center;
     padding: 0.5em 1.2em;
     font-size: 1.3vw;
     font-weight: bold;
@@ -53,7 +53,6 @@
 }
 
 #lp-services {
-    width: 80%;
     display: flex;
     flex-direction: column;
     margin: auto;
@@ -63,10 +62,14 @@
 }
 
 .lp-section-title {
+    margin: auto;
     font-size: 1.6vw;
     font-weight: 600;
     text-align: center;
     margin-bottom: 1.6vw;
+}
+.lp-section-title span {
+    width: auto;
 }
 
 .lp-service {
@@ -102,7 +105,6 @@
 }
 
 .lp-cta {
-    width: 80%;
     display: flex;
     flex-direction: column;
     margin: auto;
@@ -120,6 +122,7 @@
 }
 
 .learn-more-button {
+    text-align: center;
     padding: 0.5vw 1.2em;
     font-size: 1.3vw;
     font-weight: bold;
@@ -136,7 +139,7 @@
     box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
 }
 
-#footer {
+#footer-wrapper {
     margin-top: 4vw;
     padding: 1vw;
     background-color: #222222;
@@ -144,23 +147,29 @@
     justify-content: space-around;
 }
 
+.footer-row {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+
 .footer-left {
     width: 16vw;
 }
 
-#footer a {
+#footer-wrapper a {
     color: #dedede;
     font-size: 1.8vw;
     text-decoration: none;
 }
 
-#footer h6 {
+#footer-wrapper h6 {
     font-size: 1vw;
     letter-spacing: 4px;
     color: #dedede;
 }
 
-#footer h5 {
+#footer-wrapper h5 {
     font-size: 1.3vw;
     color: #dedede;
 }
@@ -194,7 +203,6 @@
 }
 
 .about-header {
-    width: 80%;
     margin: auto;
     margin-top: 4em;
 }
