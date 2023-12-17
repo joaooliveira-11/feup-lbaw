@@ -99,17 +99,32 @@ class ProjectController extends Controller {
             'member_id' => 'required|integer',
         ]);
 
-        event (new AcceptedProjectInvite());
         $invite = Invite::find($request->get('reference_id'));
         $project = Project::find($invite->project_invite);
         $member = User::find($request->get('member_id'));
+        event (new AcceptedProjectInvite());
         
         DB::table('project_users')->insert([
             'project_id' => $project->project_id,
             'user_id' => $member->id,
         ]);
 
+        try{
+            $confirm = DB::table('project_users')
+            ->where('project_id', $project->project_id)
+            ->where('user_id', $member->id)->first();
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to insert: ' . $e->getMessage(),
+            ]);
+        }
+    
+        
+
         return response()->json([
+            'project' => $project,
+            'member' => $member,
             'members' => $project->members(), 
             'success' => 'Member added successfully!',
         ]);

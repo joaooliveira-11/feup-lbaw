@@ -24,6 +24,9 @@ function addEventListeners() {
     if (document.getElementById("assignUserButton")) {
       setupModalForm('assignTaskForm', 'assignUserButton', 'ModalAssignTask');
     }
+    if (document.getElementById("AddMemberModalButton")) {
+      setupModalForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember');
+    }
 
     if (document.getElementById("submit-comment-button")) {
       setupCommentForm("createcommentform");
@@ -42,12 +45,6 @@ function addEventListeners() {
       chatSection.addEventListener('click', handleDeleteMessage);
     }
 
-    if (document.getElementById("AddMemberModalButton")) {
-      setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
-        'Members': 'members',
-      });
-    }
-    
     document.getElementById("notifications-button").addEventListener("click", function(event) {
       document.getElementById("notifications-dropdown").classList.toggle("hide");
       document.getElementById("new-notification").classList.remove("show");
@@ -410,7 +407,7 @@ function handleEditTask(modalId, event) {
     method: 'POST',
     body: formData,
     headers: {
-      'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+      'X-Requested-With': 'XMLHttpRequest', 
       'X-CSRF-TOKEN': csrfToken,
     },
   })
@@ -733,14 +730,6 @@ function isProjectFormValid() {
   return true;
 }
 
-function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
-  let form = document.getElementById(formId);
-  switch (formId) {
-    case 'addmemberform':
-      document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
-      break;
-  }
-}
 
 function isCommentFormValid() {
   let content = document.getElementById("comment-content").value;
@@ -771,6 +760,9 @@ function isMessageFormValid() {
 function setupModalForm(formId, buttonId, modalId) {
   let form = document.getElementById(formId);
   switch (formId) {
+    case 'addmemberform':
+      document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
+      break;
     case 'createtaskform':
       document.getElementById(formId).addEventListener("submit", handleCreateTask.bind(form, modalId));
       break;
@@ -825,6 +817,8 @@ function dismissAll() {
 function accept_invite(reference_id, notification_id, member_id) {
   sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
     if (this.status >= 200 && this.status < 400) {
+      const response = JSON.parse(this.response);
+      console.log(response);
       dismiss_notification(notification_id);
     }
   });
@@ -957,6 +951,7 @@ const pusher = new Pusher(pusherAppKey, {
 
 const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
+  console.log(data);
   if(data.user_id == userId){
     document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
@@ -965,10 +960,9 @@ channel.bind('notification-invite', function(data) {
 
 channel.bind('accepted-invite', function(data) {
   console.log(data);
-  //if(data.user_id == userId){
     document.getElementById('new-notification').classList.add('show');
-    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
-  //}
+    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+    //console.log(response);
 });
 
 function handleRefreshNotifications() {
@@ -1012,6 +1006,7 @@ function handleRefreshNotifications() {
             li.appendChild(deny);
           }
           else if(notification.type == "acceptedinvite") {
+            console.log("acceptedinvite");
               let description_accepted = document.createElement('p');
               description_accepted.classList.add('notification-text');
               description_accepted.textContent = "Your invite to the project has been accepted";
