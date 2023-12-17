@@ -44,7 +44,7 @@ DROP FUNCTION IF EXISTS check_ProjMember_before_message;
 -- Types
 -----------------------------------------
 
-CREATE TYPE task_status AS ENUM ('open', 'assigned', 'closed', 'archived');
+CREATE TYPE task_status AS ENUM ('open', 'assigned', 'completed', 'archived');
 CREATE TYPE notification_types as ENUM('assignedtask', 'coordinator', 'archivedtask', 'invite', 'forum', 'comment', 'acceptedinvite');
 
 -----------------------------------------

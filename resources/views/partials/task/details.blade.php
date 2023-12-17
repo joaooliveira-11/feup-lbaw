@@ -14,13 +14,8 @@
                 <button type="button" id="EditTaskModalButton" class="task-details-button">Manage Details</button>
                 @include('modal.edit_task', ['task_id' => $task->task_id])
             @endif
-            @if($task->assigned_to == auth()->user()->id)
-                <form action="{{ route('task.complete') }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <input type="hidden" name="task_id" value="{{ $task->task_id }}">
-                    <button type="submit" id="EditTaskDetailsButton" class="task-details-button">Complete Task</button>
-                </form>
+            @if($task->assigned_to == auth()->user()->id && $task->state != ('completed' || 'archived'))
+                <button type="button" id="completetaskbtn" class="task-details-button" data-task-id="{{ $task->task_id }}">Complete Task</button>
             @endif
             <button type="button" class="btn btn-primary" id="assignUserButton">Assign User</button>
             @include('modal.assign_task', ['task' => $task])

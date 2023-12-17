@@ -69,24 +69,23 @@ class TaskController extends Controller {
         ]);
     }
 
-    public function completetask(Request $request){
-
-        $task_id = $request->input('task_id');
-        $task = Task::find($task_id);
+    public function completetask($id){
+        $task = Task::find($id);
         $this->authorize('completetask', $task);    
 
-        $task->state = 'closed';
+        $task->state = 'completed';
         $task->save();
     
-        return redirect()->route('task', ['task_id' => $task_id])
-            ->withSuccess('You have successfully completed an assigned task');
+        return response()->json([
+            'task' => $task,
+        ]);
     }
 
     public function assign(Request $request){
 
         $task_id = $request->input('task_id');
         $task = Task::find($task_id);
-        // $this->authorize('assign', $task);    
+        $this->authorize('assign', $task);    
 
         $task->state = 'assigned';
         $task->assigned_to = $request->assign_task_to;

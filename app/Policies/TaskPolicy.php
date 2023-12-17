@@ -31,5 +31,9 @@ class TaskPolicy {
         return $task->assigned_to == $user->id;
     }
 
+    public function assign(User $user, Task $task) : bool {
+        $project = Project::find($task->project_task);
+        return $project->is_coordinator($user);  
+    }
 
 }

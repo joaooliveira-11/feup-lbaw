@@ -69,6 +69,11 @@ function addEventListeners() {
       changeProjectStatus.addEventListener('change', handleProjectStatus);
     }
 
+    let completetaskbtn = document.getElementById('completetaskbtn');
+    if(completetaskbtn){
+      completetaskbtn.addEventListener('click', handleCompleteTask);
+    }
+
     //kick members as coordinator
     const members = document.getElementsByClassName('kick-member');
     for (let i = 0; i < members.length; i++) {
@@ -1163,4 +1168,28 @@ function assign_task_to(){
   if (members.length > 0) {
     members[0].click();
   }
+}
+
+function handleCompleteTask() {
+  let taskId = this.getAttribute('data-task-id');
+  let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  fetch(`/task/complete/${taskId}`, { 
+    method: 'PATCH',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+      let stateElement = document.getElementById('task-details-state');
+      if (stateElement && stateElement.nextSibling.nodeType === Node.TEXT_NODE) {
+        stateElement.nextSibling.nodeValue = 'completed';
+        let completebtn = document.getElementById('completetaskbtn');
+        completebtn.classList.add('archived-btn'); // hide btn
+      }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 }
