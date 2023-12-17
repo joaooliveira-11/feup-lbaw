@@ -75,6 +75,8 @@ Route::controller(TaskController::class)->group(function() {
     Route::patch('/task/complete/{taskId}', 'completetask')->name('task.complete');
     Route::post('/search-tasks', 'search');
     Route::patch('/task/assign', 'assign')->name('task.assign');
+    Route::patch('/task/upload', 'upload_file')->name('task.upload');
+    Route::get('/task/download/{task}', 'download_file')->name('task.download');
 });
 
 //Comment

@@ -9,6 +9,10 @@
         <h5><span class="task-info-span" id="task-details-priority">Priority: </span>{{ $task->priority }}</h5>
         <h5><span class="task-info-span" id="task-details-assigned_to">Assigned: </span>{{ $task->assigned_to !== null ? $task->assigned_user->username : 'Not defined' }}</h5>
         <h5><span class="task-info-span" id="task-details-state">State: </span>{{ $task->state }}</h5>
+        <h5><span class="task-info-span" id="task-details-file">File: </span>{{ $task->file_path ? '1/1' : '0/1' }}</h5>
+        @if($task->file_path)
+            <a href="{{ route('task.download', $task->task_id) }}">Download File</a>
+        @endif
         <div class="task-details-buttons">
             @if($task->task_project->is_coordinator(auth()->user()))
                 <button type="button" id="EditTaskModalButton" class="task-details-button">Manage Details</button>
@@ -19,6 +23,14 @@
             @endif
             <button type="button" class="btn btn-primary" id="assignUserButton">Assign User</button>
             @include('modal.assign_task', ['task' => $task])
+
+            <form action="{{ route('task.upload') }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="task_id" value="{{ $task->task_id }}">
+                @method('PATCH')
+                @csrf
+                <input type="file" name="task_file" onchange="this.form.submit()">
+            </form>
+
         </div>
         <div id="task-description">
             <h5>Details</h5>

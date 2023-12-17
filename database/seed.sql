@@ -129,6 +129,7 @@ CREATE TABLE task (
     create_date TIMESTAMP NOT NULL CHECK(create_date <= now()),
     finish_date TIMESTAMP,
     state task_status NOT NULL DEFAULT 'open',
+    file_path TEXT,
     create_by INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
     assigned_to INTEGER REFERENCES users(id) ON UPDATE CASCADE,
     project_task INTEGER REFERENCES project(project_id) ON UPDATE CASCADE 

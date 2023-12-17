@@ -9,7 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\Project;
-
+use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Str;
 class TaskController extends Controller {
 
     public function __construct(){
@@ -127,4 +128,29 @@ class TaskController extends Controller {
 
         return response()->json($tasks);
     }
+
+    public function upload_file(Request $request){
+        $request->validate([
+            'task_file' => ['file']
+        ]);     
+        $task = Task::find($request->task_id);
+        // $this->authorize('upload', $task);
+        
+        $task_file = $request->file('task_file');
+        $file_path = Storage::disk('local')->putFileAs(
+            'tasks',
+            $task_file,
+            Str::uuid().'.'.$task_file->extension()
+        );   
+        $task->file_path = $file_path;
+        $task->save();
+    }
+
+    public function download_file($id){
+        $task = Task::find($id);
+        // $this->authorize('download', $task);     
+        $fileName = $task->title . '.' . pathinfo($task->file_path, PATHINFO_EXTENSION);
+        return Storage::disk('local')->download($task->file_path, $fileName);
+    }
+
 }
