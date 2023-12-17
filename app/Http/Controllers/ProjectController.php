@@ -78,9 +78,10 @@ class ProjectController extends Controller {
     {
     $filter = strtolower($request->get('filter'));
     $page = $request->get('page');
-    $projects = Project::whereRaw('LOWER(title) LIKE ?', ["%{$filter}%"])
-                        ->where("is_public", true)
-                        ->paginate(9, ['*'], 'page', $page);
+    $projects = Project::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$filter])
+                    ->orwhere("title", "ilike", "%{$filter}%")
+                    ->where("is_public", true)
+                    ->paginate(9, ['*'], 'page', $page);
 
     return response()->json([
         'projects' => $projects->items(),
