@@ -21,6 +21,9 @@ function addEventListeners() {
     if (document.getElementById("EditProjectModalButton")) {
       setupModalForm("editprojectform", 'EditProjectModalButton', 'ModalEditProject');
     }
+    if (document.getElementById("assignUserButton")) {
+      setupModalForm('assignTaskForm', 'assignUserButton', 'ModalAssignTask');
+    }
 
     if (document.getElementById("submit-comment-button")) {
       setupCommentForm("createcommentform");
@@ -64,6 +67,11 @@ function addEventListeners() {
     let changeProjectStatus = document.getElementById('statusSwitch');
     if (changeProjectStatus) {
       changeProjectStatus.addEventListener('change', handleProjectStatus);
+    }
+
+    let completetaskbtn = document.getElementById('completetaskbtn');
+    if(completetaskbtn){
+      completetaskbtn.addEventListener('click', handleCompleteTask);
     }
 
     //kick members as coordinator
@@ -771,7 +779,10 @@ function setupModalForm(formId, buttonId, modalId) {
       break;
     case 'editprojectform':
       document.getElementById(formId).addEventListener("submit", handleEditProject.bind(form, modalId));
-      break; 
+      break;
+    case'assignTaskForm':
+      assign_task_to();
+      break;
   }
   document.getElementById(buttonId).addEventListener('click', function () {
     let modal = new bootstrap.Modal(document.getElementById(modalId));
@@ -1139,4 +1150,46 @@ function favoriteProject(userId){
     }
   });
   
+}
+
+function assign_task_to(){
+  const members = document.querySelectorAll('.assign_task_member');
+  members.forEach(function(member) {
+    member.addEventListener('click', function() {
+      members.forEach(function(member) {
+        member.classList.remove('selected');
+      });
+      this.classList.add('selected');
+      document.getElementById('assign_task_to').value = this.getAttribute('data-id');
+    });
+  });
+
+  // Select the first member by default
+  if (members.length > 0) {
+    members[0].click();
+  }
+}
+
+function handleCompleteTask() {
+  let taskId = this.getAttribute('data-task-id');
+  let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  fetch(`/task/complete/${taskId}`, { 
+    method: 'PATCH',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+      let stateElement = document.getElementById('task-details-state');
+      if (stateElement && stateElement.nextSibling.nodeType === Node.TEXT_NODE) {
+        stateElement.nextSibling.nodeValue = 'completed';
+        let completebtn = document.getElementById('completetaskbtn');
+        completebtn.classList.add('archived-btn'); // hide btn
+      }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 }
