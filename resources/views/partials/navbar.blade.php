@@ -38,7 +38,7 @@
                             @break
                         @case('comment')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
-                                    <p class="notification-text">You have a new comment in the task</p>
+                                    <p class="notification-text">You have a new comment on the task.</p>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break

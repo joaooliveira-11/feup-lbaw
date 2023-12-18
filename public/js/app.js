@@ -919,6 +919,11 @@ channel.bind('notification-forum', function(data) {
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
+channel.bind('notification-comment', function(data) {
+  document.getElementById('new-notification').classList.add('show');
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
 
 //chat channel
 const chatChannel = pusher.subscribe('chat');
@@ -996,7 +1001,7 @@ function handleRefreshNotifications() {
         if(!notification.viewed){
         const li = document.createElement('li');
         li.classList.add('notification');
-        li.classList.add(notification.type);
+        li.classList.add(notification.type+"-notification");
         li.id = 'n' + notification.notification_id;
         if(notification.type == "invite") {
             let description_invite = document.createElement('p');
@@ -1066,7 +1071,7 @@ function handleRefreshNotifications() {
           } else if(notification.type == "forum") {
             let description_coordinator = document.createElement('p');
             description_coordinator.classList.add('notification-text');
-            description_coordinator.textContent = "New message in the project chat.";
+            description_coordinator.textContent = "New message in the project chat";
 
             const dismiss = document.createElement('button');
             dismiss.classList.add('notification-dismiss');
@@ -1081,8 +1086,25 @@ function handleRefreshNotifications() {
 
             li.appendChild(description_coordinator);
             li.appendChild(dismiss);
-        }
-          else {
+        } else if(notification.type === "comment") {
+          let description_accepted = document.createElement('p');
+              description_accepted.classList.add('notification-text');
+              description_accepted.textContent = "You have a new comment on the task.";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_accepted);
+              li.appendChild(dismiss);
+      }else {
               let description_default = document.createElement('p');
               description_default.classList.add('notification-text');
               description_default.textContent = "You have a new notification in the project";
