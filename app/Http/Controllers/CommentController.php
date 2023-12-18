@@ -7,7 +7,7 @@ use App\Models\Comment;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use App\Events\TaskComment;
 
 class CommentController extends Controller {
 
@@ -26,6 +26,8 @@ class CommentController extends Controller {
         //$this->authorize('create', $comment);   falta decidir se dá para comentar em qualquer task independentemente do estado dela
 
         $comment->save();
+
+        event(new TaskComment());
 
         return response()->json([
             'comment_id' => $comment->comment_id,
