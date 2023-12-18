@@ -7,7 +7,7 @@
     <div class="navbar-list">
         <ul class="navbar-list-ul">
             <li><a class="navbar-list-element" href="">Home</a></li>
-            <li><a class="navbar-list-element" href="#about-wrapper">About</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
             <li><a class="navbar-list-element" href="">FAQs</a></li>
             <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
         </ul>
@@ -66,10 +66,16 @@
                             </li>
                     @endswitch
                 @endforeach
+            <a class="navbar-profile-link" href="{{ url('/profile', ['id' => Auth::id()]) }}">
+                <div class="user-avatar-circle">
+                    <img src="{{ asset(Auth::user()->photo) }}" alt="User Profile" >
+                </div>
+            </a>
+            <button id="notifications-button"><i class="fa-solid fa-bell"></i><span id="new-notification"></span></button>
+            <a class="navbar-logout-button" href="{{ url('/logout') }}">
+                <i class="fa fa-sign-out-alt"></i>
+            </a>       
             @endif
-            
-        </ul>
-    </div>
     </div>
 </div>
 @endsection

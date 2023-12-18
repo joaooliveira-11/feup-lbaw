@@ -29,6 +29,7 @@ class User extends Authenticatable
         'email',
         'username',
         'password',
+        'photo',
         'google_id'
     ];
 
@@ -64,21 +65,21 @@ class User extends Authenticatable
     /**
      * Get the skills for a user.
      */ 
-    public function skills()
-    {
+    public function skills() {
         return $this->belongsToMany(Skill::class, 'user_skills', 'user_id', 'skill_id');
     }
+
     public function isAdmin() {
         return $this->is_admin;
     }
 
-    public function projects(){
+    public function projects() {
         $worker_projects = $this->belongsToMany(Project::class, 'project_users', 'user_id', 'project_id')->get();
         $coordinator_projects = $this->hasMany(Project::class, 'project_coordinator')->get();
         return $worker_projects->merge($coordinator_projects);
     }
-
-    public function notifications(){
+    
+    public function notifications() {
         return $this->hasMany(Notification::class, 'user_id');
     }
 

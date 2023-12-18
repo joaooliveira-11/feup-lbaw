@@ -3,7 +3,7 @@
         <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($project->messages as $message)
             <div class="message-chat" id="message-{{ $message->message_id }}">
-                <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
+                <img src="{{ url($message->messaged_by->photo) }}" class="user-image" alt="User Image"/> 
                 <div class="message-content">
                     <h5 class="message-username">{{ $message->messaged_by->username }}</h5>
                     <p>{{ $message->content }}</p>

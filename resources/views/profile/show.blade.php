@@ -1,13 +1,49 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="ProjectPage">
+<div id="ProfileDisplay">
     <div id="ProfilePage">
         <div class="Profile-LeftSection">
-            <label for="fileInput">
-                <img id="profilePicture" src="https://via.placeholder.com/150" alt="Profile Picture" style="cursor: pointer;">
-                <input id="fileInput" type="file">
-            </label>           
+            <div class="profile-photo-container">
+                <img id="profilePicture" src="{{ asset($user->photo) }}" alt="Profile Picture">
+                @if(Auth::check() && (Auth::user()->id == $user->id || Auth::user()->isAdmin()))
+                    <label for="fileInput" class="edit-icon-label">
+                        <div class="edit-icon-circle">
+                            <i class="fas fa-pencil-alt"></i>
+                        </div>
+                    </label>
+                    <form method="POST" action="{{ route('profile.updateImage') }}" enctype="multipart/form-data" style="display: none;">
+                        @csrf
+                        <input id="fileInput" name="profilePic" type="file" onchange="this.form.submit()">
+                    </form>
+                @endif
+            </div>
+            <div id="userActions">
+                <div id="banUserButton">
+                @if(Auth::check() && Auth::user()->isAdmin() && Auth::user()->id !== $user->id)
+                    @if($user->is_banned)
+                        <form action="{{ route('admin.unbanUser', $user->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-warning">Unban User</button>
+                        </form>
+                    @else
+                        <form action="{{ route('admin.banUser', $user->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Ban User</button>
+                        </form>
+                    @endif
+                @endif
+                </div>
+
+                <div id="deleteButton">
+                @if(Auth::check() && ((Auth::user()->isAdmin() && Auth::user()->id !== $user->id) || (!Auth::user()->isAdmin() && Auth::user()->id === $user->id)))
+                    <form action="{{ route('deleteUser', $user->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-warning">Delete Account</button>
+                    </form>
+                @endif
+                </div>
+            </div>
             <div class="profile-interests-skills">
                 <div id="Interests">
                     <h4 class="interests-title">Interests</h4>
@@ -48,24 +84,24 @@
                 </div>
             </div>
 
+            @if(Auth::check() && !Auth::user()->isAdmin())
             <div id="Projects">
-            <h4 class="label">Projects</h4>
-
-            @if ($projects->isEmpty())
-                <p>No projects yet!</p>
-            @else
-                <ul id="ProjectsList">
-
-                    @foreach ($projects as $project)
-                        <a href="{{ url('project/' . $project->project_id )}}" class="project-link project-element">
-                            <li>
-                                <p id="ProjectTitle" class="project-list-title">{{ $project->title }}</p>
-                                <p class="project-list-description">{{ $project->description }}</p>
-                            </li> 
-                        </a>
-                    @endforeach
-
-                </ul>
+                <h4 class="label">Projects</h4>
+                @if ($projects->isEmpty())
+                    <p>No projects yet!</p>
+                @else
+                    <ul id="ProjectsList">
+                        @foreach ($projects as $project)
+                            <a href="{{ url('project/' . $project->project_id )}}" class="project-link project-element">
+                                <li>
+                                    <p id="ProjectTitle" class="project-list-title">{{ $project->title }}</p>
+                                    <p class="project-list-description">{{ $project->description }}</p>
+                                </li> 
+                            </a>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
             @endif
         </div>
     </div>
