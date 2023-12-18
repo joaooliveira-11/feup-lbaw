@@ -914,6 +914,12 @@ channel.bind('notification-coordinator', function(data) {
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
+channel.bind('notification-forum', function(data) {
+  document.getElementById('new-notification').classList.add('show');
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
+
 //chat channel
 const chatChannel = pusher.subscribe('chat');
 chatChannel.bind('chat-message', function(data) {
@@ -1057,7 +1063,25 @@ function handleRefreshNotifications() {
 
               li.appendChild(description_coordinator);
               li.appendChild(dismiss);
-          }
+          } else if(notification.type == "forum") {
+            let description_coordinator = document.createElement('p');
+            description_coordinator.classList.add('notification-text');
+            description_coordinator.textContent = "New message in the project chat.";
+
+            const dismiss = document.createElement('button');
+            dismiss.classList.add('notification-dismiss');
+            dismiss.onclick = function() {
+              dismiss_notification(notification.notification_id);
+            };
+            const icondismiss = document.createElement('i');
+            icondismiss.classList.add('fa-solid');
+            icondismiss.classList.add('fa-eye');
+
+            dismiss.appendChild(icondismiss);
+
+            li.appendChild(description_coordinator);
+            li.appendChild(dismiss);
+        }
           else {
               let description_default = document.createElement('p');
               description_default.classList.add('notification-text');
