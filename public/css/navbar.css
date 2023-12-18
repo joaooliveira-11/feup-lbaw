@@ -1,6 +1,8 @@
-header .navbar {
+.hamnavbar {
     display: flex;
     justify-content: space-around;
+    width: 100%;
+    position: sticky;
     border-bottom: 1ps solid black;
     background-color: #543CE7;
     border-bottom: 1px solid black;
@@ -17,10 +19,21 @@ header .navbar {
 }
 
 .navbar-list-element {
+    flex-grow: 1;
+    flex-basis: 0;
     text-decoration: none;
+    text-align: center;
     font-size: 1vw;
     font-weight: bold;
     color: #000000;
+}
+
+.navbar-list-element:hover {
+    color: #000;
+}
+
+.hamnavbar label, #hamburger {
+    display: none;
 }
 
 .navbar-profile-logout-notifications {
@@ -70,7 +83,7 @@ header .navbar {
     width: 0.5vw;
 }
 
-.navbar button{
+.hamnavbar button{
     border-radius: 50%;
     padding: 1vh;
     width: 5vh;
@@ -224,15 +237,35 @@ button.invite-accept:hover{
 }
 
 @media screen and (max-width: 768px) {
+    .hamnavbar {
+        display: inline-block;
+    }
     .navbar-img {
         width: 18vw;
     }
-    .navbar-list-ul {
-        width: 30vw;
-    }
     .navbar-list-element {
-        font-size: 130%;
+        padding: 0.5em;
+        font-size: 230%;
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        border-top: 1px solid #fff;
     }
+    .hamnavbar label {
+        display: inline-block;
+        color: white;
+        background: #a02620;
+        font-style: normal;
+        font-size: 1.2em;
+        padding: 10px;
+    }
+    .navbar-list-ul { 
+        display: none; 
+        width: 100%;
+        padding: 0.5em 2em;
+    }
+    .hamnavbar input:checked ~ .navbar-list-ul { display: block; }
+    
     .navbar-login-button, .navbar-separator, .navbar-register-button {
         font-size: 2vw;
     }

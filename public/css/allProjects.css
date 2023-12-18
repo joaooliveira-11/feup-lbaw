@@ -1,8 +1,9 @@
 #projects-container {
     width: 1200px; 
     margin: auto;
+    margin-top: 2vw;
     padding: 20px;
-    height: 100vh;
+    height: 90vh;
 }
 
 .search-bar {
@@ -48,7 +49,7 @@
     margin: 0;
     gap: 20px 2px;
     width: 100%;
-    height: 80%;
+    height: 85%;
 }
 
 .projects-list > * {
@@ -106,7 +107,6 @@
 
 .pagination-container {
     text-align: center;
-    margin-top: 2.5vw;
 }
 
 .pagination-container .btn {

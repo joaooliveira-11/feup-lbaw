@@ -2,23 +2,24 @@
 <script>
     var userId = "{{ Auth::check() ? Auth::id() : 'null' }}";
 </script>
-<div class="navbar">
+<nav class="hamnavbar">
+    <label for="hamburger">&#9776;</label>
+    <input type="checkbox" id="hamburger"/>
     <img src="{{ asset('img/TeamSync.svg') }}" alt="TeamSync">
-    <div class="navbar-list">
-        <ul class="navbar-list-ul">
-            <li><a class="navbar-list-element" href="">Home</a></li>
-            <li><a class="navbar-list-element" href="#about-wrapper">About</a></li>
-            <li><a class="navbar-list-element" href="">FAQs</a></li>
-            <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
-        </ul>
-    </div>
-
-    <div class="navbar-profile-logout-notifications">
+    <ul class="navbar-list-ul">
+        <li><a class="navbar-list-element" href="">Home</a></li>
+        <li><a class="navbar-list-element" href="#about-wrapper">About</a></li>
+        <li><a class="navbar-list-element" href="">FAQs</a></li>
+        <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
         @if (Auth::check())
             <a class="navbar-list-element" href="{{ url('/profile', ['id' => Auth::id()]) }}">Profile</a>
 
             <a class="navbar-logout-button" href="{{ url('/logout') }}"> Logout </a>
         @endif
+    </ul>
+
+    <div class="navbar-profile-logout-notifications">
+       
     <button id="notifications-button" ><i class="fa-solid fa-bell"></i><span id = "new-notification"></span></button>
     <div id="notifications-dropdown">
         <div>
@@ -65,5 +66,5 @@
         </ul>
     </div>
     </div>
-</div>
+</nav>
 @endsection
