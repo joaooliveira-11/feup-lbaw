@@ -45,7 +45,7 @@ DROP FUNCTION IF EXISTS check_ProjMember_before_message;
 -- Types
 -----------------------------------------
 
-CREATE TYPE task_status AS ENUM ('open', 'assigned', 'closed', 'archived');
+CREATE TYPE task_status AS ENUM ('open', 'assigned', 'completed', 'archived');
 CREATE TYPE notification_types as ENUM('assignedtask', 'coordinator', 'archivedtask', 'invite', 'forum', 'comment', 'acceptedinvite');
 
 -----------------------------------------
@@ -136,6 +136,7 @@ CREATE TABLE task (
     create_date TIMESTAMP NOT NULL CHECK(create_date <= now()),
     finish_date TIMESTAMP,
     state task_status NOT NULL DEFAULT 'open',
+    file_path TEXT,
     create_by INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
     assigned_to INTEGER REFERENCES users(id) ON UPDATE CASCADE,
     project_task INTEGER REFERENCES project(project_id) ON UPDATE CASCADE 
@@ -433,7 +434,7 @@ BEGIN
     UPDATE task
     SET state = 'open', assigned_to = NULL
     WHERE project_task = OLD.project_id
-    AND ((state = 'assigned' OR state = 'closed') AND assigned_to = OLD.user_id);
+    AND ((state = 'assigned' OR state = 'completed') AND assigned_to = OLD.user_id);
     RETURN OLD;
 END
 $BODY$

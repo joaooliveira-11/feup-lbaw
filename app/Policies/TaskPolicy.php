@@ -31,5 +31,18 @@ class TaskPolicy {
         return $task->assigned_to == $user->id;
     }
 
+    public function assign(User $user, Task $task) : bool {
+        $project = Project::find($task->project_task);
+        return $project->is_coordinator($user);  
+    }
+
+    public function upload(User $user, Task $task) : bool {
+        return $task->assigned_to == $user->id;
+    }
+
+    public function download(User $user, Task $task) : bool {
+        $project = Project::find($task->project_task);
+        return $project->is_member($user);
+    }
 
 }

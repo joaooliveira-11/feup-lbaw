@@ -32,7 +32,9 @@ class Project extends Model
         $project_users = $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id')->get();
         $coordinator = $this->coordinator()->first();
 
-        return $project_users->push($coordinator);
+        $members = $project_users->push($coordinator);
+
+        return $members->sortBy('username');
     }
 
     public function nonmembers(){
@@ -65,6 +67,18 @@ class Project extends Model
     
     public function messages(): HasMany {
         return $this->hasMany(Message::class, 'project_message');
+    }
+
+    public function favorites(): HasMany {
+        return $this->hasMany(Favorite_Projects::class, 'project_id');
+    }
+
+    public function is_favorite(User $user) {
+        return $this->favorites()->where('user_id', $user->id)->exists();
+    }
+
+    public function users(): BelongsToMany {
+        return $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id');
     }
 
 }

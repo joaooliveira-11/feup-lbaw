@@ -224,3 +224,16 @@
     background-color: transparent;
     color: #303030;
 }
+
+
+/* modal assign task */
+.assign_task_member img {
+    width: 50px;
+    height: 50px;
+}
+
+.task-file-submit {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}

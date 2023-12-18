@@ -1,5 +1,7 @@
 function addEventListeners() {
 
+  setupRadioButtons();
+  
   let changePic = document.querySelector('#fileInput');
   if (changePic != null)
   changePic.addEventListener('change', handleFileSelect);
@@ -19,6 +21,12 @@ function addEventListeners() {
   if (document.getElementById("EditProjectModalButton")) {
     setupModalForm("editprojectform", 'EditProjectModalButton', 'ModalEditProject');
   }
+  if (document.getElementById("assignUserButton")) {
+    setupModalForm('assignTaskForm', 'assignUserButton', 'ModalAssignTask');
+  }
+  if (document.getElementById("AddMemberModalButton")) {
+    setupModalForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember');
+  }
 
   if (document.getElementById("submit-comment-button")) {
     setupCommentForm("createcommentform");
@@ -37,29 +45,69 @@ function addEventListeners() {
     chatSection.addEventListener('click', handleDeleteMessage);
   }
 
-  if (document.getElementById("AddMemberModalButton")) {
-    setupTaskForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember',{
-      'Members': 'members',
-    });
-  }
-
   document.getElementById("notifications-button").addEventListener("click", function(event) {
     document.getElementById("notifications-dropdown").classList.toggle("hide");
     document.getElementById("new-notification").classList.remove("show");
   });
+  
 
   let leaveProjectButton = document.getElementById('leaveProject');
   if (leaveProjectButton) {
     leaveProjectButton.addEventListener('click', handleLeaveProjectClick);
   }
+  
+  let changeProjectvisibility = document.getElementById('visibilitySwitch');
+  if (changeProjectvisibility) {
+    changeProjectvisibility.addEventListener('change', handleProjectVisibility);
+  }
 
+  let changeProjectStatus = document.getElementById('statusSwitch');
+  if (changeProjectStatus) {
+    changeProjectStatus.addEventListener('change', handleProjectStatus);
+  }
+
+  let completetaskbtn = document.getElementById('completetaskbtn');
+  if(completetaskbtn){
+    completetaskbtn.addEventListener('click', handleCompleteTask);
+  }
+
+  //kick members as coordinator
+  const members = document.getElementsByClassName('kick-member');
+  for (let i = 0; i < members.length; i++) {
+    members[i].addEventListener('click', function(event) {
+      event.preventDefault();
+      Swal.fire({
+          title: "Are you sure?",
+          text: "Once kicked, the member will not be able to rejoin the project!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, I am sure!',          
+
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          const urlPath = window.location.pathname;
+          const pathParts = urlPath.split('/');
+          const projectId = pathParts[pathParts.length - 1];
+          const memberId = document.querySelectorAll('.user-id')[i].id.substring(4);
+          const coordinatorId = document.querySelector('.coordinator-kick').id.substring(4);
+          console.log("Project: "+projectId);
+          console.log("Member: "+memberId);
+          console.log("Coordinator: "+coordinatorId);
+          kickFromProject(memberId, projectId, coordinatorId);
+        }
+      });
+    });
+  }
   
   let closeButton = document.querySelector('.close-notifications');
   if(closeButton) {
     closeButton.addEventListener('click', closeNotifications);
   }
 
-  setupRadioButtons()
+  setupRadioButtons();
   
 } 
 
@@ -165,11 +213,11 @@ if (this.status >= 200 && this.status < 400) {
       li.appendChild(div);
       a.appendChild(li);
       ul.appendChild(a);
-    });
-  }
-  else {
-      console.error('Error:', this.status, this.statusText);
-  }
+  });
+}
+else {
+    console.error('Error:', this.status, this.statusText);
+}
 }
 
 
@@ -280,16 +328,17 @@ radios.forEach(function(radio) {
   radio.addEventListener('change', function() {
     const id = this.value;
     document.querySelector('label.selected').classList.toggle('selected', false);
-    this.parentNode.classList.toggle('selected', this.checked);       
-    const toHide = document.querySelector('#MainContent .selected')
-    if (toHide) {
-      toHide.classList.toggle('selected', false);
-    }
+    this.parentNode.classList.toggle('selected', this.checked);
 
-    const toDisplay = document.querySelector('#MainContent div#' + id);
-    if (toDisplay) {
-      toDisplay.classList.toggle('selected', this.checked);
-    }
+    const toHide = document.querySelectorAll('#MainContent .selected');
+    toHide.forEach(element => {
+      element.classList.remove('selected');
+    });
+
+    const toDisplay = document.querySelectorAll('#MainContent div#' + id);
+    toDisplay.forEach(element => {
+      element.classList.add('selected');
+    });
 
     if (id === 'Chat') {
       let chatSection = document.querySelector('.chat-section');
@@ -359,14 +408,14 @@ if (!isTaskFormValid()) {
 
 let url = this.getAttribute('action');
 let formData = new FormData(this);
-formData.append('_method', 'PATCH');
+// formData.append('_method', 'PATCH');
 let csrfToken = document.querySelector('input[name="_token"]').value;
 
 fetch(url, {
   method: 'POST',
   body: formData,
   headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+    'X-Requested-With': 'XMLHttpRequest', 
     'X-CSRF-TOKEN': csrfToken,
   },
 })
@@ -544,62 +593,7 @@ fetch(url, {
 })
 .then(response => response.json())
 .then(data => {
-  let chatSection = document.querySelector('.chat-section');
-
-  let messageDiv = document.createElement('div');
-  messageDiv.className = 'message-chat';
-  messageDiv.id = 'message-' + data.message_id;
-
-  let userImage = document.createElement('img');
-  userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
-  userImage.className = 'user-image';
-  userImage.alt = 'Gmail Image';
-  messageDiv.appendChild(userImage);
-
-  let messageContentDiv = document.createElement('div');
-  messageContentDiv.className = 'message-content';
-
-  let usernameH5 = document.createElement('h5');
-  usernameH5.className = 'message-username';
-  usernameH5.textContent = data.message_message_by;
-  messageContentDiv.appendChild(usernameH5);
-
-  let contentP = document.createElement('p');
-  contentP.textContent = data.message_content;
-  messageContentDiv.appendChild(contentP);
-
-  let messageInfoButtonsDiv = document.createElement('div');
-  messageInfoButtonsDiv.className = 'message-info-buttons';
-
-  let createDate = new Date(data.message_create_date);
-  let formattedCreateDate = createDate.getFullYear() + '-' +
-  String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
-  String(createDate.getDate()).padStart(2, '0') + ' ' +
-  String(createDate.getHours()).padStart(2, '0') + ':' +
-  String(createDate.getMinutes()).padStart(2, '0') + ':' +
-  String(createDate.getSeconds()).padStart(2, '0');
-
-  let createDateH6 = document.createElement('h6');
-  createDateH6.textContent = formattedCreateDate;
-  messageInfoButtonsDiv.appendChild(createDateH6);
-
-  let messageButtonsDiv = document.createElement('div');
-  messageButtonsDiv.className = 'message-buttons';
   
-  let deleteButton = document.createElement('button');
-  deleteButton.type = 'button';
-  deleteButton.className = 'message-manage-button';
-  deleteButton.textContent = 'Delete';
-  messageButtonsDiv.appendChild(deleteButton);
-  
-  messageInfoButtonsDiv.appendChild(messageButtonsDiv);
-
-  messageContentDiv.appendChild(messageInfoButtonsDiv);
-  messageDiv.appendChild(messageContentDiv);
-  chatSection.appendChild(messageDiv);
-  document.getElementById('message-content').value = '';
-
-  chatSection.scrollTop = chatSection.scrollHeight;
 })
 .catch(error => console.error('Error:', error));
 }
@@ -689,14 +683,6 @@ if (finishDate) {
 return true;
 }
 
-function setupTaskForm(formId, buttonId, modalId, viewsToUpdate) {
-let form = document.getElementById(formId);
-switch (formId) {
-  case 'addmemberform':
-    document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
-    break;
-}
-}
 
 function isCommentFormValid() {
 let content = document.getElementById("comment-content").value;
@@ -727,6 +713,9 @@ return true;
 function setupModalForm(formId, buttonId, modalId) {
 let form = document.getElementById(formId);
 switch (formId) {
+  case 'addmemberform':
+    document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
+    break;
   case 'createtaskform':
     document.getElementById(formId).addEventListener("submit", handleCreateTask.bind(form, modalId));
     break;
@@ -735,7 +724,10 @@ switch (formId) {
     break;
   case 'editprojectform':
     document.getElementById(formId).addEventListener("submit", handleEditProject.bind(form, modalId));
-    break; 
+    break;
+  case'assignTaskForm':
+    assign_task_to();
+    break;
 }
 document.getElementById(buttonId).addEventListener('click', function () {
   let modal = new bootstrap.Modal(document.getElementById(modalId));
@@ -778,6 +770,8 @@ notifications.forEach(notification => {
 function accept_invite(reference_id, notification_id, member_id) {
 sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
   if (this.status >= 200 && this.status < 400) {
+    const response = JSON.parse(this.response);
+    console.log(response);
     dismiss_notification(notification_id);
   }
 });
@@ -785,10 +779,60 @@ sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: me
 }
 
 function removeFromProject(projectId){
-sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
-  if (this.status >= 200 && this.status < 400) {
+const is_coordinator = document.querySelector('#leaveProject.coordinator');
+if(is_coordinator != null){
+  assignCoordinator(projectId);
+}else{
+  sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      const response = JSON.parse(this.response);
+      location.reload();
+    }
+  });
+}
+}
+
+function kickFromProject(memberId, projectId, coordinatorId){
+if(memberId == coordinatorId){
+  assignCoordinator(projectId);
+}else{
+  sendAjaxRequest('DELETE', '/kickMember/'+memberId+'/'+projectId, {}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      location.reload();
+    }
+  });
+}
+}
+
+function assignCoordinator(projectId){
+const members = document.getElementsByClassName('user-id');
+  
+  const options = {};
+  for(let i = 0; i < members.length; i++){
+    const memberId = document.querySelectorAll('.user-id em')[i].textContent;
+    options[i] = memberId;
   }
-});
+  Swal.fire({
+    title: "You are the coordinator of this project!",
+    text: "You need to nominate another coordinator before leaving the project!",
+    icon: "warning",
+    input: 'select',
+    inputOptions: options,
+    inputPlaceholder: 'Select a member',
+    showCancelButton: false,
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'Ok',          
+  })
+  .then((result) => {
+    if (result.isConfirmed) {
+      const username = options[result.value].substring(1);
+      sendAjaxRequest('POST', '/changeCoordinator/'+username+'/'+projectId, {}, function() {
+        if (this.status >= 200 && this.status < 400) {
+          location.reload(); 
+        }
+      });
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -800,54 +844,54 @@ if (commentsSection) {
 });
 
 function handleDelete(event, buttonClass, itemClass, deleteUrl) {
-if (event.target.classList.contains(buttonClass)) {
-  let itemDiv = event.target.closest('.' + itemClass);
-  let itemId = itemDiv.id.split('-')[1];
-  let csrfToken = document.querySelector('#csrf-token').value;
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      fetch(deleteUrl + itemId, {
-        method: 'DELETE',
-        headers: {
-          'X-CSRF-TOKEN': csrfToken
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (data.success) {
-          itemDiv.remove();
-        } 
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-    }
-  })
-}
+  if (event.target.classList.contains(buttonClass)) {
+    let itemDiv = event.target.closest('.' + itemClass);
+    let itemId = itemDiv.id.split('-')[1];
+    let csrfToken = document.querySelector('#csrf-token').value;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(deleteUrl + itemId, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            itemDiv.remove();
+          } 
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }
+    })
+  }
 }
 
 function handleDeleteComment(event) {
-handleDelete(event, 'comment-manage-button', 'comment', '/comment/delete/');
+  handleDelete(event, 'comment-manage-button', 'comment', '/comment/delete/');
 }
 
 function handleDeleteMessage(event) {
   handleDelete(event, 'message-manage-button', 'message-chat', '/message/delete/');
 }
 
-// pusher notifications
+// pusher 
 
 const pusherAppKey = "fb8ef8f4fa10afc9c38c";
 const pusherCluster = "eu";
@@ -858,8 +902,10 @@ cluster: pusherCluster,
 encrypted: true
 });
 
+//notifications channel
 const channel = pusher.subscribe('notifications');
-  channel.bind('notification-invite', function(data) {
+channel.bind('notification-invite', function(data) {
+console.log(data);
   if(data.user_id == userId){
     document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
@@ -867,11 +913,77 @@ const channel = pusher.subscribe('notifications');
 });
 
 channel.bind('accepted-invite', function(data) {
-  console.log(data);
-  //if(data.user_id == userId){
-    document.getElementById('new-notification').classList.add('show');
-    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
-  //}
+console.log(data);
+  document.getElementById('new-notification').classList.add('show');
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+  //console.log(response);
+});
+
+//chat channel
+const chatChannel = pusher.subscribe('chat');
+chatChannel.bind('chat-message', function(data) {
+
+console.log(data);
+
+let chatSection = document.querySelector('.chat-section');
+
+  let messageDiv = document.createElement('div');
+  messageDiv.className = 'message-chat';
+  messageDiv.id = 'message-' + data.message_id;
+
+  let userImage = document.createElement('img');
+  userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+  userImage.className = 'user-image';
+  userImage.alt = 'Gmail Image';
+  messageDiv.appendChild(userImage);
+
+  let messageContentDiv = document.createElement('div');
+  messageContentDiv.className = 'message-content';
+
+  let usernameH5 = document.createElement('h5');
+  usernameH5.className = 'message-username';
+  usernameH5.textContent = data.message_by;
+  messageContentDiv.appendChild(usernameH5);
+
+  let contentP = document.createElement('p');
+  contentP.textContent = data.message;
+  messageContentDiv.appendChild(contentP);
+
+  let messageInfoButtonsDiv = document.createElement('div');
+  messageInfoButtonsDiv.className = 'message-info-buttons';
+
+  let createDate = new Date(data.create_date);
+  let formattedCreateDate = createDate.getFullYear() + '-' +
+  String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
+  String(createDate.getDate()).padStart(2, '0') + ' ' +
+  String(createDate.getHours()).padStart(2, '0') + ':' +
+  String(createDate.getMinutes()).padStart(2, '0') + ':' +
+  String(createDate.getSeconds()).padStart(2, '0');
+
+  let createDateH6 = document.createElement('h6');
+  createDateH6.textContent = formattedCreateDate;
+  messageInfoButtonsDiv.appendChild(createDateH6);
+
+  let messageButtonsDiv = document.createElement('div');
+  messageButtonsDiv.className = 'message-buttons';
+  
+  const name = document.querySelector('.chat-section').id;
+  if(name === data.message_by){
+    let deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'message-manage-button';
+    deleteButton.textContent = 'Delete';
+    messageButtonsDiv.appendChild(deleteButton);
+  }
+  messageInfoButtonsDiv.appendChild(messageButtonsDiv);
+
+  messageContentDiv.appendChild(messageInfoButtonsDiv);
+  messageDiv.appendChild(messageContentDiv);
+  chatSection.appendChild(messageDiv);
+  document.getElementById('message-content').value = '';
+
+  chatSection.scrollTop = chatSection.scrollHeight;
+
 });
 
 function handleRefreshNotifications() {
@@ -915,6 +1027,7 @@ function handleRefreshNotifications() {
           li.appendChild(deny);
         }
         else if(notification.type == "acceptedinvite") {
+          console.log("acceptedinvite");
             let description_accepted = document.createElement('p');
             description_accepted.classList.add('notification-text');
             description_accepted.textContent = "Your invite to the project has been accepted";
@@ -947,8 +1060,8 @@ function handleRefreshNotifications() {
 }
 
 function handleLeaveProjectClick(event) {
-  event.preventDefault();
-  Swal.fire({
+event.preventDefault();
+Swal.fire({
     title: "Are you sure?",
     text: "Once left, you will not be able to rejoin the project!",
     icon: "warning",
@@ -956,16 +1069,144 @@ function handleLeaveProjectClick(event) {
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
     confirmButtonText: 'Yes, I am sure!',          
+
+})
+.then((result) => {
+  if (result.isConfirmed) {
+    const urlPath = window.location.pathname;
+    const pathParts = urlPath.split('/');
+    const projectId = pathParts[pathParts.length - 1];
+    console.log(projectId);
+    removeFromProject(projectId);
+  }
+});
+}
+
+function handleProjectVisibility() {
+
+  const projectId = this.closest('.switch').dataset.projectId;
+  const is_public = this.checked ? false : true;
+
+  fetch(`/project/${projectId}/changevisibility`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({
+          is_public: is_public
+      })
   })
-  .then((result) => {
-    if (result.isConfirmed) {
-      const urlPath = window.location.pathname;
-      const pathParts = urlPath.split('/');
-      const projectId = pathParts[pathParts.length - 1];
-      console.log(projectId);
-      removeFromProject(projectId);
-      location.reload();
+  .then(response => response.json())
+  .then(data => {
+    this.checked = !(data.is_public);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    this.checked = !this.checked;
+  });
+}
+
+function updateButtonsVisibility(archived) {
+  const buttons = ['AddMemberModalButton', 'CreateTaskModalButton', 'EditProjectModalButton', 'createmessageform'];
+
+  buttons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      if (archived) {
+        button.classList.add('archived-btn');
+      } else {
+        button.classList.remove('archived-btn');
+      }
     }
+  });
+}
+
+function handleProjectStatus() {
+  const projectId = this.closest('.switch').dataset.projectId;
+  const archived = this.checked;
+
+  fetch(`/project/${projectId}/changestatus`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({
+          archived: archived
+      })
+  })
+  .then(response => response.json())
+  .then(data => {
+      this.checked = data.archived;
+      updateButtonsVisibility(data.archived)
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      this.checked = !this.checked;
+  });
+}
+
+function favoriteProject(userId){
+  const urlPath = window.location.pathname;
+  const pathParts = urlPath.split('/');
+  const projectId = pathParts[pathParts.length - 1];
+
+  sendAjaxRequest('POST', '/favoriteProject', {projectId: projectId, userId: userId}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      const response = JSON.parse(this.responseText);
+      const favoriteCount = document.querySelector('#Favorites p');
+      favoriteCount.textContent = response.favoritesCount;
+      const favoriteButton = document.querySelector('#favorite-btn');
+      if(response.job === "add"){
+        favoriteButton.innerHTML = '<i class="fa-solid fa-heart"></i>';
+      }
+      if(response.job  === "remove"){
+        favoriteButton.innerHTML = '<i class="fa-regular fa-heart"></i>';
+      }
+    }
+  });
+}
+
+function assign_task_to(){
+  const members = document.querySelectorAll('.assign_task_member');
+  members.forEach(function(member) {
+    member.addEventListener('click', function() {
+      members.forEach(function(member) {
+        member.classList.remove('selected');
+      });
+      this.classList.add('selected');
+      document.getElementById('assign_task_to').value = this.getAttribute('data-id');
+    });
+  });
+
+  // Select the first member by default
+  if (members.length > 0) {
+    members[0].click();
+  }
+}
+
+function handleCompleteTask() {
+let taskId = this.getAttribute('data-task-id');
+let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+fetch(`/task/complete/${taskId}`, { 
+  method: 'PATCH',
+  headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken
+  },
+})
+.then(response => response.json())
+.then(data => {
+    let stateElement = document.getElementById('task-details-state');
+    if (stateElement && stateElement.nextSibling.nodeType === Node.TEXT_NODE) {
+      stateElement.nextSibling.nodeValue = 'completed';
+      let completebtn = document.getElementById('completetaskbtn');
+      completebtn.classList.add('archived-btn'); // hide btn
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
   });
 }
 

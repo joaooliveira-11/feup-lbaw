@@ -15,6 +15,7 @@ class AcceptedProjectInvite  implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $coordinator;
     /**
      * Create a new event instance.
      */

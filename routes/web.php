@@ -71,7 +71,12 @@ Route::controller(ProjectController::class)->group(function() {
     Route::get('/search-projects', 'search');
     Route::post('/addMember', 'addMember')->name('addmember');
     Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
+    Route::delete('/kickMember/{user_id}/{project_id}', 'kickMember')->name('kickmember');
+    Route::post('/changeCoordinator/{username}/{project_id}', 'changeCoordinator')->name('changeCoordinator');
     Route::patch('/project/edit', 'updatedetails')->name('project.update_details');
+    Route::patch('/project/{id}/changevisibility', 'update_visibility')->name('project.update_visibility');
+    Route::patch('/project/{id}/changestatus', 'update_status')->name('project.update_status');
+    Route::post('/favoriteProject', 'favoriteProject')->name('favoriteProject');
 });
 
 //Task
@@ -79,8 +84,11 @@ Route::controller(TaskController::class)->group(function() {
     Route::post('/task/create', 'create')->name('task.create');
     Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
     Route::patch('/task/edit', 'updatedetails')->name('task.update_details');
-    Route::patch('/task/complete', 'completetask')->name('task.complete');
+    Route::patch('/task/complete/{taskId}', 'completetask')->name('task.complete');
     Route::post('/search-tasks', 'search');
+    Route::patch('/task/assign', 'assign')->name('task.assign');
+    Route::patch('/task/upload', 'upload_file')->name('task.upload');
+    Route::get('/task/download/{task}', 'download_file')->name('task.download');
 });
 
 //Comment
