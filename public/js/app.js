@@ -897,7 +897,7 @@ const pusher = new Pusher(pusherAppKey, {
 //notifications channel
 const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
-  console.log(data);
+  
   if(data.user_id == userId){
     document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
@@ -905,10 +905,13 @@ channel.bind('notification-invite', function(data) {
 });
 
 channel.bind('accepted-invite', function(data) {
-  console.log(data);
     document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
-    //console.log(response);
+});
+
+channel.bind('notification-coordinator', function(data) {
+  document.getElementById('new-notification').classList.add('show');
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
 //chat channel
@@ -992,7 +995,7 @@ function handleRefreshNotifications() {
         if(notification.type == "invite") {
             let description_invite = document.createElement('p');
             description_invite.classList.add('notification-text');
-            description_invite.textContent = "You have been invited to join the project ";
+            description_invite.textContent = "You have been invited to join the project";
           
             const accept = document.createElement('button');
             accept.classList.add('invite-accept');
@@ -1019,10 +1022,9 @@ function handleRefreshNotifications() {
             li.appendChild(deny);
           }
           else if(notification.type == "acceptedinvite") {
-            console.log("acceptedinvite");
               let description_accepted = document.createElement('p');
               description_accepted.classList.add('notification-text');
-              description_accepted.textContent = "Your invite to the project has been accepted";
+              description_accepted.textContent = "Your invitation has been accepted";
 
               const dismiss = document.createElement('button');
               dismiss.classList.add('notification-dismiss');
@@ -1036,6 +1038,24 @@ function handleRefreshNotifications() {
               dismiss.appendChild(icondismiss);
 
               li.appendChild(description_accepted);
+              li.appendChild(dismiss);
+          }else if(notification.type == "coordinator") {
+              let description_coordinator = document.createElement('p');
+              description_coordinator.classList.add('notification-text');
+              description_coordinator.textContent = "There as been a change of coordinator in the project";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_coordinator);
               li.appendChild(dismiss);
           }
           else {
