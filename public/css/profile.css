@@ -9,6 +9,17 @@
     color: #303030;
 }
 
+#ProfileDisplay {
+    background-image: url('/img/background.png');
+    background-size: cover; 
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 100vh; 
+    display: flex;
+    width: 100%;
+    padding-top: 2.7vw;
+}
+
 #fileInput {
     display: none;
 }
@@ -227,95 +238,73 @@
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); 
 }
 
-#edit-page-content{
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;  
-    background: linear-gradient(to right, #3a3a41, #9d9ea8);
-    border-radius: 5px;
-    color: #f4f4f4;
-    font-size: 16px;
-    display: grid;
+
+#edit-page-content {
+    width: 60%;
+    margin: 4em auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 0.6rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-size: 14px;
 }
 
-#edit-page-content form{
-    grid-column: span 3;
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto auto;
-    gap: 25px;
+#edit-page-content form {
+    display: flex;
+    flex-direction: column;
 }
 
-input[type="text"], input[type="email"], input[type="password"]{
-    background-color: #D9D9D9;
+#edit-page-content input[type="text"], #edit-page-content input[type="email"], #edit-page-content textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#edit-page-content textarea {
+    resize: vertical;
+}
+
+#edit-page-content label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#edit-page-content .interest, #edit-page-content .skill {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+}
+
+
+#edit-page-content #interests, #edit-page-content #skills {
+    margin-bottom: 1em;
+}
+
+#edit-page-content #interests-list, #edit-page-content #skills-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+#edit-page-content input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4248ab;
+    color: white;
     border: none;
-    border-radius: 0.5vw;
-    padding: 1vw;
-    color: #333;
-}
-
-textarea{
-    background-color: #f4f4f4;
-    border: none;
-    border-radius: 0.5vw;
-    padding: 1vw;
-    color: #333;
-    resize: none;
-}
-
-.skill label input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
+    border-radius: 4px;
     cursor: pointer;
-    height: 0;
-    width: 0;
+    transition: background-color 0.3s;
+    max-width: fit-content;
+    text-align: center;
 }
 
-.interest label input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
-
-
-div.skill, div.interest {
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 5px;
-    border: #f4f4f4 0.1vw solid;
-    border-radius: 0.5vw;
-    padding: 0.5vw;
-    font-weight: normal;
-}
-
-div.selected{
-    border: #333 0.1vw solid;
-}
-
-#interests-list, #skills-list{
-    height: 20vh;
-    overflow-y: scroll;
-    width: fit-content;
-    background-color: #f4f4f4;
-    padding: 0.5vw;
-    border-radius: 1vw;
-}
-
-#interests-list::-webkit-scrollbar, #skills-list::-webkit-scrollbar{
-    width: 10px;
-}
-
-input[value="Update Profile"]{
-    background-color: transparent;
-    border: #f4f4f4 0.1vw solid;
-    border-radius: 0.5vw;
-}
-
-input[value="Update Profile"]:hover{
-    background-color: #9d9ea8;
-    color: #333;
-    transition: ease-in-out 0.3s;
-    border: #9d9ea8 0.1vw solid;
+#edit-page-content input[type="submit"]:hover {
+    background-color: #393e96;
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="ProjectPage">
+<div id="ProfileDisplay">
     <div id="ProfilePage">
         <div class="Profile-LeftSection">
             <div class="profile-photo-container">

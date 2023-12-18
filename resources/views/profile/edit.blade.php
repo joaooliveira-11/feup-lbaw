@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div id = "edit-page-content">
-    <form action="{{ route('user.update', $user->id) }}" method="POST">
+<div id="ProfileDisplay">
+    <div id = "edit-page-content">
+        <form action="{{ route('user.update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
             <label for="name">Name:</label>
@@ -18,7 +19,7 @@
             <textarea id="description" name="description" rows="4" cols="50">{{ $user->description }}</textarea>
 
             <div id = "interests">
-                Interests:
+            <label>Interests:</label>
                 <div id = "interests-list">
                     @foreach($allInterests as $interest)
                     <div class="interest {{ in_array($interest->interest_id, $userInterests) ? 'selected' : '' }}" >
@@ -31,7 +32,7 @@
                 </div>
             </div>
             <div id = "skills">
-                Skills:
+                <label>Skills:</label>
                 <div id = "skills-list">
                     @foreach($allSkills as $skill)
                     <div class = "skill {{ in_array($skill->skill_id, $userSkills) ? 'selected' : '' }}" >
@@ -45,7 +46,7 @@
             </div>
             <input type="submit" value="Update Profile">
         </form>
-        
+    </div>    
 </div>
 
 @endsection
