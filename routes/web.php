@@ -11,6 +11,9 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RecoverPasswordController;
+
 
 
 /*
@@ -42,12 +45,21 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+Route::controller(RecoverPasswordController::class)->group(function () {
+    Route::get('password/forget', 'show')->name('password.forgot');
+    Route::post('password/forget', 'request');
+    Route::get('password/recover', 'showRecover')->name('password.recover');
+    Route::post('password/recover', 'recover');
+});
+
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('profile/{id}', 'show')->where('id', '[0-9]+')->name('show');
     Route::get('/edit-profile/{id}', 'edit')->where('id', '[0-9]+')->name('edit');
     Route::put('/profile/{id}', 'update')->name('user.update');
+    Route::post('profile/updateImage','updateImage')->name('profile.updateImage');  
     Route::post('/user-name', 'name');
+    Route::post('admin/delete/{id}','deleteUser')->where('id', '[0-9]+')->name('deleteUser');
 });
 
 //Project
@@ -108,3 +120,8 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
 
+//Admin
+Route::controller(AdminController::class)->group(function () {
+    Route::post('admin/ban/{id}','banUser')->where('id', '[0-9]+')->name('admin.banUser');
+    Route::post('admin/unban/{id}','unbanUser')->where('id', '[0-9]+')->name('admin.unbanUser');
+});

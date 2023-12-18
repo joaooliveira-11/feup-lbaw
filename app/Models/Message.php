@@ -17,7 +17,7 @@ class Message extends Model
     protected $table = 'message';
     protected $primaryKey = 'message_id';
 
-    public function messaged_by(){
+    public function messaged_by() {
         return $this->belongsTo(User::class, 'message_by');
     }
 }
