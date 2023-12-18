@@ -1278,7 +1278,7 @@ fetch(`/task/complete/${taskId}`, {
 }
 
 function closeNotifications() {
-  var notificationsDropdown = document.getElementById('notifications-dropdown');
-  notificationsDropdown.style.display = 'none';
+  document.getElementById("notifications-dropdown").classList.toggle("hide");
+  document.getElementById("new-notification").classList.remove("show");
 }
 
