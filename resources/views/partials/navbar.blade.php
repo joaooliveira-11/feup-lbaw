@@ -9,22 +9,30 @@
             <li><a class="navbar-list-element" href="">Home</a></li>
             <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
             <li><a class="navbar-list-element" href="">FAQs</a></li>
-            <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
         </ul>
     </div>
 
     <div class="navbar-profile-logout-notifications">
         @if (Auth::check())
-            <a class="navbar-list-element" href="{{ url('/profile', ['id' => Auth::id()]) }}">Profile</a>
+            <a class="navbar-profile-link" href="{{ url('/profile', ['id' => Auth::id()]) }}">
+                <div class="user-avatar-circle">
+                    <img src="{{ asset(Auth::user()->photo) }}" alt="User Profile" >
+                </div>
+            </a>
+            <button id="notifications-button"><i class="fa-solid fa-bell"></i><span id="new-notification"></span></button>
+            <a class="navbar-logout-button" href="{{ url('/logout') }}">
+                <i class="fa fa-sign-out-alt"></i>
+            </a>       
+            @endif
 
-            <a class="navbar-logout-button" href="{{ url('/logout') }}"> Logout </a>
-        @endif
-    <button id="notifications-button" ><i class="fa-solid fa-bell"></i><span id = "new-notification"></span></button>
     <div id="notifications-dropdown">
-        <div>
-            <h1 id="notifications-title">Notifications</h1>
-            <button class="dismiss-all-notis" onclick = "dismissAll()"><i class="fa-solid fa-eye"></i>All</button>
-        </div>
+            <button class="close-notifications"><i class="fa-solid fa-times"></i></button>
+            <div>
+                <h1 id="notifications-title">Notifications</h1>
+                <button class="dismiss-all-notis" onclick = "dismissAll()"><i class="fa-solid fa-eye"></i>All</button>
+            </div>
+
+
         <ul id ="notifications-list" >
             @if (Auth::check() )
                 @foreach ($notifications as $notification)
@@ -66,16 +74,10 @@
                             </li>
                     @endswitch
                 @endforeach
-            <a class="navbar-profile-link" href="{{ url('/profile', ['id' => Auth::id()]) }}">
-                <div class="user-avatar-circle">
-                    <img src="{{ asset(Auth::user()->photo) }}" alt="User Profile" >
-                </div>
-            </a>
-            <button id="notifications-button"><i class="fa-solid fa-bell"></i><span id="new-notification"></span></button>
-            <a class="navbar-logout-button" href="{{ url('/logout') }}">
-                <i class="fa fa-sign-out-alt"></i>
-            </a>       
             @endif
+            </ul>
+        </div>
+      
     </div>
 </div>
 @endsection
