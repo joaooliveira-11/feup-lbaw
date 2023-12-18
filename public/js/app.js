@@ -585,62 +585,7 @@ function handleCreateMessage(event) {
   })
   .then(response => response.json())
   .then(data => {
-    let chatSection = document.querySelector('.chat-section');
-
-    let messageDiv = document.createElement('div');
-    messageDiv.className = 'message-chat';
-    messageDiv.id = 'message-' + data.message_id;
-
-    let userImage = document.createElement('img');
-    userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
-    userImage.className = 'user-image';
-    userImage.alt = 'Gmail Image';
-    messageDiv.appendChild(userImage);
-
-    let messageContentDiv = document.createElement('div');
-    messageContentDiv.className = 'message-content';
-
-    let usernameH5 = document.createElement('h5');
-    usernameH5.className = 'message-username';
-    usernameH5.textContent = data.message_message_by;
-    messageContentDiv.appendChild(usernameH5);
-
-    let contentP = document.createElement('p');
-    contentP.textContent = data.message_content;
-    messageContentDiv.appendChild(contentP);
-
-    let messageInfoButtonsDiv = document.createElement('div');
-    messageInfoButtonsDiv.className = 'message-info-buttons';
-
-    let createDate = new Date(data.message_create_date);
-    let formattedCreateDate = createDate.getFullYear() + '-' +
-    String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
-    String(createDate.getDate()).padStart(2, '0') + ' ' +
-    String(createDate.getHours()).padStart(2, '0') + ':' +
-    String(createDate.getMinutes()).padStart(2, '0') + ':' +
-    String(createDate.getSeconds()).padStart(2, '0');
-
-    let createDateH6 = document.createElement('h6');
-    createDateH6.textContent = formattedCreateDate;
-    messageInfoButtonsDiv.appendChild(createDateH6);
-
-    let messageButtonsDiv = document.createElement('div');
-    messageButtonsDiv.className = 'message-buttons';
     
-    let deleteButton = document.createElement('button');
-    deleteButton.type = 'button';
-    deleteButton.className = 'message-manage-button';
-    deleteButton.textContent = 'Delete';
-    messageButtonsDiv.appendChild(deleteButton);
-    
-    messageInfoButtonsDiv.appendChild(messageButtonsDiv);
-
-    messageContentDiv.appendChild(messageInfoButtonsDiv);
-    messageDiv.appendChild(messageContentDiv);
-    chatSection.appendChild(messageDiv);
-    document.getElementById('message-content').value = '';
-
-    chatSection.scrollTop = chatSection.scrollHeight;
   })
   .catch(error => console.error('Error:', error));
 }
@@ -938,7 +883,7 @@ function handleDeleteMessage(event) {
   handleDelete(event, 'message-manage-button', 'message-chat', '/message/delete/');
 }
 
-// pusher notifications
+// pusher 
 
 const pusherAppKey = "fb8ef8f4fa10afc9c38c";
 const pusherCluster = "eu";
@@ -949,6 +894,7 @@ const pusher = new Pusher(pusherAppKey, {
   encrypted: true
 });
 
+//notifications channel
 const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
   console.log(data);
@@ -963,6 +909,73 @@ channel.bind('accepted-invite', function(data) {
     document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
     //console.log(response);
+});
+
+//chat channel
+const chatChannel = pusher.subscribe('chat');
+chatChannel.bind('chat-message', function(data) {
+
+  console.log(data);
+
+  let chatSection = document.querySelector('.chat-section');
+
+    let messageDiv = document.createElement('div');
+    messageDiv.className = 'message-chat';
+    messageDiv.id = 'message-' + data.message_id;
+
+    let userImage = document.createElement('img');
+    userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+    userImage.className = 'user-image';
+    userImage.alt = 'Gmail Image';
+    messageDiv.appendChild(userImage);
+
+    let messageContentDiv = document.createElement('div');
+    messageContentDiv.className = 'message-content';
+
+    let usernameH5 = document.createElement('h5');
+    usernameH5.className = 'message-username';
+    usernameH5.textContent = data.message_by;
+    messageContentDiv.appendChild(usernameH5);
+
+    let contentP = document.createElement('p');
+    contentP.textContent = data.message;
+    messageContentDiv.appendChild(contentP);
+
+    let messageInfoButtonsDiv = document.createElement('div');
+    messageInfoButtonsDiv.className = 'message-info-buttons';
+
+    let createDate = new Date(data.create_date);
+    let formattedCreateDate = createDate.getFullYear() + '-' +
+    String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
+    String(createDate.getDate()).padStart(2, '0') + ' ' +
+    String(createDate.getHours()).padStart(2, '0') + ':' +
+    String(createDate.getMinutes()).padStart(2, '0') + ':' +
+    String(createDate.getSeconds()).padStart(2, '0');
+
+    let createDateH6 = document.createElement('h6');
+    createDateH6.textContent = formattedCreateDate;
+    messageInfoButtonsDiv.appendChild(createDateH6);
+
+    let messageButtonsDiv = document.createElement('div');
+    messageButtonsDiv.className = 'message-buttons';
+    
+    const name = document.querySelector('.chat-section').id;
+    if(name === data.message_by){
+      let deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'message-manage-button';
+      deleteButton.textContent = 'Delete';
+      messageButtonsDiv.appendChild(deleteButton);
+    }
+    messageInfoButtonsDiv.appendChild(messageButtonsDiv);
+
+    messageContentDiv.appendChild(messageInfoButtonsDiv);
+    messageDiv.appendChild(messageContentDiv);
+    chatSection.appendChild(messageDiv);
+    document.getElementById('message-content').value = '';
+
+    chatSection.scrollTop = chatSection.scrollHeight;
+
 });
 
 function handleRefreshNotifications() {
