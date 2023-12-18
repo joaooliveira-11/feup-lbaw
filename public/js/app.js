@@ -1012,14 +1012,24 @@ function handleRefreshNotifications() {
         li.classList.add(notification.type+"-notification");
         li.id = 'n' + notification.notification_id;
         if(notification.type == "invite") {
-            let description_invite = document.createElement('p');
-            description_invite.classList.add('notification-text');
-            description_invite.textContent = "You have been invited to join the project";
-          
-            const accept = document.createElement('button');
-            accept.classList.add('invite-accept');
-            accept.onclick = function() {
-              accept_invite(notification.reference_id, notification.notification_id, notification.emited_to);
+          let description_invite = document.createElement('p');
+          description_invite.classList.add('notification-text');
+          description_invite.textContent = "You have been invited to join the project ";
+        
+          const accept = document.createElement('button');
+          accept.classList.add('invite-accept');
+          accept.onclick = function() {
+            accept_invite(notification.reference_id, notification.notification_id, notification.emited_to);
+        };
+          const iconaccept = document.createElement('i');
+          iconaccept.classList.add('fa-solid');
+          iconaccept.classList.add('fa-check');
+          accept.appendChild(iconaccept);
+  
+          const deny = document.createElement('button');
+          deny.classList.add('notification-deny');
+          deny.onclick = function() {
+            dismiss_notification(notification.notification_id);
           };
           const icondeny = document.createElement('i');
           icondeny.classList.add('fa-solid');
@@ -1029,45 +1039,25 @@ function handleRefreshNotifications() {
           li.appendChild(description_invite);
           li.appendChild(accept);
           li.appendChild(deny);
-        }
-        else if(notification.type == "acceptedinvite") {
-          console.log("acceptedinvite");
-            let description_accepted = document.createElement('p');
-            description_accepted.classList.add('notification-text');
-            description_accepted.textContent = "Your invite to the project has been accepted";
 
-            const dismiss = document.createElement('button');
-            dismiss.classList.add('notification-dismiss');
-            dismiss.onclick = function() {
-              dismiss_notification(notification.notification_id);
-            };
-            const icondeny = document.createElement('i');
-            icondeny.classList.add('fa-solid');
-            icondeny.classList.add('fa-ban');
-            deny.appendChild(icondeny);
-    
-            li.appendChild(description_invite);
-            li.appendChild(accept);
-            li.appendChild(deny);
-          }
+        }
           else if(notification.type == "acceptedinvite") {
-              let description_accepted = document.createElement('p');
-              description_accepted.classList.add('notification-text');
-              description_accepted.textContent = "Your invitation has been accepted";
+              let description_coordinator = document.createElement('p');
+              description_coordinator.classList.add('notification-text');
+              description_coordinator.textContent = "Your invitation to join the project was accepted";
 
-            dismiss.appendChild(icondismiss);
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
 
-            li.appendChild(description_accepted);
-            li.appendChild(dismiss);
-        }
-        else {
-            let description_default = document.createElement('p');
-            description_default.classList.add('notification-text');
-            description_default.textContent = "You have a new notification in the project";
-            li.appendChild(description_default);
-        }
+              dismiss.appendChild(icondismiss);
 
-              li.appendChild(description_accepted);
+              li.appendChild(description_coordinator);
               li.appendChild(dismiss);
           }else if(notification.type == "coordinator") {
               let description_coordinator = document.createElement('p');
@@ -1131,12 +1121,10 @@ function handleRefreshNotifications() {
           }
 
         document.getElementById('notifications-list').appendChild(li);
-      }
-      });
+         } });
     }
-    });
-  }
 }
+
 
 function handleLeaveProjectClick(event) {
 event.preventDefault();
@@ -1293,3 +1281,4 @@ function closeNotifications() {
   var notificationsDropdown = document.getElementById('notifications-dropdown');
   notificationsDropdown.style.display = 'none';
 }
+
