@@ -1,5 +1,5 @@
 <div id="Chat">
-    <div class="chat-section">
+    <div id =  "{{auth()->user()->username}}" class="chat-section">
         <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($project->messages as $message)
             <div class="message-chat" id="message-{{ $message->message_id }}">
