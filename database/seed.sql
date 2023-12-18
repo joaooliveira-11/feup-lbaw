@@ -6,7 +6,7 @@ SET search_path TO lbaw23117;
 -----------------------------------------
 
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS password_resets CASCADE;
+DROP TABLE IF EXISTS password_reset_tokens CASCADE;
 DROP TABLE IF EXISTS interest CASCADE;
 DROP TABLE IF EXISTS user_interests CASCADE;
 DROP TABLE IF EXISTS skill CASCADE;
@@ -66,7 +66,7 @@ CREATE TABLE users (
     google_id VARCHAR
 );
 
-CREATE TABLE password_resets (
+CREATE TABLE password_reset_tokens (
     email VARCHAR NOT NULL,
     token VARCHAR NOT NULL,
     created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
@@ -195,11 +195,11 @@ CREATE INDEX task_comment ON comment USING hash(task_comment);
 -- LARAVEL INDEXES
 -----------------------------------------
 
-DROP INDEX IF EXISTS password_resets_email_index;
-DROP INDEX IF EXISTS password_resets_token_index;
+DROP INDEX IF EXISTS password_reset_tokens_email_index;
+DROP INDEX IF EXISTS password_reset_tokens_token_index;
 
-CREATE INDEX password_resets_email_index ON password_resets (email);
-CREATE INDEX password_resets_token_index ON password_resets (token);
+CREATE INDEX password_reset_tokens_email_index ON password_reset_tokens (email);
+CREATE INDEX password_reset_tokens_token_index ON password_reset_tokens (token);
 
 
 -----------------------------------------

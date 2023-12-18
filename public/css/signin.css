@@ -78,12 +78,19 @@
     margin-bottom: 0.3vw;
 }
 
+#butons_signin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}
+
 #butons_signin button {
     background-color: #2E3399;
     border-radius: 1.1vw;
     color: white;
     height: 2.5vw;
-    margin-top: 1vw;
+    margin-top: 2em;
 }
 
 .separator-text {
@@ -103,6 +110,12 @@
     transform: translate(-50%, -50%);
     z-index: 1;
 }
+
+#forgot-password-link {
+    color:#000000;
+    text-decoration: none;
+}
+
 
 @media screen and (max-width: 768px) {
     #register-mobile {

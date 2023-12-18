@@ -12,7 +12,7 @@ use App\Http\Controllers\InviteController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Auth\RecoverPasswordController;
+use App\Http\Controllers\RecoverPasswordController;
 
 
 
@@ -46,8 +46,10 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(RecoverPasswordController::class)->group(function () {
-    Route::post('auth/recover', 'request')->name('password.email');
-    Route::get('auth/recover-page', 'show')->name('password.reset');
+    Route::get('password/forget', 'show')->name('password.forgot');
+    Route::post('password/forget', 'request');
+    Route::get('password/recover', 'showRecover')->name('password.recover');
+    Route::post('password/recover', 'recover');
 });
 
 // User

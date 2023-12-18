@@ -28,7 +28,7 @@
             @endif
             <div id="butons_signin">
                 <button type="submit" id="LoginButton">Sign In</button>
-                <a id="forgot-password-link" href="{{ route('password.reset') }}">Forgot password?</a>
+                <a id="forgot-password-link" href="{{ route('password.forgot') }}">Forgot password?</a>
             </div>
             
             <div id="register-mobile">
