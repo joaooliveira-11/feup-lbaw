@@ -25,12 +25,12 @@
 }
 
 .Profile-LeftSection {
-    width: 30%;
     background-color: #fff;
     display: flex;
     flex-direction: column;
     padding: 0 2.4em;
     border-radius: 0.7vw 0 0 0;
+    width: 100%;
 }
 
 .Profile-LeftSection label {
@@ -44,10 +44,12 @@
     margin: 3em auto;
 }
 
-.profile-interests-skills {
+#ProjectPage .profile-interests-skills {
     background-color: #4248ab;
     border-radius: 1em;
     padding: 2.2em 1.2em;
+    width: 95%;
+    margin: 0 auto;
 }
 
 .interests-title , .skills-title {
@@ -71,8 +73,7 @@
     margin-left: 1vw;
 }
 
-.Profile-RightSection {
-    width: 70%;
+#ProjectPage .Profile-RightSection {
     background-color: rgba(231, 231, 231, 0.6);
     display: flex;
     flex-direction: column;
@@ -194,7 +195,7 @@
 #ProjectsList {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 35vh;
+    height: 50vh;
     overflow-y: auto;
 }
 
@@ -261,27 +262,17 @@
     border-radius: 4px;
 }
 
-#edit-page-content textarea {
-    resize: vertical;
+#interests-list, #skills-list{
+    height: 20vh;
+    overflow-y: scroll;
+    width: fit-content;
+    background-color: #f4f4f4;
+    padding: 0.5vw;
+    border-radius: 1vw;
 }
 
-#edit-page-content label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-#edit-page-content .interest, #edit-page-content .skill {
-    display: inline-block;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    padding: 5px 10px;
-    background-color: #f0f0f0;
-    border-radius: 20px;
-}
-
-
-#edit-page-content #interests, #edit-page-content #skills {
-    margin-bottom: 1em;
+#interests-list::-webkit-scrollbar, #skills-list::-webkit-scrollbar{
+    width: 10px;
 }
 
 #edit-page-content #interests-list, #edit-page-content #skills-list {
@@ -307,4 +298,54 @@
 
 #edit-page-content input[type="submit"]:hover {
     background-color: #393e96;
+}
+
+@media screen and (max-width: 768px) {
+    .Profile-LeftSection {
+        padding: 1.2em;
+    }
+    .picture-wrapper {
+        height: 14em;
+    }
+    #ProfilePage .profile-interests-skills {
+        padding: 0.6em;   
+    }
+    #deleteButton button {
+        font-size: 150%;
+        height: fit-content;
+    }
+
+    .interests-title {
+        font-size: 225%;
+    }
+    #Interests p, #Skills p {
+        font-size: 150%;
+    }
+    .profile-right-section-left h5, .profile-info-span {
+        font-size: 140%;
+    }
+    #Description h5 {
+        font-size: 175%;
+    }
+    #EditProfile button {
+        width: 100%;
+        height: 100%;
+        font-size: 100%;
+    }
+    #Projects h4 {
+        font-size: 225%;
+        margin-bottom: 0;
+    }
+    #ProjectsList {
+        display: block;
+    }
+    #ProjectsList .project-element {
+        height: auto;
+    }
+    #ProjectsList #ProjectTitle {
+        font-size: 175%;
+    }
+    .project-list-description {
+        font-size: 125%;
+    }
 }

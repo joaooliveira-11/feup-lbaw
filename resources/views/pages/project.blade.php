@@ -2,13 +2,13 @@
 
 @section('content')
 <div id="ProjectPage">
-    <div id="ProjectInfo">
+    <div id="ProjectInfo" class="project-wrapper">
         @include('partials.project.sidebar')
         <div id="MainContent">
-        @include('partials.project.dashboard')
-        @include('partials.project.members')
-        @include('partials.project.chat')
-        @include('partials.project.tasks')
+            @include('partials.project.dashboard')
+            @include('partials.project.members')
+            @include('partials.project.chat')
+            @include('partials.project.tasks')
         </div>
     </div>
 </div>

@@ -1,9 +1,9 @@
-<div id="comments">
-    <div class="comments-section">
+<div id="comments" class="container">
+    <div class="container comments-section">
         <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($task->comments as $comment)
-            <div class="comment" id="comment-{{ $comment->comment_id }}">
-            <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
+            <div class="container comment" id="comment-{{ $comment->comment_id }}">
+                <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
                 <div class="comment-content">
                     <h5 class="message-username">{{ $comment->commented_by->username }}</h5>
                     <p>{{ $comment->content }}</p>
@@ -22,13 +22,11 @@
             </div>
         @endforeach
     </div>
-    @if($task->task_project->is_member(auth()->user()))
-        <form class="comment-form" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
-            @csrf
-            <input type="hidden" name="task_id" value="{{ $task->task_id }}">
-            <textarea name="content" id="comment-content" placeholder="Type comment" required></textarea>
-            <div class="error" id="contentError"></div>
-            <button id="submit-comment-button" type="submit">Send</button>
-        </form>
-    @endif
+    <form class="container comment-form" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
+        @csrf
+        <input type="hidden" name="task_id" value="{{ $task->task_id }}">
+        <textarea name="content" id="comment-content" placeholder="Type comment" required></textarea>
+        <div class="error" id="contentError"></div>
+        <button id="submit-comment-button" type="submit">Send</button>
+    </form>
 </div>

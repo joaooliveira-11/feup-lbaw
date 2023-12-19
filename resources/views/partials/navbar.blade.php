@@ -2,7 +2,9 @@
 <script>
     var userId = "{{ Auth::check() ? Auth::id() : 'null' }}";
 </script>
-<div class="navbar">
+<nav class="hamnavbar">
+    <label for="hamburger">&#9776;</label>
+    <input type="checkbox" id="hamburger"/>
     <img src="{{ asset('img/TeamSync.svg') }}" alt="TeamSync">
     <div class="navbar-list">
         <ul class="navbar-list-ul">
@@ -79,5 +81,5 @@
         </div>
       
     </div>
-</div>
+</nav>
 @endsection
