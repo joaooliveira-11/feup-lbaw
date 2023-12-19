@@ -44,6 +44,8 @@ class ProjectController extends Controller {
         $project->created_by = Auth::user()->id;
         $project->project_coordinator = Auth::user()->id;
         $project->save();
+
+        return redirect()->route('home');
     }
 
     public function updatedetails(Request $request){
@@ -64,10 +66,6 @@ class ProjectController extends Controller {
             'project_description' => $project->description,
             'project_finish_date' => $project->finish_date,
         ]);
-    }
-
-    public function showCreateForm(): View {   
-        return view('pages.createProject');
     }
 
     public function showProjects(): View {
