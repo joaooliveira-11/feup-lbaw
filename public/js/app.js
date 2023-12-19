@@ -162,7 +162,7 @@ function searchProjects(page = 1) {
 function searchTasks() {
     const input = document.getElementById('taskSearch');
     const filter = input.value; 
-    const project_id = document.getElementById('tasks-container').className;
+    const project_id = document.getElementById('tasks-container').className.split(' ')[1];
     const statusFilter = document.getElementById('status-selected').value;
     const priorityFilter = document.getElementById('priority-selected').value;
     sendAjaxRequest('POST', '/search-tasks', { filter: filter, project_id : project_id, statusFilter: statusFilter, priorityFilter: priorityFilter}, handleSearchTask);
@@ -768,6 +768,9 @@ notifications.forEach(notification => {
 }
 
 function accept_invite(reference_id, notification_id, member_id) {
+console.log(reference_id);
+console.log(notification_id);
+console.log(member_id);
 sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
   if (this.status >= 200 && this.status < 400) {
     const response = JSON.parse(this.response);
@@ -1113,7 +1116,25 @@ function handleRefreshNotifications() {
 
               li.appendChild(description_accepted);
               li.appendChild(dismiss);
-      }else {
+      } else if(notification.type === "assignedtask") {
+        let description_accepted = document.createElement('p');
+            description_accepted.classList.add('notification-text');
+            description_accepted.textContent = "You have been assigned to a task.";
+
+            const dismiss = document.createElement('button');
+            dismiss.classList.add('notification-dismiss');
+            dismiss.onclick = function() {
+              dismiss_notification(notification.notification_id);
+            };
+            const icondismiss = document.createElement('i');
+            icondismiss.classList.add('fa-solid');
+            icondismiss.classList.add('fa-eye');
+
+            dismiss.appendChild(icondismiss);
+
+            li.appendChild(description_accepted);
+            li.appendChild(dismiss);
+    } else {
               let description_default = document.createElement('p');
               description_default.classList.add('notification-text');
               description_default.textContent = "You have a new notification in the project";
