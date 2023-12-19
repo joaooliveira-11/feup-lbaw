@@ -11,6 +11,7 @@ use App\Models\Invite;
 use App\Models\Favorite_Projects;
 use Illuminate\Support\Facades\DB;
 use App\Events\AcceptedProjectInvite;
+use App\Events\NewCoordinator;
 
 class ProjectController extends Controller {
 
@@ -185,6 +186,8 @@ class ProjectController extends Controller {
         $project->project_coordinator = $coordinator->id;
         
         $project->save();
+
+        event(new NewCoordinator($project->title, $coordinator->name));
         
         return response()->json([
             'success' => 'Coordinator changed successfully!',

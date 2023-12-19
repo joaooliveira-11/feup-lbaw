@@ -1019,7 +1019,7 @@ encrypted: true
 //notifications channel
 const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
-console.log(data);
+  
   if(data.user_id == userId){
     document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
@@ -1027,11 +1027,25 @@ console.log(data);
 });
 
 channel.bind('accepted-invite', function(data) {
-console.log(data);
+    document.getElementById('new-notification').classList.add('show');
+    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
+channel.bind('notification-coordinator', function(data) {
   document.getElementById('new-notification').classList.add('show');
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
-  //console.log(response);
 });
+
+channel.bind('notification-forum', function(data) {
+  document.getElementById('new-notification').classList.add('show');
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
+channel.bind('notification-comment', function(data) {
+  document.getElementById('new-notification').classList.add('show');
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
 
 //chat channel
 const chatChannel = pusher.subscribe('chat');
@@ -1110,17 +1124,17 @@ let chatSection = document.querySelector('.chat-section');
 });
 
 function handleRefreshNotifications() {
-  if(this.status >= 200 && this.status < 400) {
-    var data = JSON.parse(this.response);
-    document.getElementById('notifications-list').innerHTML = "";
-    console.log(data);
-    data.notifications.forEach(notification => {
-      if(!notification.viewed){
-      const li = document.createElement('li');
-      li.classList.add('notification');
-      li.classList.add(notification.type);
-      li.id = 'n' + notification.notification_id;
-      if(notification.type == "invite") {
+    if(this.status >= 200 && this.status < 400) {
+      var data = JSON.parse(this.response);
+      document.getElementById('notifications-list').innerHTML = "";
+      console.log(data);
+      data.notifications.forEach(notification => {
+        if(!notification.viewed){
+        const li = document.createElement('li');
+        li.classList.add('notification');
+        li.classList.add(notification.type+"-notification");
+        li.id = 'n' + notification.notification_id;
+        if(notification.type == "invite") {
           let description_invite = document.createElement('p');
           description_invite.classList.add('notification-text');
           description_invite.textContent = "You have been invited to join the project ";
@@ -1148,12 +1162,48 @@ function handleRefreshNotifications() {
           li.appendChild(description_invite);
           li.appendChild(accept);
           li.appendChild(deny);
+
         }
-        else if(notification.type == "acceptedinvite") {
-          console.log("acceptedinvite");
-            let description_accepted = document.createElement('p');
-            description_accepted.classList.add('notification-text');
-            description_accepted.textContent = "Your invite to the project has been accepted";
+          else if(notification.type == "acceptedinvite") {
+              let description_coordinator = document.createElement('p');
+              description_coordinator.classList.add('notification-text');
+              description_coordinator.textContent = "Your invitation to join the project was accepted";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_coordinator);
+              li.appendChild(dismiss);
+          }else if(notification.type == "coordinator") {
+              let description_coordinator = document.createElement('p');
+              description_coordinator.classList.add('notification-text');
+              description_coordinator.textContent = "There as been a change of coordinator in the project";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_coordinator);
+              li.appendChild(dismiss);
+          } else if(notification.type == "forum") {
+            let description_coordinator = document.createElement('p');
+            description_coordinator.classList.add('notification-text');
+            description_coordinator.textContent = "New message in the project chat";
 
             const dismiss = document.createElement('button');
             dismiss.classList.add('notification-dismiss');
@@ -1166,21 +1216,38 @@ function handleRefreshNotifications() {
 
             dismiss.appendChild(icondismiss);
 
-            li.appendChild(description_accepted);
+            li.appendChild(description_coordinator);
             li.appendChild(dismiss);
-        }
-        else {
-            let description_default = document.createElement('p');
-            description_default.classList.add('notification-text');
-            description_default.textContent = "You have a new notification in the project";
-            li.appendChild(description_default);
-        }
+        } else if(notification.type === "comment") {
+          let description_accepted = document.createElement('p');
+              description_accepted.classList.add('notification-text');
+              description_accepted.textContent = "You have a new comment on the task.";
 
-      document.getElementById('notifications-list').appendChild(li);
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_accepted);
+              li.appendChild(dismiss);
+      }else {
+              let description_default = document.createElement('p');
+              description_default.classList.add('notification-text');
+              description_default.textContent = "You have a new notification in the project";
+              li.appendChild(description_default);
+          }
+
+        document.getElementById('notifications-list').appendChild(li);
+         } });
     }
-    });
-  }
 }
+
 
 function handleLeaveProjectClick(event) {
 event.preventDefault();
@@ -1334,6 +1401,7 @@ fetch(`/task/complete/${taskId}`, {
 }
 
 function closeNotifications() {
-  var notificationsDropdown = document.getElementById('notifications-dropdown');
-  notificationsDropdown.style.display = 'none';
+  document.getElementById("notifications-dropdown").classList.toggle("hide");
+  document.getElementById("new-notification").classList.remove("show");
 }
+

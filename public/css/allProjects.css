@@ -1,8 +1,14 @@
 #projects-container {
     width: 1200px; 
     margin: auto;
-    padding-top: 2vw;
-    height: 100vh;
+    margin-top: 2vw;
+    padding: 20px;
+    height: 90vh;
+}
+
+#projectSearch {
+    padding: 0.4em 1em;
+    font-size: 1.8em;
 }
 
 .search-bar {
@@ -48,8 +54,9 @@
     margin: 0;
     gap: 20px 2px;
     width: 100%;
-    height: 80%;
+    height: 85%;
 }
+
 
 .projects-list > * {
     flex-basis: calc(25% - 10px); 
@@ -106,14 +113,14 @@
 
 .pagination-container {
     text-align: center;
-    margin-top: 2vw;
 }
+
 
 .pagination-container .btn {
     background-color: #4248ab;
     color: white;
     text-decoration: none;
-    border-radius: 0.7vw;
+    border-radius: 5px;
     margin: 0 5px;
     font-size: 0.7vw;
 }
@@ -160,7 +167,6 @@
 
 .project-content, .project-details {
     position: absolute;
-    border-radius: 0.7vw; 
     top: 0;
     left: 0;
     width: 100%;
@@ -173,27 +179,50 @@
     backface-visibility: hidden;
 }
 
+
+
 @media screen and (max-width: 768px) {
+    #projects-container {
+        margin-top: 9em;
+        height: auto;
+    }
     .project-item {
-        flex-basis: calc(33.333% - 10px); 
         margin: 5px;
         width: 100%; 
     }
-
-    .project-link {
-        width: 47%;
+    #projects-container .project-link {
+        min-width: 48%;
+        height: 24em;
+        margin: 0;
     }
-
+    #projects-container .projects-list {
+        gap: 0;
+    }
     .project-info {
         font-size: 1.2vw;
+        margin: 0;
     }
-
     .projects-title {
         font-size: 2.6vw;
     }
-
+    .projects-list .project-title{
+        font-size: 180%;
+        height: auto;
+        margin-bottom: 0.5em;
+    }
+    .projects-list .project-info{
+        font-size: 140%;
+    }
+    .project-item .project-description {
+        font-size: 250%;
+    }
+    .pagination-container span {
+        font-size: 150%;
+    }
     .pagination-container .btn {
-        font-size: 1.3vw;
+        font-size: 1.4em;
+        height: fit-content;
+        width: 5em;
     }
 }
 
@@ -208,10 +237,6 @@
 
     .project-title {
         font-size: 3.2vw;
-    }
-
-    .pagination-container .btn {
-        font-size: 1.7vw;
     }
 
     .pagination-container {

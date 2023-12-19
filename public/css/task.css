@@ -56,7 +56,7 @@
     margin: auto;
 }
 
-.task-left-section {
+#ProjectInfo .task-left-section {
     width: 35%;
     position: relative;
 }
@@ -244,4 +244,73 @@
     display: flex;
     align-items: center;
     gap: 0.4em;
+}
+
+@media screen and (max-width: 768px) {
+    #ProjectPage .task-page-wrapper {
+        flex-direction: column;
+        margin-top: 9em;
+    }
+    #ProjectPage #Details {
+        width: 100%;
+        border-bottom: 1px solid #000;
+    }
+    .task-left-section::after {
+        display: none;
+    }
+    .task-left-section h5 {
+        font-size: 200%;
+    }
+    .task-info-span {
+        font-size: 100%;
+    }
+    #task-details h5 {
+        font-size: 200%;
+    }
+    #assignUserButton {
+        font-size: 1.5em;
+        font-weight: 600;
+        height: fit-content;
+        border-radius: 0.5em;
+    }
+    #task-description h5 {
+        font-size: 200%;
+    }
+    #task-description p {
+        font-size: 150%;
+    }
+    #comments {
+        width: 100%;
+    }
+    #comments .comment .user-image {
+        width: 6em;
+        height: 6em;
+    }
+    .comments-section {
+        height: 65vh;
+    }
+    .message-username {
+        font-size: 200%;
+    }
+    .comment-content p {
+        font-size: 140%;
+    }
+    .comment-info-buttons h6 {
+        font-size: 100%;
+    }
+    .comment-manage-button {
+        font-size: 100%;
+    }
+    .comment-form {
+        margin-top: 0;
+        height: 4em;
+    }
+    .comment-form textarea {
+        font-size: 150%;
+        width: 80%;
+    }
+    .comment-form #submit-comment-button {
+        font-size: 150%;
+        width: 20%;
+    }
 }
