@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Project_Users;
 use App\Models\Invite;
 use App\Models\Favorite_Projects;
+use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use App\Events\AcceptedProjectInvite;
 use App\Events\NewCoordinator;
@@ -103,25 +104,28 @@ class ProjectController extends Controller {
         $invite = Invite::find($request->get('reference_id'));
         $project = Project::find($invite->project_invite);
         $member = User::find($request->get('member_id'));
-        event (new AcceptedProjectInvite());
-        
-        DB::table('project_users')->insert([
-            'project_id' => $project->project_id,
-            'user_id' => $member->id,
-        ]);
+        //event (new AcceptedProjectInvite());
+/*
+        $newnotification = new Notification;
+        $newnotification->create_date = now();
+        $newnotification->emited_by = 1;
+        $newnotification->emited_to = $project->project_coordinator;
+        $newnotification->viewed = false;
+        $newnotification->type = 'acceptedinvite';
+        //$newnotification->date = now();
+        $newnotification->reference_id = $project->project_id;
 
-        try{
-            $confirm = DB::table('project_users')
-            ->where('project_id', $project->project_id)
-            ->where('user_id', $member->id)->first();
+        $newnotification->save();
+*/
+        $newmember = new Project_Users;
+        $newmember->project_id = $project->project_id;
+        $newmember->user_id = $member->id;
+        $newmember->save();
+
+        event (new AcceptedProjectInvite());
     
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Failed to insert: ' . $e->getMessage(),
-            ]);
-        }
-    
-        
+
+
 
         return response()->json([
             'project' => $project,
