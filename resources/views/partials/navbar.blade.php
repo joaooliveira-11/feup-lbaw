@@ -6,7 +6,9 @@
     <img src="{{ asset('img/TeamSync.svg') }}" alt="TeamSync">
     <div class="navbar-list">
         <ul class="navbar-list-ul">
-            <li><a class="navbar-list-element" href="">Home</a></li>
+            @if (Auth::user()->isAdmin())
+            <li><a class="navbar-list-element" href="{{ url('/dashboard') }}">Dashboard</a></li>
+            @endif
             <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
             <li><a class="navbar-list-element" href="">FAQs</a></li>
             <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
