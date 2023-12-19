@@ -1,6 +1,4 @@
 function addEventListeners() {
-
-  setupRadioButtons();
   
   let changePic = document.querySelector('#fileInput');
   if (changePic != null)
@@ -34,7 +32,6 @@ function addEventListeners() {
   if (document.getElementById("submit-comment-button")) {
     setupCommentForm("createcommentform");
   }
-  
   if (document.getElementById("submit-message-button")) {
     setupMessageForm("createmessageform");
   }
@@ -355,55 +352,14 @@ radios.forEach(function(radio) {
 });
 }
 
-function handleCreateTask(modalId, event) {
-event.preventDefault();
 
-if (!isTaskFormValid()) {
-  return;
-}
-
-let url = this.getAttribute('action');
-let formData = new FormData(this);
-let csrfToken = document.querySelector('input[name="_token"]').value;
-
-fetch(url, {
-  method: 'POST',
-  body: formData,
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
-    'X-CSRF-TOKEN': csrfToken,
-  },
-})
-.then(response => response.json())
-.then(data => {
-  let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
-  modal.hide();
-
-  let activeTasksCountElement = document.querySelector('#ActiveTasks p');
-  activeTasksCountElement.textContent = parseInt(activeTasksCountElement.textContent) + 1;
-
-  let newTask = document.createElement('li');
-  newTask.innerHTML = `
-    <a href="${data.task_url}" class="project-link task-link">
-      <div>
-        <p class="TaskTitle">${data.task_title}</p>
-        <p>${data.task_description}</p>
-        <p class="FinishDate">Deadline: ${data.task_finish_date !== null ? data.task_finish_date : 'Not defined'}</p>
-      </div>
-    </a>
-  `;
-
-  let tasksList = document.querySelector('.TasksList');
-  if (!tasksList) {
-    tasksList = document.createElement('ul');
-    tasksList.className = 'TasksList';
-    document.getElementById('tasks-container').appendChild(tasksList);
+function handleCreateTask(event) {
+  
+  if (!isTaskFormValid()) {
+    event.preventDefault();
   }
-  tasksList.appendChild(newTask);
-})
-.catch(error => console.error('Error:', error));
+  
 }
-
 
 function handleEditTask(modalId, event) {
 event.preventDefault();
@@ -735,7 +691,7 @@ switch (formId) {
     document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
     break;
   case 'createtaskform':
-    document.getElementById(formId).addEventListener("submit", handleCreateTask.bind(form, modalId));
+    document.getElementById(formId).addEventListener("submit", handleCreateTask);
     break;
   case 'edittaskform':
     document.getElementById(formId).addEventListener("submit", handleEditTask.bind(form, modalId));
@@ -812,7 +768,7 @@ if(is_coordinator != null){
   sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
     if (this.status >= 200 && this.status < 400) {
       const response = JSON.parse(this.response);
-      location.reload();
+      window.location.href = '/home';
     }
   });
 }
@@ -854,7 +810,7 @@ const members = document.getElementsByClassName('user-id');
       const username = options[result.value].substring(1);
       sendAjaxRequest('POST', '/changeCoordinator/'+username+'/'+projectId, {}, function() {
         if (this.status >= 200 && this.status < 400) {
-          location.reload(); 
+          window.location.href = '/home';
         }
       });
     }
