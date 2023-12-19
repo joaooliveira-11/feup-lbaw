@@ -44,6 +44,7 @@
 
 .projects-list {
     display: flex;
+    justify-content: space-around;
     flex-wrap: wrap;
     padding: 0;
     margin: 0;
@@ -176,43 +177,44 @@
 
 @media screen and (max-width: 768px) {
     .project-item {
-        flex-basis: calc(33.333% - 10px); 
         margin: 5px;
         width: 100%; 
     }
 
     .project-link {
-        width: 47%;
+        min-width: 46%;
+        height: 24em;
+        text-align: center;
+    }
+
+    .project-title {
+        font-size: 1.7em;
+        height: 4em;
+        font-weight: 600;
     }
 
     .project-info {
-        font-size: 1.2vw;
+        font-size: 1.2em;
     }
 
-    .projects-title {
-        font-size: 2.6vw;
+    .project-description {
+        font-size: 2.2em;
     }
 
+    .pagination-container span {
+        font-size: 1.4em;
+    }
+    
     .pagination-container .btn {
-        font-size: 1.3vw;
+        font-size: 1.4em;
+        width: 6em;
+        height: auto;
     }
 }
 
 @media screen and (max-width: 500px) {
-    .project-link {
-        width: 97%;
-    }
-
-    .project-info {
-        font-size: 1.6vw;
-    }
-
-    .project-title {
-        font-size: 3.2vw;
-    }
-
-    .pagination-container .btn {
-        font-size: 1.7vw;
+    #projects-container {
+        height: auto;
     }
 
     .pagination-container {

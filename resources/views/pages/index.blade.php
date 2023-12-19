@@ -37,7 +37,7 @@
     </div>
     <div class="container lp-cta">
         <h2 class="lp-section-title">Are you ready to take your work to the <span>next level?</span></h2>
-        <div class="row cta-buttons">
+        <div class="cta-buttons">
             <a class="col-4 lp-button" href="{{ url('/register') }}">Get Started</a>
             <a class="col-4 learn-more-button" href="{{ url('/register') }}">Learn More</a>
         </div>
@@ -72,12 +72,12 @@
     </div>
 </div>
 <div id="footer-wrapper" class=container"">
-        <div class="row footer-row">
-            <div class="col-3 footer-left">
+        <div class="footer-row">
+            <div class="col-4 footer-left">
                 <a class="footer-teamsync-button" href="{{ url('/register') }}">TeamSync</a>
                 <h6>Where collaboration meets inovation</h6>
             </div>
-            <div class="col-5 footer-middle">
+            <div class="col-3 footer-middle">
                 <h5>Pages</h5>
                 <ul>
                     <li>Home</li>
@@ -85,7 +85,7 @@
                     <li>FAQs</li>
                 </ul>
             </div>
-            <div class="col-3 footer-right">
+            <div class="col-4 footer-right">
                 <h5>Contact</h5>
                 <p>+351 912 345 678</p>
                 <p>contact@teamsync.com</p>
