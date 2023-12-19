@@ -34,6 +34,14 @@ Route::view('/index', 'pages.index')->name('index');
 
 Route::view('/home', 'pages.homePage')->name('home');
 
+//redirects
+Route::get('/forbidden', function () {
+    return view('pages.forbidden');
+});
+Route::get('/notfound', function () {
+    return view('pages.notfound');
+});
+
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
