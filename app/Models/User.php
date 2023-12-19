@@ -83,4 +83,16 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class, 'user_id');
     }
 
+    public function tasks() {
+        return $this->hasMany(Task::class, 'assigned_to');
+    }
+
+    public function upcoming_tasks() {
+        return $this->tasks()
+            ->where('finish_date', '>', now())
+            ->where('state', 'assigned')
+            ->orderBy('finish_date', 'asc')
+            ->limit(6)
+            ->get();
+    }
 }
