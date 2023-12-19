@@ -34,12 +34,7 @@ class TaskController extends Controller {
 
         $task->save();
 
-        return response()->json([
-            'task_title' => $task->title,
-            'task_description' => $task->description,
-            'task_finish_date' => $task->finish_date,
-            'task_url' => url('task/' . $task->task_id),
-        ]);
+        return redirect()->route('project', ['project_id' => $task->project_task]);
     }
 
     public function show(int $task_id){
