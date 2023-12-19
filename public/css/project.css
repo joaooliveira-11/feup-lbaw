@@ -392,6 +392,14 @@ header {
     border-radius: 0 5px 5px 0;
 }
 
+#submit-edit-message-button{
+    height: 100%;
+    background-color: #3C5EE7;
+    color: white;
+    font-size: 0.8vw;
+    border-radius: 0 5px 5px 0;
+}
+
 .message {
     display: flex;
     width: 40vw;
@@ -511,5 +519,9 @@ header {
 
   .archived-btn {
     display: none;
+  }
+
+  .hide-message-form {
+    display: none !important;
   }
 

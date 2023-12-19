@@ -621,7 +621,7 @@ INSERT INTO users (name, username, email, password, description, is_admin, is_ba
 ('Charlie Brown', 'charlieb', 'charlie@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Charlie', FALSE, FALSE, TRUE),
 ('Dav_id Wilson', 'dav_idw', 'dav_id@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Dav_id', FALSE, TRUE, TRUE),
 ('Eve Anderson', 'evea', 'eve@example.com', 'password1234', 'User account for Eve', FALSE, FALSE, TRUE),
-('Frank Miller', 'frankm', 'frank@example.com', 'millerpwd567', 'User account for Frank', FALSE, FALSE, TRUE),
+('Frank Miller', 'frankm', 'frank@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Frank', FALSE, FALSE, TRUE),
 ('Grace Martinez', 'gracem', 'grace@example.com', 'grace12345', 'User account for Grace', FALSE, FALSE, TRUE),
 ('Henry Davis', 'henryd', 'henry@example.com', 'davishash123', 'User account for Henry', FALSE, FALSE, TRUE),
 ('Ivy Taylor', 'ivyt', 'ivy@example.com', 'ivysecurepwd', 'User account for Ivy', FALSE, FALSE, TRUE),
