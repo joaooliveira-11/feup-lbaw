@@ -1,0 +1,27 @@
+.error-message {
+    text-align: center;
+    margin-top: 10%;
+}
+
+.error-message .title {
+    font-size: 4vh;
+    color: #333;
+}
+
+.error-message .subtitle {
+    font-size: 2vh;
+    color: #666;
+}
+
+.error-message .isi {
+    color: #999;
+    margin: 2vh;
+}
+
+.error-message .buttons {
+    margin-top: 3vh;
+}
+
+.error-message .home-button{
+    padding: 2vh;
+}
