@@ -42,7 +42,7 @@
                         @case('invite')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
                                     <p class="notification-text">You have been invited to join the project</p>
-                                    <button class = "invite-accept" onclick = 'accept_invite({{ $notification->invite->project_invite }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'><i class="fa-solid fa-check"></i></button>
+                                    <button class = "invite-accept" onclick = 'accept_invite({{ $notification->reference_id }} , {{ $notification->notification_id }} , {{ $notification->emited_to }})'><i class="fa-solid fa-check"></i></button>
                                     <button class = "notification-deny" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-ban"></i></button>
                             </li>
                             @break
@@ -67,6 +67,12 @@
                         @case('forum')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
                                     <p class="notification-text">New message in the project chat.</p>
+                                    <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
+                            </li>
+                            @break
+                        @case('assignedtask')
+                            <li class = "notification" id="n{{ $notification->notification_id}}">
+                                    <p class="notification-text">You have been assigned to a task.</p>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break
