@@ -10,9 +10,8 @@
                 <div class="project-directory">
                     <div class="project-directory-header">
                         <h3 class="home-page-section-title">Project Directory</h3>
-                        <form class="home-form" action="">
-                            <button class="home-button">Create Project</button>
-                        </form>
+                        <button type="button" id="CreateProjectModalButton" class="home-button">Create Project</button>
+                        @include('modal.create_proj')
                     </div>
                     <div class="project-directory-projects">
                         @foreach (Auth::user()->projects() as $project)

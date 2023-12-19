@@ -21,6 +21,9 @@ function addEventListeners() {
   if (document.getElementById("EditProjectModalButton")) {
     setupModalForm("editprojectform", 'EditProjectModalButton', 'ModalEditProject');
   }
+  if (document.getElementById("CreateProjectModalButton")) {
+    setupModalForm("createprojectform", 'CreateProjectModalButton', 'ModalCreateProject');
+  }
   if (document.getElementById("assignUserButton")) {
     setupModalForm('assignTaskForm', 'assignUserButton', 'ModalAssignTask');
   }
@@ -451,6 +454,14 @@ fetch(url, {
 .catch(error => console.error('Error:', error));
 }
 
+function handleCreateProject(event) {
+  
+  if (!isProjectFormValid()) {
+    event.preventDefault();
+  }
+  
+}
+
 function handleEditProject(modalId, event) {
 event.preventDefault();
 if (!isProjectFormValid()) {
@@ -731,6 +742,9 @@ switch (formId) {
     break;
   case 'editprojectform':
     document.getElementById(formId).addEventListener("submit", handleEditProject.bind(form, modalId));
+    break;
+  case 'createprojectform':
+    document.getElementById(formId).addEventListener("submit", handleCreateProject);
     break;
   case'assignTaskForm':
     assign_task_to();

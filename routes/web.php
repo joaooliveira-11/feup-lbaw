@@ -65,8 +65,7 @@ Route::controller(UserController::class)->group(function () {
 
 //Project
 Route::controller(ProjectController::class)->group(function() {
-    Route::get('/project/create','showCreateForm')->name('createproject'); // vai deixar de existir na home
-    Route::post('/project/create', 'create');
+    Route::post('/project/create', 'create')->name('project.create');
     Route::get('/projects', 'showProjects')->name('allprojects');
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/search-projects', 'search');
