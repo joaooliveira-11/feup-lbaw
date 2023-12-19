@@ -31,18 +31,21 @@ function addEventListeners() {
   if (document.getElementById("submit-comment-button")) {
     setupCommentForm("createcommentform");
   }
+  
   if (document.getElementById("submit-message-button")) {
     setupMessageForm("createmessageform");
   }
 
   let commentsSection = document.querySelector('.comments-section');
   if (commentsSection) {
-  commentsSection.addEventListener('click', handleDeleteComment);
+    commentsSection.addEventListener('click', handleDeleteComment);
+    commentsSection.addEventListener('click', handleEditComment);
   }
 
   let chatSection = document.querySelector('.chat-section');
   if (chatSection) {
     chatSection.addEventListener('click', handleDeleteMessage);
+    chatSection.addEventListener('click', handleEditMessage);
   }
 
   document.getElementById("notifications-button").addEventListener("click", function(event) {
@@ -493,8 +496,7 @@ fetch(url, {
 
 function handleCreateComment(event) {
 event.preventDefault();
-
-if (!isCommentFormValid()) {
+if (!isCommentFormValid("comment-content", "createcomment-contentError")) {
   return;
 }
 
@@ -506,7 +508,7 @@ fetch(url, {
   method: 'POST',
   body: formData,
   headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+    'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN': csrfToken,
   },
 })
@@ -534,6 +536,7 @@ fetch(url, {
 
   let contentP = document.createElement('p');
   contentP.textContent = data.comment_content;
+  contentP.id = 'comment-content-' + data.comment_id;
   commentContentDiv.appendChild(contentP);
 
   let commentInfoButtonsDiv = document.createElement('div');
@@ -554,10 +557,18 @@ fetch(url, {
   let commentButtonsDiv = document.createElement('div');
   commentButtonsDiv.className = 'comment-buttons';
   
+  let editButton = document.createElement('button');
+  editButton.type = 'button';
+  editButton.className = 'comment-manage-button';
+  editButton.textContent = 'Edit';
+  editButton.id = 'EditCommentbtn';
+  commentButtonsDiv.appendChild(editButton);
+
   let deleteButton = document.createElement('button');
   deleteButton.type = 'button';
   deleteButton.className = 'comment-manage-button';
   deleteButton.textContent = 'Delete';
+  deleteButton.id = 'DeleteCommentbtn';
   commentButtonsDiv.appendChild(deleteButton);
   
   commentInfoButtonsDiv.appendChild(commentButtonsDiv);
@@ -575,7 +586,7 @@ fetch(url, {
 function handleCreateMessage(event) {
 event.preventDefault();
 
-if (!isMessageFormValid()) {
+if (!isMessageFormValid("message-content", "createmessage-contentError")) {
   return;
 }
 
@@ -587,13 +598,9 @@ fetch(url, {
   method: 'POST',
   body: formData,
   headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+    'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN': csrfToken,
   },
-})
-.then(response => response.json())
-.then(data => {
-  
 })
 .catch(error => console.error('Error:', error));
 }
@@ -684,30 +691,30 @@ return true;
 }
 
 
-function isCommentFormValid() {
-let content = document.getElementById("comment-content").value;
-document.getElementById('contentError').innerHTML = '';
+function isCommentFormValid(contentId, errorId) {
+  let content = document.getElementById(contentId).value;
+  document.getElementById(errorId).innerHTML = '';
 
-if (content.length < 1 || content.length > 300) {
-    document.getElementById('content').classList.add('validation-err');
-    document.getElementById('contentError').innerHTML = 'Comment content must be between 1 and 300 characters long';
+  if (content.length < 1 || content.length > 300) {
+    document.getElementById(contentId).classList.add('validation-err');
+    document.getElementById(errorId).innerHTML = 'Comment content must be between 1 and 300 characters long';
     return false;
+  }
+
+  return true;
 }
 
-return true;
-}
+function isMessageFormValid(contentId, errorId) {
+  let content = document.getElementById(contentId).value;
+  document.getElementById(errorId).innerHTML = '';
 
-function isMessageFormValid() {
-let content = document.getElementById("message-content").value;
-document.getElementById('contentError').innerHTML = '';
-
-if (content.length < 1 || content.length > 300) {
-    document.getElementById('content').classList.add('validation-err');
-    document.getElementById('contentError').innerHTML = 'Message content must be between 1 and 300 characters long';
+  if (content.length < 1 || content.length > 300) {
+    document.getElementById(contentId).classList.add('validation-err');
+    document.getElementById(errorId).innerHTML = 'Message content must be between 1 and 300 characters long';
     return false;
-}
+  }
 
-return true;
+  return true;
 }
 
 function setupModalForm(formId, buttonId, modalId) {
@@ -740,10 +747,12 @@ let form = document.getElementById(formId);
 document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
 }
 
+
 function setupMessageForm(formId) {
 let form = document.getElementById(formId);
 document.getElementById(formId).addEventListener("submit", handleCreateMessage.bind(form));
 }
+
 
 function dismiss_notification(notificationId) {
 console.log(notificationId);
@@ -843,8 +852,8 @@ if (commentsSection) {
 }
 });
 
-function handleDelete(event, buttonClass, itemClass, deleteUrl) {
-  if (event.target.classList.contains(buttonClass)) {
+function handleDelete(event, buttonId, itemClass, deleteUrl) {
+  if (event.target.id !== buttonId) return;
     let itemDiv = event.target.closest('.' + itemClass);
     let itemId = itemDiv.id.split('-')[1];
     let csrfToken = document.querySelector('#csrf-token').value;
@@ -880,15 +889,120 @@ function handleDelete(event, buttonClass, itemClass, deleteUrl) {
         });
       }
     })
-  }
+}
+
+function EditMessage(event, buttonId, itemClass, editUrl) {
+  if (event.target.id !== buttonId) return;
+
+  let messageDiv = event.target.closest('.' + itemClass);
+  let messageId = messageDiv.id.split('-')[1];
+  let messageContent = document.getElementById('message-content-' + messageId).innerText;
+  let csrfToken = document.querySelector('#csrf-token').value;
+
+  let createForm = document.getElementById('createmessageform');
+  let editForm = document.getElementById('editmessageform');
+  createForm.classList.add('hide-message-form');
+  editForm.classList.remove('hide-message-form');
+
+  editForm.action = editUrl + messageId;
+  editForm.elements['content'].value = messageContent;
+
+  editForm.onsubmit = function(e) {
+    e.preventDefault();
+
+    if (!isMessageFormValid("edit-message-content", "editmessage-contentError")) return;
+
+    let data = {
+      content: editForm.elements['content'].value
+    };
+
+    fetch(editForm.action, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById('message-content-' + messageId).innerText = data.message_content;
+      editForm.elements['content'].value = '';
+      editForm.action = '';
+      createForm.classList.remove('hide-message-form');
+      editForm.classList.add('hide-message-form');
+    })
+    .catch(error => console.error('Error:', error));
+  };
+}
+
+function EditComment(event, buttonId, itemClass, editUrl) {
+  if (event.target.id !== buttonId) return;
+
+  let commentDiv = event.target.closest('.' + itemClass);
+  let commentId = commentDiv.id.split('-')[1];
+  let commentContent = document.getElementById('comment-content-' + commentId).innerText;
+  let csrfToken = document.querySelector('#csrf-token').value;
+
+  let createForm = document.getElementById('createcommentform');
+  let editForm = document.getElementById('editcommentform');
+  createForm.classList.add('hide-message-form');
+  editForm.classList.remove('hide-message-form');
+
+  editForm.action = editUrl + commentId;
+  editForm.elements['content'].value = commentContent;
+
+  editForm.onsubmit = function(e) {
+    e.preventDefault();
+
+    if (!isCommentFormValid("edit-comment-content", "editcomment-contentError")) return;
+
+    let data = {
+      content: editForm.elements['content'].value
+    };
+
+    fetch(editForm.action, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById('comment-content-' + commentId).innerText = data.comment_content;
+      editForm.elements['content'].value = '';
+      editForm.action = '';
+      createForm.classList.remove('hide-message-form');
+      editForm.classList.add('hide-message-form');
+    })
+    .catch(error => console.error('Error:', error));
+  };
 }
 
 function handleDeleteComment(event) {
-  handleDelete(event, 'comment-manage-button', 'comment', '/comment/delete/');
+  handleDelete(event, 'DeleteCommentbtn', 'comment', '/comment/delete/');
 }
 
 function handleDeleteMessage(event) {
-  handleDelete(event, 'message-manage-button', 'message-chat', '/message/delete/');
+  handleDelete(event, 'DeleteMessagebtn', 'message-chat', '/message/delete/');
+}
+
+function  handleEditMessage(event) {
+  EditMessage(event, 'EditMessagebtn', 'message-chat', '/message/edit/');
+}
+
+function handleEditComment(event){
+  EditComment(event, 'EditCommentbtn', 'comment', '/comment/edit/');
 }
 
 // pusher 
@@ -961,6 +1075,7 @@ let chatSection = document.querySelector('.chat-section');
 
   let contentP = document.createElement('p');
   contentP.textContent = data.message;
+  contentP.id = 'message-content-' + data.message_id;
   messageContentDiv.appendChild(contentP);
 
   let messageInfoButtonsDiv = document.createElement('div');
@@ -983,10 +1098,18 @@ let chatSection = document.querySelector('.chat-section');
   
   const name = document.querySelector('.chat-section').id;
   if(name === data.message_by){
+    let editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.className = 'message-manage-button';
+    editButton.textContent = 'Edit';
+    editButton.id = 'EditMessagebtn';
+    messageButtonsDiv.appendChild(editButton);
+
     let deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'message-manage-button';
     deleteButton.textContent = 'Delete';
+    deleteButton.id = 'DeleteMessagebtn';
     messageButtonsDiv.appendChild(deleteButton);
   }
   messageInfoButtonsDiv.appendChild(messageButtonsDiv);

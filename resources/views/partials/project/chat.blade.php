@@ -6,7 +6,7 @@
                 <img src="{{ url($message->messaged_by->photo) }}" class="user-image" alt="User Image"/> 
                 <div class="message-content">
                     <h5 class="message-username">{{ $message->messaged_by->username }}</h5>
-                    <p>{{ $message->content }}</p>
+                    <p id="message-content-{{ $message->message_id }}">{{ $message->content }}</p>
                     <div class="message-info-buttons">
                         <h6>{{ $message->create_date }}</h6>
                         @if ($message->edited == true)
@@ -14,7 +14,8 @@
                         @endif
                         <div class="message-buttons">
                             @if ($message->message_by == auth()->user()->id)
-                                <button type="button" class="message-manage-button">Delete</button>
+                                <button type="button" class="message-manage-button"id="EditMessagebtn">Edit</button>
+                                <button type="button" class="message-manage-button" id="DeleteMessagebtn">Delete</button>
                             @endif
                         </div>
                     </div>
@@ -27,8 +28,16 @@
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->project_id}}">
         <textarea class="col-10" name="content" id="message-content" placeholder="Type message" required></textarea>
-        <div class="error" id="contentError"></div>
+        <div class="error" id="createmessage-contentError"></div>
         <button class="col-2" id="submit-message-button" type="submit">Send</button>
+    </form>
+    <form class="message-form {{ $project->archived ? 'archived-btn' : '' }}  hide-message-form" id="editmessageform" action="" method="POST">
+        @csrf
+        @method('PATCH')
+        <input type="hidden" name="project_id" value="{{ $project->project_id}}">
+        <textarea class="col-10" name="content" id="edit-message-content" placeholder="Edit message" required></textarea>
+        <div class="error" id="editmessage-contentError"></div>
+        <button class="col-2" id="submit-edit-message-button" type="submit">Send</button>
     </form>
     @endif
 </div>

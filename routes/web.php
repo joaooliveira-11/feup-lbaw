@@ -95,6 +95,7 @@ Route::controller(TaskController::class)->group(function() {
 Route::controller(CommentController::class)->group(function() {
     Route::post('/comment/create', 'create')->name('comment.create');
     Route::delete('/comment/delete/{id}', 'delete')->name('comment.delete');
+    Route::patch('/comment/edit/{id}', 'edit')->name('comment.edit');
 });
 
 //Invite
@@ -106,6 +107,7 @@ Route::controller(InviteController::class)->group(function() {
 Route::controller(MessageController::class)->group(function() {
     Route::post('/message/create', 'create')->name('message.create');
     Route::delete('/message/delete/{id}', 'delete')->name('message.delete');
+    Route::patch('/message/edit/{id}', 'edit')->name('message.edit');
 });	
 
 //Notifications
