@@ -25,12 +25,12 @@
 }
 
 .Profile-LeftSection {
+    width: 30%;
     background-color: #fff;
     display: flex;
     flex-direction: column;
     padding: 0 2.4em;
     border-radius: 0.7vw 0 0 0;
-    width: 100%;
 }
 
 .Profile-LeftSection label {
@@ -44,12 +44,10 @@
     margin: 3em auto;
 }
 
-#ProjectPage .profile-interests-skills {
+.profile-interests-skills {
     background-color: #4248ab;
     border-radius: 1em;
     padding: 2.2em 1.2em;
-    width: 95%;
-    margin: 0 auto;
 }
 
 .interests-title , .skills-title {
@@ -73,7 +71,8 @@
     margin-left: 1vw;
 }
 
-#ProjectPage .Profile-RightSection {
+.Profile-RightSection {
+    width: 70%;
     background-color: rgba(231, 231, 231, 0.6);
     display: flex;
     flex-direction: column;
@@ -262,17 +261,27 @@
     border-radius: 4px;
 }
 
-#interests-list, #skills-list{
-    height: 20vh;
-    overflow-y: scroll;
-    width: fit-content;
-    background-color: #f4f4f4;
-    padding: 0.5vw;
-    border-radius: 1vw;
+#edit-page-content textarea {
+    resize: vertical;
 }
 
-#interests-list::-webkit-scrollbar, #skills-list::-webkit-scrollbar{
-    width: 10px;
+#edit-page-content label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#edit-page-content .interest, #edit-page-content .skill {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+}
+
+
+#edit-page-content #interests, #edit-page-content #skills {
+    margin-bottom: 1em;
 }
 
 #edit-page-content #interests-list, #edit-page-content #skills-list {
@@ -299,6 +308,7 @@
 #edit-page-content input[type="submit"]:hover {
     background-color: #393e96;
 }
+
 
 @media screen and (max-width: 768px) {
     .Profile-LeftSection {
