@@ -4,7 +4,7 @@
         <div class="container project-members-search-bar">
             <input type="text" id="taskSearch" class="members-searchbar"placeholder="Search tasks..." oninput="searchTasks()">
             <button class="search-users-button" onclick="searchTasks()">Search</button>
-            <form id = "status-filter">
+            <form id="status-filter">
                 <label for="status-selected">Status:</label>
                 <select id="status-selected" onchange="searchTasks()">
                     <option value="all">All</option>

@@ -2,7 +2,7 @@
 
 @section('content')
 <div id="ProjectPage">
-    <div id="ProjectInfo">
+    <div id="ProjectInfo" class="project-wrapper">
         @include('partials.project.sidebar')
         <div id="MainContent">
             @include('partials.project.dashboard')

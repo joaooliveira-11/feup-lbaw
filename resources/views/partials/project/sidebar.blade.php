@@ -1,19 +1,19 @@
 <div id="Sidebar" class="container">
-    <h1 class="roow sidebar-project-title">{{ $project->title }}</h1> 
+    <h1 class="row sidebar-project-title">{{ $project->title }}</h1> 
     <form id="projectForm" class="row">
-        <label for="dashboard" class = "selected">
+        <label for="dashboard" class="selected dashboard-element">
             <input type="radio" id="dashboard" name="project" value="Dashboard" checked>
             Dashboard
         </label>
-        <label for="chat">
+        <label for="chat" class="dashboard-element">
             <input type="radio" id="chat" name="project" value="Chat">
             Chat
         </label>
-        <label for="tasks">
+        <label for="tasks" class="dashboard-element">
             <input type="radio" id="tasks" name="project" value="Tasks">
             Tasks
         </label>
-        <label for="members">
+        <label for="members" class="dashboard-element">
             <input type="radio" id="members" name="project" value="Members">
             Members
         </label>

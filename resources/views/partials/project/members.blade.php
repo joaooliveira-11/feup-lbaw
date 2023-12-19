@@ -6,7 +6,7 @@
                 <ul style="width: 20em;">
                     <a href="{{ route('show', ['id' => $user->id]) }}" style="text-decoration: none;">
                         <li class="row project-member">
-                            <p id="user{{ $user->id}}">{{ $user->name }} - <em>{{ '@' . $user->username }}</em> 
+                            <p id="user{{ $user->id}}">{{ $user->name }} - <em>{{ '@' . $user->username }}</em></p>
                         </li>
                     </a>
                 </ul>
@@ -18,8 +18,7 @@
                 @if($user->id != $project->project_coordinator)
                     <a href="{{ route('show', ['id' => $user->id]) }}" class="container">
                         <li class="row project-member">
-                            <p id="user{{ $user->id}}" class="user-id @if ( $user->id == $project->project_coordinator)coordinator-kick @endif" >{{ $user->name }} - <em>{{ '@' . $user->username }}</em> 
-                            </p>
+                            <p id="user{{ $user->id}}" class="user-id @if ( $user->id == $project->project_coordinator)coordinator-kick @endif" >{{ $user->name }} - <em>{{ '@' . $user->username }}</em> </p>
                         </li>
                     </a>
                 @endif

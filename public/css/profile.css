@@ -264,3 +264,49 @@ input[value="Update Profile"]:hover{
     transition: ease-in-out 0.3s;
     border: #9d9ea8 0.1vw solid;
 }
+
+@media screen and (max-width: 768px) {
+    .Profile-LeftSection {
+        padding: 1.2em;
+    }
+    .picture-wrapper {
+        height: 14em;
+    }
+    #ProfilePage .profile-interests-skills {
+        padding: 0.6em;   
+    }
+
+    .interests-title {
+        font-size: 225%;
+    }
+    #Interests p, #Skills p {
+        font-size: 150%;
+    }
+    .profile-right-section-left h5, .profile-info-span {
+        font-size: 140%;
+    }
+    #Description h5 {
+        font-size: 175%;
+    }
+    #EditProfile button {
+        width: 100%;
+        height: 100%;
+        font-size: 100%;
+    }
+    #Projects h4 {
+        font-size: 225%;
+        margin-bottom: 0;
+    }
+    #ProjectsList {
+        display: block;
+    }
+    #ProjectsList .project-element {
+        height: auto;
+    }
+    #ProjectsList #ProjectTitle {
+        font-size: 175%;
+    }
+    .project-list-description {
+        font-size: 125%;
+    }
+}

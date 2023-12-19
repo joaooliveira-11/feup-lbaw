@@ -237,6 +237,11 @@ button.invite-accept:hover{
 }
 
 @media screen and (max-width: 768px) {
+    #ProfilePage {
+        max-width: 100vw;
+        width: 100vw;
+        padding: 0;
+    }
     .hamnavbar {
         display: inline-block;
     }

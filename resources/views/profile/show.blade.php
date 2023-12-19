@@ -4,9 +4,8 @@
 <div id="ProjectPage">
     <div id="ProfilePage" class="container">
         <div class="row">
-            <!-- Left Section -->
             <div class="col-md-4 Profile-LeftSection">
-                <label for="fileInput" class="row">
+                <label for="fileInput" class="row picture-wrapper">
                     <img id="profilePicture" src="https://via.placeholder.com/150" alt="Profile Picture" style="cursor: pointer;">
                     <input id="fileInput" type="file">
                 </label>           
@@ -22,7 +21,7 @@
                         @endif
                     </div>
                     <div id="Skills">
-                        <h4 class="skills-title">Skills</h4>
+                        <h4 class="interests-title">Skills</h4>
                         @if ($skills->isEmpty())
                             <p>No skills yet!</p>
                         @else
@@ -34,7 +33,6 @@
                 </div>
             </div>
 
-            <!-- Right Section -->
             <div class="col-md-8 Profile-RightSection">
                 <div id="ProfileInfo" class="container"> 
                     <div class="row profile-right-section-left">
@@ -47,7 +45,7 @@
                     </div>
                     
                     <div id="Description" class="row">
-                        <h5 class="profile-info-span">About me </h5>
+                        <h5 class="profile-info-span">About me</h5>
                         <p>{{ $user->description }}</p>
                     </div>
                 </div>
