@@ -23,7 +23,6 @@
             </div>
         @endforeach
     </div>
-<<<<<<< resources/views/partials/task/comments.blade.php
     @if($task->task_project->is_member(auth()->user()))
         <form class="container comment-form {{ $task->task_project->archived ? 'archived-btn' : '' }}" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
             @csrf
