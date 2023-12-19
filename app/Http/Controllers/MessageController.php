@@ -6,6 +6,8 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Message;
+use App\Events\ChatMessage;
+use App\Events\MessageForum;
 
 class MessageController extends Controller {
 
@@ -24,6 +26,9 @@ class MessageController extends Controller {
         //$this->authorize('create', $message);
 
         $message->save();
+
+        event(new ChatMessage($message->content, $message->message_id, Auth::user()->username, $message->create_date));
+        event(new MessageForum());
 
         return response()->json([
             'message_id' => $message->message_id,

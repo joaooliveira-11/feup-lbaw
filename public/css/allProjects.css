@@ -2,7 +2,7 @@
     width: 1200px; 
     margin: auto;
     margin-top: 2vw;
-    padding: 20px;
+    padding-top: 2vw;
     height: 90vh;
 }
 
@@ -108,13 +108,14 @@
 
 .pagination-container {
     text-align: center;
+    margin-top: 2vw;
 }
 
 .pagination-container .btn {
     background-color: #4248ab;
     color: white;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 0.7vw;
     margin: 0 5px;
     font-size: 0.7vw;
 }
@@ -161,6 +162,7 @@
 
 .project-content, .project-details {
     position: absolute;
+    border-radius: 0.7vw; 
     top: 0;
     left: 0;
     width: 100%;
@@ -172,8 +174,6 @@
     align-items: center;
     backface-visibility: hidden;
 }
-
-
 
 @media screen and (max-width: 768px) {
     .project-item {

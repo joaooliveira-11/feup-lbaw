@@ -11,6 +11,7 @@ use App\Models\Invite;
 use App\Models\Favorite_Projects;
 use Illuminate\Support\Facades\DB;
 use App\Events\AcceptedProjectInvite;
+use App\Events\NewCoordinator;
 
 class ProjectController extends Controller {
 
@@ -78,9 +79,10 @@ class ProjectController extends Controller {
     {
     $filter = strtolower($request->get('filter'));
     $page = $request->get('page');
-    $projects = Project::whereRaw('LOWER(title) LIKE ?', ["%{$filter}%"])
-                        ->where("is_public", true)
-                        ->paginate(9, ['*'], 'page', $page);
+    $projects = Project::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$filter])
+                    ->orwhere("title", "ilike", "%{$filter}%")
+                    ->where("is_public", true)
+                    ->paginate(9, ['*'], 'page', $page);
 
     return response()->json([
         'projects' => $projects->items(),
@@ -98,17 +100,32 @@ class ProjectController extends Controller {
             'member_id' => 'required|integer',
         ]);
 
-        event (new AcceptedProjectInvite());
         $invite = Invite::find($request->get('reference_id'));
         $project = Project::find($invite->project_invite);
         $member = User::find($request->get('member_id'));
+        event (new AcceptedProjectInvite());
         
         DB::table('project_users')->insert([
             'project_id' => $project->project_id,
             'user_id' => $member->id,
         ]);
 
+        try{
+            $confirm = DB::table('project_users')
+            ->where('project_id', $project->project_id)
+            ->where('user_id', $member->id)->first();
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to insert: ' . $e->getMessage(),
+            ]);
+        }
+    
+        
+
         return response()->json([
+            'project' => $project,
+            'member' => $member,
             'members' => $project->members(), 
             'success' => 'Member added successfully!',
         ]);
@@ -120,11 +137,25 @@ class ProjectController extends Controller {
         $project = Project::find($id);
         $user = User::find(Auth::user()->id);
 
-        Project_Users::where('project_id', $project->project_id)
+        $instance = Project_Users::where('project_id', $project->project_id)
+        ->where('user_id', $user->id)
+        ->first();
+
+        if($instance){
+            try {
+                DB::table('project_users')
+                    ->where('project_id', $project->project_id)
                     ->where('user_id', $user->id)
                     ->delete();
-
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => 'Failed to delete instance: ' . $e->getMessage(),
+                ]);
+            }
+        }
+  
         return response()->json([
+            'instance' => $instance,
             'success' => 'You left the project successfully!',
         ]);
     }
@@ -134,10 +165,11 @@ class ProjectController extends Controller {
             $project = Project::find($project_id);
             $user = User::find($user_id);
     
-            Project_Users::where('project_id', $project->project_id)
-                        ->where('user_id', $user->id)
-                        ->delete();
-    
+            DB::table('project_users')
+                    ->where('project_id', $project->project_id)
+                    ->where('user_id', $user->id)
+                    ->delete();
+
             return response()->json([
                 'success' => 'User kicked from project successfully!',
             ]);
@@ -154,6 +186,8 @@ class ProjectController extends Controller {
         $project->project_coordinator = $coordinator->id;
         
         $project->save();
+
+        event(new NewCoordinator($project->title, $coordinator->name));
         
         return response()->json([
             'success' => 'Coordinator changed successfully!',
@@ -195,6 +229,26 @@ class ProjectController extends Controller {
             'success' => 'Project favorited successfully!',
             'favoritesCount' => $favoritesCount,
             'job' => 'add',
+        ]);
+    }
+
+    public function update_visibility(Request $request, $id){
+        $project = Project::find($id);
+        $project->is_public = $request->input('is_public');
+        $project->save();
+        return response()->json([
+            'message' => 'Project visibility updated successfully',
+            'is_public' => $project->is_public,
+        ]);
+    }
+
+    public function update_status(Request $request, $id){
+        $project = Project::find($id);
+        $project->archived = $request->input('archived');
+        $project->save();
+        return response()->json([
+            'message' => 'Project status updated successfully',
+            'archived' => $project->archived,
         ]);
     }
     

@@ -7,6 +7,9 @@
     background-color: #543CE7;
     border-bottom: 1px solid black;
     padding: 1vw 0;
+    border-bottom: 1px solid rgb(175, 184, 191);
+    background-color: #f4f7fa;
+    padding: 0.4vw 0;
 }
 
 .navbar-img {
@@ -42,23 +45,42 @@
     align-items: center;
 }
 
-#notifications-button {
-    border-radius: 100px;
-    padding: 0;
-    height: 2.4vw;
-    width: 2.4vw;
+.navbar-logout-button {
+    font-size: 1.5em;
+    color: #000; 
+}
+
+.navbar-logout-button:hover {
+    color: #FF0000;
 }
 
 #notifications-button:hover {
+    color: #4248ab;
     transition: 0.3s ease-in-out;
+}
+
+#notifications-button:focus, #notifications-button:active {
+    color: #000000; 
+    outline: none;
 }
 
 #notifications-dropdown {
     display: none;
+    z-index: 2;
 }
 
 .dismiss-all-notis{
     margin: 1rem;
+}
+
+.close-notifications {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 1em;
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 
 #notifications-dropdown.hide {
@@ -126,12 +148,17 @@ button.invite-accept:hover{
 }
 
 #notifications-button {
-    position: relative;
-    padding: 1vh;
-    background-color: #f8f9fa;
+    background-color: transparent;
+    font-size: 2.3em; 
     border: none;
+    border-radius: 0;
+    padding: 0;
+    height: auto;
+    width: auto;
     cursor: pointer;
+    z-index: 1;
 }
+
 
 #new-notification {
     display: hidden;
@@ -192,16 +219,12 @@ button.invite-accept:hover{
 }
 
 .navbar-logout-button {
-    font-size: 1.25vw;
+    font-size: 2em;
     font-weight: 700;
     padding: 0.5em 0;
     color: #000;
     text-decoration: none;
     transition: color 0.3s ease;
-}
-
-.navbar-logout-button:hover {
-    color: #FF0000;
 }
 
 .navbar-separator {
@@ -228,12 +251,25 @@ button.invite-accept:hover{
     text-decoration: none;
     font-size: 1.25vw;
     font-weight: bold;
-    color: #fff;
+    color: #000000;
     transition: color 0.3s ease;
 }
 
 #index-navbar .navbar-list-element:hover, .navbar-login-button:hover {
     color: #000;
+}
+
+.user-avatar-circle {
+    width: 50px;
+    height: 50px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+}
+
+.user-avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 @media screen and (max-width: 768px) {

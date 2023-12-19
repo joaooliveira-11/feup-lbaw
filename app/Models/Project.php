@@ -32,7 +32,9 @@ class Project extends Model
         $project_users = $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id')->get();
         $coordinator = $this->coordinator()->first();
 
-        return $project_users->push($coordinator);
+        $members = $project_users->push($coordinator);
+
+        return $members->sortBy('username');
     }
 
     public function nonmembers(){
@@ -45,6 +47,7 @@ class Project extends Model
         })
         ->where('id', '!=', $this->project_coordinator)
         ->where('is_admin', '=', false)
+        ->where('is_banned', '=', false)
         ->get();
     }
 
@@ -56,8 +59,7 @@ class Project extends Model
             return self::whereIn('project_id', $userProjectIds)
                        ->orWhere('is_public', true);
         }
-    }
-    
+    }  
 
     public function tasks(): HasMany {
         return $this->hasMany(Task::class, 'project_task');
@@ -73,6 +75,10 @@ class Project extends Model
 
     public function is_favorite(User $user) {
         return $this->favorites()->where('user_id', $user->id)->exists();
+    }
+
+    public function users(): BelongsToMany {
+        return $this->belongsToMany(User::class, 'project_users', 'project_id', 'user_id');
     }
 
 }

@@ -1,18 +1,6 @@
- <div id="Members" class="container">
-    <h3 class="project-members-title">Project Coordinator</h3>
-    <div class="container project-members-content">
-        @foreach($project->members() as $user)
-            @if($user->id == $project->project_coordinator)
-                <ul style="width: 20em;">
-                    <a href="{{ route('show', ['id' => $user->id]) }}" style="text-decoration: none;">
-                        <li class="row project-member">
-                            <p id="user{{ $user->id}}">{{ $user->name }} - <em>{{ '@' . $user->username }}</em></p>
-                        </li>
-                    </a>
-                </ul>
-            @endif
-        @endforeach
-        <h3 class="project-members-title-2">Project Members</h3>
+ <div id="Members">
+    <h3 class="project-members-title">Project Members</h3>
+    <div class="project-members-content">
         <ul class="project-members-ul">
             @foreach($project->members() as $user)
                 @if($user->id != $project->project_coordinator)
@@ -25,5 +13,21 @@
             @endforeach
         </ul>
     </div>
-</div>    
 
+    @if($project->members()->where('is_banned', true)->count() > 0)
+        <div class="banned-user-title">
+            <h3 class="banned-user-title">Banned Members:</h3>
+        </div>
+        <div class="banned-user-list">
+            <ul class="banned-user-ul">
+                @foreach($project->members() as $user)
+                    @if($user->is_banned)
+                        <li class="banned-user-element">
+                            <p>{{ $user->name }} - <em>{{ '@' . $user->username }}</em></p>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+        </div>
+    @endif
+</div>    

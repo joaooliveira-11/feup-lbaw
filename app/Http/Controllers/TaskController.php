@@ -9,7 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\Project;
-
+use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Str;
 class TaskController extends Controller {
 
     public function __construct(){
@@ -69,17 +70,29 @@ class TaskController extends Controller {
         ]);
     }
 
-    public function completetask(Request $request){
+    public function completetask($id){
+        $task = Task::find($id);
+        $this->authorize('completetask', $task);    
+
+        $task->state = 'completed';
+        $task->save();
+    
+        return response()->json([
+            'task' => $task,
+        ]);
+    }
+
+    public function assign(Request $request){
 
         $task_id = $request->input('task_id');
         $task = Task::find($task_id);
-        $this->authorize('completetask', $task);    
+        $this->authorize('assign', $task);    
 
-        $task->state = 'closed';
+        $task->state = 'assigned';
+        $task->assigned_to = $request->assign_task_to;
         $task->save();
     
-        return redirect()->route('task', ['task_id' => $task_id])
-            ->withSuccess('You have successfully completed an assigned task');
+        return view('pages.task', ['task'=>$task]);
     }
 
     public function search(Request $request){
@@ -89,14 +102,61 @@ class TaskController extends Controller {
         $project = Project::find($project_id);
 
         if($request->input('statusFilter') == 'all' && $request->input('priorityFilter') == 'all')
-            $tasks = $project->tasks()->whereRaw('LOWER(title) LIKE ?', ['%' . $search . '%'])->get();
+            $tasks = $project   ->tasks()
+                                ->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+                                ->orwhere('title', 'ilike', '%' . $search . '%')
+                                ->get();
         else if($request->input('statusFilter') != 'all' && $request->input('priorityFilter') == 'all')
-            $tasks = $project->tasks()->whereRaw('LOWER(title) LIKE ?', ['%' . $search . '%'])->where('state', $request->input('statusFilter'))->get();
+            $tasks = $project   ->tasks()
+                                ->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+                                ->orwhere('title', 'ilike', '%' . $search . '%')
+                                ->where('state', $request->input('statusFilter'))
+                                ->get();
         else if($request->input('statusFilter') == 'all' && $request->input('priorityFilter') != 'all')
-            $tasks = $project->tasks()->whereRaw('LOWER(title) LIKE ?', ['%' . $search . '%'])->where('priority', $request->input('priorityFilter'))->get();
+            $tasks = $project   ->tasks()
+                                ->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+                                ->orwhere('title', 'ilike', '%' . $search . '%')
+                                ->where('priority', $request->input('priorityFilter'))
+                                ->get();
         else
-            $tasks = $project->tasks()->whereRaw('LOWER(title) LIKE ?', ['%' . $search . '%'])->where('state', $request->input('statusFilter'))->where('priority', $request->input('priorityFilter'))->get();
+            $tasks = $project   ->tasks()
+                                ->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+                                ->orwhere('title', 'ilike', '%' . $search . '%')
+                                ->where('state', $request->input('statusFilter'))
+                                ->where('priority', $request->input('priorityFilter'))
+                                ->get();
 
         return response()->json($tasks);
     }
+
+    public function upload_file(Request $request){
+        $request->validate([
+            'task_file' => ['file']
+        ]);     
+        $task = Task::find($request->task_id);
+        // $this->authorize('upload', $task);  já funciona, é só para dar para testar em qualquer conta
+        
+        if ($task->file_path) {
+            Storage::disk('local')->delete($task->file_path);
+        }
+
+        $task_file = $request->file('task_file');
+        $file_path = Storage::disk('local')->putFileAs(
+            'tasks',
+            $task_file,
+            Str::uuid().'.'.$task_file->extension()
+        );   
+        $task->file_path = $file_path;
+        $task->save();
+
+        return back()->with('success', 'File uploaded successfully');
+    }
+
+    public function download_file($id){
+        $task = Task::find($id);
+        $this->authorize('download', $task);     
+        $fileName = $task->title . '.' . pathinfo($task->file_path, PATHINFO_EXTENSION);
+        return Storage::disk('local')->download($task->file_path, $fileName);
+    }
+
 }

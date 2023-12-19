@@ -31,23 +31,29 @@ class LoginController extends Controller
     /**
      * Handle an authentication attempt.
      */
-    public function authenticate(Request $request): RedirectResponse
-    {
+    public function authenticate(Request $request): RedirectResponse {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
- 
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user && $user->is_banned) {
+            return back()->withErrors([
+                'email' => 'Your account is banned.'
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            //return redirect()->intended('/profile/');
-            $user = User::find(Auth::user()->id);
             return redirect()->route('show', ['id' => $user->id])
-            ->withSuccess('You have successfully logged in!');
+                ->withSuccess('You have successfully logged in!');
         }
         Alert::error('Error', 'Invalid credentials!');
         return back()->withInput($request->only('email'));
     }
+
 
     /**
      * Log out the user from application.

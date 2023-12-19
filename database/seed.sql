@@ -6,6 +6,7 @@ SET search_path TO lbaw23117;
 -----------------------------------------
 
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS password_reset_tokens CASCADE;
 DROP TABLE IF EXISTS interest CASCADE;
 DROP TABLE IF EXISTS user_interests CASCADE;
 DROP TABLE IF EXISTS skill CASCADE;
@@ -44,7 +45,7 @@ DROP FUNCTION IF EXISTS check_ProjMember_before_message;
 -- Types
 -----------------------------------------
 
-CREATE TYPE task_status AS ENUM ('open', 'assigned', 'closed', 'archived');
+CREATE TYPE task_status AS ENUM ('open', 'assigned', 'completed', 'archived');
 CREATE TYPE notification_types as ENUM('assignedtask', 'coordinator', 'archivedtask', 'invite', 'forum', 'comment', 'acceptedinvite');
 
 -----------------------------------------
@@ -58,11 +59,17 @@ CREATE TABLE users (
     email TEXT NOT NULL UNIQUE,
     password TEXT,
     description TEXT,
-    photo TEXT, 
+    photo TEXT NOT NULL DEFAULT 'profilePics/user_default.jpg', 
     is_admin BOOLEAN NOT NULL DEFAULT FALSE, 
     is_banned BOOLEAN NOT NULL DEFAULT FALSE,
     email_verification BOOLEAN NOT NULL DEFAULT FALSE,
     google_id VARCHAR
+);
+
+CREATE TABLE password_reset_tokens (
+    email VARCHAR NOT NULL,
+    token VARCHAR NOT NULL,
+    created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
 );
 
 CREATE TABLE interest (
@@ -129,6 +136,7 @@ CREATE TABLE task (
     create_date TIMESTAMP NOT NULL CHECK(create_date <= now()),
     finish_date TIMESTAMP,
     state task_status NOT NULL DEFAULT 'open',
+    file_path TEXT,
     create_by INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
     assigned_to INTEGER REFERENCES users(id) ON UPDATE CASCADE,
     project_task INTEGER REFERENCES project(project_id) ON UPDATE CASCADE 
@@ -182,6 +190,17 @@ CLUSTER message USING projectMessage_message;
 CREATE INDEX projectTask_task ON task USING hash(project_task);
 
 CREATE INDEX task_comment ON comment USING hash(task_comment);
+
+
+-----------------------------------------
+-- LARAVEL INDEXES
+-----------------------------------------
+
+DROP INDEX IF EXISTS password_reset_tokens_email_index;
+DROP INDEX IF EXISTS password_reset_tokens_token_index;
+
+CREATE INDEX password_reset_tokens_email_index ON password_reset_tokens (email);
+CREATE INDEX password_reset_tokens_token_index ON password_reset_tokens (token);
 
 
 -----------------------------------------
@@ -415,7 +434,7 @@ BEGIN
     UPDATE task
     SET state = 'open', assigned_to = NULL
     WHERE project_task = OLD.project_id
-    AND ((state = 'assigned' OR state = 'closed') AND assigned_to = OLD.user_id);
+    AND ((state = 'assigned' OR state = 'completed') AND assigned_to = OLD.user_id);
     RETURN OLD;
 END
 $BODY$
@@ -587,6 +606,7 @@ create TRIGGER task_search_update BEFORE INSERT OR UPDATE ON task
     FOR EACH ROW EXECUTE PROCEDURE task_search_update();
 
 CREATE INDEX task_search__idx ON task USING GIN(tsvectors);
+
 -----------------------------------------
 -- end
 -----------------------------------------
@@ -595,42 +615,42 @@ CREATE INDEX task_search__idx ON task USING GIN(tsvectors);
 -- Populate the database
 -----------------------------------------
 
-INSERT INTO users (name, username, email, password, description, photo, is_admin, is_banned, email_verification) VALUES
-('Admin', 'admin', 'admin@gmail.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Admin', 'admin.jpg', TRUE, FALSE, TRUE),
-('Bob Smith', 'bobsmith', 'bob@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Bob', 'bob.jpg', FALSE, FALSE, TRUE),
-('Charlie Brown', 'charlieb', 'charlie@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Charlie', 'charlie.jpg', FALSE, FALSE, TRUE),
-('Dav_id Wilson', 'dav_idw', 'dav_id@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Dav_id', 'dav_id.jpg', FALSE, FALSE, TRUE),
-('Eve Anderson', 'evea', 'eve@example.com', 'password1234', 'User account for Eve', 'eve.jpg', FALSE, FALSE, TRUE),
-('Frank Miller', 'frankm', 'frank@example.com', 'millerpwd567', 'User account for Frank', 'frank.jpg', FALSE, FALSE, TRUE),
-('Grace Martinez', 'gracem', 'grace@example.com', 'grace12345', 'User account for Grace', 'grace.jpg', FALSE, FALSE, TRUE),
-('Henry Davis', 'henryd', 'henry@example.com', 'davishash123', 'User account for Henry', 'henry.jpg', FALSE, FALSE, TRUE),
-('Ivy Taylor', 'ivyt', 'ivy@example.com', 'ivysecurepwd', 'User account for Ivy', 'ivy.jpg', FALSE, FALSE, TRUE),
-('Jack Adams', 'jacka', 'jack@example.com', 'jackpass789', 'User account for Jack', 'jack.jpg', FALSE, FALSE, TRUE),
-('Karen White', 'karenw', 'karen@example.com', 'karenpassword', 'User account for Karen', 'karen.jpg', FALSE, FALSE, TRUE),
-('Liam Scott', 'liams', 'liam@example.com', 'liam123456', 'User account for Liam', 'liam.jpg', FALSE, FALSE, TRUE),
-('Mia Turner', 'miat', 'mia@example.com', 'mia7890pwd', 'User account for Mia', 'mia.jpg', FALSE, FALSE, TRUE),
-('Noah Lewis', 'noahl', 'noah@example.com', 'noahpass123', 'User account for Noah', 'noah.jpg', FALSE, FALSE, TRUE),
-('Olivia Hall', 'oliviah', 'olivia@example.com', 'secureolivia', 'User account for Olivia', 'olivia.jpg', FALSE, FALSE, TRUE),
-('Peter Baker', 'peterb', 'peter@example.com', 'peterpwd2021', 'User account for Peter', 'peter.jpg', FALSE, FALSE, TRUE),
-('Quinn King', 'quinnk', 'quinn@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Quinn', 'quinn.jpg', FALSE, FALSE, TRUE),
-('Riley Garcia', 'rileyg', 'riley@example.com', 'rileypassword', 'User account for Riley', 'riley.jpg', FALSE, FALSE, TRUE),
-('Sophia Allen', 'sophiaa', 'sophia@example.com', 'allen1234', 'User account for Sophia', 'sophia.jpg', FALSE, FALSE, TRUE),
-('Thomas Wright', 'thomasw', 'thomas@example.com', 'pwdfortom', 'User account for Thomas', 'thomas.jpg', FALSE, FALSE, TRUE),
-('Oliver Smith', 'olivers', 'oliver@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Oliver', 'oliver.jpg', FALSE, FALSE, TRUE),
-('Penelope Johnson', 'penelopej', 'penelope@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Penelope', 'penelope.jpg', FALSE, FALSE, TRUE),
-('Quincy Adams', 'quincya', 'quincy@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Quincy', 'quincy.jpg', FALSE, FALSE, TRUE),
-('Rose Carter', 'rosec', 'rose@example.com', 'rosecarterpwd', 'User account for Rose', 'rose.jpg', FALSE, FALSE, TRUE),
-('Samuel Parker', 'samuelp', 'samuel@example.com', 'sampassword123', 'User account for Samuel', 'samuel.jpg', FALSE, FALSE, TRUE),
-('Tiffany Walker', 'tiffanyw', 'tiffany@example.com', 'tiffwalkersecure', 'User account for Tiffany', 'tiffany.jpg', FALSE, FALSE, TRUE),
-('Ulysses Morris', 'ulyssesm', 'ulysses@example.com', 'ulyssespwd', 'User account for Ulysses', 'ulysses.jpg', FALSE, FALSE, TRUE),
-('Victoria Garcia', 'victoriag', 'victoria@example.com', 'victoriapass', 'User account for Victoria', 'victoria.jpg', FALSE, FALSE, TRUE),
-('William Adams', 'williama', 'william@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for William', 'william.jpg', FALSE, FALSE, TRUE),
-('Xander King', 'xanderk', 'xander@example.com', 'xander12345', 'User account for Xander', 'xander.jpg', FALSE, FALSE, TRUE),
-('Yara Lopez', 'yaral', 'yara@example.com', 'yarasecurepwd', 'User account for Yara', 'yara.jpg', FALSE, FALSE, TRUE),
-('Zane Scott', 'zanes', 'zane@example.com', 'zanesecure', 'User account for Zane', 'zane.jpg', FALSE, FALSE, TRUE),
-('Ava Turner', 'avat', 'ava@example.com', 'avapassword', 'User account for Ava', 'ava.jpg', FALSE, FALSE, TRUE),
-('Benjamin Foster', 'benjaminf', 'benjamin@example.com', 'benjamin123', 'User account for Benjamin', 'benjamin.jpg', FALSE, FALSE, TRUE),
-('Chloe Davis', 'chloed', 'chloe@example.com', 'chloepwd', 'User account for Chloe', 'chloe.jpg', FALSE, FALSE, TRUE);
+INSERT INTO users (name, username, email, password, description, is_admin, is_banned, email_verification) VALUES
+('Admin', 'admin', 'admin@gmail.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Admin', TRUE, FALSE, TRUE),
+('Bob Smith', 'bobsmith', 'bob@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Bob', FALSE, FALSE, TRUE),
+('Charlie Brown', 'charlieb', 'charlie@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Charlie', FALSE, FALSE, TRUE),
+('Dav_id Wilson', 'dav_idw', 'dav_id@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Dav_id', FALSE, TRUE, TRUE),
+('Eve Anderson', 'evea', 'eve@example.com', 'password1234', 'User account for Eve', FALSE, FALSE, TRUE),
+('Frank Miller', 'frankm', 'frank@example.com', 'millerpwd567', 'User account for Frank', FALSE, FALSE, TRUE),
+('Grace Martinez', 'gracem', 'grace@example.com', 'grace12345', 'User account for Grace', FALSE, FALSE, TRUE),
+('Henry Davis', 'henryd', 'henry@example.com', 'davishash123', 'User account for Henry', FALSE, FALSE, TRUE),
+('Ivy Taylor', 'ivyt', 'ivy@example.com', 'ivysecurepwd', 'User account for Ivy', FALSE, FALSE, TRUE),
+('Jack Adams', 'jacka', 'jack@example.com', 'jackpass789', 'User account for Jack', FALSE, FALSE, TRUE),
+('Karen White', 'karenw', 'karen@example.com', 'karenpassword', 'User account for Karen', FALSE, FALSE, TRUE),
+('Liam Scott', 'liams', 'liam@example.com', 'liam123456', 'User account for Liam', FALSE, FALSE, TRUE),
+('Mia Turner', 'miat', 'mia@example.com', 'mia7890pwd', 'User account for Mia', FALSE, FALSE, TRUE),
+('Noah Lewis', 'noahl', 'noah@example.com', 'noahpass123', 'User account for Noah', FALSE, FALSE, TRUE),
+('Olivia Hall', 'oliviah', 'olivia@example.com', 'secureolivia', 'User account for Olivia', FALSE, FALSE, TRUE),
+('Peter Baker', 'peterb', 'peter@example.com', 'peterpwd2021', 'User account for Peter', FALSE, FALSE, TRUE),
+('Quinn King', 'quinnk', 'quinn@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Quinn', FALSE, FALSE, TRUE),
+('Riley Garcia', 'rileyg', 'riley@example.com', 'rileypassword', 'User account for Riley', FALSE, FALSE, TRUE),
+('Sophia Allen', 'sophiaa', 'sophia@example.com', 'allen1234', 'User account for Sophia', FALSE, FALSE, TRUE),
+('Thomas Wright', 'thomasw', 'thomas@example.com', 'pwdfortom', 'User account for Thomas', FALSE, FALSE, TRUE),
+('Oliver Smith', 'olivers', 'oliver@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Oliver', FALSE, FALSE, TRUE),
+('Penelope Johnson', 'penelopej', 'penelope@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Penelope', FALSE, FALSE, TRUE),
+('Quincy Adams', 'quincya', 'quincy@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for Quincy', FALSE, FALSE, TRUE),
+('Rose Carter', 'rosec', 'rose@example.com', 'rosecarterpwd', 'User account for Rose', FALSE, FALSE, TRUE),
+('Samuel Parker', 'samuelp', 'samuel@example.com', 'sampassword123', 'User account for Samuel', FALSE, FALSE, TRUE),
+('Tiffany Walker', 'tiffanyw', 'tiffany@example.com', 'tiffwalkersecure', 'User account for Tiffany', FALSE, FALSE, TRUE),
+('Ulysses Morris', 'ulyssesm', 'ulysses@example.com', 'ulyssespwd', 'User account for Ulysses', FALSE, FALSE, TRUE),
+('Victoria Garcia', 'victoriag', 'victoria@example.com', 'victoriapass', 'User account for Victoria', FALSE, FALSE, TRUE),
+('William Adams', 'williama', 'william@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'User account for William', FALSE, FALSE, TRUE),
+('Xander King', 'xanderk', 'xander@example.com', 'xander12345', 'User account for Xander', FALSE, FALSE, TRUE),
+('Yara Lopez', 'yaral', 'yara@example.com', 'yarasecurepwd', 'User account for Yara', FALSE, FALSE, TRUE),
+('Zane Scott', 'zanes', 'zane@example.com', 'zanesecure', 'User account for Zane', FALSE, FALSE, TRUE),
+('Ava Turner', 'avat', 'ava@example.com', 'avapassword', 'User account for Ava', FALSE, FALSE, TRUE),
+('Benjamin Foster', 'benjaminf', 'benjamin@example.com', 'benjamin123', 'User account for Benjamin', FALSE, FALSE, TRUE),
+('Chloe Davis', 'chloed', 'chloe@example.com', 'chloepwd', 'User account for Chloe', FALSE, FALSE, TRUE);
 
 INSERT INTO interest (interest) VALUES
 ('Coding'),

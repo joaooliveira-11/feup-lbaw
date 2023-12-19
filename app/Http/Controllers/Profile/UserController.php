@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 use App\Models\User;
+use App\Models\Project_Users;
 use App\Models\Interest;
 use App\Models\Skill;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
     public function __construct(){
         $this->middleware('auth');
     }
@@ -99,6 +101,64 @@ class UserController extends Controller
         return response()->json($name);
     }
 
+
+    public function updateImage(Request $request) {
+        $user = Auth::user();
+
+        $request->validate([
+            'profilePic' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $this->authorize('update', $user);
+
+        $file = $request->file('profilePic');
+        $extension = $file->getClientOriginalExtension();
+        $imageName = "user" . $user->id . "." . $extension;
+
+        $path = public_path('profilePics/') . $imageName;
+        if(file_exists($path)) {
+            unlink($path);
+        }
+
+        $file->move(public_path('profilePics/'), $imageName);
+
+        $user->photo = 'profilePics/' . $imageName;
+        $user->save();
+        return redirect("profile/".$user->id );
+    }
+
+    public function deleteUser(int $id) {
+        $user = User::find($id);
+
+        Project_Users::where('user_id', $user->id)
+        ->delete();
+
+        $user->skills()->detach();
+        $user->interests()->detach();
+
+
+        $deletedName = 'deletedUser' . $user->id;
+        $deletedUsername = 'deletedUser_' . $user->id;
+        $deletedEmail = 'deletedUser_' . $user->id . '@email.com';
+        $deletedDescription = 'This user has been deleted';
+       
+       
+        $currentImage = public_path('profilePics/') . $user->photo;
+        if (file_exists($currentImage)) {
+            unlink($currentImage);
+        }
+        
+
+        $user->name = $deletedName;
+        $user->username = $deletedUsername;
+        $user->email = $deletedEmail;
+        $user->description = $deletedDescription;
+        $user->photo = 'profilePics/user_default.jpg';
+
+        $user->save();
+
+        return redirect()->back();
+    }
     
 }
 ?>

@@ -5,8 +5,19 @@
     max-width: 80vw;
     width: 100%;
     margin: 0 auto; 
-    margin-top: 4.5vw;
+    margin-top: 6em;
     color: #303030;
+}
+
+#ProfileDisplay {
+    background-image: url('/img/background.png');
+    background-size: cover; 
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 100vh; 
+    display: flex;
+    width: 100%;
+    padding-top: 2.7vw;
 }
 
 #fileInput {
@@ -66,7 +77,6 @@
     background-color: rgba(231, 231, 231, 0.6);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     padding: 2.4em 2.4em 0 2.4em;
     border-radius: 0 0.7vw 0 0;
 }
@@ -110,6 +120,28 @@
     color: #fff;
 }
 
+#profilePicture {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#userActions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#banUserButton, #deleteButton {
+    flex: 1;
+    margin: 0 5px;
+}
+
+#banUserButton button, #deleteButton button {
+    width: 100%;
+}
+
 #Description {
     width: 65%;
 }
@@ -117,7 +149,8 @@
 #Projects {
     background-color: #fff;
     padding: 2.4em;
-    border-radius: 0.7vw 0.7vw 0 0;
+    border-radius: 0.7vw;
+    margin-top: 2em;
 }
 
 #Projects h4 {
@@ -162,81 +195,71 @@
 #ProjectsList {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 45vh;
+    height: 35vh;
     overflow-y: auto;
 }
+
 #ProjectsList .project-element {
     height: 100%;
 }
+
 #ProjectsList p {
     height: 4vh;
 }
 
-#edit-page-content{
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;  
-    background: linear-gradient(to right, #3a3a41, #9d9ea8);
-    border-radius: 5px;
-    color: #f4f4f4;
-    font-size: 16px;
-    display: grid;
+.profile-photo-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
 }
 
-#edit-page-content form{
-    grid-column: span 3;
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto auto;
-    gap: 25px;
+.profile-photo-container img {
+    display: block; 
+    width: 160px; 
+    height: 160px; 
+    border-radius: 50%;
+    border: 2px solid rgb(175, 175, 175);
 }
 
-input[type="text"], input[type="email"], input[type="password"]{
-    background-color: #f4f4f4;
-    border: none;
-    border-radius: 0.5vw;
-    padding: 1vw;
-    color: #333;
-}
-
-textarea{
-    background-color: #f4f4f4;
-    border: none;
-    border-radius: 0.5vw;
-    padding: 1vw;
-    color: #333;
-    resize: none;
-}
-
-.skill label input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
+.edit-icon-label {
     cursor: pointer;
-    height: 0;
-    width: 0;
-}
-
-.interest label input[type="checkbox"] {
     position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.edit-icon-circle {
+    width: 40px; 
+    height: 40px;
+    background-color: #FFF; 
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); 
 }
 
 
-div.skill, div.interest {
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 5px;
-    border: #f4f4f4 0.1vw solid;
-    border-radius: 0.5vw;
-    padding: 0.5vw;
-    font-weight: normal;
+#edit-page-content {
+    width: 60%;
+    margin: 4em auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 0.6rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-size: 14px;
 }
 
-div.selected{
-    border: #333 0.1vw solid;
+#edit-page-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+#edit-page-content input[type="text"], #edit-page-content input[type="email"], #edit-page-content textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 #interests-list, #skills-list{
@@ -252,17 +275,29 @@ div.selected{
     width: 10px;
 }
 
-input[value="Update Profile"]{
-    background-color: transparent;
-    border: #f4f4f4 0.1vw solid;
-    border-radius: 0.5vw;
+#edit-page-content #interests-list, #edit-page-content #skills-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #f9f9f9;
 }
 
-input[value="Update Profile"]:hover{
-    background-color: #9d9ea8;
-    color: #333;
-    transition: ease-in-out 0.3s;
-    border: #9d9ea8 0.1vw solid;
+#edit-page-content input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4248ab;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    max-width: fit-content;
+    text-align: center;
+}
+
+#edit-page-content input[type="submit"]:hover {
+    background-color: #393e96;
 }
 
 @media screen and (max-width: 768px) {

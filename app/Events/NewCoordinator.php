@@ -10,25 +10,21 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ProjectInvite implements ShouldBroadcast
+class NewCoordinator implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $project_id;
     public $message;
-    public $user_id;
     /**
      * Create a new event instance.
      */
-    public function __construct($project_id, $user_id){
-        $this->project_id = $project_id;
-        $this->user_id = $user_id;
-        $this->message = "You have been invited to join the project";
+    public function __construct($project, $user){
+        $this->message = $user . " has been added as a coordinator to " . $project;
     }
 
     
     public function broadcastAs(){
-        return 'notification-invite';
+        return 'notification-coordinator';
     }
 
     public function broadcastOn(){

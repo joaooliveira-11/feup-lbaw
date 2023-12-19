@@ -1,9 +1,9 @@
-<div id="Chat" class="container">
-    <div class="container chat-section">
+<div id="Chat">
+    <div id="{{auth()->user()->username}}" class="container chat-section">
         <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($project->messages as $message)
             <div class="container message-chat" id="message-{{ $message->message_id }}">
-                <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
+                <img src="{{ url($message->messaged_by->photo) }}" class="user-image" alt="User Image"/> 
                 <div class="message-content">
                     <h5 class="message-username">{{ $message->messaged_by->username }}</h5>
                     <p>{{ $message->content }}</p>
@@ -23,7 +23,7 @@
         @endforeach
     </div>
     @if($project->is_member(auth()->user()))
-    <form class="container message-form" id="createmessageform" action="{{ route('message.create') }}" method="POST">
+    <form class="container message-form {{ $project->archived ? 'archived-btn' : '' }}" id="createmessageform" action="{{ route('message.create') }}" method="POST">
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->project_id}}">
         <textarea class="col-10" name="content" id="message-content" placeholder="Type message" required></textarea>
