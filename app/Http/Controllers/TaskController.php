@@ -86,7 +86,7 @@ class TaskController extends Controller {
 
         $task_id = $request->input('task_id');
         $task = Task::find($task_id);
-        $this->authorize('assign', $task);    
+        // $this->authorize('assign', $task);    
 
         $task->state = 'assigned';
         $task->assigned_to = $request->assign_task_to;

@@ -29,16 +29,25 @@
 
                 <div class="upcoming-tasks">
                     <h3 class="home-page-section-title">Upcoming Tasks</h3>
-                        <div class="project-directory-projects">
-                            @foreach (Auth::user()->projects() as $project)
-                                <a href="{{ url('project/' . $project->project_id) }}" class="home-page-a">
-                                    <li class="project-directory-item">
-                                        <h5 class="project-directory-title">{{ $project->title }}</h5>
-                                        <p class="project-directory-members"> Members: {{ $project->members()->count() }} </p>
-                                    </li>
-                                </a>
-                            @endforeach
-                        </div>
+                    <div class="project-directory-projects">
+                    @foreach (Auth::user()->projects() as $project)
+                        @foreach ($project->tasks->where('assigned_to', Auth::user()->id)->sortBy('finish_date', SORT_REGULAR, true) as $task)
+                            <a href="{{ url('task/' . $task->task_id) }}" class="home-page-a">
+                                <li class="project-directory-item">
+                                    <h5 class="project-directory-title">{{ $task->title }}</h5>
+
+                                    @if($task->finish_date)
+                                        <h5 class="project-directory-title">{{ $task->finish_date }}</h5>
+                                    @else
+                                        <p class="project-directory-title">Deadline not Specified</p>
+                                    @endif
+                                </li>
+                            </a>
+                        @endforeach
+                    @endforeach
+
+
+                    </div>
                 </div>
             </div>
 
