@@ -195,7 +195,7 @@
 #ProjectsList {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 35vh;
+    height: 50vh;
     overflow-y: auto;
 }
 
@@ -309,6 +309,10 @@
     }
     #ProfilePage .profile-interests-skills {
         padding: 0.6em;   
+    }
+    #deleteButton button {
+        font-size: 150%;
+        height: fit-content;
     }
 
     .interests-title {

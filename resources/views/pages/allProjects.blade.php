@@ -2,6 +2,7 @@
 
 @section('content')
 <div id="ProjectPage">
+
     <div id="projects-container">
         <input class="row" type="text" id="projectSearch" placeholder="Search projects..." oninput="searchProjects({{ $projects->currentPage() }})">
 
@@ -23,7 +24,7 @@
                             </p>
                             <p class="project-coordinator project-info"> {{ $project->coordinator->name }}</p>
                         </div>
-                        <div class = "project-details">
+                        <div class="project-details">
                             <p class="project-description">{{ $project->description }}</p>
                         </div>
                     </li>
@@ -39,7 +40,7 @@
                 <span>Page {{ $projects->currentPage() }} of {{ $projects->lastPage() }}</span>
 
                 @if ($projects->hasMorePages())
-                    <button class="btn " onclick = "searchProjects( {{ $projects->currentPage() + 1}})">Next</button>
+                    <button class="btn" onclick = "searchProjects( {{ $projects->currentPage() + 1}})">Next</button>
                 @endif
             </div>
         @endif

@@ -40,20 +40,20 @@
         <div id="ProjectDescription" class="col-7">
             <h2 class="dashboard-project-title">Description:</h2>
             <p id="dashboard-project-content" class="row">{{ $project->description }}</p>
-        </div>
-        <div>
-            <span>Private</span>
-            <label class="switch" data-project-id="{{ $project->project_id }}">
-                <input type="checkbox" id="visibilitySwitch" {{ !($project->is_public) ? 'checked' : '' }}>
-                <span class="slider"></span>
-            </label>
-        </div>
-        <div>
-            <span>Archived</span>
-            <label class="switch" data-project-id="{{ $project->project_id }}">
-                <input type="checkbox" id="statusSwitch" {{ $project->archived ? 'checked' : '' }}>
-                <span class="slider"></span>
-            </label>
+            <div>
+                <span>Private</span>
+                <label class="switch" data-project-id="{{ $project->project_id }}">
+                    <input type="checkbox" id="visibilitySwitch" {{ !($project->is_public) ? 'checked' : '' }}>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div>
+                <span>Archived</span>
+                <label class="switch" data-project-id="{{ $project->project_id }}">
+                    <input type="checkbox" id="statusSwitch" {{ $project->archived ? 'checked' : '' }}>
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
     </div>
 </div>
