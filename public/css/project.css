@@ -518,7 +518,7 @@ header {
   }
 
   .archived-btn {
-    display: none;
+    display: none !important;
   }
 
   .hide-message-form {

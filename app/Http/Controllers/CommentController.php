@@ -44,4 +44,15 @@ class CommentController extends Controller {
         ]);
     }
 
+    public function edit($id, Request $request){
+        $comment = Comment::find($id);
+        // $this->authorize('edit', $comment);
+        $comment->content = $request->content;
+        $comment->edited = true;
+        $comment->save();
+        return response()->json([
+            'comment_content' => $comment->content,
+        ]);
+    }
+
 }

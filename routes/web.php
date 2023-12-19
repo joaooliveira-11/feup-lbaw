@@ -95,6 +95,7 @@ Route::controller(TaskController::class)->group(function() {
 Route::controller(CommentController::class)->group(function() {
     Route::post('/comment/create', 'create')->name('comment.create');
     Route::delete('/comment/delete/{id}', 'delete')->name('comment.delete');
+    Route::patch('/comment/edit/{id}', 'edit')->name('comment.edit');
 });
 
 //Invite
