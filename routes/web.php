@@ -32,6 +32,7 @@ Route::redirect('/', '/index');
 Route::view('/index', 'pages.index')->name('index');
 // Route::view('/about', 'pages.about')->name('about'); vai deixar de existir
 
+Route::view('/home', 'pages.homePage')->name('home');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {

@@ -1,0 +1,86 @@
+#home-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8vw;
+    width: 100%;
+}
+
+.home-middle-section {
+    height: 34vh;
+}
+
+.project-directory {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1vw 2vw;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+    height: 100%;
+    width: 38%;
+}
+
+.project-directory-header  {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home-page-section-title {
+    font-size: 1.4vw;
+    font-weight: 700;
+}
+
+.home-page-title {
+    font-size: 1.8vw;
+    font-weight: 600;
+}
+
+.home-form {
+    margin: 0;
+}
+
+.home-button {
+    padding: 0.3em 1.6em;
+    font-size: 0.9vw;
+    font-weight: bold;
+    color: #fff;
+    background-color: #543CE7;
+    border-radius: 1em;
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-button:hover {
+    background-color: #dedede;
+    color: #000;
+    box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
+}
+
+.project-directory-projects {
+    padding: 0.5vw;
+    height: 100%;
+    list-style-type: none;
+    overflow-x: auto;
+}
+
+.home-page-a {
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-directory-item {
+    height: 3vw;
+    display: flex;
+    justify-content: space-between;
+}
+
+.project-directory-title {
+    color: #303030;
+    font-size: 0.9vw;
+    font-weight: 600;
+}
+
+.project-directory-members {
+    color: #303030;
+}
