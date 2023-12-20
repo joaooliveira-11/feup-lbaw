@@ -25,15 +25,15 @@
                 </button>
             </div>
             <div class="dashboard-project-buttons">
-                @if($project->is_coordinator(auth()->user()))
-                    <button type="button" id="AddMemberModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}"> Add Member</button>
-                    @include('modal.add_member', ['project' => $project])
-                @endif
                 <button type="button" id="CreateTaskModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}">Create Task</button>
                 @include('modal.create_task', ['project_id' => $project->project_id])
                 @if($project->is_coordinator(auth()->user()))
+                    <button type="button" id="AddMemberModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}"> Add Member</button>
+                    @include('modal.add_member', ['project' => $project])
                     <button type="button" id="EditProjectModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}">Manage Details</button>
                     @include('modal.edit_proj', ['project' => $project])
+                    <button type="button" id="AssignCoordinatorModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}">Assign Coordinator</button>
+                    @include('modal.assign_coordinator', ['project' => $project])
                 @endif
             </div>
         </div>

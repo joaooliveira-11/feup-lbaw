@@ -31,7 +31,7 @@
         <div class="error" id="createmessage-contentError"></div>
         <button class="col-2" id="submit-message-button" type="submit">Send</button>
     </form>
-    <form class="message-form {{ $project->archived ? 'archived-btn' : '' }}  hide-message-form" id="editmessageform" action="" method="POST">
+    <form class="container message-form {{ $project->archived ? 'archived-btn' : '' }}  hide-message-form" id="editmessageform" action="" method="POST">
         @csrf
         @method('PATCH')
         <input type="hidden" name="project_id" value="{{ $project->project_id}}">
