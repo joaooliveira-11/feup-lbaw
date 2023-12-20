@@ -32,6 +32,15 @@ Route::redirect('/', '/index');
 Route::view('/index', 'pages.index')->name('index');
 // Route::view('/about', 'pages.about')->name('about'); vai deixar de existir
 
+Route::view('/home', 'pages.homePage')->name('home');
+
+//redirects
+Route::get('/forbidden', function () {
+    return view('pages.forbidden');
+});
+Route::get('/notfound', function () {
+    return view('pages.notfound');
+});
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -64,8 +73,7 @@ Route::controller(UserController::class)->group(function () {
 
 //Project
 Route::controller(ProjectController::class)->group(function() {
-    Route::get('/project/create','showCreateForm')->name('createproject'); // vai deixar de existir na home
-    Route::post('/project/create', 'create');
+    Route::post('/project/create', 'create')->name('project.create');
     Route::get('/projects', 'showProjects')->name('allprojects');
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/search-projects', 'search');
@@ -95,6 +103,7 @@ Route::controller(TaskController::class)->group(function() {
 Route::controller(CommentController::class)->group(function() {
     Route::post('/comment/create', 'create')->name('comment.create');
     Route::delete('/comment/delete/{id}', 'delete')->name('comment.delete');
+    Route::patch('/comment/edit/{id}', 'edit')->name('comment.edit');
 });
 
 //Invite
@@ -106,6 +115,7 @@ Route::controller(InviteController::class)->group(function() {
 Route::controller(MessageController::class)->group(function() {
     Route::post('/message/create', 'create')->name('message.create');
     Route::delete('/message/delete/{id}', 'delete')->name('message.delete');
+    Route::patch('/message/edit/{id}', 'edit')->name('message.edit');
 });	
 
 //Notifications

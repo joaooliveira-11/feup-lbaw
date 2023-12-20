@@ -9,8 +9,10 @@ use App\Models\User;
 use App\Models\Project_Users;
 use App\Models\Invite;
 use App\Models\Favorite_Projects;
+use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use App\Events\AcceptedProjectInvite;
+use App\Events\NewCoordinator;
 
 class ProjectController extends Controller {
 
@@ -42,6 +44,8 @@ class ProjectController extends Controller {
         $project->created_by = Auth::user()->id;
         $project->project_coordinator = Auth::user()->id;
         $project->save();
+
+        return redirect()->route('home');
     }
 
     public function updatedetails(Request $request){
@@ -62,10 +66,6 @@ class ProjectController extends Controller {
             'project_description' => $project->description,
             'project_finish_date' => $project->finish_date,
         ]);
-    }
-
-    public function showCreateForm(): View {   
-        return view('pages.createProject');
     }
 
     public function showProjects(): View {
@@ -102,30 +102,28 @@ class ProjectController extends Controller {
         $invite = Invite::find($request->get('reference_id'));
         $project = Project::find($invite->project_invite);
         $member = User::find($request->get('member_id'));
-        event (new AcceptedProjectInvite());
-        
-        DB::table('project_users')->insert([
-            'project_id' => $project->project_id,
-            'user_id' => $member->id,
-        ]);
 
-        try{
-            $confirm = DB::table('project_users')
-            ->where('project_id', $project->project_id)
-            ->where('user_id', $member->id)->first();
+        $newnotification = new Notification;
+        $newnotification->create_date = now();
+        $newnotification->emited_by = 1;
+        $newnotification->emited_to = $project->project_coordinator;
+        $newnotification->viewed = false;
+        $newnotification->type = 'acceptedinvite';
+        $newnotification->reference_id = $project->project_id;
+
+        $newnotification->save();
+
+        $newmember = new Project_Users;
+        $newmember->project_id = $project->project_id;
+        $newmember->user_id = $member->id;
+        $newmember->save();
+
+        event (new AcceptedProjectInvite());
     
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Failed to insert: ' . $e->getMessage(),
-            ]);
-        }
-    
-        
+
+
 
         return response()->json([
-            'project' => $project,
-            'member' => $member,
-            'members' => $project->members(), 
             'success' => 'Member added successfully!',
         ]);
         
@@ -185,6 +183,8 @@ class ProjectController extends Controller {
         $project->project_coordinator = $coordinator->id;
         
         $project->save();
+
+        event(new NewCoordinator($project->title, $coordinator->name));
         
         return response()->json([
             'success' => 'Coordinator changed successfully!',

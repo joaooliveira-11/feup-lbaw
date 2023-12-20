@@ -1,25 +1,25 @@
-<div id="Sidebar">
+<div id="Sidebar" class="container @if(!$project->is_member(auth()->user()))gap-sidebar @endif">
     <h1 class="sidebar-project-title">{{ $project->title }}</h1> 
-    <form id="projectForm">
-        <label for="dashboard" class = "selected">
+    <form id="projectForm" class="row">
+        <label for="dashboard" class="selected dashboard-element">
             <input type="radio" id="dashboard" name="project" value="Dashboard" checked>
             Dashboard
         </label>
-        <label for="chat">
+        <label for="chat" class="dashboard-element">
             <input type="radio" id="chat" name="project" value="Chat">
             Chat
         </label>
-        <label for="tasks">
+        <label for="tasks" class="dashboard-element">
             <input type="radio" id="tasks" name="project" value="Tasks">
             Tasks
         </label>
-        <label for="members">
+        <label for="members" class="dashboard-element">
             <input type="radio" id="members" name="project" value="Members">
             Members
         </label>
     </form>
     @if($project->is_member(auth()->user()))
-        <button id="leaveProject" @if(Auth::user()->id == $project->project_coordinator) class =  "coordinator" @endif >Leave Project</button>
+        <button @if(Auth::user()->id == $project->project_coordinator) class = "coordinator row" @else class = " row " @endif id="leaveProject"  >Leave Project</button>
     @endif
 </div>
 

@@ -1,6 +1,4 @@
 function addEventListeners() {
-
-  setupRadioButtons();
   
   let changePic = document.querySelector('#fileInput');
   if (changePic != null)
@@ -21,8 +19,14 @@ function addEventListeners() {
   if (document.getElementById("EditProjectModalButton")) {
     setupModalForm("editprojectform", 'EditProjectModalButton', 'ModalEditProject');
   }
+  if (document.getElementById("CreateProjectModalButton")) {
+    setupModalForm("createprojectform", 'CreateProjectModalButton', 'ModalCreateProject');
+  }
   if (document.getElementById("assignUserButton")) {
     setupModalForm('assignTaskForm', 'assignUserButton', 'ModalAssignTask');
+  }
+  if (document.getElementById("AssignCoordinatorModalButton")) {
+    setupModalForm('assignCoordinatorForm', 'AssignCoordinatorModalButton', 'ModalAssignCoordinator');
   }
   if (document.getElementById("AddMemberModalButton")) {
     setupModalForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember');
@@ -37,12 +41,14 @@ function addEventListeners() {
 
   let commentsSection = document.querySelector('.comments-section');
   if (commentsSection) {
-  commentsSection.addEventListener('click', handleDeleteComment);
+    commentsSection.addEventListener('click', handleDeleteComment);
+    commentsSection.addEventListener('click', handleEditComment);
   }
 
   let chatSection = document.querySelector('.chat-section');
   if (chatSection) {
     chatSection.addEventListener('click', handleDeleteMessage);
+    chatSection.addEventListener('click', handleEditMessage);
   }
 
   document.getElementById("notifications-button").addEventListener("click", function(event) {
@@ -92,11 +98,9 @@ function addEventListeners() {
           const pathParts = urlPath.split('/');
           const projectId = pathParts[pathParts.length - 1];
           const memberId = document.querySelectorAll('.user-id')[i].id.substring(4);
-          const coordinatorId = document.querySelector('.coordinator-kick').id.substring(4);
           console.log("Project: "+projectId);
           console.log("Member: "+memberId);
-          console.log("Coordinator: "+coordinatorId);
-          kickFromProject(memberId, projectId, coordinatorId);
+          kickFromProject(memberId, projectId);
         }
       });
     });
@@ -107,7 +111,7 @@ function addEventListeners() {
     closeButton.addEventListener('click', closeNotifications);
   }
 
-  ddocument.getElementById('userSearchInput').addEventListener('input', function() {
+  document.getElementById('userSearchInput').addEventListener('input', function() {
     var searchTerm = this.value;
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/search-users?search=' + encodeURIComponent(searchTerm), true);
@@ -118,6 +122,15 @@ function addEventListeners() {
         }
     };
     xhr.send();
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var hamburger = document.getElementById('hamburger');
+    var menu = document.querySelector('.navbar-list-ul');
+
+    hamburger.addEventListener('click', function() {
+        menu.classList.toggle('navbar-active');
+    });
   });
 
   setupRadioButtons();
@@ -174,7 +187,7 @@ function searchProjects(page = 1) {
 function searchTasks() {
     const input = document.getElementById('taskSearch');
     const filter = input.value; 
-    const project_id = document.getElementById('tasks-container').className;
+    const project_id = document.getElementById('tasks-container').className.split(' ')[1];
     const statusFilter = document.getElementById('status-selected').value;
     const priorityFilter = document.getElementById('priority-selected').value;
     sendAjaxRequest('POST', '/search-tasks', { filter: filter, project_id : project_id, statusFilter: statusFilter, priorityFilter: priorityFilter}, handleSearchTask);
@@ -361,55 +374,14 @@ radios.forEach(function(radio) {
 });
 }
 
-function handleCreateTask(modalId, event) {
-event.preventDefault();
 
-if (!isTaskFormValid()) {
-  return;
-}
-
-let url = this.getAttribute('action');
-let formData = new FormData(this);
-let csrfToken = document.querySelector('input[name="_token"]').value;
-
-fetch(url, {
-  method: 'POST',
-  body: formData,
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
-    'X-CSRF-TOKEN': csrfToken,
-  },
-})
-.then(response => response.json())
-.then(data => {
-  let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
-  modal.hide();
-
-  let activeTasksCountElement = document.querySelector('#ActiveTasks p');
-  activeTasksCountElement.textContent = parseInt(activeTasksCountElement.textContent) + 1;
-
-  let newTask = document.createElement('li');
-  newTask.innerHTML = `
-    <a href="${data.task_url}" class="project-link task-link">
-      <div>
-        <p class="TaskTitle">${data.task_title}</p>
-        <p>${data.task_description}</p>
-        <p class="FinishDate">Deadline: ${data.task_finish_date !== null ? data.task_finish_date : 'Not defined'}</p>
-      </div>
-    </a>
-  `;
-
-  let tasksList = document.querySelector('.TasksList');
-  if (!tasksList) {
-    tasksList = document.createElement('ul');
-    tasksList.className = 'TasksList';
-    document.getElementById('tasks-container').appendChild(tasksList);
+function handleCreateTask(event) {
+  
+  if (!isTaskFormValid()) {
+    event.preventDefault();
   }
-  tasksList.appendChild(newTask);
-})
-.catch(error => console.error('Error:', error));
+  
 }
-
 
 function handleEditTask(modalId, event) {
 event.preventDefault();
@@ -460,6 +432,14 @@ fetch(url, {
 .catch(error => console.error('Error:', error));
 }
 
+function handleCreateProject(event) {
+  
+  if (!isProjectFormValid()) {
+    event.preventDefault();
+  }
+  
+}
+
 function handleEditProject(modalId, event) {
 event.preventDefault();
 if (!isProjectFormValid()) {
@@ -505,8 +485,7 @@ fetch(url, {
 
 function handleCreateComment(event) {
 event.preventDefault();
-
-if (!isCommentFormValid()) {
+if (!isCommentFormValid("comment-content", "createcomment-contentError")) {
   return;
 }
 
@@ -518,7 +497,7 @@ fetch(url, {
   method: 'POST',
   body: formData,
   headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+    'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN': csrfToken,
   },
 })
@@ -527,13 +506,13 @@ fetch(url, {
   let commentsSection = document.querySelector('.comments-section');
 
   let commentDiv = document.createElement('div');
-  commentDiv.className = 'comment';
+  commentDiv.className = 'comment container';
   commentDiv.id = 'comment-' + data.comment_id;
 
   let userImage = document.createElement('img');
-  userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+  userImage.src = data.comment_by_photo;
   userImage.className = 'user-image';
-  userImage.alt = 'Gmail Image';
+  userImage.alt = 'User Image';
   commentDiv.appendChild(userImage);
 
   let commentContentDiv = document.createElement('div');
@@ -546,6 +525,7 @@ fetch(url, {
 
   let contentP = document.createElement('p');
   contentP.textContent = data.comment_content;
+  contentP.id = 'comment-content-' + data.comment_id;
   commentContentDiv.appendChild(contentP);
 
   let commentInfoButtonsDiv = document.createElement('div');
@@ -566,10 +546,18 @@ fetch(url, {
   let commentButtonsDiv = document.createElement('div');
   commentButtonsDiv.className = 'comment-buttons';
   
+  let editButton = document.createElement('button');
+  editButton.type = 'button';
+  editButton.className = 'comment-manage-button';
+  editButton.textContent = 'Edit';
+  editButton.id = 'EditCommentbtn';
+  commentButtonsDiv.appendChild(editButton);
+
   let deleteButton = document.createElement('button');
   deleteButton.type = 'button';
   deleteButton.className = 'comment-manage-button';
   deleteButton.textContent = 'Delete';
+  deleteButton.id = 'DeleteCommentbtn';
   commentButtonsDiv.appendChild(deleteButton);
   
   commentInfoButtonsDiv.appendChild(commentButtonsDiv);
@@ -587,7 +575,7 @@ fetch(url, {
 function handleCreateMessage(event) {
 event.preventDefault();
 
-if (!isMessageFormValid()) {
+if (!isMessageFormValid("message-content", "createmessage-contentError")) {
   return;
 }
 
@@ -599,42 +587,24 @@ fetch(url, {
   method: 'POST',
   body: formData,
   headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
+    'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN': csrfToken,
   },
-})
-.then(response => response.json())
-.then(data => {
-  
 })
 .catch(error => console.error('Error:', error));
 }
 
 function handleAddMember(modalId, event) {
-console.log("handleAddMember");
-event.preventDefault();
-let url = this.getAttribute('action');
-let formData = new FormData(this);
-let csrf = document.querySelector("input[name='_token']").content;
-
-
-console.log("URL:", url);
-for (var pair of formData.entries()) {
-  console.log(pair[0]+ ', ' + pair[1]); 
-}
-fetch(url, {
-  method: 'POST',
-  body: formData,
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
-    'X-CSRF-TOKEN': csrf,
-  },
-})
-.then(response => response.json())
-.then(data => {
-  let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
-  modal.hide();
-})
+  event.preventDefault();
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  sendAjaxRequest('POST', url, {project_id: formData.get('project_id'),  member_id: formData.get('member_id')}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+      modal.hide();
+      location.reload();
+    }
+  });
 }
 
 function isTaskFormValid() {
@@ -696,30 +666,30 @@ return true;
 }
 
 
-function isCommentFormValid() {
-let content = document.getElementById("comment-content").value;
-document.getElementById('contentError').innerHTML = '';
+function isCommentFormValid(contentId, errorId) {
+  let content = document.getElementById(contentId).value;
+  document.getElementById(errorId).innerHTML = '';
 
-if (content.length < 1 || content.length > 300) {
-    document.getElementById('content').classList.add('validation-err');
-    document.getElementById('contentError').innerHTML = 'Comment content must be between 1 and 300 characters long';
+  if (content.length < 1 || content.length > 300) {
+    document.getElementById(contentId).classList.add('validation-err');
+    document.getElementById(errorId).innerHTML = 'Comment content must be between 1 and 300 characters long';
     return false;
+  }
+
+  return true;
 }
 
-return true;
-}
+function isMessageFormValid(contentId, errorId) {
+  let content = document.getElementById(contentId).value;
+  document.getElementById(errorId).innerHTML = '';
 
-function isMessageFormValid() {
-let content = document.getElementById("message-content").value;
-document.getElementById('contentError').innerHTML = '';
-
-if (content.length < 1 || content.length > 300) {
-    document.getElementById('content').classList.add('validation-err');
-    document.getElementById('contentError').innerHTML = 'Message content must be between 1 and 300 characters long';
+  if (content.length < 1 || content.length > 300) {
+    document.getElementById(contentId).classList.add('validation-err');
+    document.getElementById(errorId).innerHTML = 'Message content must be between 1 and 300 characters long';
     return false;
-}
+  }
 
-return true;
+  return true;
 }
 
 function setupModalForm(formId, buttonId, modalId) {
@@ -729,7 +699,7 @@ switch (formId) {
     document.getElementById(formId).addEventListener("submit", handleAddMember.bind(form, modalId));
     break;
   case 'createtaskform':
-    document.getElementById(formId).addEventListener("submit", handleCreateTask.bind(form, modalId));
+    document.getElementById(formId).addEventListener("submit", handleCreateTask);
     break;
   case 'edittaskform':
     document.getElementById(formId).addEventListener("submit", handleEditTask.bind(form, modalId));
@@ -737,8 +707,14 @@ switch (formId) {
   case 'editprojectform':
     document.getElementById(formId).addEventListener("submit", handleEditProject.bind(form, modalId));
     break;
+  case 'createprojectform':
+    document.getElementById(formId).addEventListener("submit", handleCreateProject);
+    break;
   case'assignTaskForm':
     assign_task_to();
+    break;
+  case 'assignCoordinatorForm':
+    assign_coordinator();
     break;
 }
 document.getElementById(buttonId).addEventListener('click', function () {
@@ -752,15 +728,25 @@ let form = document.getElementById(formId);
 document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
 }
 
+
 function setupMessageForm(formId) {
 let form = document.getElementById(formId);
 document.getElementById(formId).addEventListener("submit", handleCreateMessage.bind(form));
 }
 
+
 function dismiss_notification(notificationId) {
 console.log(notificationId);
 sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
   if (this.status >= 200 && this.status < 400) {
+    const prev_number = document.getElementById('noti-number').textContent;
+    if(prev_number == 1){
+      document.getElementById('noti-number').textContent = '';
+      document.getElementById('noti-number').classList.add('hide');
+    }else {
+      document.getElementById('noti-number').textContent = prev_number - 1;
+    }
+  
     let notificationElement = document.getElementById('n'+notificationId);
     notificationElement.style.transition = "transform 0.5s ease-out";
     notificationElement.style.transform = "translateX(100%)";
@@ -780,6 +766,9 @@ notifications.forEach(notification => {
 }
 
 function accept_invite(reference_id, notification_id, member_id) {
+console.log(reference_id);
+console.log(notification_id);
+console.log(member_id);
 sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
   if (this.status >= 200 && this.status < 400) {
     const response = JSON.parse(this.response);
@@ -798,22 +787,18 @@ if(is_coordinator != null){
   sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
     if (this.status >= 200 && this.status < 400) {
       const response = JSON.parse(this.response);
-      location.reload();
+      window.location.href = '/home';
     }
   });
 }
 }
 
-function kickFromProject(memberId, projectId, coordinatorId){
-if(memberId == coordinatorId){
-  assignCoordinator(projectId);
-}else{
+function kickFromProject(memberId, projectId){
   sendAjaxRequest('DELETE', '/kickMember/'+memberId+'/'+projectId, {}, function() {
     if (this.status >= 200 && this.status < 400) {
       location.reload();
     }
   });
-}
 }
 
 function assignCoordinator(projectId){
@@ -840,7 +825,7 @@ const members = document.getElementsByClassName('user-id');
       const username = options[result.value].substring(1);
       sendAjaxRequest('POST', '/changeCoordinator/'+username+'/'+projectId, {}, function() {
         if (this.status >= 200 && this.status < 400) {
-          location.reload(); 
+          window.location.href = '/home';
         }
       });
     }
@@ -855,8 +840,8 @@ if (commentsSection) {
 }
 });
 
-function handleDelete(event, buttonClass, itemClass, deleteUrl) {
-  if (event.target.classList.contains(buttonClass)) {
+function handleDelete(event, buttonId, itemClass, deleteUrl) {
+  if (event.target.id !== buttonId) return;
     let itemDiv = event.target.closest('.' + itemClass);
     let itemId = itemDiv.id.split('-')[1];
     let csrfToken = document.querySelector('#csrf-token').value;
@@ -892,15 +877,120 @@ function handleDelete(event, buttonClass, itemClass, deleteUrl) {
         });
       }
     })
-  }
+}
+
+function EditMessage(event, buttonId, itemClass, editUrl) {
+  if (event.target.id !== buttonId) return;
+
+  let messageDiv = event.target.closest('.' + itemClass);
+  let messageId = messageDiv.id.split('-')[1];
+  let messageContent = document.getElementById('message-content-' + messageId).innerText;
+  let csrfToken = document.querySelector('#csrf-token').value;
+
+  let createForm = document.getElementById('createmessageform');
+  let editForm = document.getElementById('editmessageform');
+  createForm.classList.add('hide-message-form');
+  editForm.classList.remove('hide-message-form');
+
+  editForm.action = editUrl + messageId;
+  editForm.elements['content'].value = messageContent;
+
+  editForm.onsubmit = function(e) {
+    e.preventDefault();
+
+    if (!isMessageFormValid("edit-message-content", "editmessage-contentError")) return;
+
+    let data = {
+      content: editForm.elements['content'].value
+    };
+
+    fetch(editForm.action, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById('message-content-' + messageId).innerText = data.message_content;
+      editForm.elements['content'].value = '';
+      editForm.action = '';
+      createForm.classList.remove('hide-message-form');
+      editForm.classList.add('hide-message-form');
+    })
+    .catch(error => console.error('Error:', error));
+  };
+}
+
+function EditComment(event, buttonId, itemClass, editUrl) {
+  if (event.target.id !== buttonId) return;
+
+  let commentDiv = event.target.closest('.' + itemClass);
+  let commentId = commentDiv.id.split('-')[1];
+  let commentContent = document.getElementById('comment-content-' + commentId).innerText;
+  let csrfToken = document.querySelector('#csrf-token').value;
+
+  let createForm = document.getElementById('createcommentform');
+  let editForm = document.getElementById('editcommentform');
+  createForm.classList.add('hide-message-form');
+  editForm.classList.remove('hide-message-form');
+
+  editForm.action = editUrl + commentId;
+  editForm.elements['content'].value = commentContent;
+
+  editForm.onsubmit = function(e) {
+    e.preventDefault();
+
+    if (!isCommentFormValid("edit-comment-content", "editcomment-contentError")) return;
+
+    let data = {
+      content: editForm.elements['content'].value
+    };
+
+    fetch(editForm.action, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById('comment-content-' + commentId).innerText = data.comment_content;
+      editForm.elements['content'].value = '';
+      editForm.action = '';
+      createForm.classList.remove('hide-message-form');
+      editForm.classList.add('hide-message-form');
+    })
+    .catch(error => console.error('Error:', error));
+  };
 }
 
 function handleDeleteComment(event) {
-  handleDelete(event, 'comment-manage-button', 'comment', '/comment/delete/');
+  handleDelete(event, 'DeleteCommentbtn', 'comment', '/comment/delete/');
 }
 
 function handleDeleteMessage(event) {
-  handleDelete(event, 'message-manage-button', 'message-chat', '/message/delete/');
+  handleDelete(event, 'DeleteMessagebtn', 'message-chat', '/message/delete/');
+}
+
+function  handleEditMessage(event) {
+  EditMessage(event, 'EditMessagebtn', 'message-chat', '/message/edit/');
+}
+
+function handleEditComment(event){
+  EditComment(event, 'EditCommentbtn', 'comment', '/comment/edit/');
 }
 
 // pusher 
@@ -917,19 +1007,32 @@ encrypted: true
 //notifications channel
 const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
-console.log(data);
+  
   if(data.user_id == userId){
-    document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
   }
 });
 
 channel.bind('accepted-invite', function(data) {
-console.log(data);
-  document.getElementById('new-notification').classList.add('show');
-  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
-  //console.log(response);
+    sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
+
+channel.bind('notification-coordinator', function(data) {
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
+channel.bind('notification-forum', function(data) {
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
+channel.bind('assigned-task', function(data) {
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
+channel.bind('notification-comment', function(data) {
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
 
 //chat channel
 const chatChannel = pusher.subscribe('chat');
@@ -940,11 +1043,11 @@ console.log(data);
 let chatSection = document.querySelector('.chat-section');
 
   let messageDiv = document.createElement('div');
-  messageDiv.className = 'message-chat';
+  messageDiv.className = 'message-chat container';
   messageDiv.id = 'message-' + data.message_id;
 
   let userImage = document.createElement('img');
-  userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+  userImage.src = "../"+data.photo_path // falta mudar para a imagem do user
   userImage.className = 'user-image';
   userImage.alt = 'Gmail Image';
   messageDiv.appendChild(userImage);
@@ -959,6 +1062,7 @@ let chatSection = document.querySelector('.chat-section');
 
   let contentP = document.createElement('p');
   contentP.textContent = data.message;
+  contentP.id = 'message-content-' + data.message_id;
   messageContentDiv.appendChild(contentP);
 
   let messageInfoButtonsDiv = document.createElement('div');
@@ -981,10 +1085,18 @@ let chatSection = document.querySelector('.chat-section');
   
   const name = document.querySelector('.chat-section').id;
   if(name === data.message_by){
+    let editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.className = 'message-manage-button';
+    editButton.textContent = 'Edit';
+    editButton.id = 'EditMessagebtn';
+    messageButtonsDiv.appendChild(editButton);
+
     let deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'message-manage-button';
     deleteButton.textContent = 'Delete';
+    deleteButton.id = 'DeleteMessagebtn';
     messageButtonsDiv.appendChild(deleteButton);
   }
   messageInfoButtonsDiv.appendChild(messageButtonsDiv);
@@ -999,17 +1111,20 @@ let chatSection = document.querySelector('.chat-section');
 });
 
 function handleRefreshNotifications() {
-  if(this.status >= 200 && this.status < 400) {
-    var data = JSON.parse(this.response);
-    document.getElementById('notifications-list').innerHTML = "";
-    console.log(data);
-    data.notifications.forEach(notification => {
-      if(!notification.viewed){
-      const li = document.createElement('li');
-      li.classList.add('notification');
-      li.classList.add(notification.type);
-      li.id = 'n' + notification.notification_id;
-      if(notification.type == "invite") {
+    if(this.status >= 200 && this.status < 400) {
+      var data = JSON.parse(this.response);
+      document.getElementById('notifications-list').innerHTML = "";
+      
+      let new_notis = 0;
+
+      data.notifications.forEach(notification => {
+        if(!notification.viewed){
+        new_notis++;
+        const li = document.createElement('li');
+        li.classList.add('notification');
+        li.classList.add(notification.type+"-notification");
+        li.id = 'n' + notification.notification_id;
+        if(notification.type == "invite") {
           let description_invite = document.createElement('p');
           description_invite.classList.add('notification-text');
           description_invite.textContent = "You have been invited to join the project ";
@@ -1037,12 +1152,84 @@ function handleRefreshNotifications() {
           li.appendChild(description_invite);
           li.appendChild(accept);
           li.appendChild(deny);
+
         }
-        else if(notification.type == "acceptedinvite") {
-          console.log("acceptedinvite");
-            let description_accepted = document.createElement('p');
+          else if(notification.type == "acceptedinvite") {
+              let description_coordinator = document.createElement('p');
+              description_coordinator.classList.add('notification-text');
+              description_coordinator.textContent = "Your invitation to join the project was accepted";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_coordinator);
+              li.appendChild(dismiss);
+          }else if(notification.type == "coordinator") {
+              let description_coordinator = document.createElement('p');
+              description_coordinator.classList.add('notification-text');
+              description_coordinator.textContent = "There as been a change of coordinator in the project";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_coordinator);
+              li.appendChild(dismiss);
+          } else if(notification.type == "forum") {
+            let description_coordinator = document.createElement('p');
+            description_coordinator.classList.add('notification-text');
+            description_coordinator.textContent = "New message in the project chat";
+
+            const dismiss = document.createElement('button');
+            dismiss.classList.add('notification-dismiss');
+            dismiss.onclick = function() {
+              dismiss_notification(notification.notification_id);
+            };
+            const icondismiss = document.createElement('i');
+            icondismiss.classList.add('fa-solid');
+            icondismiss.classList.add('fa-eye');
+
+            dismiss.appendChild(icondismiss);
+
+            li.appendChild(description_coordinator);
+            li.appendChild(dismiss);
+        } else if(notification.type === "comment") {
+          let description_accepted = document.createElement('p');
+              description_accepted.classList.add('notification-text');
+              description_accepted.textContent = "You have a new comment on the task.";
+
+              const dismiss = document.createElement('button');
+              dismiss.classList.add('notification-dismiss');
+              dismiss.onclick = function() {
+                dismiss_notification(notification.notification_id);
+              };
+              const icondismiss = document.createElement('i');
+              icondismiss.classList.add('fa-solid');
+              icondismiss.classList.add('fa-eye');
+
+              dismiss.appendChild(icondismiss);
+
+              li.appendChild(description_accepted);
+              li.appendChild(dismiss);
+      } else if(notification.type === "assignedtask") {
+        let description_accepted = document.createElement('p');
             description_accepted.classList.add('notification-text');
-            description_accepted.textContent = "Your invite to the project has been accepted";
+            description_accepted.textContent = "You have been assigned to a task.";
 
             const dismiss = document.createElement('button');
             dismiss.classList.add('notification-dismiss');
@@ -1057,25 +1244,29 @@ function handleRefreshNotifications() {
 
             li.appendChild(description_accepted);
             li.appendChild(dismiss);
-        }
-        else {
-            let description_default = document.createElement('p');
-            description_default.classList.add('notification-text');
-            description_default.textContent = "You have a new notification in the project";
-            li.appendChild(description_default);
-        }
+    } else {
+              let description_default = document.createElement('p');
+              description_default.classList.add('notification-text');
+              description_default.textContent = "You have a new notification in the project";
+              li.appendChild(description_default);
+          }
 
-      document.getElementById('notifications-list').appendChild(li);
+        document.getElementById('notifications-list').appendChild(li);
+         } });
+
+         if(new_notis > 0){
+          document.getElementById('noti-number').classList.remove('hide');
+          document.getElementById('noti-number').textContent = new_notis;
+        }
     }
-    });
-  }
 }
+
 
 function handleLeaveProjectClick(event) {
 event.preventDefault();
 Swal.fire({
     title: "Are you sure?",
-    text: "Once left, you will not be able to rejoin the project!",
+    text: "You are leaving this project!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -1120,7 +1311,7 @@ function handleProjectVisibility() {
 }
 
 function updateButtonsVisibility(archived) {
-  const buttons = ['AddMemberModalButton', 'CreateTaskModalButton', 'EditProjectModalButton', 'createmessageform'];
+  const buttons = ['AddMemberModalButton', 'CreateTaskModalButton', 'EditProjectModalButton', 'AssignCoordinatorModalButton', 'createmessageform'];
 
   buttons.forEach(buttonId => {
     const button = document.getElementById(buttonId);
@@ -1198,6 +1389,29 @@ function assign_task_to(){
   }
 }
 
+function assign_coordinator(){
+  const members = document.querySelectorAll('.assign_coordinator_member');
+  const form = document.getElementById('assignCoordinatorForm');
+  const projectId = document.getElementById('project_id').value;
+  members.forEach(function(member) {
+    member.addEventListener('click', function() {
+      members.forEach(function(member) {
+        member.classList.remove('selected');
+      });
+      this.classList.add('selected');
+      const username = this.getAttribute('data-id');
+      document.getElementById('assign_coordinator').value = username;
+      form.action = '/changeCoordinator/' + username + '/' + projectId;
+    });
+  });
+
+  // Select the first member by default
+  if (members.length > 0) {
+    members[0].click();
+  }
+}
+
+
 function handleCompleteTask() {
 let taskId = this.getAttribute('data-task-id');
 let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -1223,8 +1437,8 @@ fetch(`/task/complete/${taskId}`, {
 }
 
 function closeNotifications() {
-  var notificationsDropdown = document.getElementById('notifications-dropdown');
-  notificationsDropdown.style.display = 'none';
+  document.getElementById("notifications-dropdown").classList.toggle("hide");
+  document.getElementById("new-notification").classList.remove("show");
 }
 
 function updateUserTable(users) {

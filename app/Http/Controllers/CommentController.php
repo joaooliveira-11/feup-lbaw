@@ -7,7 +7,7 @@ use App\Models\Comment;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use App\Events\TaskComment;
 
 class CommentController extends Controller {
 
@@ -27,11 +27,14 @@ class CommentController extends Controller {
 
         $comment->save();
 
+        event(new TaskComment());
+
         return response()->json([
             'comment_id' => $comment->comment_id,
             'comment_content' => $comment->content,
             'comment_create_date' => $comment->create_date,
             'comment_comment_by' => Auth::user()->username,
+            'comment_by_photo' => url(Auth::user()->photo),
         ]);
     }
 
@@ -41,6 +44,17 @@ class CommentController extends Controller {
         $comment->delete();
         return response()->json([
             'success' => true
+        ]);
+    }
+
+    public function edit($id, Request $request){
+        $comment = Comment::find($id);
+        // $this->authorize('edit', $comment);
+        $comment->content = $request->content;
+        $comment->edited = true;
+        $comment->save();
+        return response()->json([
+            'comment_content' => $comment->content,
         ]);
     }
 

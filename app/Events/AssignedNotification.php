@@ -10,32 +10,24 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatMessage implements ShouldBroadcast
+class AssignedNotification  implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
-    public $message_id;
-    public $message_by;
-    public $create_date;
-    public $photo_path;
     /**
      * Create a new event instance.
      */
-    public function __construct($message, $message_id, $message_by, $create_date, $photo_path){
-        $this->message = $message;
-        $this->message_id = $message_id;
-        $this->message_by = $message_by;
-        $this->photo_path = $photo_path;
-        $this->create_date = $create_date;
+    public function __construct(){
+        $this->message = "A new task has been assigned to you!";
     }
 
     
     public function broadcastAs(){
-        return 'chat-message';
+        return 'assigned-task';
     }
 
     public function broadcastOn(){
-        return 'chat';
+        return 'notifications';
     }
 }

@@ -29,6 +29,10 @@ class Task extends Model {
         return $this->hasMany(Comment::class, 'task_comment');
     }
 
+    public function assigned_to() {
+        return $this->assigned_to;
+    }
+
     public function task_project(): BelongsTo {
         return $this->belongsTo(Project::class, 'project_task');
     }

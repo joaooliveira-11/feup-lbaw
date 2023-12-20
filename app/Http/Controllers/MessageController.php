@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Message;
 use App\Events\ChatMessage;
+use App\Events\MessageForum;
 
 class MessageController extends Controller {
 
@@ -26,14 +27,8 @@ class MessageController extends Controller {
 
         $message->save();
 
-        event(new ChatMessage($message->content, $message->message_id, Auth::user()->username, $message->create_date));
-
-        return response()->json([
-            'message_id' => $message->message_id,
-            'message_content' => $message->content,
-            'message_create_date' => $message->create_date,
-            'message_message_by' => Auth::user()->username,
-        ]);
+        event(new ChatMessage($message->content, $message->message_id, Auth::user()->username, $message->create_date, Auth::user()->photo));
+        event(new MessageForum());
     }
 
     public function delete($id){
@@ -44,5 +39,15 @@ class MessageController extends Controller {
             'success' => true
         ]);
     }
-
+    
+    public function edit($id, Request $request){
+        $message = Message::find($id);
+        // $this->authorize('edit', $message);
+        $message->content = $request->content;
+        $message->edited = true;
+        $message->save();
+        return response()->json([
+            'message_content' => $message->content,
+        ]);
+    }
 } 

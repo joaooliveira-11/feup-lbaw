@@ -11,6 +11,8 @@ use Illuminate\Validation\Rule;
 use App\Models\Project;
 use Illuminate\Support\Facades\Storage; 
 use Illuminate\Support\Str;
+use App\Events\AssignedNotification;
+
 class TaskController extends Controller {
 
     public function __construct(){
@@ -34,12 +36,7 @@ class TaskController extends Controller {
 
         $task->save();
 
-        return response()->json([
-            'task_title' => $task->title,
-            'task_description' => $task->description,
-            'task_finish_date' => $task->finish_date,
-            'task_url' => url('task/' . $task->task_id),
-        ]);
+        return redirect()->route('project', ['project_id' => $task->project_task]);
     }
 
     public function show(int $task_id){
@@ -91,6 +88,8 @@ class TaskController extends Controller {
         $task->state = 'assigned';
         $task->assigned_to = $request->assign_task_to;
         $task->save();
+
+        event(new AssignedNotification());
     
         return view('pages.task', ['task'=>$task]);
     }
@@ -101,30 +100,39 @@ class TaskController extends Controller {
         $project_id = $request->input('project_id');
         $project = Project::find($project_id);
 
-        if($request->input('statusFilter') == 'all' && $request->input('priorityFilter') == 'all')
-            $tasks = $project   ->tasks()
-                                ->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
-                                ->orwhere('title', 'ilike', '%' . $search . '%')
-                                ->get();
-        else if($request->input('statusFilter') != 'all' && $request->input('priorityFilter') == 'all')
-            $tasks = $project   ->tasks()
-                                ->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
-                                ->orwhere('title', 'ilike', '%' . $search . '%')
-                                ->where('state', $request->input('statusFilter'))
-                                ->get();
-        else if($request->input('statusFilter') == 'all' && $request->input('priorityFilter') != 'all')
-            $tasks = $project   ->tasks()
-                                ->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
-                                ->orwhere('title', 'ilike', '%' . $search . '%')
-                                ->where('priority', $request->input('priorityFilter'))
-                                ->get();
-        else
-            $tasks = $project   ->tasks()
-                                ->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
-                                ->orwhere('title', 'ilike', '%' . $search . '%')
-                                ->where('state', $request->input('statusFilter'))
-                                ->where('priority', $request->input('priorityFilter'))
-                                ->get();
+        if($request->input('statusFilter') == 'all' && $request->input('priorityFilter') == 'all') {
+            $tasks = $project->tasks()
+                ->where(function ($query) use ($search) {
+                    $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+                        ->orWhere('title', 'ilike', '%' . $search . '%');
+                })
+                ->get();
+        } else if($request->input('statusFilter') != 'all' && $request->input('priorityFilter') == 'all') {
+            $tasks = $project->tasks()
+                ->where(function ($query) use ($search) {
+                    $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+                        ->orWhere('title', 'ilike', '%' . $search . '%');
+                })
+                ->where('state', $request->input('statusFilter'))
+                ->get();
+        } else if($request->input('statusFilter') == 'all' && $request->input('priorityFilter') != 'all') {
+            $tasks = $project->tasks()
+                ->where(function ($query) use ($search) {
+                    $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+                        ->orWhere('title', 'ilike', '%' . $search . '%');
+                })
+                ->where('priority', $request->input('priorityFilter'))
+                ->get();
+        } else {
+            $tasks = $project->tasks()
+                ->where(function ($query) use ($search) {
+                    $query->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+                        ->orWhere('title', 'ilike', '%' . $search . '%');
+                })
+                ->where('state', $request->input('statusFilter'))
+                ->where('priority', $request->input('priorityFilter'))
+                ->get();
+        }
 
         return response()->json($tasks);
     }

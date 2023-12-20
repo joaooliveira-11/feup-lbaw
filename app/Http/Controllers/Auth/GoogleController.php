@@ -33,9 +33,7 @@ class GoogleController extends Controller
         } else {
             Auth::login($user);
         }
-
-        $user_id = Auth::user()->id;
-            return redirect()->route('show', ['id' => $user_id])
+            return redirect()->route('home')
             ->withSuccess('You have successfully logged in!');
     }
 }

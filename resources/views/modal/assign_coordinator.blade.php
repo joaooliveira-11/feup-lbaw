@@ -1,13 +1,12 @@
-<form action="{{ route('task.assign') }}" id="assignTaskForm" method="post">
+<form action="" id="assignCoordinatorForm" method="post">
     @csrf
-    @method('PATCH')
-    <input type="hidden" name="task_id" id="task_id" value="{{ $task->task_id }}">
-    <input type="hidden" name="assign_task_to" id="assign_task_to">
-    <div class="modal fade text-left" id="ModalAssignTask" tabindex="-1" role="dialog" aria-hidden="true">
+    <input type="hidden" id="assign_coordinator" name="assign_coordinator">
+    <input type="hidden" id="project_id" name="project_id" value="{{ $project->id }}">
+    <div class="modal fade text-left" id="ModalAssignCoordinator" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Assign Task</h4>
+                    <h4 class="modal-title">Assign Coordinator</h4>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>                
@@ -15,18 +14,18 @@
                 <div class="modal-body">
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            @foreach($task->task_project->members() as $user)
-                                @if($task->assigned_to != $user->id)
-                                    <div class="assign_task_member" data-id="{{ $user->id }}">
+                            @foreach($project->members() as $user)
+                                @if ($user->id != $project->project_coordinator)
+                                    <div class="assign_coordinator_member" data-id="{{ $user->username }}">
                                         <img src="{{ url($user->photo) }}">
                                         <span>{{ $user->username }}</span>
                                     </div>
-                                 @endif
+                                @endif
                             @endforeach
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <button type="submit" class="btn btn-success"> {{ __('Assign Task') }}</button>
+                        <button type="submit" class="btn btn-success"> {{ __('Submit') }}</button>
                     </div>
                 </div>
             </div>

@@ -24,11 +24,10 @@ class InviteController extends Controller {
         $invite->invited_by = Auth::user()->id;
         $invite->invited_to = (int) $request->member_id;
         $invite->project_invite = (int) $request->project_id; 
-        //$this->authorize('create', $invite); 
+        $this->authorize('create', $invite); 
         $invite->save(); 
 
         return response()->json([
-            'invite' => $invite,
             'success' => 'Invite created successfully!',
         ]);
     }
