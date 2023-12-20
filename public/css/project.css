@@ -140,19 +140,20 @@ header {
 
 /*----------------------------  Dasboard ----------------------------*/
 #Dashboard {
-    width: 100%;
+    margin-left: 0;
+    width: 93%;
 }
 #Dashboard .dashboard-content {
     margin: 0;
     display: flex;
-    padding-bottom: 1.4vw;
+    padding-top: 1em;
     border-bottom: 1px solid #303030;
     overflow-wrap: break-word;
     overflow: hidden;
 }
 
 .dashboard-left {
-    width: 50%;
+    width: 40%;
 }
 
 #ProjectDeadline, #MembersCounter, #ActiveTasks, #Favorites {
@@ -164,7 +165,8 @@ header {
 }
 
 #ProjectDescription {
-    width: 70%;
+    width: 60%;
+    max-width: 60%;
     font-size: 1vw;
     color: #303030;
     display: flex;
@@ -179,7 +181,7 @@ header {
 }
 
 #dashboard-project-content {
-    width: 100%;
+    width: 60%;
     font-size: 1vw;
     color: #303030;
     font-weight: 500;
@@ -191,18 +193,21 @@ header {
 
 .dashboard-project-buttons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding-right: 1.6vw;
 }
 
 .dashboard-project-button {
+    margin-bottom: 1em;
     background-color: #303030;
     border-radius: 0.8vw;
     color: #fff;
     font-size: 0.7vw;
     font-weight: 600;
-    padding: 0.8vw;
-    width: 7.6vw;
+    padding: 1em;
+    width: 14em;
+    box-sizing: border-box;
     transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -219,6 +224,12 @@ header {
 
 #favorite-btn i{
     color: #e83749;
+}
+
+.private-archived {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #CreateTaskButton {
@@ -454,9 +465,10 @@ header {
     font-size: 0.8vw;
 }
 
-.message-chat {
+#Chat .message-chat {
     display: flex;
-    width: 50vw;
+    width: 56vw;
+    max-width: 100%;
     margin-top: 1vw;
     align-items: center;
 }
@@ -485,6 +497,12 @@ header {
 .message-content h6 {
     color: #000;
     font-size: 0.7vw;
+}
+
+.message-info-left {
+    margin-top: 4px;
+    display: flex;
+    gap: 1em;
 }
 
 .message-info-buttons {
@@ -625,11 +643,15 @@ header {
     }
     #dashboard-project-content {
         font-size: 350%;
+        width: fit-content;
     }
     .dashboard-project-buttons button {
         width: 35%;
         font-size: 125%;
         height: auto;
+    }
+    #favorite-btn i{
+        font-size: 4em;
     }
     #ProjectDescription {
         flex-direction: column;

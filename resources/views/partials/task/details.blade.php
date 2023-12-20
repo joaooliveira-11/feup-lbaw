@@ -34,11 +34,14 @@
                 <button type="button" id="EditTaskModalButton" class="task-details-button {{ $task->task_project->archived ? 'archived-btn' : '' }}">Manage Details</button>
                 @include('modal.edit_task', ['task_id' => $task->task_id])
                 <button type="button" class="task-details-button {{ $task->task_project->archived ? 'archived-btn' : '' }}" id="assignUserButton">Assign User</button>
-                @include('modal.assign_task', ['task' => $task])
             @endif
             @if($task->assigned_to == auth()->user()->id && $task->state == ('assigned'))
                 <button type="button" id="completetaskbtn" class="task-details-button {{ $task->task_project->archived ? 'archived-btn' : '' }}" data-task-id="{{ $task->task_id }}">Complete Task</button>
-            @endif 
+            @endif
+            @if($task->task_project->is_coordinator(auth()->user()))
+                @include('modal.assign_task', ['task' => $task])
+            @endif
+            <button type="button" id="" class="task-details-button {{ $task->task_project->archived ? 'archived-btn' : '' }}" data-task-id="{{ $task->task_id }}">Archive Task</button>
         </div>
         <div id="task-description" class="container">
             <h5 class="row">Details</h5>

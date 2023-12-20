@@ -445,7 +445,7 @@ CREATE TRIGGER update_tasks_on_user_leave
     FOR EACH ROW
     EXECUTE PROCEDURE update_tasks_on_user_leave();
 
-
+/*
 --TRIGGER13 (The task has to be created by a user who is in the project)
 CREATE OR REPLACE FUNCTION task_user_in_project() RETURNS TRIGGER AS
 $BODY$
@@ -505,11 +505,12 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+
 CREATE TRIGGER check_ProjMember_before_message
     BEFORE INSERT ON message
     FOR EACH ROW 
     EXECUTE PROCEDURE check_ProjMember_before_message();
-
+*/
 
 
 -----------------------------------------

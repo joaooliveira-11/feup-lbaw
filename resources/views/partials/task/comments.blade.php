@@ -10,7 +10,7 @@
                     <div class="comment-info-buttons">
                         <h6>{{ $comment->create_date }}</h6>
                         @if ($comment->edited == true)
-                            <p>Edited</p>
+                            <h6>Edited</h6>
                         @endif
                         <div class="comment-buttons">
                             @if ($comment->comment_by == auth()->user()->id)

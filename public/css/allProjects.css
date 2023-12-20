@@ -31,6 +31,9 @@
     height: 50%;
     overflow: ellipsis;
 }
+.projects-title {
+    text-align: center;
+}
 
 .project-deadline::before {
     content: 'Deadline: ';
@@ -208,7 +211,7 @@
         margin: 0;
     }
     .projects-title {
-        font-size: 2.6vw;
+        font-size: 2em;
     }
     .projects-list .project-title{
         font-size: 180%;
@@ -219,7 +222,7 @@
         font-size: 140%;
     }
     .project-item .project-description {
-        font-size: 250%;
+        font-size: 2em;
     }
     .pagination-container span {
         font-size: 150%;
