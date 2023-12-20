@@ -31,7 +31,7 @@
             <div class="error" id="createcomment-contentError"></div>
             <button id="submit-comment-button" type="submit">Send</button>
         </form>
-        <form class="comment-form {{ $task->task_project->archived ? 'archived-btn' : '' }}  hide-message-form" id="editcommentform" action="" method="POST">
+        <form class="container comment-form {{ $task->task_project->archived ? 'archived-btn' : '' }}  hide-message-form" id="editcommentform" action="" method="POST">
             @csrf
             @method('PATCH')
             <input type="hidden" name="task_id" value="{{ $task->task_id}}">

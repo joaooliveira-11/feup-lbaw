@@ -25,6 +25,9 @@ function addEventListeners() {
   if (document.getElementById("assignUserButton")) {
     setupModalForm('assignTaskForm', 'assignUserButton', 'ModalAssignTask');
   }
+  if (document.getElementById("AssignCoordinatorModalButton")) {
+    setupModalForm('assignCoordinatorForm', 'AssignCoordinatorModalButton', 'ModalAssignCoordinator');
+  }
   if (document.getElementById("AddMemberModalButton")) {
     setupModalForm("addmemberform", 'AddMemberModalButton', 'ModalAddMember');
   }
@@ -484,7 +487,7 @@ fetch(url, {
   let commentsSection = document.querySelector('.comments-section');
 
   let commentDiv = document.createElement('div');
-  commentDiv.className = 'comment';
+  commentDiv.className = 'comment container';
   commentDiv.id = 'comment-' + data.comment_id;
 
   let userImage = document.createElement('img');
@@ -690,6 +693,9 @@ switch (formId) {
     break;
   case'assignTaskForm':
     assign_task_to();
+    break;
+  case 'assignCoordinatorForm':
+    assign_coordinator();
     break;
 }
 document.getElementById(buttonId).addEventListener('click', function () {
@@ -1028,7 +1034,7 @@ console.log(data);
 let chatSection = document.querySelector('.chat-section');
 
   let messageDiv = document.createElement('div');
-  messageDiv.className = 'message-chat';
+  messageDiv.className = 'message-chat container';
   messageDiv.id = 'message-' + data.message_id;
 
   let userImage = document.createElement('img');
@@ -1296,7 +1302,7 @@ function handleProjectVisibility() {
 }
 
 function updateButtonsVisibility(archived) {
-  const buttons = ['AddMemberModalButton', 'CreateTaskModalButton', 'EditProjectModalButton', 'createmessageform'];
+  const buttons = ['AddMemberModalButton', 'CreateTaskModalButton', 'EditProjectModalButton', 'AssignCoordinatorModalButton', 'createmessageform'];
 
   buttons.forEach(buttonId => {
     const button = document.getElementById(buttonId);
@@ -1373,6 +1379,29 @@ function assign_task_to(){
     members[0].click();
   }
 }
+
+function assign_coordinator(){
+  const members = document.querySelectorAll('.assign_coordinator_member');
+  const form = document.getElementById('assignCoordinatorForm');
+  const projectId = document.getElementById('project_id').value;
+  members.forEach(function(member) {
+    member.addEventListener('click', function() {
+      members.forEach(function(member) {
+        member.classList.remove('selected');
+      });
+      this.classList.add('selected');
+      const username = this.getAttribute('data-id');
+      document.getElementById('assign_coordinator').value = username;
+      form.action = '/changeCoordinator/' + username + '/' + projectId;
+    });
+  });
+
+  // Select the first member by default
+  if (members.length > 0) {
+    members[0].click();
+  }
+}
+
 
 function handleCompleteTask() {
 let taskId = this.getAttribute('data-task-id');
