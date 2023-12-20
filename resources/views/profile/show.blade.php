@@ -45,7 +45,7 @@
                     @endif
                     </div>
                 </div>
-                <div class="row profile-interests-skills">
+                <div class="container row profile-interests-skills" style="margin:0 auto;">
                     <div id="Interests">
                         <h4 class="interests-title">Interests</h4>
                         @if ($interests->isEmpty())

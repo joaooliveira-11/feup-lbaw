@@ -1,5 +1,5 @@
 <div id="Sidebar" class="container">
-    <h1 class="row sidebar-project-title">{{ $project->title }}</h1> 
+    <h1 class="sidebar-project-title">{{ $project->title }}</h1> 
     <form id="projectForm" class="row">
         <label for="dashboard" class="selected dashboard-element">
             <input type="radio" id="dashboard" name="project" value="Dashboard" checked>
