@@ -18,13 +18,15 @@ class ChatMessage implements ShouldBroadcast
     public $message_id;
     public $message_by;
     public $create_date;
+    public $photo_path;
     /**
      * Create a new event instance.
      */
-    public function __construct($message, $message_id, $message_by, $create_date){
+    public function __construct($message, $message_id, $message_by, $create_date, $photo_path){
         $this->message = $message;
         $this->message_id = $message_id;
         $this->message_by = $message_by;
+        $this->photo_path = $photo_path;
         $this->create_date = $create_date;
     }
 

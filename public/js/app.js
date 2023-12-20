@@ -982,33 +982,27 @@ const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
   
   if(data.user_id == userId){
-    //document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
   }
 });
 
 channel.bind('accepted-invite', function(data) {
-    document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
 channel.bind('notification-coordinator', function(data) {
-  document.getElementById('new-notification').classList.add('show');
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
 channel.bind('notification-forum', function(data) {
-  document.getElementById('new-notification').classList.add('show');
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
 channel.bind('assigned-task', function(data) {
-  document.getElementById('new-notification').classList.add('show');
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
 channel.bind('notification-comment', function(data) {
-  document.getElementById('new-notification').classList.add('show');
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
@@ -1026,7 +1020,7 @@ let chatSection = document.querySelector('.chat-section');
   messageDiv.id = 'message-' + data.message_id;
 
   let userImage = document.createElement('img');
-  userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+  userImage.src = "../"+data.photo_path // falta mudar para a imagem do user
   userImage.className = 'user-image';
   userImage.alt = 'Gmail Image';
   messageDiv.appendChild(userImage);

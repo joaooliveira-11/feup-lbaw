@@ -27,16 +27,8 @@ class MessageController extends Controller {
 
         $message->save();
 
-        event(new ChatMessage($message->content, $message->message_id, Auth::user()->username, $message->create_date));
+        event(new ChatMessage($message->content, $message->message_id, Auth::user()->username, $message->create_date, Auth::user()->photo));
         event(new MessageForum());
-/*
-        return response()->json([
-            'message_id' => $message->message_id,
-            'message_content' => $message->content,
-            'message_create_date' => $message->create_date,
-            'message_message_by' => Auth::user()->username,
-        ]);
-*/
     }
 
     public function delete($id){
