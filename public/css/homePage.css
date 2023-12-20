@@ -85,6 +85,8 @@
 }
 
 .project-directory-title {
+    max-width: 65%;
+    overflow: hidden;
     color: #303030;
     font-size: 0.9vw;
     font-weight: 600;
@@ -127,6 +129,8 @@
 .project-progression-title {
     width: 40%;
     font-size: 1vw;
+    max-width: 75%;
+    overflow: hidden;
 }
 .project-progression-element {
     width: 25%;
@@ -164,4 +168,68 @@
     width: 38%;
     height: 33vh;
     background-color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+    #ProjectInfo {
+        max-width: 90%;
+    }
+    #home-page-wrapper {
+        margin-top: 7em;
+    }
+    .home-page-title {
+        text-align: center;
+        font-size: 3em;
+        margin-bottom: 0.4em;
+    }
+    .home-middle-section, .home-lower-section {
+        height: auto;
+        flex-direction: column;
+    }
+    .home-page-section-title {
+        font-size: 2.4em;
+    }
+    .project-directory {
+        width: 100%;
+        height: 30vh;
+    }
+    .project-directory-header  .home-button {
+        font-size: 1.6em;
+        height: fit-content;
+        border-radius: 0.5em;
+    }
+    .project-directory-item {
+        height: fit-content;
+        padding: 0.5em 0;
+    }
+    .project-directory-title {
+        font-size: 1.6em;
+    }
+    .project-directory-members {
+        font-size: 1.4em;
+    }
+    .upcoming-tasks {
+        height: 24vh;
+    }
+    .project-progression {
+        width: 100%;
+        height: 30vh;
+    }
+    .project-progression-title {
+        font-size: 1.4em;
+        color: #000;
+        font-weight: 600;
+        width: 36%;
+    }
+    .project-progression-element {
+        font-size: 1.3em;
+        width: fit-content;
+    }
+    .project-directory-progress p {
+        font-size: 1.2em;
+    }
+    .home-page-tasks {
+        width: 100%;
+        height: 24vh;
+    }
 }

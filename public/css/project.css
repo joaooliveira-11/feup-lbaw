@@ -30,7 +30,6 @@ header {
 }
 
 #MainContent {
-    padding-left: 2vw; 
     width: 80vw;
 
 }
@@ -59,12 +58,19 @@ header {
     justify-content: space-between;
 }
 
+#Sidebar.gap-sidebar {
+    justify-content: initial;
+    gap: 6em;
+}
+
 .sidebar-project-title {
     font-size: 1.6vw;
     margin-bottom: 1.2vw;
     text-align: center;
     border-bottom: #000 solid 0.1vw;
     padding: 0.5vw;
+    word-wrap: break-word;
+    overflow: hidden;
 }
 
 #Sidebar p , #projectForm label{
@@ -133,12 +139,16 @@ header {
 
 
 /*----------------------------  Dasboard ----------------------------*/
-
-.dashboard-content {
+#Dashboard {
+    width: 100%;
+}
+#Dashboard .dashboard-content {
+    margin: 0;
     display: flex;
-    justify-content: space-between;
     padding-bottom: 1.4vw;
     border-bottom: 1px solid #303030;
+    overflow-wrap: break-word;
+    overflow: hidden;
 }
 
 .dashboard-left {
@@ -154,10 +164,12 @@ header {
 }
 
 #ProjectDescription {
+    width: 70%;
     font-size: 1vw;
     color: #303030;
     display: flex;
     align-items: baseline;
+    overflow-wrap: break-word;
 }
 
 .dashboard-project-title {
@@ -167,11 +179,14 @@ header {
 }
 
 #dashboard-project-content {
+    width: 100%;
     font-size: 1vw;
     color: #303030;
     font-weight: 500;
     margin-bottom: 0;
     margin-left: 0.5vw;
+    overflow-wrap: break-word;
+    overflow: hidden;
 }
 
 .dashboard-project-buttons {
@@ -228,7 +243,6 @@ header {
 
 /*----------------------------  Tasks ----------------------------*/
 
-
 #Tasks ul {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -283,8 +297,18 @@ header {
     height: 28.5vw;
     overflow-y: auto;
 }
+
 #tasks-container ul {
     padding-left: 0;
+}
+
+#tasks-container .TasksList li p {
+    overflow-wrap: break-word;
+    overflow: hidden;
+}
+
+#tasks-container p {
+    white-space: normal;
 }
 
 #status-filter {
@@ -454,6 +478,8 @@ header {
     color: #303030;
     font-size: 1vw;
     border-radius: 5px;
+    overflow-wrap: break-word;
+    overflow: hidden;
 }
 
 .message-content h6 {
@@ -559,10 +585,14 @@ header {
     }
     #Sidebar {
         width: 100%;
-        height: auto;
+        height: 24vh;
+    }
+    #Sidebar.gap-sidebar{
+        gap: 0;
     }
     .sidebar-project-title {
         font-size: 225%;
+        height: 6em;
     }
     #projectForm {
         display: grid;
@@ -580,7 +610,7 @@ header {
         margin-top: 0;
         margin-left: 1.4em;
         width: 35%;
-        height: 130%;
+        height: fit-content;
         align-items: center;
         font-size: 140%;
     }
@@ -628,7 +658,7 @@ header {
         font-size: 125%;
     }
     .chat-section {
-        height: 58vh;
+        height: 52vh;
     }
     .message-form textarea {
         font-size: 150%;
@@ -671,8 +701,9 @@ header {
         margin-right: 1em;
     }
     #tasks-container {
-        height: 100%;
+        height: 40vh;
         margin-top: 8em;
+        overflow-y: auto;
     }
     #Tasks ul {
         display: block;

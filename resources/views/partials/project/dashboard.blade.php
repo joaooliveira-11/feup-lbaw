@@ -1,6 +1,6 @@
 <div id="Dashboard" class="container selected">
     <div class="container dashboard-content">
-        <div class="col-5 dashboard-left">
+        <div class="dashboard-left">
             <div id="ProjectDeadline" class="container">
                 <h2 class="dashboard-project-title">Project Deadline:</h2>
                 <p id="dashboard-project-content">{{ $project->finish_date !== null ? $project->finish_date : 'Not defined' }}</p>
@@ -37,22 +37,24 @@
                 @endif
             </div>
         </div>
-        <div id="ProjectDescription" class="col-7">
+        <div id="ProjectDescription">
             <h2 class="dashboard-project-title">Description:</h2>
-            <p id="dashboard-project-content" class="row">{{ $project->description }}</p>
-            <div>
-                <span>Private</span>
-                <label class="switch" data-project-id="{{ $project->project_id }}">
-                    <input type="checkbox" id="visibilitySwitch" {{ !($project->is_public) ? 'checked' : '' }}>
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div>
-                <span>Archived</span>
-                <label class="switch" data-project-id="{{ $project->project_id }}">
-                    <input type="checkbox" id="statusSwitch" {{ $project->archived ? 'checked' : '' }}>
-                    <span class="slider"></span>
-                </label>
+            <p id="dashboard-project-content">{{ $project->description }}</p>
+            <div class="private-archived">
+                <div>
+                    <span>Private</span>
+                    <label class="switch" data-project-id="{{ $project->project_id }}">
+                        <input type="checkbox" id="visibilitySwitch" {{ !($project->is_public) ? 'checked' : '' }}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div>
+                    <span>Archived</span>
+                    <label class="switch" data-project-id="{{ $project->project_id }}">
+                        <input type="checkbox" id="statusSwitch" {{ $project->archived ? 'checked' : '' }}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
             </div>
         </div>
     </div>

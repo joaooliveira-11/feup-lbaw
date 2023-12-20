@@ -36,7 +36,7 @@
             <button type="button" class="btn btn-primary" id="assignUserButton">Assign User</button>
             @include('modal.assign_task', ['task' => $task])
         </div>
-        <div id="task-description">
+        <div id="task-description" class="container">
             <h5 class="row">Details</h5>
             <p>{{ $task->description }}</p>
         </div>
