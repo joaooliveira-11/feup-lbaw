@@ -38,9 +38,9 @@
             </div>
         </div>
         <div id="ProjectDescription">
-            <h2 class="col-2 dashboard-project-title">Description:</h2>
-            <p class="col-6" id="dashboard-project-content">{{ $project->description }}</p>
-            <div class="col-3 private-archived">
+            <h2 class="dashboard-project-title">Description:</h2>
+            <p id="dashboard-project-content">{{ $project->description }}</p>
+            <div class="private-archived">
                 <div>
                     <span>Private</span>
                     <label class="switch" data-project-id="{{ $project->project_id }}">

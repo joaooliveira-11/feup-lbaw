@@ -8,10 +8,12 @@
                     <h5 class="message-username">{{ $comment->commented_by->username }}</h5>
                     <p id="comment-content-{{ $comment->comment_id }}">{{ $comment->content }}</p>
                     <div class="comment-info-buttons">
-                        <h6>{{ $comment->create_date }}</h6>
-                        @if ($comment->edited == true)
-                            <h6>Edited</h6>
-                        @endif
+                        <div class="message-info-left">
+                            <h6>{{ $comment->create_date }}</h6>
+                            @if ($comment->edited == true)
+                                <h6 style="font-style: italic;">Edited</h6>
+                            @endif
+                        </div>
                         <div class="comment-buttons">
                             @if ($comment->comment_by == auth()->user()->id)
                                 <button type="button" class="comment-manage-button" id="EditCommentbtn">Edit</button>

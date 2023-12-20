@@ -141,7 +141,7 @@ header {
 /*----------------------------  Dasboard ----------------------------*/
 #Dashboard {
     margin-left: 0;
-    width: 93%;
+    max-width: 88%;
 }
 #Dashboard .dashboard-content {
     margin: 0;

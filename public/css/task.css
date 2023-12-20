@@ -133,12 +133,14 @@
 }
 
 #task-description p {
+    height: 20vh;
     color: #000;
     letter-spacing: 0.2px;
     font-size: 1vw;
     text-align: justify;
     overflow-wrap: break-word;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #comments {
@@ -203,6 +205,12 @@
 
 .comment-content {
     width: 70%;
+}
+
+.comment-info-left {
+    margin-top: 4px;
+    display: flex;
+    gap: 1em;
 }
 
 .comment-content p {
