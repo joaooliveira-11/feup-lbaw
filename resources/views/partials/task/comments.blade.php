@@ -3,7 +3,7 @@
         <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($task->comments as $comment)
             <div class="container comment" id="comment-{{ $comment->comment_id }}">
-                <img src="{{ url('/img/gmail.png') }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
+                <img src="{{ url($comment->commented_by->photo) }}" class="user-image" alt="Gmail Image"/> <!-- imagem do user -->
                 <div class="comment-content">
                     <h5 class="message-username">{{ $comment->commented_by->username }}</h5>
                     <p id="comment-content-{{ $comment->comment_id }}">{{ $comment->content }}</p>

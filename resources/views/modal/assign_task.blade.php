@@ -17,7 +17,7 @@
                         <div class="form-group">
                             @foreach($task->task_project->members() as $user)
                                 <div class="assign_task_member" data-id="{{ $user->id }}">
-                                    <img src="{{ url('/img/gmail.png') }}">
+                                    <img src="{{ url($user->photo) }}">
                                     <span>{{ $user->username }}</span>
                                 </div>
                             @endforeach

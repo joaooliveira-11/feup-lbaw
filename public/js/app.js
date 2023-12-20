@@ -488,9 +488,9 @@ fetch(url, {
   commentDiv.id = 'comment-' + data.comment_id;
 
   let userImage = document.createElement('img');
-  userImage.src = '/img/gmail.png'; // falta mudar para a imagem do user
+  userImage.src = data.comment_by_photo;
   userImage.className = 'user-image';
-  userImage.alt = 'Gmail Image';
+  userImage.alt = 'User Image';
   commentDiv.appendChild(userImage);
 
   let commentContentDiv = document.createElement('div');

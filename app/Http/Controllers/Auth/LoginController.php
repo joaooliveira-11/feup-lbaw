@@ -47,7 +47,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->route('show', ['id' => $user->id])
+            return redirect()->route('home')
                 ->withSuccess('You have successfully logged in!');
         }
         Alert::error('Error', 'Invalid credentials!');
