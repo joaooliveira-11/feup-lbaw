@@ -145,7 +145,7 @@ header {
 #Dashboard .dashboard-content {
     margin: 0;
     display: flex;
-    padding-bottom: 1.4vw;
+    padding-top: 1em;
     border-bottom: 1px solid #303030;
     overflow-wrap: break-word;
     overflow: hidden;
@@ -191,18 +191,21 @@ header {
 
 .dashboard-project-buttons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding-right: 1.6vw;
 }
 
 .dashboard-project-button {
+    margin-bottom: 1em;
     background-color: #303030;
     border-radius: 0.8vw;
     color: #fff;
     font-size: 0.7vw;
     font-weight: 600;
-    padding: 0.8vw;
-    width: 7.6vw;
+    padding: 1em;
+    width: 14em;
+    box-sizing: border-box;
     transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -625,11 +628,15 @@ header {
     }
     #dashboard-project-content {
         font-size: 350%;
+        width: fit-content;
     }
     .dashboard-project-buttons button {
         width: 35%;
         font-size: 125%;
         height: auto;
+    }
+    #favorite-btn i{
+        font-size: 4em;
     }
     #ProjectDescription {
         flex-direction: column;

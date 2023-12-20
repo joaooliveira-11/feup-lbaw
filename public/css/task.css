@@ -110,9 +110,10 @@
 #task-details .task-details-buttons .task-details-button {
     margin: 0;
     background-color: #303030;
-    width: 11vw;
+    width: 11em;
+    font-size: 1.3em;
+    padding: 0;
     color: #FFF;
-    font-size: 0.8vw;
     border: none;
     border-radius: 6px;
 }
@@ -120,6 +121,8 @@
 #task-description {
     margin-top: 1.8vw;
     width: 90%;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 #task-description h5 {
@@ -266,8 +269,20 @@
     .task-info-span {
         font-size: 100%;
     }
+    .task-details-buttons {
+        width: 100%;
+        justify-content: space-around;
+    }
     #task-details h5 {
         font-size: 200%;
+    }
+    #task-details .task-details-buttons .task-details-button  {
+        font-size: 1.4em;
+        font-weight: 600;
+        height: fit-content;
+        width: fit-content;
+        padding: 0.8em;
+        border-radius: 0.5em;
     }
     #assignUserButton {
         font-size: 1.5em;
