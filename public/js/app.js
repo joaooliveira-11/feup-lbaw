@@ -714,6 +714,14 @@ function dismiss_notification(notificationId) {
 console.log(notificationId);
 sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
   if (this.status >= 200 && this.status < 400) {
+    const prev_number = document.getElementById('noti-number').textContent;
+    if(prev_number == 1){
+      document.getElementById('noti-number').textContent = '';
+      document.getElementById('noti-number').classList.add('hide');
+    }else {
+      document.getElementById('noti-number').textContent = prev_number - 1;
+    }
+  
     let notificationElement = document.getElementById('n'+notificationId);
     notificationElement.style.transition = "transform 0.5s ease-out";
     notificationElement.style.transform = "translateX(100%)";
@@ -980,7 +988,7 @@ const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
   
   if(data.user_id == userId){
-    document.getElementById('new-notification').classList.add('show');
+    //document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
   }
 });
@@ -1091,9 +1099,12 @@ function handleRefreshNotifications() {
     if(this.status >= 200 && this.status < 400) {
       var data = JSON.parse(this.response);
       document.getElementById('notifications-list').innerHTML = "";
-      console.log(data);
+      
+      let new_notis = 0;
+
       data.notifications.forEach(notification => {
         if(!notification.viewed){
+        new_notis++;
         const li = document.createElement('li');
         li.classList.add('notification');
         li.classList.add(notification.type+"-notification");
@@ -1227,6 +1238,11 @@ function handleRefreshNotifications() {
 
         document.getElementById('notifications-list').appendChild(li);
          } });
+
+         if(new_notis > 0){
+          document.getElementById('noti-number').classList.remove('hide');
+          document.getElementById('noti-number').textContent = new_notis;
+        }
     }
 }
 
