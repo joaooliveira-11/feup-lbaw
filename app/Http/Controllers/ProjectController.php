@@ -102,19 +102,17 @@ class ProjectController extends Controller {
         $invite = Invite::find($request->get('reference_id'));
         $project = Project::find($invite->project_invite);
         $member = User::find($request->get('member_id'));
-        //event (new AcceptedProjectInvite());
-/*
+
         $newnotification = new Notification;
         $newnotification->create_date = now();
         $newnotification->emited_by = 1;
         $newnotification->emited_to = $project->project_coordinator;
         $newnotification->viewed = false;
         $newnotification->type = 'acceptedinvite';
-        //$newnotification->date = now();
         $newnotification->reference_id = $project->project_id;
 
         $newnotification->save();
-*/
+
         $newmember = new Project_Users;
         $newmember->project_id = $project->project_id;
         $newmember->user_id = $member->id;
@@ -126,9 +124,6 @@ class ProjectController extends Controller {
 
 
         return response()->json([
-            'project' => $project,
-            'member' => $member,
-            'members' => $project->members(), 
             'success' => 'Member added successfully!',
         ]);
         
