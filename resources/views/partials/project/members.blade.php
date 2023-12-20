@@ -18,7 +18,13 @@
                 @if($user->id != $project->project_coordinator)
                     <a href="{{ route('show', ['id' => $user->id]) }}" class="container">
                         <li class="row project-member">
-                        <p id="user{{ $user->id}}" class="user-id @if ( $user->id == $project->project_coordinator)coordinator-kick @endif" >{{ $user->name }} - <em>{{ '@' . $user->username }}</em> </p>
+                        <p id="user{{ $user->id}}" class= "user-id @if ( $user->id == $project->project_coordinator)coordinator-kick @endif" >{{ $user->name }} - <em>{{ '@' . $user->username }}</em> 
+                        @if (Auth::user()->id == $project->project_coordinator)
+                            <button class="kick-member" ><i class="fa-solid fa-user-xmark"></i></button>
+                            </p>
+                        @else
+                        </p>
+                        @endif
                         </li>
                     </a>
                 @endif

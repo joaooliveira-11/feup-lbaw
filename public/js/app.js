@@ -95,11 +95,9 @@ function addEventListeners() {
           const pathParts = urlPath.split('/');
           const projectId = pathParts[pathParts.length - 1];
           const memberId = document.querySelectorAll('.user-id')[i].id.substring(4);
-          const coordinatorId = document.querySelector('.coordinator-kick').id.substring(4);
           console.log("Project: "+projectId);
           console.log("Member: "+memberId);
-          console.log("Coordinator: "+coordinatorId);
-          kickFromProject(memberId, projectId, coordinatorId);
+          kickFromProject(memberId, projectId);
         }
       });
     });
@@ -768,16 +766,12 @@ if(is_coordinator != null){
 }
 }
 
-function kickFromProject(memberId, projectId, coordinatorId){
-if(memberId == coordinatorId){
-  assignCoordinator(projectId);
-}else{
+function kickFromProject(memberId, projectId){
   sendAjaxRequest('DELETE', '/kickMember/'+memberId+'/'+projectId, {}, function() {
     if (this.status >= 200 && this.status < 400) {
       location.reload();
     }
   });
-}
 }
 
 function assignCoordinator(projectId){
