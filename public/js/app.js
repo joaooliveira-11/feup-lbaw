@@ -107,8 +107,20 @@ function addEventListeners() {
     closeButton.addEventListener('click', closeNotifications);
   }
 
+  ddocument.getElementById('userSearchInput').addEventListener('input', function() {
+    var searchTerm = this.value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/search-users?search=' + encodeURIComponent(searchTerm), true);
+    xhr.onload = function() {
+        if (this.status == 200) {
+            var users = JSON.parse(this.responseText);
+            updateUserTable(users);
+        }
+    };
+    xhr.send();
+  });
+
   setupRadioButtons();
-  
 } 
 
 function encodeForAjax(data) {
@@ -1214,3 +1226,16 @@ function closeNotifications() {
   var notificationsDropdown = document.getElementById('notifications-dropdown');
   notificationsDropdown.style.display = 'none';
 }
+
+function updateUserTable(users) {
+  var tableBody = document.getElementById('userTableBody');
+  tableBody.innerHTML = '';
+  users.forEach(function(user) {
+      var row = document.createElement('tr');
+      row.innerHTML = '<td>' + user.id + '</td>' +
+                      '<td>' + user.name + '</td>' +
+                      '<td>' + user.email + '</td>';
+      tableBody.appendChild(row);
+  });
+}
+

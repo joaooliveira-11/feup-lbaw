@@ -7,10 +7,12 @@
         <div class="col-md-8 mx-auto mt-6">
             <h4 class="mb-3">Search Users:</h4>
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search for users...">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Search</button>
-                </div>
+                <form id="userSearchForm">
+                    <input type="text" id="userSearchInput" class="form-control" placeholder="Search for users...">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="userSearchButton">Search</button>
+                    </div>
+                </form>
             </div>
 
             <table class="table table-hover table-bordered custom-table">
@@ -21,7 +23,7 @@
                         <th>Email</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="userTableBody">
                     @foreach($users as $user)
                         <tr onclick="window.location='{{ url('/profile/' . $user->id) }}';" style="cursor:pointer;">
                             <td>{{ $user->id }}</td>
