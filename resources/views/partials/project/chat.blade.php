@@ -8,10 +8,12 @@
                     <h5 class="message-username">{{ $message->messaged_by->username }}</h5>
                     <p id="message-content-{{ $message->message_id }}">{{ $message->content }}</p>
                     <div class="message-info-buttons">
-                        <h6>{{ $message->create_date }}</h6>
-                        @if ($message->edited == true)
-                            <p>Edited</p>
-                        @endif
+                        <div class="message-info-left">
+                            <h6>{{ $message->create_date }}</h6>
+                            @if ($message->edited == true)
+                                <h6 style="font-style: italic;">Edited</h6>
+                            @endif
+                        </div>
                         <div class="message-buttons">
                             @if ($message->message_by == auth()->user()->id)
                                 <button type="button" class="message-manage-button"id="EditMessagebtn">Edit</button>

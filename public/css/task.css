@@ -104,19 +104,22 @@
     margin-top: 2vw;
     width: 24vw;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2em;
 }
 
 #task-details .task-details-buttons .task-details-button {
     margin: 0;
     background-color: #303030;
-    width: 11em;
+    width: 44%;
     font-size: 1.3em;
-    padding: 0;
+    padding: 0.5em;
     color: #FFF;
     border: none;
     border-radius: 6px;
 }
+
 
 #task-description {
     margin-top: 1.8vw;

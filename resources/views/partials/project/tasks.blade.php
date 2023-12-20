@@ -37,7 +37,7 @@
             </ul>
         </div>
         @else
-            <p>No tasks found for this project.</p>
+            <p style="color: #000;">No tasks found for this project.</p>
         @endif
     </div>
 </div>
