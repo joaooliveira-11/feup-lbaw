@@ -22,7 +22,7 @@
                     <img src="{{ asset(Auth::user()->photo) }}" alt="User Profile" >
                 </div>
             </a>
-            <button id="notifications-button"><i class="fa-solid fa-bell"></i><span id="new-notification"></span></button>
+            <button id="notifications-button"><i class="fa-solid fa-bell"><div id = "noti-number" @if($notifications->count() != 0) >  {{$notifications->count()}} </div>@else class = "hide" ></div> @endif </i></button>
             <a class="navbar-logout-button" href="{{ url('/logout') }}">
                 <i class="fa fa-sign-out-alt"></i>
             </a>       
@@ -47,15 +47,15 @@
                                     <button class = "notification-deny" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-ban"></i></button>
                             </li>
                             @break
-                        @case('comment')
+                        @case('coordinator')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
-                                    <p class="notification-text">You have a new comment on the task.</p>
+                                    <p class="notification-text">There as been a change of coordinator in the project</p>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break
-                        @case('task')
+                        @case('comment')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
-                                    <p class="notification-text">You have a new task in the project.</p>
+                                    <p class="notification-text">You have a new comment on the task.</p>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break

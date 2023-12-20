@@ -573,30 +573,16 @@ fetch(url, {
 }
 
 function handleAddMember(modalId, event) {
-console.log("handleAddMember");
-event.preventDefault();
-let url = this.getAttribute('action');
-let formData = new FormData(this);
-let csrf = document.querySelector("input[name='_token']").content;
-
-
-console.log("URL:", url);
-for (var pair of formData.entries()) {
-  console.log(pair[0]+ ', ' + pair[1]); 
-}
-fetch(url, {
-  method: 'POST',
-  body: formData,
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest', // This is to let Laravel know this is an AJAX request
-    'X-CSRF-TOKEN': csrf,
-  },
-})
-.then(response => response.json())
-.then(data => {
-  let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
-  modal.hide();
-})
+  event.preventDefault();
+  let url = this.getAttribute('action');
+  let formData = new FormData(this);
+  sendAjaxRequest('POST', url, {project_id: formData.get('project_id'),  member_id: formData.get('member_id')}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      let modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+      modal.hide();
+      location.reload();
+    }
+  });
 }
 
 function isTaskFormValid() {
@@ -728,6 +714,14 @@ function dismiss_notification(notificationId) {
 console.log(notificationId);
 sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
   if (this.status >= 200 && this.status < 400) {
+    const prev_number = document.getElementById('noti-number').textContent;
+    if(prev_number == 1){
+      document.getElementById('noti-number').textContent = '';
+      document.getElementById('noti-number').classList.add('hide');
+    }else {
+      document.getElementById('noti-number').textContent = prev_number - 1;
+    }
+  
     let notificationElement = document.getElementById('n'+notificationId);
     notificationElement.style.transition = "transform 0.5s ease-out";
     notificationElement.style.transform = "translateX(100%)";
@@ -994,7 +988,7 @@ const channel = pusher.subscribe('notifications');
 channel.bind('notification-invite', function(data) {
   
   if(data.user_id == userId){
-    document.getElementById('new-notification').classList.add('show');
+    //document.getElementById('new-notification').classList.add('show');
     sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);
   }
 });
@@ -1010,6 +1004,11 @@ channel.bind('notification-coordinator', function(data) {
 });
 
 channel.bind('notification-forum', function(data) {
+  document.getElementById('new-notification').classList.add('show');
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
+channel.bind('assigned-task', function(data) {
   document.getElementById('new-notification').classList.add('show');
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
@@ -1100,9 +1099,12 @@ function handleRefreshNotifications() {
     if(this.status >= 200 && this.status < 400) {
       var data = JSON.parse(this.response);
       document.getElementById('notifications-list').innerHTML = "";
-      console.log(data);
+      
+      let new_notis = 0;
+
       data.notifications.forEach(notification => {
         if(!notification.viewed){
+        new_notis++;
         const li = document.createElement('li');
         li.classList.add('notification');
         li.classList.add(notification.type+"-notification");
@@ -1236,6 +1238,11 @@ function handleRefreshNotifications() {
 
         document.getElementById('notifications-list').appendChild(li);
          } });
+
+         if(new_notis > 0){
+          document.getElementById('noti-number').classList.remove('hide');
+          document.getElementById('noti-number').textContent = new_notis;
+        }
     }
 }
 
@@ -1244,7 +1251,7 @@ function handleLeaveProjectClick(event) {
 event.preventDefault();
 Swal.fire({
     title: "Are you sure?",
-    text: "Once left, you will not be able to rejoin the project!",
+    text: "You are leaving this project!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: '#3085d6',

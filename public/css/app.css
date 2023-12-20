@@ -7,3 +7,21 @@ body {
 * {
     font-family: 'Roboto', sans-serif;
 }
+
+.btn.btn-success {
+    background-color: #543CE7;
+
+}
+
+.btn.btn-success:hover {
+    background-color: #543CE7;
+}
+
+.close {
+    background-color: #543CE7;
+}
+
+.close:hover {
+    background-color: #543CE7;
+
+}
