@@ -1,4 +1,4 @@
-<div id="Sidebar" class="container">
+<div id="Sidebar" class="container @if(!$project->is_member(auth()->user()))gap-sidebar @endif">
     <h1 class="sidebar-project-title">{{ $project->title }}</h1> 
     <form id="projectForm" class="row">
         <label for="dashboard" class="selected dashboard-element">

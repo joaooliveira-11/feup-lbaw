@@ -85,6 +85,8 @@
 }
 
 .project-directory-title {
+    max-width: 65%;
+    overflow: hidden;
     color: #303030;
     font-size: 0.9vw;
     font-weight: 600;
@@ -127,6 +129,8 @@
 .project-progression-title {
     width: 40%;
     font-size: 1vw;
+    max-width: 75%;
+    overflow: hidden;
 }
 .project-progression-element {
     width: 25%;
