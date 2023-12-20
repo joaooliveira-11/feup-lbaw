@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Project_Users;
 use App\Models\Interest;
 use App\Models\Skill;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
     public function __construct(){
@@ -63,10 +64,9 @@ class UserController extends Controller {
             'allInterests' => $allInterests,
             'allSkills' => $allSkills
         ]);
-    }  
+    }
 
 
-    
     /**
      * Update a profile.
      */
@@ -75,15 +75,29 @@ class UserController extends Controller {
         $user = Auth::user();
         $request->validate([
             'name' => 'required|string|max:25',
-            'username' => 'required|string|max:12',
-            'email' => 'required|email|max:250|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:8|confirmed'
+            'username' => 'required|string|max:12|unique:users,username,' . $user->id,
+            'email' => 'required|email|max:20|unique:users,email,' . $user->id,
+        ]);
+
+        if ($request->current_password && !Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'The provided password does not match our records.']);
+        }
+
+        $request->validate([
+            'current_password' => ['nullable', 'required_with:new_password,new_password_confirmation'],
+            'new_password' => ['nullable', 'required_with:current_password,new_password_confirmation', 'confirmed', 'min:8'],
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->username = $request->username;
         $user->description = $request->description;
+
+        if ($request->new_password) {
+            $user->password = Hash::make($request->new_password);
+        }
+
+        
         $user->save();
         
         $user->interests()->sync( $request->interests);
