@@ -221,9 +221,10 @@
 
 .edit-icon-label {
     cursor: pointer;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    position: relative;
+    bottom: 8rem;
+    left: 3rem;
+    transform: translate(50%, 50%);
 }
 
 .edit-icon-circle {
@@ -236,7 +237,6 @@
     justify-content: center;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); 
 }
-
 
 #edit-page-content {
     width: 60%;

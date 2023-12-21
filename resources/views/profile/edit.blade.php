@@ -27,25 +27,28 @@
 
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="4" cols="50">{{ old('description', $user->description) }}</textarea>
-
-            <label for="current_password">Current Password:</label>
-            <input type="password" id="current_password" name="current_password">
-            @if($errors->has('current_password'))
-                <div class="error">{{ $errors->first('current_password') }}</div>
-            @endif
-
-            <label for="new_password">New Password:</label>
-            <input type="password" id="new_password" name="new_password">
-            @if($errors->has('new_password'))
-                <div class="error">{{ $errors->first('new_password') }}</div>
-            @endif
-
-            <label for="new_password_confirmation">Confirm New Password:</label>
-            <input type="password" id="new_password_confirmation" name="new_password_confirmation">
-            @if($errors->has('new_password_confirmation'))
-                <div class="error">{{ $errors->first('new_password_confirmation') }}</div>
-            @endif
             
+            
+            @if(Auth::check() && !Auth::user()->isAdmin())
+                <label for="current_password">Current Password:</label>
+                <input type="password" id="current_password" name="current_password">
+                @if($errors->has('current_password'))
+                    <div class="error">{{ $errors->first('current_password') }}</div>
+                @endif
+
+                <label for="new_password">New Password:</label>
+                <input type="password" id="new_password" name="new_password">
+                @if($errors->has('new_password'))
+                    <div class="error">{{ $errors->first('new_password') }}</div>
+                @endif
+
+                <label for="new_password_confirmation">Confirm New Password:</label>
+                <input type="password" id="new_password_confirmation" name="new_password_confirmation">
+                @if($errors->has('new_password_confirmation'))
+                    <div class="error">{{ $errors->first('new_password_confirmation') }}</div>
+                @endif
+            @endif
+
             <div id="interests">
                 <label>Interests:</label>
                 <div id="interests-list">
