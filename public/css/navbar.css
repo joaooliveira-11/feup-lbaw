@@ -302,13 +302,14 @@ button.invite-accept:hover{
         border-top: 1px solid #fff;
     }
     .hamnavbar label {
-        display: inline-block;
+        display: none;
         color: white;
-        background: #a02620;
+        background: #4248ab;
         font-style: normal;
         font-size: 1.2em;
         padding: 10px;
     }
+
     .navbar-list-ul { 
         display: none; 
         width: 100%;
@@ -319,4 +320,13 @@ button.invite-accept:hover{
     .navbar-login-button, .navbar-separator, .navbar-register-button {
         font-size: 2vw;
     }
+
+    .hamnavbar label {
+        display: block;
+    }
+
+    .navbar-list-ul {
+        display: none;
+    }
+
 }

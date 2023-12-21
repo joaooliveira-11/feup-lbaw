@@ -15,14 +15,22 @@ class CommentPolicy{
         $task = Task::find($comment->task_comment);
         $project = Project::find($task->project_task);
 
-        return (($project->is_member($user) || $project->is_coordinator($user)) && !($task->is_archived()) && $task->is_assigned());
+        return $project->is_member($user) && !($task->is_archived() || $project->archived);
     }
     
     public function delete(User $user, Comment $comment) : bool {
         $task = Task::find($comment->task_comment);
         $project = Project::find($task->project_task);
 
-        return ($project->is_member($user)  && !($task->is_archived()) && $comment->comment_by == $user->id);
+        return ($project->is_member($user)  && !($task->is_archived() || $project->archived) && $comment->comment_by == $user->id);
     }
 
+    public function edit(User $user, Comment $comment) : bool {
+        $task = Task::find($comment->task_comment);
+        $project = Project::find($task->project_task);
+
+        return ($project->is_member($user)  && !($task->is_archived() || $project->archived) && $comment->comment_by == $user->id);
+    }
+    
 }
+

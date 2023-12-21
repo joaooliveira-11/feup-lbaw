@@ -143,35 +143,50 @@ class UserController extends Controller {
 
     public function deleteUser(int $id) {
         $user = User::find($id);
-
-        Project_Users::where('user_id', $user->id)
-        ->delete();
-
+    
+        if (!$user) {
+            return back()->withError('User not found!');
+        }
+    
+        Project_Users::where('user_id', $user->id)->delete();
         $user->skills()->detach();
         $user->interests()->detach();
-
-
-        $deletedName = 'deletedUser' . $user->id;
-        $deletedUsername = 'deletedUser_' . $user->id;
-        $deletedEmail = 'deletedUser_' . $user->id . '@email.com';
-        $deletedDescription = 'This user has been deleted';
-       
-       
+    
         $currentImage = public_path('profilePics/') . $user->photo;
         if (file_exists($currentImage)) {
             unlink($currentImage);
         }
-        
-
+    
+        $deletedName = 'deletedUser' . $user->id;
+        $deletedUsername = 'deletedUser_' . $user->id;
+        $deletedEmail = 'deletedUser_' . $user->id . '@email.com';
+        $deletedDescription = 'This user has been deleted';
+    
         $user->name = $deletedName;
         $user->username = $deletedUsername;
         $user->email = $deletedEmail;
         $user->description = $deletedDescription;
         $user->photo = 'profilePics/user_default.jpg';
-
         $user->save();
-
-        return redirect()->back();
+    
+        if (Auth::check() && Auth::user()->id === $user->id) {
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+            return redirect('/')->withSuccess('Your account has been successfully deleted.');
+        }
+    
+        return redirect()->back()->withSuccess('The account has been successfully deleted.');
+    }
+    
+    public function search(Request $request){
+        $search = $request->get('search');
+        $users = User::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+            ->orWhere('name', 'ilike', '%' . $search . '%')
+            ->orWhere('username', 'ilike', '%' . $search . '%')
+            ->orWhere('email', 'ilike', '%' . $search . '%')
+            ->get();
+        return response()->json($users);
     }
     
 }

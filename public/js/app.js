@@ -53,7 +53,6 @@ function addEventListeners() {
 
   document.getElementById("notifications-button").addEventListener("click", function(event) {
     document.getElementById("notifications-dropdown").classList.toggle("hide");
-    document.getElementById("new-notification").classList.remove("show");
   });
   
 
@@ -75,6 +74,11 @@ function addEventListeners() {
   let completetaskbtn = document.getElementById('completetaskbtn');
   if(completetaskbtn){
     completetaskbtn.addEventListener('click', handleCompleteTask);
+  }
+
+  let archivetaskbtn = document.getElementById('archivetaskbtn');
+  if(archivetaskbtn){
+    archivetaskbtn.addEventListener('click', handleArchiveTask);
   }
 
   //kick members as coordinator
@@ -111,8 +115,21 @@ function addEventListeners() {
     closeButton.addEventListener('click', closeNotifications);
   }
 
+  if(document.getElementById('userSearchInput')){
+      document.getElementById('userSearchInput').addEventListener('input', function() {
+        sendAjaxRequest('GET', '/search-users?search=' + this.value, {}, handleSearchUser);
+    });
+  }
+  document.addEventListener("DOMContentLoaded", function() {
+    var hamburger = document.getElementById('hamburger');
+    var menu = document.querySelector('.navbar-list-ul');
+
+    hamburger.addEventListener('click', function() {
+        menu.classList.toggle('navbar-active');
+    });
+  });
+
   setupRadioButtons();
-  
 } 
 
 function encodeForAjax(data) {
@@ -184,6 +201,23 @@ if (this.status >= 200 && this.status < 400) {
   }
   ul.innerHTML = '';
 
+  if(data.length == 0){
+    if(document.querySelector('.no-tasks') == null){
+    const tasksContainer = document.getElementById('tasks-container');
+    const div = document.createElement('div');
+    div.classList.add('task-content');
+    div.classList.add('no-tasks');
+    div.textContent = "No tasks found";
+    tasksContainer.appendChild(div);
+    }
+  }
+  else{
+    const noTasksDiv = document.querySelector('.no-tasks');
+    if (noTasksDiv) {
+        noTasksDiv.remove();
+    }
+  }
+
   data.forEach(task => {
       var li = document.createElement('li');
       li.classList.add('task-item');
@@ -227,7 +261,6 @@ else {
 
 function handleSearchProject() {
 
-  console.log(this.response)
   if (this.status >= 200 && this.status < 400) {
     var data = JSON.parse(this.response);
     var container = document.querySelector('#projects-container');
@@ -238,6 +271,23 @@ function handleSearchProject() {
         container.appendChild(ul);
     }
     ul.innerHTML = ''; 
+
+    if(data.projects.length == 0){
+      if(document.querySelector('.no-projects') == null){
+      const div = document.createElement('div');
+      div.classList.add('no-projects');
+      div.textContent = "No projects found";
+      ul.before(div);
+      document.querySelector('.pagination-container').style.display = 'none';
+      }
+  }else{
+      const noProjectsDiv = document.querySelector('.no-projects');
+      if (noProjectsDiv) {
+          noProjectsDiv.remove();
+          document.querySelector('.pagination-container').style.display = 'block';
+      }
+  }
+
     data.projects.forEach(project => {
         var li = document.createElement('li');
         li.classList.add('project-item');
@@ -325,6 +375,51 @@ function handleSearchProject() {
 }
 }
 
+function handleSearchUser() {
+  if (this.status >= 200 && this.status < 400) {
+    const data = JSON.parse(this.response);
+    const container = document.querySelector('#userTableBody');
+    container.innerHTML = '';
+
+    if(data.length == 0){
+      if(document.querySelector('.no-users') == null){
+      const div = document.createElement('div');
+      div.classList.add('no-users');
+      div.textContent = "No users found";
+      container.before(div);
+      }
+    }
+       else {
+        const noUsersDiv = document.querySelector('.no-users');
+        if (noUsersDiv) {
+            noUsersDiv.remove();
+        }
+      }
+
+
+    data.forEach(user => {
+      const tr = document.createElement('tr');
+      tr.onclick = function() {
+        window.location.href = '/profile/' + user.id;
+      }
+      const id = document.createElement('td');
+      id.textContent = user.id;
+
+      const name = document.createElement('td');
+      name.textContent = user.name;
+
+      const email = document.createElement('td');
+      email.textContent = user.email;
+
+      tr.appendChild(id);
+      tr.appendChild(name);
+      tr.appendChild(email);
+
+      container.appendChild(tr);
+    });
+  }
+}
+
 function setupRadioButtons() {
 const radios = document.querySelectorAll('#projectForm input[type="radio"]');
 
@@ -388,22 +483,30 @@ fetch(url, {
   modal.hide();
   
   let titleNode = document.createTextNode(data.task_title);
-  let finishDate = new Date(data.task_finish_date);
-  let formattedFinishDate = finishDate.getFullYear() + '-' +
-    String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
-    String(finishDate.getDate()).padStart(2, '0') + ' ' +
-    String(finishDate.getHours()).padStart(2, '0') + ':' +
-    String(finishDate.getMinutes()).padStart(2, '0') + ':' +
-    String(finishDate.getSeconds()).padStart(2, '0');
-    let finishDateNode = document.createTextNode(formattedFinishDate);
-    let priorityNode = document.createTextNode(data.task_priority);
+  if(data.task_finish_date){
+    let finishDate = new Date(data.task_finish_date);
+    let formattedFinishDate = finishDate.getFullYear() + '-' +
+      String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
+      String(finishDate.getDate()).padStart(2, '0') + ' ' +
+      String(finishDate.getHours()).padStart(2, '0') + ':' +
+      String(finishDate.getMinutes()).padStart(2, '0') + ':' +
+      String(finishDate.getSeconds()).padStart(2, '0');
+      let finishDateNode = document.createTextNode(formattedFinishDate);
+      let finishDateElement = document.getElementById('task-details-finish_date');
+      finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
+  }
+  else{
+    let finishDateNode = document.createTextNode('Not defined');
+    let finishDateElement = document.getElementById('task-details-finish_date');
+    finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
+  }
+
+  let priorityNode = document.createTextNode(data.task_priority);
 
   let titleElement = document.getElementById('task-details-title');
-  let finishDateElement = document.getElementById('task-details-finish_date');
   let priorityElement = document.getElementById('task-details-priority');
 
   titleElement.parentNode.replaceChild(titleNode, titleElement.nextSibling);
-  finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
   priorityElement.parentNode.replaceChild(priorityNode, priorityElement.nextSibling);
   
   document.querySelector('#task-description p').textContent = data.task_description;
@@ -451,6 +554,10 @@ fetch(url, {
 
       let finishDateElement = document.querySelector('#ProjectDeadline #dashboard-project-content');
       finishDateElement.textContent = formattedFinishDate;
+  }
+  else{
+    let finishDateElement = document.querySelector('#ProjectDeadline #dashboard-project-content');
+    finishDateElement.textContent = 'Not defined';
   }
 
   let titleElement = document.querySelector('.sidebar-project-title');
@@ -510,6 +617,9 @@ fetch(url, {
   let commentInfoButtonsDiv = document.createElement('div');
   commentInfoButtonsDiv.className = 'comment-info-buttons';
 
+  let messageInfoLeftDiv = document.createElement('div');
+  messageInfoLeftDiv.className = 'message-info-left';
+
   let createDate = new Date(data.comment_create_date);
   let formattedCreateDate = createDate.getFullYear() + '-' +
   String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
@@ -520,7 +630,9 @@ fetch(url, {
 
   let createDateH6 = document.createElement('h6');
   createDateH6.textContent = formattedCreateDate;
-  commentInfoButtonsDiv.appendChild(createDateH6);
+  messageInfoLeftDiv.appendChild(createDateH6);
+
+  commentInfoButtonsDiv.appendChild(messageInfoLeftDiv);
 
   let commentButtonsDiv = document.createElement('div');
   commentButtonsDiv.className = 'comment-buttons';
@@ -898,6 +1010,19 @@ function EditMessage(event, buttonId, itemClass, editUrl) {
     })
     .then(data => {
       document.getElementById('message-content-' + messageId).innerText = data.message_content;
+      let messageInfoButtonsDiv = messageDiv.querySelector('.message-info-buttons');
+      let messageInfoLeftDiv = messageInfoButtonsDiv.querySelector('.message-info-left');
+  
+      if (data.edited) {
+        let existingEditedElement = messageInfoLeftDiv.querySelector('h6[style="font-style: italic;"]');
+        if (!existingEditedElement) {
+          let editedElement = document.createElement('h6');
+          editedElement.style.fontStyle = 'italic';
+          editedElement.innerText = 'Edited';
+          messageInfoLeftDiv.appendChild(editedElement);
+        }
+      }
+
       editForm.elements['content'].value = '';
       editForm.action = '';
       createForm.classList.remove('hide-message-form');
@@ -947,6 +1072,18 @@ function EditComment(event, buttonId, itemClass, editUrl) {
     })
     .then(data => {
       document.getElementById('comment-content-' + commentId).innerText = data.comment_content;
+      let commentInfoButtonsDiv = commentDiv.querySelector('.comment-info-buttons');
+      let messageInfoLeftDiv = commentInfoButtonsDiv.querySelector('.message-info-left');
+  
+      if (data.edited) {
+        let existingEditedElement = messageInfoLeftDiv.querySelector('h6[style="font-style: italic;"]');
+        if (!existingEditedElement) {
+          let editedElement = document.createElement('h6');
+          editedElement.style.fontStyle = 'italic';
+          editedElement.innerText = 'Edited';
+          messageInfoLeftDiv.appendChild(editedElement);
+        }
+      }
       editForm.elements['content'].value = '';
       editForm.action = '';
       createForm.classList.remove('hide-message-form');
@@ -1012,6 +1149,10 @@ channel.bind('notification-comment', function(data) {
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
+channel.bind('notification-archived', function(data) {
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
 
 //chat channel
 const chatChannel = pusher.subscribe('chat');
@@ -1026,7 +1167,7 @@ let chatSection = document.querySelector('.chat-section');
   messageDiv.id = 'message-' + data.message_id;
 
   let userImage = document.createElement('img');
-  userImage.src = "../"+data.photo_path // falta mudar para a imagem do user
+  userImage.src = "../"+data.photo_path
   userImage.className = 'user-image';
   userImage.alt = 'Gmail Image';
   messageDiv.appendChild(userImage);
@@ -1047,6 +1188,9 @@ let chatSection = document.querySelector('.chat-section');
   let messageInfoButtonsDiv = document.createElement('div');
   messageInfoButtonsDiv.className = 'message-info-buttons';
 
+  let messageInfoLeftDiv = document.createElement('div');
+  messageInfoLeftDiv.className = 'message-info-left';
+
   let createDate = new Date(data.create_date);
   let formattedCreateDate = createDate.getFullYear() + '-' +
   String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
@@ -1057,7 +1201,9 @@ let chatSection = document.querySelector('.chat-section');
 
   let createDateH6 = document.createElement('h6');
   createDateH6.textContent = formattedCreateDate;
-  messageInfoButtonsDiv.appendChild(createDateH6);
+  messageInfoLeftDiv.appendChild(createDateH6);
+
+  messageInfoButtonsDiv.appendChild(messageInfoLeftDiv);
 
   let messageButtonsDiv = document.createElement('div');
   messageButtonsDiv.className = 'message-buttons';
@@ -1149,7 +1295,22 @@ function handleRefreshNotifications() {
 
               dismiss.appendChild(icondismiss);
 
+              const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/project/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
               li.appendChild(description_coordinator);
+              li.appendChild(reference);
               li.appendChild(dismiss);
           }else if(notification.type == "coordinator") {
               let description_coordinator = document.createElement('p');
@@ -1167,7 +1328,23 @@ function handleRefreshNotifications() {
 
               dismiss.appendChild(icondismiss);
 
+              const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/project/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
+
               li.appendChild(description_coordinator);
+              li.appendChild(reference);
               li.appendChild(dismiss);
           } else if(notification.type == "forum") {
             let description_coordinator = document.createElement('p');
@@ -1185,7 +1362,22 @@ function handleRefreshNotifications() {
 
             dismiss.appendChild(icondismiss);
 
+            const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/project/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
             li.appendChild(description_coordinator);
+            li.appendChild(reference);
             li.appendChild(dismiss);
         } else if(notification.type === "comment") {
           let description_accepted = document.createElement('p');
@@ -1203,7 +1395,22 @@ function handleRefreshNotifications() {
 
               dismiss.appendChild(icondismiss);
 
+              const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/task/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
               li.appendChild(description_accepted);
+              li.appendChild(reference);
               li.appendChild(dismiss);
       } else if(notification.type === "assignedtask") {
         let description_accepted = document.createElement('p');
@@ -1221,9 +1428,57 @@ function handleRefreshNotifications() {
 
             dismiss.appendChild(icondismiss);
 
-            li.appendChild(description_accepted);
-            li.appendChild(dismiss);
-    } else {
+            const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/task/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
+              li.appendChild(description_accepted);
+              li.appendChild(reference);
+              li.appendChild(dismiss);
+    } else if(notification.type === "archivedtask") {
+      let description_accepted = document.createElement('p');
+          description_accepted.classList.add('notification-text');
+          description_accepted.textContent = "The task has been completed and archived.";
+
+          const dismiss = document.createElement('button');
+          dismiss.classList.add('notification-dismiss');
+          dismiss.onclick = function() {
+            dismiss_notification(notification.notification_id);
+          };
+          const icondismiss = document.createElement('i');
+          icondismiss.classList.add('fa-solid');
+          icondismiss.classList.add('fa-eye');
+
+          dismiss.appendChild(icondismiss);
+
+          const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/task/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
+              li.appendChild(description_accepted);
+              li.appendChild(reference);
+              li.appendChild(dismiss);
+  } else {
               let description_default = document.createElement('p');
               description_default.classList.add('notification-text');
               description_default.textContent = "You have a new notification in the project";
@@ -1362,7 +1617,6 @@ function assign_task_to(){
     });
   });
 
-  // Select the first member by default
   if (members.length > 0) {
     members[0].click();
   }
@@ -1384,7 +1638,6 @@ function assign_coordinator(){
     });
   });
 
-  // Select the first member by default
   if (members.length > 0) {
     members[0].click();
   }
@@ -1415,7 +1668,119 @@ fetch(`/task/complete/${taskId}`, {
   });
 }
 
+function handle_taskarchived_btns() {
+const buttons = ['upload_file_form','EditTaskModalButton', 'assignUserButton', 'completetaskbtn', 'archivetaskbtn', 'createcommentform'];
+
+  buttons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.classList.add('archived-btn');
+    }
+  });
+}
+
+function handleArchiveTask() {
+  let taskId = this.getAttribute('data-task-id');
+  let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, archive it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/task/archive/${taskId}`, { 
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+          let stateElement = document.getElementById('task-details-state');
+          if (stateElement && stateElement.nextSibling.nodeType === Node.TEXT_NODE) {
+            stateElement.nextSibling.nodeValue = 'archived';
+            handle_taskarchived_btns();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  })
+}
+
 function closeNotifications() {
   document.getElementById("notifications-dropdown").classList.toggle("hide");
-  document.getElementById("new-notification").classList.remove("show");
+}
+
+function updateUserTable(users) {
+  var tableBody = document.getElementById('userTableBody');
+  tableBody.innerHTML = '';
+  users.forEach(function(user) {
+      var row = document.createElement('tr');
+      row.innerHTML = '<td>' + user.id + '</td>' +
+                      '<td>' + user.name + '</td>' +
+                      '<td>' + user.email + '</td>';
+      tableBody.appendChild(row);
+  });
+}
+
+let valueDisplays = document.querySelectorAll(".num");
+let interval = 2500;
+let initialDelay = 1000;
+
+valueDisplays.forEach((valueDisplay) => {
+  let startValue = 0;
+  let endValue = parseInt(valueDisplay.getAttribute("data-val"));
+
+  setTimeout(() => {
+    let duration = Math.floor(interval / endValue);
+    let counter = setInterval(function () {
+      startValue += 1;
+      valueDisplay.textContent = startValue;
+      if (startValue == endValue) {
+        clearInterval(counter);
+      }
+    },
+    duration);
+  },
+  initialDelay);
+});
+
+let toggles = document.getElementsByClassName('faq-toggle');
+let contentDiv = document.getElementsByClassName('faq-content');
+let icons = document.getElementsByClassName('icon');
+
+for(let i=0; i<toggles.length; i++){
+    toggles[i].addEventListener('click', ()=>{
+        if( parseInt(contentDiv[i].style.height) != contentDiv[i].scrollHeight){
+            contentDiv[i].style.height = contentDiv[i].scrollHeight + "px";
+            toggles[i].style.color = "#543CE7";
+            toggles[i].style.fontWeight = "600";
+            icons[i].classList.remove('fa-plus');
+            icons[i].classList.add('fa-minus');
+        }
+        else{
+            contentDiv[i].style.height = "0px";
+            toggles[i].style.color = "#111130";
+            toggles[i].style.fontWeight = "400";
+            icons[i].classList.remove('fa-minus');
+            icons[i].classList.add('fa-plus');
+        }
+
+        for(let j=0; j<contentDiv.length; j++){
+            if(j!==i){
+                contentDiv[j].style.height = "0px";
+                toggles[j].style.color = "#111130";
+                icons[j].classList.remove('fa-minus');
+                icons[j].classList.add('fa-plus');
+            }
+        }
+    });
 }

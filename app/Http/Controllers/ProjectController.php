@@ -119,7 +119,7 @@ class ProjectController extends Controller {
         $newmember->save();
 
         event (new AcceptedProjectInvite());
-    
+
 
 
 
@@ -128,6 +128,7 @@ class ProjectController extends Controller {
         ]);
         
     }
+
 
     public function leaveProject($id){
         
@@ -161,7 +162,8 @@ class ProjectController extends Controller {
             
             $project = Project::find($project_id);
             $user = User::find($user_id);
-    
+            $this->authorize('kickmember', $project); 
+
             DB::table('project_users')
                     ->where('project_id', $project->project_id)
                     ->where('user_id', $user->id)
@@ -177,6 +179,7 @@ class ProjectController extends Controller {
         
         $project = Project::find($project_id);
         $coordinator = User::where('username', $username)->first();
+        $this->authorize('change_coordinator', $project); 
 
         $this->kickMember($coordinator->id, $project_id);
 
@@ -186,9 +189,13 @@ class ProjectController extends Controller {
 
         event(new NewCoordinator($project->title, $coordinator->name));
         
-        return response()->json([
-            'success' => 'Coordinator changed successfully!',
-        ]);
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => 'Coordinator changed successfully!',
+            ]);
+        } else {
+            return redirect()->route('project', ['project_id' => $project->project_id]);
+        }
     }
     
     public function favoriteProject(Request $request){
@@ -231,6 +238,7 @@ class ProjectController extends Controller {
 
     public function update_visibility(Request $request, $id){
         $project = Project::find($id);
+        $this->authorize('update_visibility', $project);
         $project->is_public = $request->input('is_public');
         $project->save();
         return response()->json([
@@ -241,6 +249,7 @@ class ProjectController extends Controller {
 
     public function update_status(Request $request, $id){
         $project = Project::find($id);
+        $this->authorize('update_status', $project);
         $project->archived = $request->input('archived');
         $project->save();
         return response()->json([

@@ -33,6 +33,8 @@ Route::view('/index', 'pages.index')->name('index');
 // Route::view('/about', 'pages.about')->name('about'); vai deixar de existir
 
 Route::view('/home', 'pages.homePage')->name('home');
+Route::view('/about', 'pages.aboutPage')->name('about');
+Route::view('/faqs', 'pages.faqsPage')->name('faqs');
 
 //redirects
 Route::get('/forbidden', function () {
@@ -69,6 +71,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('profile/updateImage','updateImage')->name('profile.updateImage');  
     Route::post('/user-name', 'name');
     Route::post('admin/delete/{id}','deleteUser')->where('id', '[0-9]+')->name('deleteUser');
+    Route::get('/search-users', 'search');
 });
 
 //Project
@@ -93,6 +96,7 @@ Route::controller(TaskController::class)->group(function() {
     Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
     Route::patch('/task/edit', 'updatedetails')->name('task.update_details');
     Route::patch('/task/complete/{taskId}', 'completetask')->name('task.complete');
+    Route::patch('/task/archive/{taskId}', 'archivetask')->name('task.archive');
     Route::post('/search-tasks', 'search');
     Route::patch('/task/assign', 'assign')->name('task.assign');
     Route::patch('/task/upload', 'upload_file')->name('task.upload');
@@ -134,4 +138,6 @@ Route::controller(GoogleController::class)->group(function () {
 Route::controller(AdminController::class)->group(function () {
     Route::post('admin/ban/{id}','banUser')->where('id', '[0-9]+')->name('admin.banUser');
     Route::post('admin/unban/{id}','unbanUser')->where('id', '[0-9]+')->name('admin.unbanUser');
+    Route::get('dashboard','dashboard')->name('admin.dashboard');
+    Route::get('dashboard','dashboard')->name('admin.create');
 });

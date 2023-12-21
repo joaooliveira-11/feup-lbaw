@@ -75,9 +75,11 @@
                         <h5><span class="profile-info-span">Name: </span>{{ $user->name }}</h5>
                         <h5><span class="profile-info-span">Username: </span><em>{{$user->username}}</em></h5>
                         <h5><span class="profile-info-span">Email: </span>{{ $user->email }}</h5>
+                        @if(Auth::check() && (Auth::user()->id == $user->id || Auth::user()->isAdmin()))
                         <div id="EditProfile">
                             <button onclick="location.href='{{ url("/edit-profile/".$user->id) }}'">Edit Profile</button>
                         </div>
+                        @endif
                     </div>
                     
                     <div id="Description" class="row">

@@ -8,10 +8,17 @@
     <img src="{{ asset('img/TeamSync.svg') }}" alt="TeamSync">
     <div class="navbar-list">
         <ul class="navbar-list-ul">
+            @if (Auth::user()->isAdmin())
+            <li><a class="navbar-list-element" href="{{ url('/dashboard') }}">Dashboard</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/faqs') }}">FAQs</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
+            @else
             <li><a class="navbar-list-element" href="{{ url('/home') }}">Home</a></li>
             <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
-            <li><a class="navbar-list-element" href="">FAQs</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/faqs') }}">FAQs</a></li>
             <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
+            @endif
         </ul>
     </div>
 
@@ -26,12 +33,13 @@
             <a class="navbar-logout-button" href="{{ url('/logout') }}">
                 <i class="fa fa-sign-out-alt"></i>
             </a>       
-            @endif
+        @endif
 
     <div id="notifications-dropdown">
             <button class="close-notifications"><i class="fa-solid fa-times"></i></button>
             <div>
                 <h1 id="notifications-title">Notifications</h1>
+
                 <button class="dismiss-all-notis" onclick = "dismissAll()"><i class="fa-solid fa-eye"></i>All</button>
             </div>
 
@@ -50,30 +58,42 @@
                         @case('coordinator')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
                                     <p class="notification-text">There as been a change of coordinator in the project</p>
+                                    <a href="{{ url('/project', ['id' => $notification->reference_id]) }}"><button class = "notification-reference"><i class = "fa-solid fa-arrow-right"></i></button></a>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break
                         @case('comment')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
                                     <p class="notification-text">You have a new comment on the task.</p>
+                                    <a href="{{ url('/task', ['id' => $notification->reference_id]) }}"><button class = "notification-reference"><i class = "fa-solid fa-arrow-right"></i></button></a>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break
                         @case('acceptedinvite')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
                                     <p class="notification-text">Your invite to the project has been accepted.</p>
+                                    <a href="{{ url('/project', ['id' => $notification->reference_id]) }}"><button class = "notification-reference"><i class = "fa-solid fa-arrow-right"></i></button></a>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break
                         @case('forum')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
                                     <p class="notification-text">New message in the project chat.</p>
+                                    <a href="{{ url('/project', ['id' => $notification->reference_id]) }}"><button class = "notification-reference"><i class = "fa-solid fa-arrow-right"></i></button></a>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break
                         @case('assignedtask')
                             <li class = "notification" id="n{{ $notification->notification_id}}">
                                     <p class="notification-text">You have been assigned to a task.</p>
+                                    <a href="{{ url('/task', ['id' => $notification->reference_id]) }}"><button class = "notification-reference"><i class = "fa-solid fa-arrow-right"></i></button></a>
+                                    <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
+                            </li>
+                            @break
+                        @case('archivedtask')
+                            <li class = "notification" id="n{{ $notification->notification_id}}">
+                                    <p class="notification-text">The task has been completed and archived.</p>
+                                    <a href="{{ url('/task', ['id' => $notification->reference_id]) }}"><button class = "notification-reference"><i class = "fa-solid fa-arrow-right"></i></button></a>
                                     <button class = "notification-dismiss" onclick = 'dismiss_notification({{ $notification->notification_id}})'><i class="fa-solid fa-eye"></i></button>
                             </li>
                             @break

@@ -24,6 +24,8 @@
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <link href="{{ url('css/homePage.css') }}" rel="stylesheet">
         <link href="{{ url('css/forgotPassword.css') }}" rel="stylesheet">
+        <link href="{{ url('css/dashboard.css') }}" rel="stylesheet">
+        <link href="{{ url('css/faqs.css') }}" rel="stylesheet">
         <link href="{{ url('css/errorPages.css') }}" rel="stylesheet">
         <link href="{{ url('css/modals.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">

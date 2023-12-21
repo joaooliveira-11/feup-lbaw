@@ -11,7 +11,7 @@
                 <p id="dashboard-project-content"> {{ $project->members()->count() }} </p>
             </div>
             <div id="ActiveTasks" class="container">
-                <h2 class="dashboard-project-title">Active Tasks:</h2>
+                <h2 class="dashboard-project-title">Total Tasks:</h2>
                 <p id="dashboard-project-content"> {{ $project->tasks->count() }} </p>
             </div>
             <div id="Favorites" class="container">
@@ -26,8 +26,10 @@
                 </button>
             </div>
             <div class="dashboard-project-buttons">
-                <button type="button" id="CreateTaskModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}">Create Task</button>
-                @include('modal.create_task', ['project_id' => $project->project_id])
+                @if($project->is_member(auth()->user()))
+                    <button type="button" id="CreateTaskModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}">Create Task</button>
+                    @include('modal.create_task', ['project_id' => $project->project_id])
+                @endif
                 @if($project->is_coordinator(auth()->user()))
                     <button type="button" id="AddMemberModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}"> Add Member</button>
                     @include('modal.add_member', ['project' => $project])
@@ -45,14 +47,14 @@
                 <div>
                     <span>Private</span>
                     <label class="switch" data-project-id="{{ $project->project_id }}">
-                        <input type="checkbox" id="visibilitySwitch" {{ !($project->is_public) ? 'checked' : '' }}>
+                        <input type="checkbox" id="visibilitySwitch" {{ !($project->is_public) ? 'checked' : '' }} {{ (Auth::user()->id !== $project->project_coordinator) ? 'disabled' : '' }}>
                         <span class="slider"></span>
                     </label>
                 </div>
                 <div>
                     <span>Archived</span>
                     <label class="switch" data-project-id="{{ $project->project_id }}">
-                        <input type="checkbox" id="statusSwitch" {{ $project->archived ? 'checked' : '' }}>
+                        <input type="checkbox" id="statusSwitch" {{ $project->archived ? 'checked' : '' }} {{ (Auth::user()->id !== $project->project_coordinator) ? 'disabled' : '' }}>
                         <span class="slider"></span>
                     </label>
                 </div>

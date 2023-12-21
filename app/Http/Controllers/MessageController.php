@@ -23,7 +23,7 @@ class MessageController extends Controller {
         $message->message_by = Auth::user()->id;
         $message->project_message = $request->project_id;
         
-        //$this->authorize('create', $message);
+        $this->authorize('create', $message);
 
         $message->save();
 
@@ -42,12 +42,13 @@ class MessageController extends Controller {
     
     public function edit($id, Request $request){
         $message = Message::find($id);
-        // $this->authorize('edit', $message);
+        $this->authorize('edit', $message);
         $message->content = $request->content;
         $message->edited = true;
         $message->save();
         return response()->json([
             'message_content' => $message->content,
+            'edited' => $message->edited,
         ]);
     }
 } 
