@@ -1,4 +1,5 @@
 <div id="Chat">
+    <h2 class="dashboard-project-title">Chat</h2>
     <div id="{{auth()->user()->username}}" class="container chat-section">
         <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($project->messages as $message)

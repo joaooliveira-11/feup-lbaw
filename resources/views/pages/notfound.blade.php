@@ -9,6 +9,6 @@
     </div>
 
     <div class="buttons">
-        <a class="home-button " href="{{ url('/home') }}">Go to homepage</a>
+        <a class="home-button" href="{{ url('/home') }}">Go to homepage</a>
     </div>
 </div>

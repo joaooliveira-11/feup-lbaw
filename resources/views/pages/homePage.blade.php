@@ -48,7 +48,7 @@
                                 </a>
                             @endforeach
                         @else
-                            <p style="color: #000;">You have no upcoming tasks</p>
+                            <p class="project-directory-title">You have no upcoming tasks</p>
                         @endif
                     </div>
                 </div>

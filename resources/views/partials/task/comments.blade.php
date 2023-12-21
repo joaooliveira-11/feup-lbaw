@@ -1,4 +1,5 @@
 <div id="comments" class="container">
+    <h2 class="dashboard-project-title">Comments</h2>
     <div class="container comments-section">
         <input type="hidden" id="csrf-token" value="{{ csrf_token() }}">
         @foreach($task->comments as $comment)
