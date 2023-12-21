@@ -373,12 +373,17 @@ header {
 }
 
 .project-members-ul {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(auto-fill, 14em);
+    height: 50vh;
+    overflow-y: auto;
     list-style: none;
-    column-count: 2;
-    flex-grow: 1;
 }
 
 .project-members-ul a {
+    height: 8em;
     text-decoration: none;
 }
 

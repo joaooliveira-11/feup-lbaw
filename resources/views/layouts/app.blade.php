@@ -25,6 +25,7 @@
         <link href="{{ url('css/homePage.css') }}" rel="stylesheet">
         <link href="{{ url('css/forgotPassword.css') }}" rel="stylesheet">
         <link href="{{ url('css/errorPages.css') }}" rel="stylesheet">
+        <link href="{{ url('css/modals.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

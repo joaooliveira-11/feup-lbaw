@@ -1,0 +1,43 @@
+.user-list-modal {
+    height: 32vh;
+    overflow-y: auto;
+}
+
+.modal-title {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.modal-second-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.modal-top-button {
+    font-size: 2rem;
+}
+
+.modal-rounded-picture {
+    border-radius: 100%;
+}
+
+.modal-username {
+    font-size: 1.4rem;
+    margin-left: 1rem;
+}
+
+.modal-body .modal-simple-text {
+    font-size: 1.4rem;
+}
+
+.modal-body .modal-textarea {
+    resize: none;
+    font-size: 1.4rem;
+}
+
+.modal-body .modal-bottom-button {
+    font-size: 1.6rem;
+    font-weight: 600;
+    width: 12em;
+    margin-top: 2rem;
+}
