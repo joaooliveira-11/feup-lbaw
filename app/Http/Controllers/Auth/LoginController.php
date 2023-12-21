@@ -49,7 +49,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
     
             if ($user->isAdmin()) {
-                return redirect()->route('dashboard')
+                return redirect()->route('admin.dashboard')
                     ->withSuccess('You have successfully logged in as an admin!');
             }
     

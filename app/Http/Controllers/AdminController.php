@@ -29,5 +29,21 @@ class AdminController extends Controller {
         $users = User::all();
         return view('pages.dashboard', compact('users'));
     }
-    
+
+    public function regiterUser(Request $request) {
+        $request->validate([
+            'name' => 'required|string|max:25',
+            'username' => 'required|string|max:12|unique:users',
+            'email' => 'required|email|max:30|unique:users',
+            'password' => 'required|min:8|confirmed'
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+    }
 }

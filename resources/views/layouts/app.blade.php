@@ -41,7 +41,7 @@
     <body>
         <main>
             <header>
-                @if(!Request::is('login') && !Request::is('register'))
+                @if(!Request::is('login') && !Request::is('register') && !Request::is('password/forget') && !Request::is('password/recover'))
                     @if(Auth::check())
                         @if(Request::is('index'))
                             @include('partials.authNavbar')
