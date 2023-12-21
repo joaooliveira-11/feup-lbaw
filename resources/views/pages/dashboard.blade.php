@@ -37,7 +37,7 @@
         <div class="col-md-8 mx-auto">
             <div class="add-user-container">
                 <h4 class="mb-3">Add New User:</h4>
-                <form class="form-group" method="POST" action="{{ route('admin.dashboard') }}">
+                <form class="form-group" method="POST" action="{{ route('admin.registerUser') }}">
                     {{ csrf_field() }}
                     
                     <div class="form-content mb-3">

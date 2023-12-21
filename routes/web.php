@@ -137,4 +137,5 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('admin/ban/{id}','banUser')->where('id', '[0-9]+')->name('admin.banUser');
     Route::post('admin/unban/{id}','unbanUser')->where('id', '[0-9]+')->name('admin.unbanUser');
     Route::get('dashboard','dashboard')->name('admin.dashboard');
+    Route::post('dahsboard/register', 'regiterUser')->name('admin.registerUser');
 });

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 
 class AdminController extends Controller {
@@ -44,6 +45,8 @@ class AdminController extends Controller {
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        return redirect()->route('admin.dashboard')->withSuccess('User added successfully.');
 
     }
 }
