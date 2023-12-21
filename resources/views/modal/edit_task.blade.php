@@ -28,8 +28,8 @@
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            <strong>{{ __('Finish Date') }}:</strong>
-                            <input type="datetime-local" name="finish_date" class="form-control" id="finish_date" value="{{ $task->finish_date ? \Carbon\Carbon::parse($task->finish_date)->format('Y-m-d\TH:i') : '' }}">
+                            <strong class="modal-second-title">{{ __('Finish Date') }}:</strong>
+                            <input type="datetime-local" name="finish_date" class="form-control modal-simple-text" id="finish_date" value="{{ $task->finish_date ? \Carbon\Carbon::parse($task->finish_date)->format('Y-m-d\TH:i') : '' }}">
                             <div class="error" id="finish_dateError"></div>
                         </div>
                     </div>
