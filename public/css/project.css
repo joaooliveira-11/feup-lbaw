@@ -277,6 +277,12 @@ header {
     justify-content: space-around;
 }
 
+.task-content.no-tasks {
+    font-size: 2vw;
+    justify-content: center;
+    align-items: center;
+}
+
 .project-tasks-title {
     font-size: 1.4vw;
     font-weight: 500;

@@ -117,7 +117,6 @@ function addEventListeners() {
 
   if(document.getElementById('userSearchInput')){
       document.getElementById('userSearchInput').addEventListener('input', function() {
-        console.log(this.value);
         sendAjaxRequest('GET', '/search-users?search=' + this.value, {}, handleSearchUser);
     });
   }
@@ -202,6 +201,23 @@ if (this.status >= 200 && this.status < 400) {
   }
   ul.innerHTML = '';
 
+  if(data.length == 0){
+    if(document.querySelector('.no-tasks') == null){
+    const tasksContainer = document.getElementById('tasks-container');
+    const div = document.createElement('div');
+    div.classList.add('task-content');
+    div.classList.add('no-tasks');
+    div.textContent = "No tasks found";
+    tasksContainer.appendChild(div);
+    }
+  }
+  else{
+    const noTasksDiv = document.querySelector('.no-tasks');
+    if (noTasksDiv) {
+        noTasksDiv.remove();
+    }
+  }
+
   data.forEach(task => {
       var li = document.createElement('li');
       li.classList.add('task-item');
@@ -245,7 +261,6 @@ else {
 
 function handleSearchProject() {
 
-  console.log(this.response)
   if (this.status >= 200 && this.status < 400) {
     var data = JSON.parse(this.response);
     var container = document.querySelector('#projects-container');
@@ -256,6 +271,23 @@ function handleSearchProject() {
         container.appendChild(ul);
     }
     ul.innerHTML = ''; 
+
+    if(data.projects.length == 0){
+      if(document.querySelector('.no-projects') == null){
+      const div = document.createElement('div');
+      div.classList.add('no-projects');
+      div.textContent = "No projects found";
+      ul.before(div);
+      document.querySelector('.pagination-container').style.display = 'none';
+      }
+  }else{
+      const noProjectsDiv = document.querySelector('.no-projects');
+      if (noProjectsDiv) {
+          noProjectsDiv.remove();
+          document.querySelector('.pagination-container').style.display = 'block';
+      }
+  }
+
     data.projects.forEach(project => {
         var li = document.createElement('li');
         li.classList.add('project-item');
@@ -348,6 +380,23 @@ function handleSearchUser() {
     const data = JSON.parse(this.response);
     const container = document.querySelector('#userTableBody');
     container.innerHTML = '';
+
+    if(data.length == 0){
+      if(document.querySelector('.no-users') == null){
+      const div = document.createElement('div');
+      div.classList.add('no-users');
+      div.textContent = "No users found";
+      container.before(div);
+      }
+    }
+       else {
+        const noUsersDiv = document.querySelector('.no-users');
+        if (noUsersDiv) {
+            noUsersDiv.remove();
+        }
+      }
+
+
     data.forEach(user => {
       const tr = document.createElement('tr');
       tr.onclick = function() {
