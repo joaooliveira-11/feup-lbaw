@@ -158,6 +158,15 @@
     justify-content: center;
 }
 
+.no-projects {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vh;
+    margin-top: 5vh;
+    color: #303030;
+}   
+
 .project-details{
     font-size: 1.2vw;
     backface-visibility: hidden;

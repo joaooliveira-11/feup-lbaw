@@ -12,6 +12,7 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Storage; 
 use Illuminate\Support\Str;
 use App\Events\AssignedNotification;
+use App\Events\ArchivedTask;
 
 class TaskController extends Controller {
 
@@ -85,6 +86,8 @@ class TaskController extends Controller {
 
         $task->state = 'archived';
         $task->save();
+
+        event(new ArchivedTask());
     
         return response()->json([
             'task' => $task,
@@ -103,7 +106,7 @@ class TaskController extends Controller {
 
         event(new AssignedNotification());
     
-        return view('pages.task', ['task'=>$task]);
+        return redirect()->route('task', ['task_id' => $task->task_id]);
     }
 
     public function search(Request $request){
@@ -154,7 +157,7 @@ class TaskController extends Controller {
             'task_file' => ['file']
         ]);     
         $task = Task::find($request->task_id);
-        // $this->authorize('upload', $task);  já funciona, é só para dar para testar em qualquer conta
+        $this->authorize('upload', $task);
         
         if ($task->file_path) {
             Storage::disk('local')->delete($task->file_path);
@@ -169,7 +172,7 @@ class TaskController extends Controller {
         $task->file_path = $file_path;
         $task->save();
 
-        return back()->with('success', 'File uploaded successfully');
+        return redirect()->route('task', ['task_id' => $task->task_id]);
     }
 
     public function download_file($id){

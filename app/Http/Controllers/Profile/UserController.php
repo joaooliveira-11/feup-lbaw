@@ -14,7 +14,7 @@ use App\Models\Skill;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
-    public function __construct(){
+    public function __construct() {
         $this->middleware('auth');
     }
     
@@ -177,7 +177,17 @@ class UserController extends Controller {
         }
     
         return redirect()->back()->withSuccess('The account has been successfully deleted.');
-    }    
+    }
+    
+    public function search(Request $request){
+        $search = $request->get('search');
+        $users = User::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])
+            ->orWhere('name', 'ilike', '%' . $search . '%')
+            ->orWhere('username', 'ilike', '%' . $search . '%')
+            ->orWhere('email', 'ilike', '%' . $search . '%')
+            ->get();
+        return response()->json($users);
+    }
     
 }
 ?>

@@ -14,21 +14,22 @@ class TaskPolicy {
 
     public function show(User $user, Task $task): bool {
         $project = Project::find($task->project_task);
-        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user);    
+        return $project->is_member($user) || $user->isAdmin() || $project->is_public;
     }
     
     public function create(User $user, Task $task): bool {
         $project = Project::find($task->project_task);
-        return $project->is_member($user) || $project->is_coordinator($user);    
+        return $project->is_member($user);   
     }
 
     public function updatedetails(User $user, Task $task) : bool {
         $project = Project::find($task->project_task);
-        return $project->is_member($user) || $project->is_coordinator($user);  
+        return $project->is_member($user);
     }
     
     public function completetask(User $user, Task $task) : bool {
-        return $task->assigned_to == $user->id;
+        $project = Project::find($task->project_task);
+        return $project->is_member($user) && $task->assigned_to == $user->id && $task->state == 'assigned';
     }
 
     public function archivetask(User $user, Task $task) : bool {
@@ -42,7 +43,8 @@ class TaskPolicy {
     }
 
     public function upload(User $user, Task $task) : bool {
-        return $task->assigned_to == $user->id;
+        $project = Project::find($task->project_task);
+        return $project->is_member($user) && $task->assigned_to == $user->id && ($task->state == 'assigned' || $task->state == 'completed');
     }
 
     public function download(User $user, Task $task) : bool {

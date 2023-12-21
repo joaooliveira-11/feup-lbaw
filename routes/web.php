@@ -69,6 +69,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('profile/updateImage','updateImage')->name('profile.updateImage');  
     Route::post('/user-name', 'name');
     Route::post('admin/delete/{id}','deleteUser')->where('id', '[0-9]+')->name('deleteUser');
+    Route::get('/search-users', 'search');
 });
 
 //Project

@@ -18,7 +18,7 @@ class ProjectPolicy{
     }
 
     public function show(User $user, Project $project) : bool {
-        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user) || $project->is_public;
+        return $project->is_member($user) || $user->isAdmin() || $project->is_public;
     }
 
     public function delete(User $user, User $model) {
@@ -26,6 +26,22 @@ class ProjectPolicy{
     }
 
     public function adduser(User $user, Project $project) : bool{
+        return $project->is_coordinator($user);
+    }
+
+    public function kickmember(User $user, Project $project) : bool{
+        return $project->is_coordinator($user);
+    }
+
+    public function change_coordinator(User $user, Project $project) : bool{
+        return $project->is_coordinator($user);
+    }
+
+    public function update_visibility(User $user, Project $project) : bool{
+        return $project->is_coordinator($user);
+    }
+
+    public function update_status(User $user, Project $project) : bool{
         return $project->is_coordinator($user);
     }
 }

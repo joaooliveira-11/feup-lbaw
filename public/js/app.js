@@ -53,7 +53,6 @@ function addEventListeners() {
 
   document.getElementById("notifications-button").addEventListener("click", function(event) {
     document.getElementById("notifications-dropdown").classList.toggle("hide");
-    document.getElementById("new-notification").classList.remove("show");
   });
   
 
@@ -116,19 +115,11 @@ function addEventListeners() {
     closeButton.addEventListener('click', closeNotifications);
   }
 
-  document.getElementById('userSearchInput').addEventListener('input', function() {
-    var searchTerm = this.value;
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search-users?search=' + encodeURIComponent(searchTerm), true);
-    xhr.onload = function() {
-        if (this.status == 200) {
-            var users = JSON.parse(this.responseText);
-            updateUserTable(users);
-        }
-    };
-    xhr.send();
-  });
-
+  if(document.getElementById('userSearchInput')){
+      document.getElementById('userSearchInput').addEventListener('input', function() {
+        sendAjaxRequest('GET', '/search-users?search=' + this.value, {}, handleSearchUser);
+    });
+  }
   document.addEventListener("DOMContentLoaded", function() {
     var hamburger = document.getElementById('hamburger');
     var menu = document.querySelector('.navbar-list-ul');
@@ -210,6 +201,23 @@ if (this.status >= 200 && this.status < 400) {
   }
   ul.innerHTML = '';
 
+  if(data.length == 0){
+    if(document.querySelector('.no-tasks') == null){
+    const tasksContainer = document.getElementById('tasks-container');
+    const div = document.createElement('div');
+    div.classList.add('task-content');
+    div.classList.add('no-tasks');
+    div.textContent = "No tasks found";
+    tasksContainer.appendChild(div);
+    }
+  }
+  else{
+    const noTasksDiv = document.querySelector('.no-tasks');
+    if (noTasksDiv) {
+        noTasksDiv.remove();
+    }
+  }
+
   data.forEach(task => {
       var li = document.createElement('li');
       li.classList.add('task-item');
@@ -253,7 +261,6 @@ else {
 
 function handleSearchProject() {
 
-  console.log(this.response)
   if (this.status >= 200 && this.status < 400) {
     var data = JSON.parse(this.response);
     var container = document.querySelector('#projects-container');
@@ -264,6 +271,23 @@ function handleSearchProject() {
         container.appendChild(ul);
     }
     ul.innerHTML = ''; 
+
+    if(data.projects.length == 0){
+      if(document.querySelector('.no-projects') == null){
+      const div = document.createElement('div');
+      div.classList.add('no-projects');
+      div.textContent = "No projects found";
+      ul.before(div);
+      document.querySelector('.pagination-container').style.display = 'none';
+      }
+  }else{
+      const noProjectsDiv = document.querySelector('.no-projects');
+      if (noProjectsDiv) {
+          noProjectsDiv.remove();
+          document.querySelector('.pagination-container').style.display = 'block';
+      }
+  }
+
     data.projects.forEach(project => {
         var li = document.createElement('li');
         li.classList.add('project-item');
@@ -351,6 +375,51 @@ function handleSearchProject() {
 }
 }
 
+function handleSearchUser() {
+  if (this.status >= 200 && this.status < 400) {
+    const data = JSON.parse(this.response);
+    const container = document.querySelector('#userTableBody');
+    container.innerHTML = '';
+
+    if(data.length == 0){
+      if(document.querySelector('.no-users') == null){
+      const div = document.createElement('div');
+      div.classList.add('no-users');
+      div.textContent = "No users found";
+      container.before(div);
+      }
+    }
+       else {
+        const noUsersDiv = document.querySelector('.no-users');
+        if (noUsersDiv) {
+            noUsersDiv.remove();
+        }
+      }
+
+
+    data.forEach(user => {
+      const tr = document.createElement('tr');
+      tr.onclick = function() {
+        window.location.href = '/profile/' + user.id;
+      }
+      const id = document.createElement('td');
+      id.textContent = user.id;
+
+      const name = document.createElement('td');
+      name.textContent = user.name;
+
+      const email = document.createElement('td');
+      email.textContent = user.email;
+
+      tr.appendChild(id);
+      tr.appendChild(name);
+      tr.appendChild(email);
+
+      container.appendChild(tr);
+    });
+  }
+}
+
 function setupRadioButtons() {
 const radios = document.querySelectorAll('#projectForm input[type="radio"]');
 
@@ -414,22 +483,30 @@ fetch(url, {
   modal.hide();
   
   let titleNode = document.createTextNode(data.task_title);
-  let finishDate = new Date(data.task_finish_date);
-  let formattedFinishDate = finishDate.getFullYear() + '-' +
-    String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
-    String(finishDate.getDate()).padStart(2, '0') + ' ' +
-    String(finishDate.getHours()).padStart(2, '0') + ':' +
-    String(finishDate.getMinutes()).padStart(2, '0') + ':' +
-    String(finishDate.getSeconds()).padStart(2, '0');
-    let finishDateNode = document.createTextNode(formattedFinishDate);
-    let priorityNode = document.createTextNode(data.task_priority);
+  if(data.task_finish_date){
+    let finishDate = new Date(data.task_finish_date);
+    let formattedFinishDate = finishDate.getFullYear() + '-' +
+      String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
+      String(finishDate.getDate()).padStart(2, '0') + ' ' +
+      String(finishDate.getHours()).padStart(2, '0') + ':' +
+      String(finishDate.getMinutes()).padStart(2, '0') + ':' +
+      String(finishDate.getSeconds()).padStart(2, '0');
+      let finishDateNode = document.createTextNode(formattedFinishDate);
+      let finishDateElement = document.getElementById('task-details-finish_date');
+      finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
+  }
+  else{
+    let finishDateNode = document.createTextNode('Not defined');
+    let finishDateElement = document.getElementById('task-details-finish_date');
+    finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
+  }
+
+  let priorityNode = document.createTextNode(data.task_priority);
 
   let titleElement = document.getElementById('task-details-title');
-  let finishDateElement = document.getElementById('task-details-finish_date');
   let priorityElement = document.getElementById('task-details-priority');
 
   titleElement.parentNode.replaceChild(titleNode, titleElement.nextSibling);
-  finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
   priorityElement.parentNode.replaceChild(priorityNode, priorityElement.nextSibling);
   
   document.querySelector('#task-description p').textContent = data.task_description;
@@ -477,6 +554,10 @@ fetch(url, {
 
       let finishDateElement = document.querySelector('#ProjectDeadline #dashboard-project-content');
       finishDateElement.textContent = formattedFinishDate;
+  }
+  else{
+    let finishDateElement = document.querySelector('#ProjectDeadline #dashboard-project-content');
+    finishDateElement.textContent = 'Not defined';
   }
 
   let titleElement = document.querySelector('.sidebar-project-title');
@@ -1068,6 +1149,10 @@ channel.bind('notification-comment', function(data) {
   sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
 });
 
+channel.bind('notification-archived', function(data) {
+  sendAjaxRequest('GET', '/notifications' , {}, handleRefreshNotifications);  
+});
+
 
 //chat channel
 const chatChannel = pusher.subscribe('chat');
@@ -1210,7 +1295,22 @@ function handleRefreshNotifications() {
 
               dismiss.appendChild(icondismiss);
 
+              const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/project/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
               li.appendChild(description_coordinator);
+              li.appendChild(reference);
               li.appendChild(dismiss);
           }else if(notification.type == "coordinator") {
               let description_coordinator = document.createElement('p');
@@ -1228,7 +1328,23 @@ function handleRefreshNotifications() {
 
               dismiss.appendChild(icondismiss);
 
+              const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/project/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
+
               li.appendChild(description_coordinator);
+              li.appendChild(reference);
               li.appendChild(dismiss);
           } else if(notification.type == "forum") {
             let description_coordinator = document.createElement('p');
@@ -1246,7 +1362,22 @@ function handleRefreshNotifications() {
 
             dismiss.appendChild(icondismiss);
 
+            const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/project/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
             li.appendChild(description_coordinator);
+            li.appendChild(reference);
             li.appendChild(dismiss);
         } else if(notification.type === "comment") {
           let description_accepted = document.createElement('p');
@@ -1264,7 +1395,22 @@ function handleRefreshNotifications() {
 
               dismiss.appendChild(icondismiss);
 
+              const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/task/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
               li.appendChild(description_accepted);
+              li.appendChild(reference);
               li.appendChild(dismiss);
       } else if(notification.type === "assignedtask") {
         let description_accepted = document.createElement('p');
@@ -1282,9 +1428,57 @@ function handleRefreshNotifications() {
 
             dismiss.appendChild(icondismiss);
 
-            li.appendChild(description_accepted);
-            li.appendChild(dismiss);
-    } else {
+            const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/task/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
+              li.appendChild(description_accepted);
+              li.appendChild(reference);
+              li.appendChild(dismiss);
+    } else if(notification.type === "archivedtask") {
+      let description_accepted = document.createElement('p');
+          description_accepted.classList.add('notification-text');
+          description_accepted.textContent = "The task has been completed and archived.";
+
+          const dismiss = document.createElement('button');
+          dismiss.classList.add('notification-dismiss');
+          dismiss.onclick = function() {
+            dismiss_notification(notification.notification_id);
+          };
+          const icondismiss = document.createElement('i');
+          icondismiss.classList.add('fa-solid');
+          icondismiss.classList.add('fa-eye');
+
+          dismiss.appendChild(icondismiss);
+
+          const reference_btn = document.createElement('button');
+              reference_btn.classList.add('notification-reference');
+
+              const reference = document.createElement('a');
+              reference.href = "/task/" + notification.reference_id;
+              
+              const iconreference = document.createElement('i');
+              iconreference.classList.add('fa-solid');
+              iconreference.classList.add('fa-arrow-right');
+
+              reference_btn.appendChild(iconreference);
+              reference.appendChild(reference_btn);
+
+
+              li.appendChild(description_accepted);
+              li.appendChild(reference);
+              li.appendChild(dismiss);
+  } else {
               let description_default = document.createElement('p');
               description_default.classList.add('notification-text');
               description_default.textContent = "You have a new notification in the project";
@@ -1525,7 +1719,6 @@ function handleArchiveTask() {
 
 function closeNotifications() {
   document.getElementById("notifications-dropdown").classList.toggle("hide");
-  document.getElementById("new-notification").classList.remove("show");
 }
 
 function updateUserTable(users) {
