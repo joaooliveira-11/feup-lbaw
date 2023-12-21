@@ -149,7 +149,7 @@ class UserController extends Controller {
             $project = $projects[$i];
             if($project->project_coordinator == $user->id) {
                 $newcoord = Project_Users::where('project_id', $project->project_id)->first()->user_id;
-                Project_Users::where('user_id', $newcoord)->delete();
+                Project_Users::where('project_id', $project->project_id)->where('user_id', $newcoord)->delete();
                 $project->project_coordinator = $newcoord;
                 $project->save();
 
