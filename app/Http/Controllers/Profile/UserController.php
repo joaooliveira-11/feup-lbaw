@@ -12,6 +12,7 @@ use App\Models\Project_Users;
 use App\Models\Interest;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\ProjectController;
 
 class UserController extends Controller {
     public function __construct() {
@@ -147,10 +148,11 @@ class UserController extends Controller {
         for($i = 0; $i < count($projects); $i++) {
             $project = $projects[$i];
             if($project->project_coordinator == $user->id) {
-                $newcoord = Project_Users::where('project_id', $project->project_id)->where('user_id', '!=', $user->id)->first()->user_id;
+                $newcoord = Project_Users::where('project_id', $project->project_id)->first()->user_id;
+                Project_Users::where('user_id', $newcoord)->delete();
                 $project->project_coordinator = $newcoord;
-                Project_Users::where('project_id', $project->project_id)->where('user_id', $newcoord)->delete();
                 $project->save();
+
             }
         }
     
