@@ -510,6 +510,9 @@ fetch(url, {
   let commentInfoButtonsDiv = document.createElement('div');
   commentInfoButtonsDiv.className = 'comment-info-buttons';
 
+  let messageInfoLeftDiv = document.createElement('div');
+  messageInfoLeftDiv.className = 'message-info-left';
+
   let createDate = new Date(data.comment_create_date);
   let formattedCreateDate = createDate.getFullYear() + '-' +
   String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
@@ -520,7 +523,9 @@ fetch(url, {
 
   let createDateH6 = document.createElement('h6');
   createDateH6.textContent = formattedCreateDate;
-  commentInfoButtonsDiv.appendChild(createDateH6);
+  messageInfoLeftDiv.appendChild(createDateH6);
+
+  commentInfoButtonsDiv.appendChild(messageInfoLeftDiv);
 
   let commentButtonsDiv = document.createElement('div');
   commentButtonsDiv.className = 'comment-buttons';
@@ -898,6 +903,19 @@ function EditMessage(event, buttonId, itemClass, editUrl) {
     })
     .then(data => {
       document.getElementById('message-content-' + messageId).innerText = data.message_content;
+      let messageInfoButtonsDiv = messageDiv.querySelector('.message-info-buttons');
+      let messageInfoLeftDiv = messageInfoButtonsDiv.querySelector('.message-info-left');
+  
+      if (data.edited) {
+        let existingEditedElement = messageInfoLeftDiv.querySelector('h6[style="font-style: italic;"]');
+        if (!existingEditedElement) {
+          let editedElement = document.createElement('h6');
+          editedElement.style.fontStyle = 'italic';
+          editedElement.innerText = 'Edited';
+          messageInfoLeftDiv.appendChild(editedElement);
+        }
+      }
+
       editForm.elements['content'].value = '';
       editForm.action = '';
       createForm.classList.remove('hide-message-form');
@@ -947,6 +965,18 @@ function EditComment(event, buttonId, itemClass, editUrl) {
     })
     .then(data => {
       document.getElementById('comment-content-' + commentId).innerText = data.comment_content;
+      let commentInfoButtonsDiv = commentDiv.querySelector('.comment-info-buttons');
+      let messageInfoLeftDiv = commentInfoButtonsDiv.querySelector('.message-info-left');
+  
+      if (data.edited) {
+        let existingEditedElement = messageInfoLeftDiv.querySelector('h6[style="font-style: italic;"]');
+        if (!existingEditedElement) {
+          let editedElement = document.createElement('h6');
+          editedElement.style.fontStyle = 'italic';
+          editedElement.innerText = 'Edited';
+          messageInfoLeftDiv.appendChild(editedElement);
+        }
+      }
       editForm.elements['content'].value = '';
       editForm.action = '';
       createForm.classList.remove('hide-message-form');
@@ -1026,7 +1056,7 @@ let chatSection = document.querySelector('.chat-section');
   messageDiv.id = 'message-' + data.message_id;
 
   let userImage = document.createElement('img');
-  userImage.src = "../"+data.photo_path // falta mudar para a imagem do user
+  userImage.src = "../"+data.photo_path
   userImage.className = 'user-image';
   userImage.alt = 'Gmail Image';
   messageDiv.appendChild(userImage);
@@ -1047,6 +1077,9 @@ let chatSection = document.querySelector('.chat-section');
   let messageInfoButtonsDiv = document.createElement('div');
   messageInfoButtonsDiv.className = 'message-info-buttons';
 
+  let messageInfoLeftDiv = document.createElement('div');
+  messageInfoLeftDiv.className = 'message-info-left';
+
   let createDate = new Date(data.create_date);
   let formattedCreateDate = createDate.getFullYear() + '-' +
   String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
@@ -1057,7 +1090,9 @@ let chatSection = document.querySelector('.chat-section');
 
   let createDateH6 = document.createElement('h6');
   createDateH6.textContent = formattedCreateDate;
-  messageInfoButtonsDiv.appendChild(createDateH6);
+  messageInfoLeftDiv.appendChild(createDateH6);
+
+  messageInfoButtonsDiv.appendChild(messageInfoLeftDiv);
 
   let messageButtonsDiv = document.createElement('div');
   messageButtonsDiv.className = 'message-buttons';

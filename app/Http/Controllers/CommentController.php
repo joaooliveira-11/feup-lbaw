@@ -55,6 +55,7 @@ class CommentController extends Controller {
         $comment->save();
         return response()->json([
             'comment_content' => $comment->content,
+            'edited' => $comment->edited,
         ]);
     }
 
