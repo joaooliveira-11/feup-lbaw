@@ -36,23 +36,31 @@ class LoginController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-
+    
         $user = User::where('email', $request->email)->first();
-
+    
         if ($user && $user->is_banned) {
             return back()->withErrors([
                 'email' => 'Your account is banned.'
             ])->onlyInput('email');
         }
-
+    
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
+    
+            if ($user->isAdmin()) {
+                return redirect()->route('dashboard')
+                    ->withSuccess('You have successfully logged in as an admin!');
+            }
+    
             return redirect()->route('home')
                 ->withSuccess('You have successfully logged in!');
         }
+    
         Alert::error('Error', 'Invalid credentials!');
         return back()->withInput($request->only('email'));
     }
+    
 
 
     /**
