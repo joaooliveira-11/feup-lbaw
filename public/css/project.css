@@ -279,7 +279,7 @@ header {
 }
 
 .task-content {
-    height: 78vh;
+    height: 75vh;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
