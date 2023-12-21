@@ -143,6 +143,16 @@ class UserController extends Controller {
 
     public function deleteUser(int $id) {
         $user = User::find($id);
+        $projects = $user->projects();
+        for($i = 0; $i < count($projects); $i++) {
+            $project = $projects[$i];
+            if($project->project_coordinator == $user->id) {
+                $newcoord = Project_Users::where('project_id', $project->project_id)->where('user_id', '!=', $user->id)->first()->user_id;
+                $project->project_coordinator = $newcoord;
+                Project_Users::where('project_id', $project->project_id)->where('user_id', $newcoord)->delete();
+                $project->save();
+            }
+        }
     
         if (!$user) {
             return back()->withError('User not found!');
