@@ -305,6 +305,7 @@
     cursor: pointer;
     transition: background-color 0.3s;
     max-width: fit-content;
+    height: fit-content;
     text-align: center;
 }
 
@@ -360,5 +361,8 @@
     }
     .project-list-description {
         font-size: 125%;
+    }
+    #edit-page-content input[type="submit"] {
+        font-size: 1.4rem;
     }
 }

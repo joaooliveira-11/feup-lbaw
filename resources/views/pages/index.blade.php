@@ -89,7 +89,7 @@
             <div class="container lp-service">
                 <div class="col-7 service-text">
                     <h4>Our Values</h4>
-                    <p>At TeamSync, we're more than just a brand – we're a collective of passionate individuals united by a common vision. Our journey began with a simple idea: to to allow users to. Since then, we've grown, evolved, and forged a path driven by innovation and dedication.</p>
+                    <p>At TeamSync, we're more than just a brand – we're a collective of passionate individuals united by a common vision. Our journey began with a simple idea: to allow users to. Since then, we've grown, evolved, and forged a path driven by innovation and dedication.</p>
                 </div>
                 <img class="col-5 service-image" src="{{ asset('img/creation.png') }}" alt="Project Creation">
             </div>

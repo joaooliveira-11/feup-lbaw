@@ -1,6 +1,6 @@
 .error-message {
     text-align: center;
-    margin-top: 10%;
+    margin-top: 16rem;
 }
 
 .error-message .title {
@@ -19,9 +19,10 @@
 }
 
 .error-message .buttons {
-    margin-top: 3vh;
+    margin-top: 4rem;
 }
 
 .error-message .home-button{
-    padding: 2vh;
+    padding: 2rem;
+    font-size: 1.6rem;
 }
