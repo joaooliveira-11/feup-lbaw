@@ -1617,7 +1617,6 @@ function assign_task_to(){
     });
   });
 
-  // Select the first member by default
   if (members.length > 0) {
     members[0].click();
   }
@@ -1639,7 +1638,6 @@ function assign_coordinator(){
     });
   });
 
-  // Select the first member by default
   if (members.length > 0) {
     members[0].click();
   }
@@ -1733,3 +1731,56 @@ function updateUserTable(users) {
   });
 }
 
+let valueDisplays = document.querySelectorAll(".num");
+let interval = 2500;
+let initialDelay = 1000;
+
+valueDisplays.forEach((valueDisplay) => {
+  let startValue = 0;
+  let endValue = parseInt(valueDisplay.getAttribute("data-val"));
+
+  setTimeout(() => {
+    let duration = Math.floor(interval / endValue);
+    let counter = setInterval(function () {
+      startValue += 1;
+      valueDisplay.textContent = startValue;
+      if (startValue == endValue) {
+        clearInterval(counter);
+      }
+    },
+    duration);
+  },
+  initialDelay);
+});
+
+let toggles = document.getElementsByClassName('faq-toggle');
+let contentDiv = document.getElementsByClassName('faq-content');
+let icons = document.getElementsByClassName('icon');
+
+for(let i=0; i<toggles.length; i++){
+    toggles[i].addEventListener('click', ()=>{
+        if( parseInt(contentDiv[i].style.height) != contentDiv[i].scrollHeight){
+            contentDiv[i].style.height = contentDiv[i].scrollHeight + "px";
+            toggles[i].style.color = "#543CE7";
+            toggles[i].style.fontWeight = "600";
+            icons[i].classList.remove('fa-plus');
+            icons[i].classList.add('fa-minus');
+        }
+        else{
+            contentDiv[i].style.height = "0px";
+            toggles[i].style.color = "#111130";
+            toggles[i].style.fontWeight = "400";
+            icons[i].classList.remove('fa-minus');
+            icons[i].classList.add('fa-plus');
+        }
+
+        for(let j=0; j<contentDiv.length; j++){
+            if(j!==i){
+                contentDiv[j].style.height = "0px";
+                toggles[j].style.color = "#111130";
+                icons[j].classList.remove('fa-minus');
+                icons[j].classList.add('fa-plus');
+            }
+        }
+    });
+}
