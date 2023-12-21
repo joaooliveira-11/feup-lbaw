@@ -35,9 +35,6 @@
     color: #000;
 }
 
-.hamnavbar label, #hamburger {
-    display: none;
-}
 
 .navbar-profile-logout-notifications {
     display: flex;
@@ -274,6 +271,7 @@ button.invite-accept:hover{
     object-fit: cover;
 }
 
+
 @media screen and (max-width: 768px) {
     #noti-number {
         position : absolute;
@@ -287,12 +285,11 @@ button.invite-accept:hover{
         width: 100vw;
         padding: 0;
     }
-    .hamnavbar {
-        display: inline-block;
-    }
+    
     .navbar-img {
         width: 18vw;
     }
+
     .navbar-list-element {
         padding: 0.5em;
         font-size: 230%;
@@ -301,32 +298,11 @@ button.invite-accept:hover{
         width: 100%;
         border-top: 1px solid #fff;
     }
-    .hamnavbar label {
-        display: none;
-        color: white;
-        background: #4248ab;
-        font-style: normal;
-        font-size: 1.2em;
-        padding: 10px;
-    }
-
+   
     .navbar-list-ul { 
         display: none; 
         width: 100%;
         padding: 0.5em 2em;
-    }
-    .hamnavbar input:checked ~ .navbar-list-ul { display: block; }
-    
-    .navbar-login-button, .navbar-separator, .navbar-register-button {
-        font-size: 2vw;
-    }
-
-    .hamnavbar label {
-        display: block;
-    }
-
-    .navbar-list-ul {
-        display: none;
     }
 
 }

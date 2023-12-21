@@ -815,73 +815,72 @@ document.getElementById(buttonId).addEventListener('click', function () {
 }
 
 function setupCommentForm(formId) {
-let form = document.getElementById(formId);
-document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
+  let form = document.getElementById(formId);
+  document.getElementById(formId).addEventListener("submit", handleCreateComment.bind(form));
 }
 
 
 function setupMessageForm(formId) {
-let form = document.getElementById(formId);
-document.getElementById(formId).addEventListener("submit", handleCreateMessage.bind(form));
+  let form = document.getElementById(formId);
+  document.getElementById(formId).addEventListener("submit", handleCreateMessage.bind(form));
 }
 
 
 function dismiss_notification(notificationId) {
-console.log(notificationId);
-sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
-  if (this.status >= 200 && this.status < 400) {
-    const prev_number = document.getElementById('noti-number').textContent;
-    if(prev_number == 1){
-      document.getElementById('noti-number').textContent = '';
-      document.getElementById('noti-number').classList.add('hide');
-    }else {
-      document.getElementById('noti-number').textContent = prev_number - 1;
-    }
-  
-    let notificationElement = document.getElementById('n'+notificationId);
-    notificationElement.style.transition = "transform 0.5s ease-out";
-    notificationElement.style.transform = "translateX(100%)";
-    setTimeout(function() {
-        notificationElement.style.display = "none";
-    }, 500);
-  }
-});
-}
-
-function dismissAll() {
-const notifications = document.querySelectorAll('.notification');
-notifications.forEach(notification => {
-  const notification_id = notification.id.substring(1); 
-  dismiss_notification(notification_id);
-});
-}
-
-function accept_invite(reference_id, notification_id, member_id) {
-console.log(reference_id);
-console.log(notification_id);
-console.log(member_id);
-sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
-  if (this.status >= 200 && this.status < 400) {
-    const response = JSON.parse(this.response);
-    console.log(response);
-    dismiss_notification(notification_id);
-  }
-});
-
-}
-
-function removeFromProject(projectId){
-const is_coordinator = document.querySelector('#leaveProject.coordinator');
-if(is_coordinator != null){
-  assignCoordinator(projectId);
-}else{
-  sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
+  console.log(notificationId);
+  sendAjaxRequest('POST', '/dismiss-notification', {notificationId: notificationId}, function() {
     if (this.status >= 200 && this.status < 400) {
-      const response = JSON.parse(this.response);
-      window.location.href = '/home';
+      const prev_number = document.getElementById('noti-number').textContent;
+      if(prev_number == 1){
+        document.getElementById('noti-number').textContent = '';
+        document.getElementById('noti-number').classList.add('hide');
+      }else {
+        document.getElementById('noti-number').textContent = prev_number - 1;
+      }
+    
+      let notificationElement = document.getElementById('n'+notificationId);
+      notificationElement.style.transition = "transform 0.5s ease-out";
+      notificationElement.style.transform = "translateX(100%)";
+      setTimeout(function() {
+          notificationElement.style.display = "none";
+      }, 500);
     }
   });
 }
+
+function dismissAll() {
+  const notifications = document.querySelectorAll('.notification');
+  notifications.forEach(notification => {
+    const notification_id = notification.id.substring(1); 
+    dismiss_notification(notification_id);
+  });
+}
+
+function accept_invite(reference_id, notification_id, member_id) {
+  console.log(reference_id);
+  console.log(notification_id);
+  console.log(member_id);
+  sendAjaxRequest('POST', '/addMember', {reference_id: reference_id, member_id: member_id}, function() {
+    if (this.status >= 200 && this.status < 400) {
+      const response = JSON.parse(this.response);
+      console.log(response);
+      dismiss_notification(notification_id);
+    }
+  });
+}
+
+function removeFromProject(projectId){
+  const is_coordinator = document.querySelector('#leaveProject.coordinator');
+  if(is_coordinator != null){
+    assignCoordinator(projectId);
+  }else{
+    sendAjaxRequest('DELETE', '/leaveProject/'+projectId, {}, function() {
+      if (this.status >= 200 && this.status < 400) {
+        const response = JSON.parse(this.response);
+        window.location.href = '/home';
+      }
+    });
+  }
 }
 
 function kickFromProject(memberId, projectId){
@@ -1713,6 +1712,13 @@ function handleArchiveTask() {
         });
     }
   })
+}
+
+function toggleHamburgerMenu() {
+  var navbar = document.querySelector('.navbar-list-ul');
+  var hamburger = document.querySelector('.hamburger');
+  navbar.classList.toggle('show');
+  hamburger.classList.toggle('active');
 }
 
 function closeNotifications() {
