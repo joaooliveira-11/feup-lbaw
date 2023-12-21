@@ -233,7 +233,7 @@ BEGIN
     IF NEW.project_coordinator <> OLD.project_Coordinator THEN
         FOR userslist IN (SELECT user_id FROM project_users WHERE project_id = NEW.project_id) LOOP
             INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id)
-            VALUES ('2022-11-25', FALSE, NEW.project_coordinator, userslist, 'coordinator', NEW.project_id);
+            VALUES (NOW(), FALSE, NEW.project_coordinator, userslist, 'coordinator', NEW.project_id);
         END LOOP;
     END IF;
     
@@ -255,7 +255,7 @@ $BODY$
 BEGIN
     IF NEW.state = 'archived' AND NEW.state <> OLD.state THEN
         INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id)
-        VALUES ('2022-11-03', FALSE, (SELECT project_coordinator from project WHERE NEW.project_task = project_id), NEW.assigned_to, 'archivedtask', NEW.task_id);
+        VALUES (NOW(), FALSE, (SELECT project_coordinator from project WHERE NEW.project_task = project_id), NEW.assigned_to, 'archivedtask', NEW.task_id);
     END IF;
     RETURN NEW;
 END
@@ -275,7 +275,7 @@ $BODY$
 BEGIN
     IF (OLD.assigned_to IS NULL AND NEW.assigned_to IS NOT NULL) OR
     (OLD.assigned_to IS NOT NULL AND NEW.assigned_to IS NOT NULL AND NEW.assigned_to <> OLD.assigned_to) THEN 
-        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES ('2022-11-03', 
+        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NOW(), 
             FALSE, (SELECT project_coordinator from project WHERE NEW.project_task = project_id), NEW.assigned_to, 'assignedtask', NEW.task_id);
     END IF;
     RETURN NEW;
@@ -297,7 +297,7 @@ DECLARE
     userslist INTEGER;
 BEGIN
     FOR userslist IN (SELECT user_id FROM project_users WHERE project_id = New.project_id AND user_id <> NEW.user_id) LOOP
-        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES ('2022-11-03', 
+        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NOW(), 
             FALSE, (SELECT project_coordinator from project WHERE NEW.project_id = project_id), userslist, 'acceptedinvite', NEW.project_id);
     END LOOP;
     RETURN NEW;

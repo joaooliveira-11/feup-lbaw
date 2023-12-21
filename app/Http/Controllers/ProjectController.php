@@ -176,6 +176,16 @@ class ProjectController extends Controller {
         
         $project->save();
 
+        $newnotification = new Notification;
+        $newnotification->create_date = now();
+        $newnotification->emited_by = 1;
+        $newnotification->emited_to = $coordinator->id;
+        $newnotification->viewed = false;
+        $newnotification->type = 'coordinator';
+        $newnotification->reference_id = $project->project_id;
+
+        $newnotification->save();
+
         event(new NewCoordinator($project->title, $coordinator->name));
         
         return response()->json([
