@@ -17,8 +17,8 @@
                         </div>
                         <div class="message-buttons">
                             @if ($message->message_by == auth()->user()->id)
-                                <button type="button" class="message-manage-button"id="EditMessagebtn">Edit</button>
-                                <button type="button" class="message-manage-button" id="DeleteMessagebtn">Delete</button>
+                                <button type="button" class="message-manage-button {{ $project->archived ? 'archived-btn' : '' }}" id="EditMessagebtn">Edit</button>
+                                <button type="button" class="message-manage-button {{ $project->archived ? 'archived-btn' : '' }}" id="DeleteMessagebtn">Delete</button>
                             @endif
                         </div>
                     </div>

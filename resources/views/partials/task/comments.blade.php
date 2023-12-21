@@ -17,8 +17,8 @@
                         </div>
                         <div class="comment-buttons">
                             @if ($comment->comment_by == auth()->user()->id)
-                                <button type="button" class="comment-manage-button" id="EditCommentbtn">Edit</button>
-                                <button type="button" class="comment-manage-button" id="DeleteCommentbtn">Delete</button>
+                                <button type="button" class="comment-manage-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" id="EditCommentbtn">Edit</button>
+                                <button type="button" class="comment-manage-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" id="DeleteCommentbtn">Delete</button>
                             @endif
                         </div>
                     </div>

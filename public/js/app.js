@@ -51,9 +51,12 @@ function addEventListeners() {
     chatSection.addEventListener('click', handleEditMessage);
   }
 
-  document.getElementById("notifications-button").addEventListener("click", function(event) {
-    document.getElementById("notifications-dropdown").classList.toggle("hide");
-  });
+  let notificationsButton = document.getElementById("notifications-button");
+  if(notificationsButton){
+    document.getElementById("notifications-button").addEventListener("click", function(event) {
+      document.getElementById("notifications-dropdown").classList.toggle("hide");
+    });
+  }
   
 
   let leaveProjectButton = document.getElementById('leaveProject');
@@ -1556,6 +1559,12 @@ function updateButtonsVisibility(archived) {
       }
     }
   });
+
+  const editdelbtns = document.querySelectorAll('.message-manage-button');
+  editdelbtns.forEach(button => {
+    if(archived) button.classList.add('archived-btn');
+    else button.classList.remove('archived-btn');
+  });
 }
 
 function handleProjectStatus() {
@@ -1675,6 +1684,11 @@ const buttons = ['upload_file_form','EditTaskModalButton', 'assignUserButton', '
     if (button) {
       button.classList.add('archived-btn');
     }
+  });
+
+  const editdelbtns = document.querySelectorAll('.comment-manage-button');
+  editdelbtns.forEach(button => {
+    button.classList.add('archived-btn');
   });
 }
 

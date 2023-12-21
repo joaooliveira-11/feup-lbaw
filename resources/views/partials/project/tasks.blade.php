@@ -10,7 +10,7 @@
                     <option value="all">All</option>
                     <option value="open">Open</option>
                     <option value="assigned">Assigned</option>
-                    <option value="closed">Closed</option>
+                    <option value="completed">Completed</option>
                     <option value="archived">Archived</option>
                 </select>
                 <label for="priority-selected">Priority:</label>

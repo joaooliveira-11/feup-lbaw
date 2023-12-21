@@ -467,6 +467,7 @@ header {
 }
 
 #submit-edit-message-button{
+    min-height: 3.5vw;
     height: 100%;
     background-color: #3C5EE7;
     color: white;

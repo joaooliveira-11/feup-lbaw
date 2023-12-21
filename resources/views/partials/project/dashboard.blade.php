@@ -31,7 +31,7 @@
                     @include('modal.create_task', ['project_id' => $project->project_id])
                 @endif
                 @if($project->is_coordinator(auth()->user()))
-                    <button type="button" id="AddMemberModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}"> Add Member</button>
+                    <button type="button" id="AddMemberModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}"> Invite Member</button>
                     @include('modal.add_member', ['project' => $project])
                     <button type="button" id="EditProjectModalButton" class="dashboard-project-button {{ $project->archived ? 'archived-btn' : '' }}">Manage Details</button>
                     @include('modal.edit_proj', ['project' => $project])

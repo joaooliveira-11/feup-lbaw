@@ -5,7 +5,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ __('Add Member to Project') }}</h4>
+                    <h4 class="modal-title">{{ __('Invite Member to Project') }}</h4>
                     <button class="modal-top-button" type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>                
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <button type="submit" class="btn btn-success modal-bottom-button"> {{ __('Add to Project') }}</button>
+                        <button type="submit" class="btn btn-success modal-bottom-button"> {{ __('Invite to Project') }}</button>
                     </div>
                 </div>
             </div>
