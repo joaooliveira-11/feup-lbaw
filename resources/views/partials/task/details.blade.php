@@ -31,21 +31,23 @@
         @endif
         <div class="task-details-buttons">
             @if($task->task_project->is_coordinator(auth()->user()))
-                <button type="button" id="EditTaskModalButton" class="task-details-button {{ $task->task_project->archived ? 'archived-btn' : '' }}" onclick="toggleModal('editTaskModalWrapper')">Manage Details</button>
-                <button type="button" class="task-details-button {{ $task->task_project->archived ? 'archived-btn' : '' }}" id="assignUserButton" onclick="toggleModal('assignTaskModalWrapper')">Assign User</button>
-            @endif
-            @if($task->assigned_to == auth()->user()->id && $task->state == ('assigned') && $task->task_project->is_member(auth()->user()))
-                <button type="button" id="completetaskbtn" class="task-details-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" data-task-id="{{ $task->task_id }}">Complete Task</button>
-            @endif
-            <button type="button" id="" class="task-details-button {{ $task->task_project->archived ? 'archived-btn' : '' }}" data-task-id="{{ $task->task_id }}">Archive Task</button>
-            @if($task->task_project->is_coordinator(auth()->user()))
-            <div id="assignTaskModalWrapper">
-                @include('modal.assign_task', ['task' => $task])
-            </div>
-            <div id="editTaskModalWrapper">
+                <button type="button" id="EditTaskModalButton" class="task-details-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}">Manage Details</button>
                 @include('modal.edit_task', ['task_id' => $task->task_id])
-            </div>
+                <button type="button" class="task-details-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" id="assignUserButton">Assign User</button>
             @endif
+
+            @if($task->assigned_to == auth()->user()->id && $task->state == ('assigned') && $task->task_project->is_member(auth()->user()))
+            <button type="button" id="completetaskbtn" class="task-details-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" data-task-id="{{ $task->task_id }}">Complete Task</button>
+            @endif
+
+            @if($task->task_project->is_coordinator(auth()->user()))
+                @include('modal.assign_task', ['task' => $task])
+            @endif
+
+            @if ($task->task_project->is_coordinator(auth()->user()) && $task->state == 'completed')
+                <button type="button" id="archivetaskbtn" class="task-details-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" data-task-id="{{ $task->task_id }}">Archive Task</button>
+            @endif
+
         </div>
         <div id="task-description" class="container">
             <h5 class="row">Details</h5>
