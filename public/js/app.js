@@ -913,7 +913,7 @@ const members = document.getElementsByClassName('user-id');
   .then((result) => {
     if (result.isConfirmed) {
       const username = options[result.value].substring(1);
-      sendAjaxRequest('POST', '/changeCoordinator/'+username+'/'+projectId, {}, function() {
+      sendAjaxRequest('POST', '/leaveAsCoordinator/'+username+'/'+projectId, {}, function() {
         if (this.status >= 200 && this.status < 400) {
           window.location.href = '/home';
         }
