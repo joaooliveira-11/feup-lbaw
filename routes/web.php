@@ -84,6 +84,7 @@ Route::controller(ProjectController::class)->group(function() {
     Route::delete('/leaveProject/{id}', 'leaveProject')->name('leaveproject');
     Route::delete('/kickMember/{user_id}/{project_id}', 'kickMember')->name('kickmember');
     Route::post('/changeCoordinator/{username}/{project_id}', 'changeCoordinator')->name('changeCoordinator');
+    Route::post('/leaveAsCoordinator/{username}/{project_id}', 'leaveAsCoordinator')->name('leaveAsCoordinator');
     Route::patch('/project/edit', 'updatedetails')->name('project.update_details');
     Route::patch('/project/{id}/changevisibility', 'update_visibility')->name('project.update_visibility');
     Route::patch('/project/{id}/changestatus', 'update_status')->name('project.update_status');
