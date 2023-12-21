@@ -188,14 +188,9 @@ class ProjectController extends Controller {
 
         event(new NewCoordinator($project->title, $coordinator->name));
 
-        if (request()->ajax() || request()->wantsJson()) {
-            return response()->json([
-                'success' => 'Coordinator changed successfully!',
-            ]);
-        } else {
-            return redirect()->route('project', ['project_id' => $project->project_id]);
-        }
-        
+        return response()->json([
+            'success' => 'Coordinator changed successfully!',
+        ]);    
     }
 
     public function changeCoordinator($username, $project_id){
@@ -229,13 +224,7 @@ class ProjectController extends Controller {
 
         event(new NewCoordinator($project->title, $coordinator->name));
         
-        if (request()->ajax() || request()->wantsJson()) {
-            return response()->json([
-                'success' => 'Coordinator changed successfully!',
-            ]);
-        } else {
-            return redirect()->route('project', ['project_id' => $project->project_id]);
-        }
+        return redirect()->route('project', ['project_id' => $project->project_id]);
     }
     
     public function favoriteProject(Request $request){
