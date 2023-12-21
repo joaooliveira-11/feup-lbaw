@@ -1,4 +1,5 @@
 #lp-content {
+    overflow: hidden;
     margin-top: 4vw;
 }
 #lp-content .container {
@@ -53,6 +54,12 @@
     background-color: #dedede;
     color: #000;
     box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
+}
+.lp-cta .lp-button:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
+    border: 1px solid #543CE7;
 }
 .statistics-wrapper {
     margin-top: 8rem;
@@ -113,6 +120,15 @@
     align-items: center;
 }
 
+#about-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 4rem;
+    position: relative;
+    align-items: center;
+}
+
 .lp-section-title {
     margin: auto;
     font-size: 1.6vw;
@@ -161,13 +177,16 @@
     width: 20vw;
 }
 
-.lp-cta {
+#lp-content .lp-cta {
+    width: 100%;
+    max-width: 100%;
+    padding: 4rem 0;
     display: flex;
     flex-direction: column;
     margin: auto;
-    margin-top: 5em;
     position: relative;
     align-items: center;
+    background-color: #dedede;
 }
 
 .cta-buttons {
@@ -185,6 +204,7 @@
     font-weight: bold;
     color: #454545;
     border: 2px solid #543CE7;
+    background-color: #fff;
     border-radius: 0.5em;
     text-decoration: none;
     transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
@@ -197,24 +217,22 @@
 }
 
 #footer-wrapper {
-    margin-top: 4vw;
-    padding: 1vw;
+    padding: 3rem;
     background-color: #222222;
-    display: flex;
-    justify-content: space-around;
 }
 
 .footer-row {
-    width: 80%;
+    width: 70%;
     display: flex;
     justify-content: space-between;
+    margin: auto;
 }
 
 .footer-left {
     width: 16vw;
 }
 
-#footer-wrapper a {
+#footer-wrapper .footer-teamsync-button {
     color: #dedede;
     font-size: 1.8vw;
     text-decoration: none;
@@ -244,11 +262,21 @@
 }
 
 .footer-middle li {
-    color: #dedede;
-    font-size: 0.9vw;
     margin-bottom: 0;
 }
 
+#footer-wrapper ul li a {
+    font-size: 0.9vw;
+    text-decoration: none;
+    color: #dedede;
+}
+
+.footer-directions {
+    text-decoration: none;
+}
+.footer-directions p:hover {
+    color: #543CE7;
+}
 .footer-right p {
     font-size: 0.9vw;
     letter-spacing: 2px;
@@ -259,9 +287,13 @@
     margin-top: 6vw;
 }
 
-.about-header {
+.about-about-us {
+    padding: 4rem 0;
+    background-color: #dedede;
+}
+
+#lp-content .about-header {
     margin: auto;
-    margin-top: 4em;
 }
 
 .about-header p {
@@ -276,10 +308,13 @@
 
 @media screen and (max-width: 768px) {
     #lp-content {
-        margin-top: 8em;
+        margin-top: 12rem;
     }
-    .lp-header {
-        margin-top: 10vw;
+    #lp-content.about-about-us {
+        margin-top: 6rem;
+    }
+    #lp-content.lp-header {
+        margin-top: 0;
     }
     #lp-content .lp-header-content {
         max-width: 100%;
@@ -349,6 +384,15 @@
         width: 85%;
         margin-bottom: 3vw;
     }
+    #about-container .lp-service {
+        margin-bottom: 3vw;
+    }
+    #about-container .service-text h4 {
+        text-align: center;
+    }
+    #about-container .service-text {
+        width: 100%;
+    }
     #lp-content .service-text {
         width: 100%;
     }
@@ -368,6 +412,9 @@
 
     .lp-section-title {
         font-size: 175%;
+    }
+    .about-header .lp-section-title {
+        font-size: 3rem;
     }
     .lp-cta h3 {
         font-size: 175%;
@@ -395,23 +442,36 @@
     }
     #footer-wrapper {
         height: 12em;
+        padding: 3rem 2rem;
+    }
+    .footer-row {
+        width: 100%;
+    }
+    .footer-left {
+        width: 37vw;
     }
     #footer-wrapper .footer-teamsync-button {
-        font-size: 200%;
+        font-size: 3rem;
     }
     #footer-wrapper h6 {
-        font-size: 100%;
+        font-size: 1.4rem;
+    }
+    .footer-middle {
+        width: 10vw;
     }
     #footer-wrapper .footer-middle h5 {
-        font-size: 175%;
+        font-size: 1.6rem;
     }
-    .footer-middle ul li {
-        font-size: 140%;
+    #footer-wrapper ul li a {
+        font-size: 1.4rem;
+    }
+    .footer-right {
+        width: 37vw;
     }
     #footer-wrapper .footer-right h5 {
-        font-size: 175%;
+        font-size: 1.6rem;
     }
     .footer-right p {
-        font-size: 100%;
+        font-size: 1.2rem;
     }
 }

@@ -72,6 +72,7 @@
             </div>
         </div>
     </div>
+
     <div class="container lp-cta">
         <h2 class="lp-section-title">Are you ready to take your work to the <span>next level?</span></h2>
         <div class="cta-buttons">
@@ -108,26 +109,31 @@
             </div>
         </div>
     </div>
+
 </div>
+
 <div id="footer-wrapper">
-    <div class="footer-row">
-        <div class="col-4 footer-left">
+     <div class="footer-row">
+        <div class="footer-left">
             <a class="footer-teamsync-button" href="{{ url('/register') }}">TeamSync</a>
             <h6>Where collaboration meets inovation</h6>
         </div>
-        <div class="col-3 footer-middle">
+        <div class="footer-middle">
             <h5>Pages</h5>
             <ul>
-                <li>Home</li>
-                <li>About</li>
-                <li>FAQs</li>
+                <li> <a href="{{ url('/index') }}">Home</a></li>
+                <li> <a href="{{ url('/about') }}">About</a></li>
+                <li> <a href="{{ url('/faqs') }}">FAQs</a></li>
             </ul>
-        </div>
-        <div class="col-4 footer-right">
+            </div>
+
+        <div class="footer-right">
             <h5>Contact</h5>
             <p>+351 912 345 678</p>
             <p>contact@teamsync.com</p>
-            <p>Rua Olivia Rodrigo 123</p>
+            <a class="footer-directions" href="https://www.google.com/maps/place/FEUP+-+Faculdade+de+Engenharia+da+Universidade+do+Porto/@41.1783583,-8.5958454,17z/data=!3m1!4b1!4m6!3m5!1s0xd246446d48922a3:0x8b1e4a0bcdacc840!8m2!3d41.1783583!4d-8.5958454!16s%2Fg%2F1tj92tyc?entry=ttu" target="_blank">
+                <p>R. Dr. Roberto Frias, Porto</p>
+            </a>
         </div>
     </div>
 </div>
