@@ -8,10 +8,17 @@
     <img src="{{ asset('img/TeamSync.svg') }}" alt="TeamSync">
     <div class="navbar-list">
         <ul class="navbar-list-ul">
+            @if (Auth::user()->isAdmin())
+            <li><a class="navbar-list-element" href="{{ url('/dashboard') }}">Dashboard</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
+            <li><a class="navbar-list-element" href="">FAQs</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
+            @else
             <li><a class="navbar-list-element" href="{{ url('/home') }}">Home</a></li>
             <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
             <li><a class="navbar-list-element" href="">FAQs</a></li>
             <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
+            @endif
         </ul>
     </div>
 
@@ -26,7 +33,7 @@
             <a class="navbar-logout-button" href="{{ url('/logout') }}">
                 <i class="fa fa-sign-out-alt"></i>
             </a>       
-            @endif
+        @endif
 
     <div id="notifications-dropdown">
             <button class="close-notifications"><i class="fa-solid fa-times"></i></button>

@@ -24,5 +24,10 @@ class AdminController extends Controller {
         User::where('id', $id)->update(['is_banned' => false]);
         return redirect()->back();
     }
+
+    public function dashboard() {
+        $users = User::all();
+        return view('pages.dashboard', compact('users'));
+    }
     
 }

@@ -111,8 +111,29 @@ function addEventListeners() {
     closeButton.addEventListener('click', closeNotifications);
   }
 
+  document.getElementById('userSearchInput').addEventListener('input', function() {
+    var searchTerm = this.value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/search-users?search=' + encodeURIComponent(searchTerm), true);
+    xhr.onload = function() {
+        if (this.status == 200) {
+            var users = JSON.parse(this.responseText);
+            updateUserTable(users);
+        }
+    };
+    xhr.send();
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var hamburger = document.getElementById('hamburger');
+    var menu = document.querySelector('.navbar-list-ul');
+
+    hamburger.addEventListener('click', function() {
+        menu.classList.toggle('navbar-active');
+    });
+  });
+
   setupRadioButtons();
-  
 } 
 
 function encodeForAjax(data) {
@@ -1418,5 +1439,17 @@ fetch(`/task/complete/${taskId}`, {
 function closeNotifications() {
   document.getElementById("notifications-dropdown").classList.toggle("hide");
   document.getElementById("new-notification").classList.remove("show");
+}
+
+function updateUserTable(users) {
+  var tableBody = document.getElementById('userTableBody');
+  tableBody.innerHTML = '';
+  users.forEach(function(user) {
+      var row = document.createElement('tr');
+      row.innerHTML = '<td>' + user.id + '</td>' +
+                      '<td>' + user.name + '</td>' +
+                      '<td>' + user.email + '</td>';
+      tableBody.appendChild(row);
+  });
 }
 

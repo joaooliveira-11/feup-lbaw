@@ -253,11 +253,15 @@
     flex-direction: column;
 }
 
-#edit-page-content input[type="text"], #edit-page-content input[type="email"], #edit-page-content textarea {
+#edit-page-content input[type="text"], #edit-page-content input[type="email"], #edit-page-content input[type="password"], #edit-page-content textarea {
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.navbar-active-link {
+    text-decoration: underline;
 }
 
 #edit-page-content textarea {
