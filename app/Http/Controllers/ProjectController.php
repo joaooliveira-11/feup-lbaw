@@ -28,8 +28,19 @@ class ProjectController extends Controller {
     }
 
     public function showAllProjects() {
-        $project = Project::where('is_public', true)->get();
-        return view('pages.allProjects', ['projects'=>$project]);
+        $user = Auth::user();
+    
+        if ($user->is_admin) {
+            $projects = Project::all();
+        } else {
+            $projects = Project::where('is_public', true)
+                        ->orWhere(function($query) use ($user) {
+                            $query->whereHas('users', function($q) use ($user) {
+                                $q->where('users.id', $user->id);
+                            });
+                        })->get();
+        }
+        return view('pages.allProjects', ['projects' => $projects]);
     }
 
     public function create(Request $request) {   
