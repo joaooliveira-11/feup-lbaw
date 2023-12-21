@@ -116,6 +116,7 @@ function addEventListeners() {
     closeButton.addEventListener('click', closeNotifications);
   }
 
+  /*
   document.getElementById('userSearchInput').addEventListener('input', function() {
     var searchTerm = this.value;
     var xhr = new XMLHttpRequest();
@@ -128,7 +129,7 @@ function addEventListeners() {
     };
     xhr.send();
   });
-
+*/
   document.addEventListener("DOMContentLoaded", function() {
     var hamburger = document.getElementById('hamburger');
     var menu = document.querySelector('.navbar-list-ul');
@@ -414,22 +415,30 @@ fetch(url, {
   modal.hide();
   
   let titleNode = document.createTextNode(data.task_title);
-  let finishDate = new Date(data.task_finish_date);
-  let formattedFinishDate = finishDate.getFullYear() + '-' +
-    String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
-    String(finishDate.getDate()).padStart(2, '0') + ' ' +
-    String(finishDate.getHours()).padStart(2, '0') + ':' +
-    String(finishDate.getMinutes()).padStart(2, '0') + ':' +
-    String(finishDate.getSeconds()).padStart(2, '0');
-    let finishDateNode = document.createTextNode(formattedFinishDate);
-    let priorityNode = document.createTextNode(data.task_priority);
+  if(data.task_finish_date){
+    let finishDate = new Date(data.task_finish_date);
+    let formattedFinishDate = finishDate.getFullYear() + '-' +
+      String(finishDate.getMonth() + 1).padStart(2, '0') + '-' +
+      String(finishDate.getDate()).padStart(2, '0') + ' ' +
+      String(finishDate.getHours()).padStart(2, '0') + ':' +
+      String(finishDate.getMinutes()).padStart(2, '0') + ':' +
+      String(finishDate.getSeconds()).padStart(2, '0');
+      let finishDateNode = document.createTextNode(formattedFinishDate);
+      let finishDateElement = document.getElementById('task-details-finish_date');
+      finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
+  }
+  else{
+    let finishDateNode = document.createTextNode('Not defined');
+    let finishDateElement = document.getElementById('task-details-finish_date');
+    finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
+  }
+
+  let priorityNode = document.createTextNode(data.task_priority);
 
   let titleElement = document.getElementById('task-details-title');
-  let finishDateElement = document.getElementById('task-details-finish_date');
   let priorityElement = document.getElementById('task-details-priority');
 
   titleElement.parentNode.replaceChild(titleNode, titleElement.nextSibling);
-  finishDateElement.parentNode.replaceChild(finishDateNode, finishDateElement.nextSibling);
   priorityElement.parentNode.replaceChild(priorityNode, priorityElement.nextSibling);
   
   document.querySelector('#task-description p').textContent = data.task_description;
@@ -477,6 +486,10 @@ fetch(url, {
 
       let finishDateElement = document.querySelector('#ProjectDeadline #dashboard-project-content');
       finishDateElement.textContent = formattedFinishDate;
+  }
+  else{
+    let finishDateElement = document.querySelector('#ProjectDeadline #dashboard-project-content');
+    finishDateElement.textContent = 'Not defined';
   }
 
   let titleElement = document.querySelector('.sidebar-project-title');

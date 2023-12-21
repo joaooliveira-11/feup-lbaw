@@ -14,17 +14,17 @@ class TaskPolicy {
 
     public function show(User $user, Task $task): bool {
         $project = Project::find($task->project_task);
-        return $project->is_member($user) || $user->isAdmin() || $project->is_coordinator($user);    
+        return $project->is_member($user) || $user->isAdmin() || $project->is_public;
     }
     
     public function create(User $user, Task $task): bool {
         $project = Project::find($task->project_task);
-        return $project->is_member($user) || $project->is_coordinator($user);    
+        return $project->is_member($user);   
     }
 
     public function updatedetails(User $user, Task $task) : bool {
         $project = Project::find($task->project_task);
-        return $project->is_member($user) || $project->is_coordinator($user);  
+        return $project->is_member($user);
     }
     
     public function completetask(User $user, Task $task) : bool {

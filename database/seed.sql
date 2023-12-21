@@ -409,6 +409,7 @@ CREATE TRIGGER coordinator_not_in_project
     FOR EACH ROW
     EXECUTE PROCEDURE coordinator_not_in_project();
 
+/*
 --TRIGGER11 (User cannot comment on a task that is not assigned to someone or is archived)
 CREATE FUNCTION comment_unassigned_or_archived_task() RETURNS TRIGGER AS
 $BODY$
@@ -425,7 +426,7 @@ CREATE TRIGGER comment_unassigned_or_archived_task
     BEFORE INSERT ON comment
     FOR EACH ROW
     EXECUTE PROCEDURE comment_unassigned_or_archived_task();
-
+*/
 
 --TRIGGER12 (Update tasks when a user leaves a project)
 CREATE FUNCTION update_tasks_on_user_leave() RETURNS TRIGGER AS
@@ -445,7 +446,6 @@ CREATE TRIGGER update_tasks_on_user_leave
     FOR EACH ROW
     EXECUTE PROCEDURE update_tasks_on_user_leave();
 
-/*
 --TRIGGER13 (The task has to be created by a user who is in the project)
 CREATE OR REPLACE FUNCTION task_user_in_project() RETURNS TRIGGER AS
 $BODY$
@@ -455,6 +455,11 @@ BEGIN
         FROM project_users
         WHERE project_id = NEW.project_task
           AND user_id = NEW.create_by
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM project
+        WHERE project_id = NEW.project_task
+          AND project_coordinator = NEW.create_by
     ) THEN
         RAISE EXCEPTION 'The task has to be created by a user who is in the project';
     END IF;
@@ -477,6 +482,10 @@ BEGIN
         SELECT 1 FROM project_users pu
         JOIN task t ON pu.project_id = t.project_task
         WHERE pu.user_id = NEW.comment_by AND t.task_id = NEW.task_comment
+    ) AND NOT EXISTS (
+        SELECT 1 FROM project p
+        JOIN task t ON p.project_id = t.project_task
+        WHERE p.project_coordinator = NEW.comment_by AND t.task_id = NEW.task_comment
     ) THEN
         RAISE EXCEPTION 'User cannot make a comment if they are not in the project.';
     END IF;
@@ -497,20 +506,20 @@ $BODY$
 BEGIN
     IF NOT EXISTS (
         SELECT 1 FROM project_users WHERE user_id = NEW.message_by AND project_id = NEW.project_message
+    ) AND NOT EXISTS (
+        SELECT 1 FROM project WHERE project_coordinator = NEW.message_by AND project_id = NEW.project_message
     ) THEN
-        RAISE EXCEPTION 'User cannot send a message if they are not in the project..';
+        RAISE EXCEPTION 'User cannot send a message if they are not in the project.';
     END IF;
     RETURN NEW;
 END;
 $BODY$
 LANGUAGE plpgsql;
 
-
 CREATE TRIGGER check_ProjMember_before_message
     BEFORE INSERT ON message
     FOR EACH ROW 
     EXECUTE PROCEDURE check_ProjMember_before_message();
-*/
 
 
 -----------------------------------------
