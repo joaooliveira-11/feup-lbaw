@@ -11,12 +11,12 @@
             @if (Auth::user()->isAdmin())
             <li><a class="navbar-list-element" href="{{ url('/dashboard') }}">Dashboard</a></li>
             <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
-            <li><a class="navbar-list-element" href="">FAQs</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/faqs') }}">FAQs</a></li>
             <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
             @else
             <li><a class="navbar-list-element" href="{{ url('/home') }}">Home</a></li>
             <li><a class="navbar-list-element" href="{{ url('/about') }}">About</a></li>
-            <li><a class="navbar-list-element" href="">FAQs</a></li>
+            <li><a class="navbar-list-element" href="{{ url('/faqs') }}">FAQs</a></li>
             <li><a class="navbar-list-element" href="{{ url('/projects') }}">Projects</a></li>
             @endif
         </ul>

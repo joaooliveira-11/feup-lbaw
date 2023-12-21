@@ -33,6 +33,8 @@ Route::view('/index', 'pages.index')->name('index');
 // Route::view('/about', 'pages.about')->name('about'); vai deixar de existir
 
 Route::view('/home', 'pages.homePage')->name('home');
+Route::view('/about', 'pages.aboutPage')->name('about');
+Route::view('/faqs', 'pages.faqsPage')->name('faqs');
 
 //redirects
 Route::get('/forbidden', function () {

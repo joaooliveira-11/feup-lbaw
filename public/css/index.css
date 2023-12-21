@@ -1,5 +1,9 @@
 #lp-content {
+    overflow: hidden;
     margin-top: 4vw;
+}
+#lp-content .container {
+    max-width: 70vw;
 }
 .lp-header {
     margin: auto;
@@ -15,15 +19,15 @@
     max-width: 35%;
 }
 
-.lp-header-image {
-    width:46vw;
+#lp-content .lp-header-image {
+    width: 40vw;
     height: fit-content;
-    margin-top: 5vw;
+    margin-top: 3em;
 }
 
 .lp-header-content h1 {
     color: #454545;
-    font-size: 5vw;
+    font-size: 4.5vw;
     width: 9em;
     margin-bottom: 0.2em;
 }
@@ -51,12 +55,76 @@
     color: #000;
     box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
 }
+.lp-cta .lp-button:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
+    border: 1px solid #543CE7;
+}
+.statistics-wrapper {
+    margin-top: 8rem;
+    padding-bottom: 8rem;
+    padding-top: 4rem;
+    background-color: #e0e0e0;
+}
+
+.statistics-container {
+    height: 28vh;
+    width: 80vw;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.statistic {
+    width: 28vmin;
+    height: 28vmin;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 1em 0;
+    position: relative;
+    font-size: 16px;
+    border-radius: 0.5em;
+    background-color: #454545;
+    border-bottom: 10px solid #543CE7;
+}
+.statistic i {
+    color: #dedede;
+    font-size: 2.5em;
+    text-align: center;
+}
+
+.statistic span.num {
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: 3em;
+}
+.statistic span.text {
+    color: #e0e0e0;
+    font-size: 1.4em;
+    text-align: center;
+    pad: 0.7em 0;
+    font-weight: 600;
+    line-height: 0;
+}
 
 #lp-services {
     display: flex;
     flex-direction: column;
     margin: auto;
-    margin-top: 5em;
+    margin-top: 8em;
+    position: relative;
+    align-items: center;
+}
+
+#about-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 4rem;
     position: relative;
     align-items: center;
 }
@@ -99,22 +167,30 @@
     width: 64%;
 }
 
-.service-image {
-    height: 15vw;
-    width: 20vw;;
+.service-img-container {
+    width: 28vw;
+    text-align: center;
 }
 
-.lp-cta {
+.service-image {
+    height: 15vw;
+    width: 20vw;
+}
+
+#lp-content .lp-cta {
+    width: 100%;
+    max-width: 100%;
+    padding: 4rem 0;
     display: flex;
     flex-direction: column;
     margin: auto;
-    margin-top: 5em;
     position: relative;
     align-items: center;
+    background-color: #dedede;
 }
 
 .cta-buttons {
-    width: 30vw;
+    width: 36vw;
     display: flex;
     margin: auto;
     margin-top: 4vw;
@@ -128,6 +204,7 @@
     font-weight: bold;
     color: #454545;
     border: 2px solid #543CE7;
+    background-color: #fff;
     border-radius: 0.5em;
     text-decoration: none;
     transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
@@ -140,24 +217,22 @@
 }
 
 #footer-wrapper {
-    margin-top: 4vw;
-    padding: 1vw;
+    padding: 3rem;
     background-color: #222222;
-    display: flex;
-    justify-content: space-around;
 }
 
 .footer-row {
-    width: 80%;
+    width: 70%;
     display: flex;
     justify-content: space-between;
+    margin: auto;
 }
 
 .footer-left {
     width: 16vw;
 }
 
-#footer-wrapper a {
+#footer-wrapper .footer-teamsync-button {
     color: #dedede;
     font-size: 1.8vw;
     text-decoration: none;
@@ -187,11 +262,21 @@
 }
 
 .footer-middle li {
-    color: #dedede;
-    font-size: 0.9vw;
     margin-bottom: 0;
 }
 
+#footer-wrapper ul li a {
+    font-size: 0.9vw;
+    text-decoration: none;
+    color: #dedede;
+}
+
+.footer-directions {
+    text-decoration: none;
+}
+.footer-directions p:hover {
+    color: #543CE7;
+}
 .footer-right p {
     font-size: 0.9vw;
     letter-spacing: 2px;
@@ -202,9 +287,13 @@
     margin-top: 6vw;
 }
 
-.about-header {
+.about-about-us {
+    padding: 4rem 0;
+    background-color: #dedede;
+}
+
+#lp-content .about-header {
     margin: auto;
-    margin-top: 4em;
 }
 
 .about-header p {
@@ -219,10 +308,13 @@
 
 @media screen and (max-width: 768px) {
     #lp-content {
-        margin-top: 8em;
+        margin-top: 12rem;
     }
-    .lp-header {
-        margin-top: 10vw;
+    #lp-content.about-about-us {
+        margin-top: 6rem;
+    }
+    #lp-content.lp-header {
+        margin-top: 0;
     }
     #lp-content .lp-header-content {
         max-width: 100%;
@@ -255,6 +347,25 @@
     #footer a, #footer h5, #footer p, #footer li {
         font-size: 115%;
     }
+
+    .statistics-container {
+        margin-top: 4rem;
+        height: 48vh;
+        flex-direction: column;
+    }
+    .statistic {
+        width: 50vw;
+        margin: 0 auto;
+    }
+    .statistic span.num {
+        font-size: 2em;
+    }
+    .statistic span.text {
+        font-size: 1.2em;
+    }
+    .statistic i {
+        font-size: 2em;
+    }
     #lp-services {
         width: 100%;
         text-align: center;
@@ -272,6 +383,15 @@
     .lp-service {
         width: 85%;
         margin-bottom: 3vw;
+    }
+    #about-container .lp-service {
+        margin-bottom: 3vw;
+    }
+    #about-container .service-text h4 {
+        text-align: center;
+    }
+    #about-container .service-text {
+        width: 100%;
     }
     #lp-content .service-text {
         width: 100%;
@@ -292,6 +412,9 @@
 
     .lp-section-title {
         font-size: 175%;
+    }
+    .about-header .lp-section-title {
+        font-size: 3rem;
     }
     .lp-cta h3 {
         font-size: 175%;
@@ -319,23 +442,36 @@
     }
     #footer-wrapper {
         height: 12em;
+        padding: 3rem 2rem;
+    }
+    .footer-row {
+        width: 100%;
+    }
+    .footer-left {
+        width: 37vw;
     }
     #footer-wrapper .footer-teamsync-button {
-        font-size: 200%;
+        font-size: 3rem;
     }
     #footer-wrapper h6 {
-        font-size: 100%;
+        font-size: 1.4rem;
+    }
+    .footer-middle {
+        width: 10vw;
     }
     #footer-wrapper .footer-middle h5 {
-        font-size: 175%;
+        font-size: 1.6rem;
     }
-    .footer-middle ul li {
-        font-size: 140%;
+    #footer-wrapper ul li a {
+        font-size: 1.4rem;
+    }
+    .footer-right {
+        width: 37vw;
     }
     #footer-wrapper .footer-right h5 {
-        font-size: 175%;
+        font-size: 1.6rem;
     }
     .footer-right p {
-        font-size: 100%;
+        font-size: 1.2rem;
     }
 }
