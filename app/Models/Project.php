@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class Project extends Model
 {
@@ -55,9 +57,10 @@ class Project extends Model
         if ($user->is_admin) {
             return self::query();
         } else {
-            $userProjectIds = $user->projects()->pluck('id');
-            return self::whereIn('project_id', $userProjectIds)
-                       ->orWhere('is_public', true);
+            return self::where('is_public', true)
+            ->orWhereHas('users', function ($query) use ($user) {
+                $query->where('users.id', '=', $user->id);
+            });
         }
     }  
 

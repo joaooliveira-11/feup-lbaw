@@ -29,24 +29,15 @@ class ProjectController extends Controller {
 
     public function showAllProjects() {
         $user = Auth::user();
+        $query = Project::get_all_projects($user);
+        $projects = $query->paginate(9);
     
-        if ($user->is_admin) {
-            $projects = Project::all();
-        } else {
-            $projects = Project::where('is_public', true)
-                        ->orWhere(function($query) use ($user) {
-                            $query->whereHas('users', function($q) use ($user) {
-                                $q->where('users.id', $user->id);
-                            });
-                        })->get();
-        }
         return view('pages.allProjects', ['projects' => $projects]);
     }
-
+    
     public function create(Request $request) {   
 
         $this->authorize('create', Project::class);
-        // Set project details.
         $project = new Project();
         $project->title = $request->title;
         $project->description = $request->description;
@@ -79,30 +70,23 @@ class ProjectController extends Controller {
         ]);
     }
 
-    public function showProjects(): View {
-        $projects = Project::where('is_public', true)->paginate(9);
-        return view('pages.allProjects', ['projects'=>$projects]);
+    public function search(Request $request) {
+        $filter = strtolower($request->get('filter'));
+        $page = $request->get('page');
+        $projects = Project::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$filter])
+                        ->orwhere("title", "ilike", "%{$filter}%")
+                        ->where("is_public", true)
+                        ->paginate(9, ['*'], 'page', $page);
+
+        return response()->json([
+            'projects' => $projects->items(),
+            'currentPage' => $projects->currentPage(),
+            'lastPage' => $projects->lastPage(),
+            'hasMorePages' => $projects->hasMorePages(),
+            'previousPageUrl' => $projects->previousPageUrl(),
+            'nextPageUrl' => $projects->nextPageUrl(),
+        ]);
     }
-
-
-    public function search(Request $request)
-    {
-    $filter = strtolower($request->get('filter'));
-    $page = $request->get('page');
-    $projects = Project::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$filter])
-                    ->orwhere("title", "ilike", "%{$filter}%")
-                    ->where("is_public", true)
-                    ->paginate(9, ['*'], 'page', $page);
-
-    return response()->json([
-        'projects' => $projects->items(),
-        'currentPage' => $projects->currentPage(),
-        'lastPage' => $projects->lastPage(),
-        'hasMorePages' => $projects->hasMorePages(),
-        'previousPageUrl' => $projects->previousPageUrl(),
-        'nextPageUrl' => $projects->nextPageUrl(),
-    ]);
-}
 
     public function addMember(Request $request){
         $request->validate([
@@ -130,9 +114,6 @@ class ProjectController extends Controller {
         $newmember->save();
 
         event (new AcceptedProjectInvite());
-    
-
-
 
         return response()->json([
             'success' => 'Member added successfully!',
@@ -168,8 +149,7 @@ class ProjectController extends Controller {
         ]);
     }
 
-    public function kickMember($user_id, $project_id){
-            
+    public function kickMember($user_id, $project_id){    
             $project = Project::find($project_id);
             $user = User::find($user_id);
     
@@ -184,8 +164,6 @@ class ProjectController extends Controller {
     }
 
     public function changeCoordinator($username, $project_id){
-        
-        
         $project = Project::find($project_id);
         $coordinator = User::where('username', $username)->first();
 
@@ -203,7 +181,6 @@ class ProjectController extends Controller {
     }
     
     public function favoriteProject(Request $request){
-
         $project = Project::find($request->get('projectId'));
         $user = User::find($request->get('userId'));
         

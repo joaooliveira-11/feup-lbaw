@@ -74,7 +74,7 @@ Route::controller(UserController::class)->group(function () {
 //Project
 Route::controller(ProjectController::class)->group(function() {
     Route::post('/project/create', 'create')->name('project.create');
-    Route::get('/projects', 'showProjects')->name('allprojects');
+    Route::get('/projects', 'showAllProjects')->name('allprojects');
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/search-projects', 'search');
     Route::post('/addMember', 'addMember')->name('addmember');
