@@ -12,12 +12,18 @@ class MessagePolicy{
 
     public function create(User $user, Message $message) : bool {
         $project = Project::find($message->project_message);
-        return ($project->is_member($user) || $project->is_coordinator($user));
+        return $project->is_member($user) && !($project->archived);
     }
     
     public function delete(User $user, Message $message) : bool {
         $project = Project::find($message->project_message);
 
-        return ($project->is_member($user) && $message->message_by == $user->id);
+        return ($project->is_member($user) && !($project->archived) && $message->message_by == $user->id);
+    }
+
+    public function edit(User $user, Message $message) : bool {
+        $project = Project::find($message->project_message);
+
+        return ($project->is_member($user) && !($project->archived) && $message->message_by == $user->id);
     }
 }

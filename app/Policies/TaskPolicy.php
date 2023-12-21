@@ -28,7 +28,8 @@ class TaskPolicy {
     }
     
     public function completetask(User $user, Task $task) : bool {
-        return $task->assigned_to == $user->id;
+        $project = Project::find($task->project_task);
+        return $project->is_member($user) && $task->assigned_to == $user->id && $task->state == 'assigned';
     }
 
     public function archivetask(User $user, Task $task) : bool {
@@ -42,7 +43,8 @@ class TaskPolicy {
     }
 
     public function upload(User $user, Task $task) : bool {
-        return $task->assigned_to == $user->id;
+        $project = Project::find($task->project_task);
+        return $project->is_member($user) && $task->assigned_to == $user->id && ($task->state == 'assigned' || $task->state == 'completed');
     }
 
     public function download(User $user, Task $task) : bool {

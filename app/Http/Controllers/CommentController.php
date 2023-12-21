@@ -23,7 +23,7 @@ class CommentController extends Controller {
         $comment->comment_by = Auth::user()->id;
         $comment->task_comment = $request->task_id;
         
-        //$this->authorize('create', $comment);   falta decidir se dá para comentar em qualquer task independentemente do estado dela
+        $this->authorize('create', $comment);
 
         $comment->save();
 
@@ -49,7 +49,7 @@ class CommentController extends Controller {
 
     public function edit($id, Request $request){
         $comment = Comment::find($id);
-        // $this->authorize('edit', $comment);
+        $this->authorize('edit', $comment);
         $comment->content = $request->content;
         $comment->edited = true;
         $comment->save();
