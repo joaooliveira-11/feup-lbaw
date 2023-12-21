@@ -35,32 +35,34 @@
 
     <div class="row mt-5">
         <div class="col-md-8 mx-auto">
-            <h4 class="mb-3">Add New User:</h4>
-            <form class="form-group" method="POST" action="{{ route('admin.create') }}">
-                {{ csrf_field() }}
-                
-                <div class="form-content mb-3">
-                    <input type="text" class="form-box" name="name" required placeholder="Name">
-                </div>
+            <div class="add-user-container">
+                <h4 class="mb-3">Add New User:</h4>
+                <form class="form-group" method="POST" action="{{ route('admin.registerUser') }}">
+                    {{ csrf_field() }}
+                    
+                    <div class="form-content mb-3">
+                        <input type="text" class="form-box" name="name" required placeholder="Name">
+                    </div>
 
-                <div class="form-content mb-3">
-                    <input type="text" class="form-box" name="username" required placeholder="Username">
-                </div>
+                    <div class="form-content mb-3">
+                        <input type="text" class="form-box" name="username" required placeholder="Username">
+                    </div>
 
-                <div class="form-content mb-3">
-                    <input type="email" class="form-box" name="email" required placeholder="Email">
-                </div>
+                    <div class="form-content mb-3">
+                        <input type="email" class="form-box" name="email" required placeholder="Email">
+                    </div>
 
-                <div class="form-content mb-3">
-                    <input type="password" class="form-box" name="password" required placeholder="Password">
-                </div>
+                    <div class="form-content mb-3">
+                        <input type="password" class="form-box" name="password" required placeholder="Password">
+                    </div>
 
-                <div class="form-content mb-3">
-                    <input type="password" class="form-box" name="password_confirmation" required placeholder="Confirm Password">
-                </div>
+                    <div class="form-content mb-3">
+                        <input type="password" class="form-box" name="password_confirmation" required placeholder="Confirm Password">
+                    </div>
 
-                <button type="submit" class="btn btn-primary">Add User</button>
-            </form>
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

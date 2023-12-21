@@ -42,3 +42,38 @@
 .custom-table tbody tr:nth-child(odd) {
     background-color: #f8f9fa;
 }
+
+.add-user-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.add-user-container .form-box {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.add-user-container .form-box:focus {
+    outline: none;
+    border-color: #4248ab;
+    box-shadow: 0 0 5px rgba(66, 72, 171, 0.2);
+}
+
+.add-user-container .btn-primary {
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 5px;
+    background-color: #4248ab;
+    border: none;
+    color: white;
+}
+
+.add-user-container .btn-primary:hover {
+    background-color: darken(#4248ab, 10%);
+}

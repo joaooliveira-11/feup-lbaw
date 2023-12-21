@@ -77,7 +77,7 @@ Route::controller(UserController::class)->group(function () {
 //Project
 Route::controller(ProjectController::class)->group(function() {
     Route::post('/project/create', 'create')->name('project.create');
-    Route::get('/projects', 'showProjects')->name('allprojects');
+    Route::get('/projects', 'showAllProjects')->name('allprojects');
     Route::get('/project/{project_id}','show')->where(['project_id'=>'[0-9]+'])->name('project');
     Route::get('/search-projects', 'search');
     Route::post('/addMember', 'addMember')->name('addmember');
@@ -139,5 +139,5 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('admin/ban/{id}','banUser')->where('id', '[0-9]+')->name('admin.banUser');
     Route::post('admin/unban/{id}','unbanUser')->where('id', '[0-9]+')->name('admin.unbanUser');
     Route::get('dashboard','dashboard')->name('admin.dashboard');
-    Route::get('dashboard','dashboard')->name('admin.create');
+    Route::post('dahsboard/register', 'regiterUser')->name('admin.registerUser');
 });

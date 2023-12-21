@@ -87,7 +87,7 @@
                         <p>{{ $user->description }}</p>
                     </div>
                 </div>
-
+                @if(Auth::check() && !Auth::user()->isAdmin())
                 <div id="Projects">
                     <h4 class="label">Projects</h4>
                     @if ($projects->isEmpty())
@@ -105,6 +105,7 @@
                         </ul>
                     @endif
                 </div>
+                @endif
             </div>
         </div>
     </div>

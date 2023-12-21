@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<script>
+    var projectCount = @json($projects->count());
+    console.log('Number of projects:', projectCount);
+</script>
 <div id="ProjectPage">
     <div id="projects-container">
         <input class="row" type="text" id="projectSearch" placeholder="Search projects..." oninput="searchProjects({{ $projects->currentPage() }})">
@@ -10,6 +14,7 @@
         @else
             <ul class="projects-list">
                 @foreach ($projects as $project)
+
                     <a href="{{ url('project/' . $project->project_id) }}" class="container project-link">
                         <li class="project-item">
                             <div class="container project-content {{ $project->project_id }}">
