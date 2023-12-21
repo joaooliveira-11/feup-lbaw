@@ -1714,13 +1714,6 @@ function handleArchiveTask() {
   })
 }
 
-function toggleHamburgerMenu() {
-  var navbar = document.querySelector('.navbar-list-ul');
-  var hamburger = document.querySelector('.hamburger');
-  navbar.classList.toggle('show');
-  hamburger.classList.toggle('active');
-}
-
 function closeNotifications() {
   document.getElementById("notifications-dropdown").classList.toggle("hide");
 }
