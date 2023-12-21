@@ -1419,4 +1419,3 @@ function closeNotifications() {
   document.getElementById("notifications-dropdown").classList.toggle("hide");
   document.getElementById("new-notification").classList.remove("show");
 }
-
