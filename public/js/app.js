@@ -116,17 +116,9 @@ function addEventListeners() {
   }
 
   if(document.getElementById('userSearchInput')){
-    document.getElementById('userSearchInput').addEventListener('input', function() {
-      var searchTerm = this.value;
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/search-users?search=' + encodeURIComponent(searchTerm), true);
-      xhr.onload = function() {
-          if (this.status == 200) {
-              var users = JSON.parse(this.responseText);
-              updateUserTable(users);
-          }
-      };
-      xhr.send();
+      document.getElementById('userSearchInput').addEventListener('input', function() {
+        console.log(this.value);
+        sendAjaxRequest('GET', '/search-users?search=' + this.value, {}, handleSearchUser);
     });
   }
 
@@ -350,6 +342,34 @@ function handleSearchProject() {
 } else {
     console.error('Error:', this.status, this.statusText);
 }
+}
+
+function handleSearchUser() {
+  if (this.status >= 200 && this.status < 400) {
+    const data = JSON.parse(this.response);
+    const container = document.querySelector('#userTableBody');
+    container.innerHTML = '';
+    data.forEach(user => {
+      const tr = document.createElement('tr');
+      tr.onclick = function() {
+        window.location.href = '/profile/' + user.id;
+      }
+      const id = document.createElement('td');
+      id.textContent = user.id;
+
+      const name = document.createElement('td');
+      name.textContent = user.name;
+
+      const email = document.createElement('td');
+      email.textContent = user.email;
+
+      tr.appendChild(id);
+      tr.appendChild(name);
+      tr.appendChild(email);
+
+      container.appendChild(tr);
+    });
+  }
 }
 
 function setupRadioButtons() {
