@@ -77,6 +77,11 @@ function addEventListeners() {
     completetaskbtn.addEventListener('click', handleCompleteTask);
   }
 
+  let archivetaskbtn = document.getElementById('archivetaskbtn');
+  if(archivetaskbtn){
+    archivetaskbtn.addEventListener('click', handleArchiveTask);
+  }
+
   //kick members as coordinator
   const members = document.getElementsByClassName('kick-member');
   for (let i = 0; i < members.length; i++) {
@@ -1448,6 +1453,53 @@ fetch(`/task/complete/${taskId}`, {
   .catch((error) => {
     console.error('Error:', error);
   });
+}
+
+function handle_taskarchived_btns() {
+const buttons = ['upload_file_form','EditTaskModalButton', 'assignUserButton', 'completetaskbtn', 'archivetaskbtn', 'createcommentform'];
+
+  buttons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.classList.add('archived-btn');
+    }
+  });
+}
+
+function handleArchiveTask() {
+  let taskId = this.getAttribute('data-task-id');
+  let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, archive it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/task/archive/${taskId}`, { 
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+          let stateElement = document.getElementById('task-details-state');
+          if (stateElement && stateElement.nextSibling.nodeType === Node.TEXT_NODE) {
+            stateElement.nextSibling.nodeValue = 'archived';
+            handle_taskarchived_btns();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  })
 }
 
 function closeNotifications() {

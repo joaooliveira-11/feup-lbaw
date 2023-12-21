@@ -26,7 +26,7 @@
         @endforeach
     </div>
     @if($task->task_project->is_member(auth()->user()))
-        <form class="container comment-form {{ $task->task_project->archived ? 'archived-btn' : '' }}" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
+        <form class="container comment-form {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" id="createcommentform" action="{{ route('comment.create') }}" method="POST">
             @csrf
             <input type="hidden" name="task_id" value="{{ $task->task_id }}">
             <textarea name="content" id="comment-content" placeholder="Type comment" required></textarea>
