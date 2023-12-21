@@ -23,5 +23,8 @@ body {
 
 .close:hover {
     background-color: #543CE7;
+}
 
+.error {
+    color: red;
 }
