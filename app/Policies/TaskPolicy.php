@@ -31,6 +31,11 @@ class TaskPolicy {
         return $task->assigned_to == $user->id;
     }
 
+    public function archivetask(User $user, Task $task) : bool {
+        $project = Project::find($task->project_task);
+        return  $project->is_coordinator($user) && $task->state == 'completed';
+    }
+
     public function assign(User $user, Task $task) : bool {
         $project = Project::find($task->project_task);
         return $project->is_coordinator($user);  

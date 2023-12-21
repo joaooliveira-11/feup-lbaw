@@ -48,6 +48,7 @@ class MessageController extends Controller {
         $message->save();
         return response()->json([
             'message_content' => $message->content,
+            'edited' => $message->edited,
         ]);
     }
 } 

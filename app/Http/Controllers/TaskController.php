@@ -79,6 +79,18 @@ class TaskController extends Controller {
         ]);
     }
 
+    public function archivetask($id){
+        $task = Task::find($id);
+        $this->authorize('archivetask', $task);    
+
+        $task->state = 'archived';
+        $task->save();
+    
+        return response()->json([
+            'task' => $task,
+        ]);
+    }
+
     public function assign(Request $request){
 
         $task_id = $request->input('task_id');

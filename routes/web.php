@@ -93,6 +93,7 @@ Route::controller(TaskController::class)->group(function() {
     Route::get('/task/{task_id}','show')->where(['task_id'=>'[0-9]+'])->name('task');
     Route::patch('/task/edit', 'updatedetails')->name('task.update_details');
     Route::patch('/task/complete/{taskId}', 'completetask')->name('task.complete');
+    Route::patch('/task/archive/{taskId}', 'archivetask')->name('task.archive');
     Route::post('/search-tasks', 'search');
     Route::patch('/task/assign', 'assign')->name('task.assign');
     Route::patch('/task/upload', 'upload_file')->name('task.upload');

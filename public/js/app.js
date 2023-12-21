@@ -77,6 +77,11 @@ function addEventListeners() {
     completetaskbtn.addEventListener('click', handleCompleteTask);
   }
 
+  let archivetaskbtn = document.getElementById('archivetaskbtn');
+  if(archivetaskbtn){
+    archivetaskbtn.addEventListener('click', handleArchiveTask);
+  }
+
   //kick members as coordinator
   const members = document.getElementsByClassName('kick-member');
   for (let i = 0; i < members.length; i++) {
@@ -531,6 +536,9 @@ fetch(url, {
   let commentInfoButtonsDiv = document.createElement('div');
   commentInfoButtonsDiv.className = 'comment-info-buttons';
 
+  let messageInfoLeftDiv = document.createElement('div');
+  messageInfoLeftDiv.className = 'message-info-left';
+
   let createDate = new Date(data.comment_create_date);
   let formattedCreateDate = createDate.getFullYear() + '-' +
   String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
@@ -541,7 +549,9 @@ fetch(url, {
 
   let createDateH6 = document.createElement('h6');
   createDateH6.textContent = formattedCreateDate;
-  commentInfoButtonsDiv.appendChild(createDateH6);
+  messageInfoLeftDiv.appendChild(createDateH6);
+
+  commentInfoButtonsDiv.appendChild(messageInfoLeftDiv);
 
   let commentButtonsDiv = document.createElement('div');
   commentButtonsDiv.className = 'comment-buttons';
@@ -919,6 +929,19 @@ function EditMessage(event, buttonId, itemClass, editUrl) {
     })
     .then(data => {
       document.getElementById('message-content-' + messageId).innerText = data.message_content;
+      let messageInfoButtonsDiv = messageDiv.querySelector('.message-info-buttons');
+      let messageInfoLeftDiv = messageInfoButtonsDiv.querySelector('.message-info-left');
+  
+      if (data.edited) {
+        let existingEditedElement = messageInfoLeftDiv.querySelector('h6[style="font-style: italic;"]');
+        if (!existingEditedElement) {
+          let editedElement = document.createElement('h6');
+          editedElement.style.fontStyle = 'italic';
+          editedElement.innerText = 'Edited';
+          messageInfoLeftDiv.appendChild(editedElement);
+        }
+      }
+
       editForm.elements['content'].value = '';
       editForm.action = '';
       createForm.classList.remove('hide-message-form');
@@ -968,6 +991,18 @@ function EditComment(event, buttonId, itemClass, editUrl) {
     })
     .then(data => {
       document.getElementById('comment-content-' + commentId).innerText = data.comment_content;
+      let commentInfoButtonsDiv = commentDiv.querySelector('.comment-info-buttons');
+      let messageInfoLeftDiv = commentInfoButtonsDiv.querySelector('.message-info-left');
+  
+      if (data.edited) {
+        let existingEditedElement = messageInfoLeftDiv.querySelector('h6[style="font-style: italic;"]');
+        if (!existingEditedElement) {
+          let editedElement = document.createElement('h6');
+          editedElement.style.fontStyle = 'italic';
+          editedElement.innerText = 'Edited';
+          messageInfoLeftDiv.appendChild(editedElement);
+        }
+      }
       editForm.elements['content'].value = '';
       editForm.action = '';
       createForm.classList.remove('hide-message-form');
@@ -1047,7 +1082,7 @@ let chatSection = document.querySelector('.chat-section');
   messageDiv.id = 'message-' + data.message_id;
 
   let userImage = document.createElement('img');
-  userImage.src = "../"+data.photo_path // falta mudar para a imagem do user
+  userImage.src = "../"+data.photo_path
   userImage.className = 'user-image';
   userImage.alt = 'Gmail Image';
   messageDiv.appendChild(userImage);
@@ -1068,6 +1103,9 @@ let chatSection = document.querySelector('.chat-section');
   let messageInfoButtonsDiv = document.createElement('div');
   messageInfoButtonsDiv.className = 'message-info-buttons';
 
+  let messageInfoLeftDiv = document.createElement('div');
+  messageInfoLeftDiv.className = 'message-info-left';
+
   let createDate = new Date(data.create_date);
   let formattedCreateDate = createDate.getFullYear() + '-' +
   String(createDate.getMonth() + 1).padStart(2, '0') + '-' +
@@ -1078,7 +1116,9 @@ let chatSection = document.querySelector('.chat-section');
 
   let createDateH6 = document.createElement('h6');
   createDateH6.textContent = formattedCreateDate;
-  messageInfoButtonsDiv.appendChild(createDateH6);
+  messageInfoLeftDiv.appendChild(createDateH6);
+
+  messageInfoButtonsDiv.appendChild(messageInfoLeftDiv);
 
   let messageButtonsDiv = document.createElement('div');
   messageButtonsDiv.className = 'message-buttons';
@@ -1434,6 +1474,53 @@ fetch(`/task/complete/${taskId}`, {
   .catch((error) => {
     console.error('Error:', error);
   });
+}
+
+function handle_taskarchived_btns() {
+const buttons = ['upload_file_form','EditTaskModalButton', 'assignUserButton', 'completetaskbtn', 'archivetaskbtn', 'createcommentform'];
+
+  buttons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.classList.add('archived-btn');
+    }
+  });
+}
+
+function handleArchiveTask() {
+  let taskId = this.getAttribute('data-task-id');
+  let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, archive it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/task/archive/${taskId}`, { 
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+          let stateElement = document.getElementById('task-details-state');
+          if (stateElement && stateElement.nextSibling.nodeType === Node.TEXT_NODE) {
+            stateElement.nextSibling.nodeValue = 'archived';
+            handle_taskarchived_btns();
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  })
 }
 
 function closeNotifications() {
