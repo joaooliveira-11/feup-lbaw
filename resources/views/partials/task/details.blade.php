@@ -14,7 +14,7 @@
         <h5 class="task-file-submit">
             <span class="task-info-span" style="margin: 0;" id="task-details-file">File: </span>
             {{ $task->file_path ? '1/1' : '0/1' }}
-            @if($task->assigned_to == auth()->user()->id && ($task->state == 'assigned' || $task->state == 'completed'))
+            @if($task->assigned_to == auth()->user()->id && ($task->state == 'assigned' || $task->state == 'completed') && $task->task_project->is_member(auth()->user()))
                 <form action="{{ route('task.upload') }}" class="{{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" id="upload_file_form" method="post" enctype="multipart/form-data" style="display: flex; align-items: center; margin-bottom: 0;">
                     <input type="hidden" name="task_id" value="{{ $task->task_id }}">
                     @method('PATCH')
@@ -26,7 +26,7 @@
                 </form>
             @endif
         </h5>
-        @if($task->file_path)
+        @if($task->file_path && $task->task_project->is_member(auth()->user()))
             <a href="{{ route('task.download', $task->task_id) }}">Download File</a>
         @endif
         <div class="task-details-buttons">
@@ -35,7 +35,7 @@
                 @include('modal.edit_task', ['task_id' => $task->task_id])
                 <button type="button" class="task-details-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" id="assignUserButton">Assign User</button>
             @endif
-            @if($task->assigned_to == auth()->user()->id && $task->state == ('assigned'))
+            @if($task->assigned_to == auth()->user()->id && $task->state == ('assigned') && $task->task_project->is_member(auth()->user()))
                 <button type="button" id="completetaskbtn" class="task-details-button {{ ($task->state == 'archived' || $task->task_project->archived) ? 'archived-btn' : '' }}" data-task-id="{{ $task->task_id }}">Complete Task</button>
             @endif
             @if($task->task_project->is_coordinator(auth()->user()))
