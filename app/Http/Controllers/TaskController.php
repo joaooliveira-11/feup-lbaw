@@ -12,6 +12,7 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Storage; 
 use Illuminate\Support\Str;
 use App\Events\AssignedNotification;
+use App\Events\ArchivedTask;
 
 class TaskController extends Controller {
 
@@ -85,6 +86,8 @@ class TaskController extends Controller {
 
         $task->state = 'archived';
         $task->save();
+
+        event(new ArchivedTask());
     
         return response()->json([
             'task' => $task,
