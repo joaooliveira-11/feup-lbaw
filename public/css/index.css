@@ -1,9 +1,17 @@
+#content {
+    width: 100%;
+}
 #lp-content {
     overflow: hidden;
     margin-top: 4vw;
 }
 #lp-content .container {
-    max-width: 70vw;
+    max-width: 80vw;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2vw;
 }
 .lp-header {
     margin: auto;
@@ -68,7 +76,7 @@
     background-color: #e0e0e0;
 }
 
-.statistics-container {
+#lp-content .statistics-container {
     height: 28vh;
     width: 80vw;
     display: flex;
@@ -138,14 +146,6 @@
 }
 .lp-section-title span {
     width: auto;
-}
-
-.lp-service {
-    width: 86%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2vw;
 }
 
 .service-text h4 {
@@ -285,6 +285,7 @@
 
 #about-wrapper {
     margin-top: 6vw;
+    flex-direction: column;
 }
 
 .about-about-us {
@@ -307,8 +308,11 @@
 }
 
 @media screen and (max-width: 768px) {
+    #lp-content.index-wrapper {
+        margin-top: 4rem;
+    }
     #lp-content {
-        margin-top: 12rem;
+        margin-top: 17rem;
     }
     #lp-content.about-about-us {
         margin-top: 6rem;
@@ -348,7 +352,7 @@
         font-size: 115%;
     }
 
-    .statistics-container {
+    #lp-content .statistics-wrapper .statistics-container {
         margin-top: 4rem;
         height: 48vh;
         flex-direction: column;
@@ -398,6 +402,7 @@
     }
     .service-text h4 {
         font-size: 2em;
+        text-align: center;
     }
     .service-text p {
         text-align: center;
@@ -411,7 +416,8 @@
     }
 
     .lp-section-title {
-        font-size: 175%;
+        font-size: 3rem;
+        margin-bottom: 3rem ;
     }
     .about-header .lp-section-title {
         font-size: 3rem;

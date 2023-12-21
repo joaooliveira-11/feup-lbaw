@@ -193,7 +193,7 @@ header {
     overflow: hidden;
 }
 #ProjectDescription #dashboard-project-content {
-    width: 20em;
+    width: 16em;
     overflow-y: auto;
     height: 14em;
 }
@@ -279,6 +279,7 @@ header {
 }
 
 .task-content {
+    height: 78vh;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -432,7 +433,7 @@ header {
 }
 
 .chat-section {
-    height: 67vh;
+    height: 69vh;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1vw 0 2vw 0;
@@ -445,8 +446,8 @@ header {
 .message-form {
     display: flex;
     margin: 0;
-    height: 3vw;
     margin-top: 2vh;
+    margin-bottom: 1rem;
 }
 
 .message-form textarea {
@@ -457,11 +458,12 @@ header {
 }
 
 #submit-message-button {
-    height: 100%;
+    min-height: 3.5vw;
     background-color: #3C5EE7;
     color: white;
     font-size: 0.8vw;
     border-radius: 0 5px 5px 0;
+    padding: 0.6vw;
 }
 
 #submit-edit-message-button{
@@ -614,21 +616,21 @@ header {
         height: 100%;
     }
     #ProjectPage .project-wrapper {
-        margin-top: 9em;
+        margin-top: 12rem;
         flex-direction: column;
         max-width: 100vw;
         width: 100%;
     }
     #Sidebar {
         width: 100%;
-        height: 24vh;
+        height: auto;
     }
     #Sidebar.gap-sidebar{
         gap: 0;
     }
     .sidebar-project-title {
         font-size: 225%;
-        height: 6em;
+        height: auto;
     }
     #projectForm {
         display: grid;
@@ -649,6 +651,15 @@ header {
         height: fit-content;
         align-items: center;
         font-size: 140%;
+    }
+    #ProjectDescription #dashboard-project-content {
+        width: 100%;
+        height: 8em;
+    }
+    .private-archived {
+        flex-direction: row;
+        margin: auto;
+        gap: 6em;
     }
     .dashboard-content {
         flex-direction: column;
@@ -672,11 +683,15 @@ header {
         font-size: 4em;
     }
     #ProjectDescription {
+        max-width: 100%;
         flex-direction: column;
         width: 100%;
     }
     #ProjectDescription span {
         font-size: 350%;
+    }
+    #Chat .message-chat {
+        width: 90%;
     }
     .message-chat img {
         height: 10vw;
@@ -705,7 +720,7 @@ header {
         height: 300%;
     }
     #submit-message-button {
-        height: 300%;
+        height: 5.4rem;
         font-size: 150%;
     }
     .project-members-title, .project-members-title-2 {
@@ -747,9 +762,6 @@ header {
     }
     #Tasks ul {
         display: block;
-    }
-    #Tasks .project-link {
-        height: 16vh;
     }
     #Tasks .project-link li {
         padding: 6em;
