@@ -7,25 +7,25 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Assign Coordinator</h4>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close modal-top-button" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>                
                 </div>
                 <div class="modal-body">
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
+                        <div class="form-group user-list-modal">
                             @foreach($project->members() as $user)
                                 @if ($user->id != $project->project_coordinator)
                                     <div class="assign_coordinator_member" data-id="{{ $user->username }}">
-                                        <img src="{{ url($user->photo) }}">
-                                        <span>{{ $user->username }}</span>
+                                        <img class="modal-rounded-picture" src="{{ url($user->photo) }}">
+                                        <span class="modal-username">{{ $user->username }}</span>
                                     </div>
                                 @endif
                             @endforeach
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <button type="submit" class="btn btn-success"> {{ __('Submit') }}</button>
+                        <button type="submit" class="btn btn-success modal-bottom-button"> {{ __('Submit') }}</button>
                     </div>
                 </div>
             </div>

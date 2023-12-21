@@ -7,22 +7,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">{{ __('Edit Project Details') }}</h4>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close modal-top-button" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>                
                 </div>
                 <div class="modal-body">
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            <strong>{{ __('Title') }}:</strong>
-                            <input type="text" name="title" class="form-control" id="proj_title" required value="{{ $project->title }}">
+                            <strong class="modal-second-title">{{ __('Title') }}:</strong>
+                            <input type="text" name="title" class="form-control modal-simple-text" id="proj_title" required value="{{ $project->title }}">
                             <div class="error" id="proj_titleError"></div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            <strong>{{ __('Description') }}:</strong>
-                            <textarea type="text" rows="4" col="55" name="description" class="form-control" id="proj_description" required>{{ $project->description  }}</textarea>
+                            <strong class="modal-second-title">{{ __('Description') }}:</strong>
+                            <textarea type="text" rows="4" col="55" name="description" class="form-control modal-textarea" id="proj_description" required>{{ $project->description  }}</textarea>
                             <div class="error" id="proj_descriptionError"></div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <button type="submit" class="btn btn-success" >{{ __('Save') }} </button>
+                        <button type="submit" class="btn btn-success modal-bottom-button" >{{ __('Save') }} </button>
                     </div>
                 </div>
             </div>

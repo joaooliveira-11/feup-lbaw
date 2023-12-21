@@ -6,44 +6,44 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">{{ __('Create New Task') }}</h4>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close modal-top-button" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>                
                 </div>
                 <div class="modal-body">
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            <strong>{{ __('Title') }}:</strong>
-                            <input type="text" name="title" class="form-control" id="title" required value="{{ old('title') }}">
+                            <strong class="modal-second-title">{{ __('Title') }}:</strong>
+                            <input type="text" name="title" class="form-control modal-simple-text" id="title" required value="{{ old('title') }}">
                             <div class="error" id="titleError"></div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            <strong>{{ __('Description') }}:</strong>
-                            <textarea type="text" rows="4" col="55" name="description" class="form-control" id="description" required>{{ old('description') }}</textarea>
+                            <strong class="modal-second-title">{{ __('Description') }}:</strong>
+                            <textarea type="text" rows="4" col="55" name="description" class="form-control modal-textarea" id="description" required>{{ old('description') }}</textarea>
                             <div class="error" id="descriptionError"></div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            <strong>{{ __('Finish Date') }}:</strong>
-                            <input type="datetime-local" name="finish_date" class="form-control" id="finish_date" value="{{ old('finish_date') }}">
+                            <strong class="modal-second-title">{{ __('Finish Date') }}:</strong>
+                            <input type="datetime-local" name="finish_date" class="form-control modal-simple-text" id="finish_date" value="{{ old('finish_date') }}">
                             <div class="error" id="finish_dateError"></div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            <strong>{{ __('Priority') }}:</strong>
-                            <select name="priority" id="priority" class="form-control" required>
-                                <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
-                                <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
-                                <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
+                            <strong class="modal-second-title">{{ __('Priority') }}:</strong>
+                            <select name="priority" id="priority" class="form-control modal-simple-text" required>
+                                <option class="modal-simple-text" value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                                <option class="modal-simple-text" value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                                <option class="modal-simple-text" value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <button type="submit" class="btn btn-success" >{{ __('Save') }} </button>
+                        <button type="submit" class="btn btn-success modal-bottom-button">{{ __('Save') }} </button>
                     </div>
                 </div>
             </div>

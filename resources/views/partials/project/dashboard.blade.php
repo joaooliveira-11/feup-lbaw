@@ -1,4 +1,5 @@
-<div id="Dashboard" class="container selected">
+
+<div id="Dashboard" class="selected">
     <div class="container dashboard-content">
         <div class="dashboard-left">
             <div id="ProjectDeadline" class="container">

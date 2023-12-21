@@ -141,9 +141,11 @@ header {
 /*----------------------------  Dasboard ----------------------------*/
 #Dashboard {
     margin-left: 0;
-    max-width: 88%;
+    max-width: 100%;
 }
 #Dashboard .dashboard-content {
+    width: 100%;
+    max-width: 100%;
     margin: 0;
     display: flex;
     padding-top: 1em;
@@ -181,7 +183,7 @@ header {
 }
 
 #dashboard-project-content {
-    width: 60%;
+    width: 12em;
     font-size: 1vw;
     color: #303030;
     font-weight: 500;
@@ -189,6 +191,11 @@ header {
     margin-left: 0.5vw;
     overflow-wrap: break-word;
     overflow: hidden;
+}
+#ProjectDescription #dashboard-project-content {
+    width: 20em;
+    overflow-y: auto;
+    height: 14em;
 }
 
 .dashboard-project-buttons {
@@ -311,7 +318,7 @@ header {
 #tasks-container {
     margin-top: 1vw;
     padding: 0.5vw 0;
-    height: 28.5vw;
+    height: 27.9vw;
     overflow-y: auto;
 }
 
@@ -372,12 +379,17 @@ header {
 }
 
 .project-members-ul {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(auto-fill, 14em);
+    height: 50vh;
+    overflow-y: auto;
     list-style: none;
-    column-count: 2;
-    flex-grow: 1;
 }
 
 .project-members-ul a {
+    height: 8em;
     text-decoration: none;
 }
 
@@ -420,7 +432,7 @@ header {
 }
 
 .chat-section {
-    height: 69vh;
+    height: 67vh;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1vw 0 2vw 0;
@@ -756,5 +768,7 @@ header {
 }
 
 .selected {
+    padding: 1rem;
     background-color: #f0f0f0;
+    border-radius: 10px;
 }
