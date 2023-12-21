@@ -317,7 +317,7 @@ CREATE FUNCTION comment_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
     INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NEW.create_date, 
-        FALSE, NEW.comment_by , (SELECT assigned_to FROM task WHERE NEW.task_comment = task_id), 'comment', NEW.comment_id);
+        FALSE, NEW.comment_by , (SELECT assigned_to FROM task WHERE NEW.task_comment = task_id), 'comment', (SELECT task_comment FROM comment WHERE NEW.comment_id = comment_id));
     RETURN NEW;
 END
 $BODY$
@@ -342,7 +342,7 @@ BEGIN
         SELECT project_coordinator FROM project WHERE project_id = NEW.project_message
         ) LOOP
         INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NEW.create_date, 
-            FALSE, NEW.message_by, userslist, 'forum', NEW.message_id);
+            FALSE, NEW.message_by, userslist, 'forum', (SELECT project_message FROM message WHERE NEW.message_id = message_id));
     END LOOP;
     RETURN NEW;
 END
