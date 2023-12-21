@@ -11,37 +11,75 @@
         </div>
         <img class="col-6 lp-header-image" src="{{ asset('img/lp_header_img.png') }}" alt="Programming">
     </div>
+
+    @php
+        $usersCount = DB::table('users')->count();
+        $projectsCount = DB::table('project')->count();
+        $tasksCount = DB::table('task')->count();
+    @endphp
+
+    <div class="statistics-wrapper">
+        <h2 class="lp-section-title" style="margin-bottom: 5rem;">Our Progress So Far</h2>
+        <div class="container statistics-container">
+            <div class="statistic">
+                <i class="fas fa-user"></i>
+                <span id="usersCount" style="display: none;"> {{ $usersCount }}</span>
+                <span id="usersLiveCount" class="num" data-val="{{ $usersCount }}">00</span>
+                <span class="text">Accounts Created</span>
+            </div>
+            <div class="statistic">
+                <i class="fas fa-folder"></i>
+                <span id="projectsCount"style="display: none;"> {{ $projectsCount }}</span>
+                <span id="projectsLiveCount" class="num" data-val="{{ $projectsCount }}">00</span>
+                <span class="text">Projects Created</span>
+            </div>
+            <div class="statistic">
+                <i class="fas fa-tasks"></i>
+                <span id="tasksCount" style="display: none;"> {{ $tasksCount }}</span>
+                <span id="tasksLiveCount" class="num" data-val="{{ $tasksCount }}">000</span>
+                <span class="text">Tasks Created</span>
+            </div>
+        </div>
+    </div>
+
     <div id="lp-services" class="container">
         <h2 class="lp-section-title">What We Offer</h2>
-        <div class="row">
+        <div class="container lp-service">
             <div class="col-7 service-text">
                 <h4>Create Any Project You Imagine</h4>
                 <p>Turn your ideas into reality.  Code, create, and collaborate on any project you can imagine</p>
             </div>
-            <img class="col-5 service-image" src="{{ asset('img/creation.png') }}" alt="Project Creation">
+            <div class="service-img-container">
+                <img class="service-image" src="{{ asset('img/creation.png') }}" alt="Project Creation">
+            </div>
         </div>
-        <div class="row">
-            <img class="col-5 service-image" src="{{ asset('img/showcase.png') }}" alt="Project Showcase">
+        <div class="container lp-service">
+            <div class="service-img-container">
+                <img class="service-image" src="{{ asset('img/showcase.png') }}" alt="Project Showcase">
+            </div>
             <div class="col-7 service-text">
                 <h4>Showcase Your Talent</h4>
                 <p>Elevate your profile by showcasing your noteworthy projects and accomplishments for all to see</p>
             </div>
         </div>
-        <div class="row">
+        <div class="container lp-service">
             <div class="col-7 service-text">
                 <h4>Chat and Collaborate with Fellow Members</h4>
                 <p>Connect and collaborate effortlessly with other members through many chat channels</p>
             </div>
-            <img class="col-5 service-image" src="{{ asset('img/communication.png') }}" alt="Communication">
+            <div class="service-img-container">
+                <img class="service-image" src="{{ asset('img/communication.png') }}" alt="Communication">
+            </div>
         </div>
     </div>
     <div class="container lp-cta">
         <h2 class="lp-section-title">Are you ready to take your work to the <span>next level?</span></h2>
         <div class="cta-buttons">
-            <a class="col-4 lp-button" href="{{ url('/register') }}">Get Started</a>
-            <a class="col-4 learn-more-button" href="{{ url('/register') }}">Learn More</a>
+            <a class="col-5 lp-button" href="{{ url('/register') }}">Get Started</a>
+            <a class="col-5 learn-more-button" href="{{ url('/about') }}">Learn More</a>
         </div>
     </div>
+    
     <div id="about-wrapper" class="container">
         <div class="row about-header">
             <h2 class="lp-section-title">About Us</h2>
@@ -71,27 +109,27 @@
         </div>
     </div>
 </div>
-<div id="footer-wrapper" class=container"">
-        <div class="footer-row">
-            <div class="col-4 footer-left">
-                <a class="footer-teamsync-button" href="{{ url('/register') }}">TeamSync</a>
-                <h6>Where collaboration meets inovation</h6>
-            </div>
-            <div class="col-3 footer-middle">
-                <h5>Pages</h5>
-                <ul>
-                    <li>Home</li>
-                    <li>About</li>
-                    <li>FAQs</li>
-                </ul>
-            </div>
-            <div class="col-4 footer-right">
-                <h5>Contact</h5>
-                <p>+351 912 345 678</p>
-                <p>contact@teamsync.com</p>
-                <p>Rua Olivia Rodrigo 123</p>
-            </div>
+<div id="footer-wrapper">
+    <div class="footer-row">
+        <div class="col-4 footer-left">
+            <a class="footer-teamsync-button" href="{{ url('/register') }}">TeamSync</a>
+            <h6>Where collaboration meets inovation</h6>
         </div>
+        <div class="col-3 footer-middle">
+            <h5>Pages</h5>
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>FAQs</li>
+            </ul>
+        </div>
+        <div class="col-4 footer-right">
+            <h5>Contact</h5>
+            <p>+351 912 345 678</p>
+            <p>contact@teamsync.com</p>
+            <p>Rua Olivia Rodrigo 123</p>
+        </div>
+    </div>
 </div>
 
 

@@ -1,6 +1,9 @@
 #lp-content {
     margin-top: 4vw;
 }
+#lp-content .container {
+    max-width: 70vw;
+}
 .lp-header {
     margin: auto;
     margin-top: 4vw;
@@ -15,15 +18,15 @@
     max-width: 35%;
 }
 
-.lp-header-image {
-    width:46vw;
+#lp-content .lp-header-image {
+    width: 40vw;
     height: fit-content;
-    margin-top: 5vw;
+    margin-top: 3em;
 }
 
 .lp-header-content h1 {
     color: #454545;
-    font-size: 5vw;
+    font-size: 4.5vw;
     width: 9em;
     margin-bottom: 0.2em;
 }
@@ -51,12 +54,61 @@
     color: #000;
     box-shadow: 0 0 24px rgba(84, 60, 231, 0.5);
 }
+.statistics-wrapper {
+    margin-top: 8rem;
+    padding-bottom: 8rem;
+    padding-top: 4rem;
+    background-color: #e0e0e0;
+}
+
+.statistics-container {
+    height: 28vh;
+    width: 80vw;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.statistic {
+    width: 28vmin;
+    height: 28vmin;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 1em 0;
+    position: relative;
+    font-size: 16px;
+    border-radius: 0.5em;
+    background-color: #454545;
+    border-bottom: 10px solid #543CE7;
+}
+.statistic i {
+    color: #dedede;
+    font-size: 2.5em;
+    text-align: center;
+}
+
+.statistic span.num {
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: 3em;
+}
+.statistic span.text {
+    color: #e0e0e0;
+    font-size: 1.4em;
+    text-align: center;
+    pad: 0.7em 0;
+    font-weight: 600;
+    line-height: 0;
+}
 
 #lp-services {
     display: flex;
     flex-direction: column;
     margin: auto;
-    margin-top: 5em;
+    margin-top: 8em;
     position: relative;
     align-items: center;
 }
@@ -99,9 +151,14 @@
     width: 64%;
 }
 
+.service-img-container {
+    width: 28vw;
+    text-align: center;
+}
+
 .service-image {
     height: 15vw;
-    width: 20vw;;
+    width: 20vw;
 }
 
 .lp-cta {
@@ -114,7 +171,7 @@
 }
 
 .cta-buttons {
-    width: 30vw;
+    width: 36vw;
     display: flex;
     margin: auto;
     margin-top: 4vw;
@@ -254,6 +311,25 @@
     }
     #footer a, #footer h5, #footer p, #footer li {
         font-size: 115%;
+    }
+
+    .statistics-container {
+        margin-top: 4rem;
+        height: 48vh;
+        flex-direction: column;
+    }
+    .statistic {
+        width: 50vw;
+        margin: 0 auto;
+    }
+    .statistic span.num {
+        font-size: 2em;
+    }
+    .statistic span.text {
+        font-size: 1.2em;
+    }
+    .statistic i {
+        font-size: 2em;
     }
     #lp-services {
         width: 100%;
