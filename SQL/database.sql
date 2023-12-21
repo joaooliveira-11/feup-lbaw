@@ -6,7 +6,7 @@ SET search_path TO lbaw23117;
 -----------------------------------------
 
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS password_resets CASCADE;
+DROP TABLE IF EXISTS password_reset_tokens CASCADE;
 DROP TABLE IF EXISTS interest CASCADE;
 DROP TABLE IF EXISTS user_interests CASCADE;
 DROP TABLE IF EXISTS skill CASCADE;
@@ -45,7 +45,7 @@ DROP FUNCTION IF EXISTS check_ProjMember_before_message;
 -- Types
 -----------------------------------------
 
-CREATE TYPE task_status AS ENUM ('open', 'assigned', 'closed', 'archived');
+CREATE TYPE task_status AS ENUM ('open', 'assigned', 'completed', 'archived');
 CREATE TYPE notification_types as ENUM('assignedtask', 'coordinator', 'archivedtask', 'invite', 'forum', 'comment', 'acceptedinvite');
 
 -----------------------------------------
@@ -66,7 +66,7 @@ CREATE TABLE users (
     google_id VARCHAR
 );
 
-CREATE TABLE password_resets (
+CREATE TABLE password_reset_tokens (
     email VARCHAR NOT NULL,
     token VARCHAR NOT NULL,
     created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
@@ -136,6 +136,7 @@ CREATE TABLE task (
     create_date TIMESTAMP NOT NULL CHECK(create_date <= now()),
     finish_date TIMESTAMP,
     state task_status NOT NULL DEFAULT 'open',
+    file_path TEXT,
     create_by INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
     assigned_to INTEGER REFERENCES users(id) ON UPDATE CASCADE,
     project_task INTEGER REFERENCES project(project_id) ON UPDATE CASCADE 
@@ -195,11 +196,11 @@ CREATE INDEX task_comment ON comment USING hash(task_comment);
 -- LARAVEL INDEXES
 -----------------------------------------
 
-DROP INDEX IF EXISTS password_resets_email_index;
-DROP INDEX IF EXISTS password_resets_token_index;
+DROP INDEX IF EXISTS password_reset_tokens_email_index;
+DROP INDEX IF EXISTS password_reset_tokens_token_index;
 
-CREATE INDEX password_resets_email_index ON password_resets (email);
-CREATE INDEX password_resets_token_index ON password_resets (token);
+CREATE INDEX password_reset_tokens_email_index ON password_reset_tokens (email);
+CREATE INDEX password_reset_tokens_token_index ON password_reset_tokens (token);
 
 
 -----------------------------------------
@@ -232,7 +233,7 @@ BEGIN
     IF NEW.project_coordinator <> OLD.project_Coordinator THEN
         FOR userslist IN (SELECT user_id FROM project_users WHERE project_id = NEW.project_id) LOOP
             INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id)
-            VALUES ('2022-11-25', FALSE, NEW.project_coordinator, userslist, 'coordinator', NEW.project_id);
+            VALUES (NOW(), FALSE, NEW.project_coordinator, userslist, 'coordinator', NEW.project_id);
         END LOOP;
     END IF;
     
@@ -254,7 +255,7 @@ $BODY$
 BEGIN
     IF NEW.state = 'archived' AND NEW.state <> OLD.state THEN
         INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id)
-        VALUES ('2022-11-03', FALSE, (SELECT project_coordinator from project WHERE NEW.project_task = project_id), NEW.assigned_to, 'archivedtask', NEW.task_id);
+        VALUES (NOW(), FALSE, (SELECT project_coordinator from project WHERE NEW.project_task = project_id), NEW.assigned_to, 'archivedtask', NEW.task_id);
     END IF;
     RETURN NEW;
 END
@@ -274,7 +275,7 @@ $BODY$
 BEGIN
     IF (OLD.assigned_to IS NULL AND NEW.assigned_to IS NOT NULL) OR
     (OLD.assigned_to IS NOT NULL AND NEW.assigned_to IS NOT NULL AND NEW.assigned_to <> OLD.assigned_to) THEN 
-        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES ('2022-11-03', 
+        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NOW(), 
             FALSE, (SELECT project_coordinator from project WHERE NEW.project_task = project_id), NEW.assigned_to, 'assignedtask', NEW.task_id);
     END IF;
     RETURN NEW;
@@ -296,7 +297,7 @@ DECLARE
     userslist INTEGER;
 BEGIN
     FOR userslist IN (SELECT user_id FROM project_users WHERE project_id = New.project_id AND user_id <> NEW.user_id) LOOP
-        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES ('2022-11-03', 
+        INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NOW(), 
             FALSE, (SELECT project_coordinator from project WHERE NEW.project_id = project_id), userslist, 'acceptedinvite', NEW.project_id);
     END LOOP;
     RETURN NEW;
@@ -316,7 +317,7 @@ CREATE FUNCTION comment_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN 
     INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NEW.create_date, 
-        FALSE, NEW.comment_by , (SELECT assigned_to FROM task WHERE NEW.task_comment = task_id), 'comment', NEW.comment_id);
+        FALSE, NEW.comment_by , (SELECT assigned_to FROM task WHERE NEW.task_comment = task_id), 'comment', (SELECT task_comment FROM comment WHERE NEW.comment_id = comment_id));
     RETURN NEW;
 END
 $BODY$
@@ -341,7 +342,7 @@ BEGIN
         SELECT project_coordinator FROM project WHERE project_id = NEW.project_message
         ) LOOP
         INSERT INTO notification (create_date, viewed, emited_by, emited_to, type, reference_id) VALUES (NEW.create_date, 
-            FALSE, NEW.message_by, userslist, 'forum', NEW.message_id);
+            FALSE, NEW.message_by, userslist, 'forum', (SELECT project_message FROM message WHERE NEW.message_id = message_id));
     END LOOP;
     RETURN NEW;
 END
@@ -408,6 +409,7 @@ CREATE TRIGGER coordinator_not_in_project
     FOR EACH ROW
     EXECUTE PROCEDURE coordinator_not_in_project();
 
+/*
 --TRIGGER11 (User cannot comment on a task that is not assigned to someone or is archived)
 CREATE FUNCTION comment_unassigned_or_archived_task() RETURNS TRIGGER AS
 $BODY$
@@ -424,7 +426,7 @@ CREATE TRIGGER comment_unassigned_or_archived_task
     BEFORE INSERT ON comment
     FOR EACH ROW
     EXECUTE PROCEDURE comment_unassigned_or_archived_task();
-
+*/
 
 --TRIGGER12 (Update tasks when a user leaves a project)
 CREATE FUNCTION update_tasks_on_user_leave() RETURNS TRIGGER AS
@@ -433,7 +435,7 @@ BEGIN
     UPDATE task
     SET state = 'open', assigned_to = NULL
     WHERE project_task = OLD.project_id
-    AND ((state = 'assigned' OR state = 'closed') AND assigned_to = OLD.user_id);
+    AND ((state = 'assigned' OR state = 'completed') AND assigned_to = OLD.user_id);
     RETURN OLD;
 END
 $BODY$
@@ -444,7 +446,6 @@ CREATE TRIGGER update_tasks_on_user_leave
     FOR EACH ROW
     EXECUTE PROCEDURE update_tasks_on_user_leave();
 
-
 --TRIGGER13 (The task has to be created by a user who is in the project)
 CREATE OR REPLACE FUNCTION task_user_in_project() RETURNS TRIGGER AS
 $BODY$
@@ -454,6 +455,11 @@ BEGIN
         FROM project_users
         WHERE project_id = NEW.project_task
           AND user_id = NEW.create_by
+    ) AND NOT EXISTS (
+        SELECT 1
+        FROM project
+        WHERE project_id = NEW.project_task
+          AND project_coordinator = NEW.create_by
     ) THEN
         RAISE EXCEPTION 'The task has to be created by a user who is in the project';
     END IF;
@@ -476,6 +482,10 @@ BEGIN
         SELECT 1 FROM project_users pu
         JOIN task t ON pu.project_id = t.project_task
         WHERE pu.user_id = NEW.comment_by AND t.task_id = NEW.task_comment
+    ) AND NOT EXISTS (
+        SELECT 1 FROM project p
+        JOIN task t ON p.project_id = t.project_task
+        WHERE p.project_coordinator = NEW.comment_by AND t.task_id = NEW.task_comment
     ) THEN
         RAISE EXCEPTION 'User cannot make a comment if they are not in the project.';
     END IF;
@@ -496,8 +506,10 @@ $BODY$
 BEGIN
     IF NOT EXISTS (
         SELECT 1 FROM project_users WHERE user_id = NEW.message_by AND project_id = NEW.project_message
+    ) AND NOT EXISTS (
+        SELECT 1 FROM project WHERE project_coordinator = NEW.message_by AND project_id = NEW.project_message
     ) THEN
-        RAISE EXCEPTION 'User cannot send a message if they are not in the project..';
+        RAISE EXCEPTION 'User cannot send a message if they are not in the project.';
     END IF;
     RETURN NEW;
 END;
@@ -508,7 +520,6 @@ CREATE TRIGGER check_ProjMember_before_message
     BEFORE INSERT ON message
     FOR EACH ROW 
     EXECUTE PROCEDURE check_ProjMember_before_message();
-
 
 
 -----------------------------------------
@@ -605,6 +616,7 @@ create TRIGGER task_search_update BEFORE INSERT OR UPDATE ON task
     FOR EACH ROW EXECUTE PROCEDURE task_search_update();
 
 CREATE INDEX task_search__idx ON task USING GIN(tsvectors);
+
 -----------------------------------------
 -- end
 -----------------------------------------

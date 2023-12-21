@@ -2,36 +2,33 @@
 
 @section('content')
 
-    <div id="lp-content" class="container">
-
-        <div id="lp-services" class="container">
-            <h2 class="lp-section-title">What We Offer</h2>
-            <div class="container lp-service">
-                <div class="col-7 service-text">
-                    <h4>Create Any Project You Imagine</h4>
-                    <p>Turn your ideas into reality.  Code, create, and collaborate on any project you can imagine</p>
-                </div>
-                <div class="service-img-container">
-                    <img class="service-image" src="{{ asset('img/creation.png') }}" alt="Project Creation">
-                </div>
+    <div id="lp-content">
+        <h2 class="lp-section-title">What We Offer</h2>
+        <div class="container lp-service">
+            <div class="col-7 service-text">
+                <h4>Create Any Project You Imagine</h4>
+                <p>Turn your ideas into reality.  Code, create, and collaborate on any project you can imagine</p>
             </div>
-            <div class="container lp-service">
-                <div class="service-img-container">
-                    <img class="service-image" src="{{ asset('img/showcase.png') }}" alt="Project Showcase">
-                </div>
-                <div class="col-7 service-text">
-                    <h4>Showcase Your Talent</h4>
-                    <p>Elevate your profile by showcasing your noteworthy projects and accomplishments for all to see</p>
-                </div>
+            <div class="service-img-container">
+                <img class="service-image" src="{{ asset('img/creation.png') }}" alt="Project Creation">
             </div>
-            <div class="container lp-service">
-                <div class="col-7 service-text">
-                    <h4>Chat and Collaborate with Fellow Members</h4>
-                    <p>Connect and collaborate effortlessly with other members through many chat channels</p>
-                </div>
-                <div class="service-img-container">
-                    <img class="service-image" src="{{ asset('img/communication.png') }}" alt="Communication">
-                </div>
+        </div>
+        <div class="container lp-service">
+            <div class="service-img-container">
+                <img class="service-image" src="{{ asset('img/showcase.png') }}" alt="Project Showcase">
+            </div>
+            <div class="col-7 service-text">
+                <h4>Showcase Your Talent</h4>
+                <p>Elevate your profile by showcasing your noteworthy projects and accomplishments for all to see</p>
+            </div>
+        </div>
+        <div class="container lp-service">
+            <div class="col-7 service-text">
+                <h4>Chat and Collaborate with Fellow Members</h4>
+                <p>Connect and collaborate effortlessly with other members through many chat channels</p>
+            </div>
+            <div class="service-img-container">
+                <img class="service-image" src="{{ asset('img/communication.png') }}" alt="Communication">
             </div>
         </div>
     </div>

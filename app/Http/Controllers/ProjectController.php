@@ -165,14 +165,14 @@ class ProjectController extends Controller {
             ]);
     }
 
-    public function changeCoordinator($username, $project_id){
+    public function leaveAsCoordinator($username, $project_id){
         $project = Project::find($project_id);
         $coordinator = User::where('username', $username)->first();
         $this->authorize('change_coordinator', $project); 
 
-        $this->kickMember($coordinator->id, $project_id);
-
         $project->project_coordinator = $coordinator->id;
+
+        $this->kickMember($coordinator->id, $project->project_id);
         
         $project->save();
 
@@ -187,14 +187,44 @@ class ProjectController extends Controller {
         $newnotification->save();
 
         event(new NewCoordinator($project->title, $coordinator->name));
+
+        return response()->json([
+            'success' => 'Coordinator changed successfully!',
+        ]);    
+    }
+
+    public function changeCoordinator($username, $project_id){
+        $project = Project::find($project_id);
+        $prevcoordinator = User::find($project->project_coordinator);
+        $coordinator = User::where('username', $username)->first();
+        $this->authorize('change_coordinator', $project); 
+
+        $this->kickMember($coordinator->id, $project->project_id);
+
+        $project->project_coordinator = $coordinator->id;
         
-        if (request()->ajax() || request()->wantsJson()) {
-            return response()->json([
-                'success' => 'Coordinator changed successfully!',
-            ]);
-        } else {
-            return redirect()->route('project', ['project_id' => $project->project_id]);
-        }
+        $project->save();
+
+        $newmember = new Project_Users;
+        $newmember->project_id = $project->project_id;
+        $newmember->user_id = $prevcoordinator->id;
+        $newmember->save();
+
+        
+
+        $newnotification = new Notification;
+        $newnotification->create_date = now();
+        $newnotification->emited_by = 1;
+        $newnotification->emited_to = $coordinator->id;
+        $newnotification->viewed = false;
+        $newnotification->type = 'coordinator';
+        $newnotification->reference_id = $project->project_id;
+
+        $newnotification->save();
+
+        event(new NewCoordinator($project->title, $coordinator->name));
+        
+        return redirect()->route('project', ['project_id' => $project->project_id]);
     }
     
     public function favoriteProject(Request $request){

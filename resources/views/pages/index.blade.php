@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div id="lp-content">
+<div id="lp-content" class="index-wrapper">
     <div class="container lp-header">
         <div class="col-6 lp-header-content">
             <h1>Where Collaboration Meets Inovation</h1>
