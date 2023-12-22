@@ -282,8 +282,7 @@ TeamSync is made with HTML5, JavaScript, CSS. We used two frameworks, Bootstrap 
 ![VideoPage](https://hackmd.io/_uploads/BJ-91LMDa.png)
 
 
-You can see the video [here](https://git.fe.up.pt
-/lbaw/lbaw2324/lbaw23117/-/blob/main/docs/lbaw23117.mp4?ref_type=heads).
+You can see the video [here](https://git.fe.up.pt/lbaw/lbaw2324/lbaw23117/-/blob/main/docs/lbaw23117.mp4?ref_type=heads).
 
 ---
 
